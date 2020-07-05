@@ -13,6 +13,7 @@ Wantum（Androidアプリ）サーバサイド
 - `develop`=開発環境
 - `master`=プロダクション環境
 - `master`や`develop`へのforced pushは🆖
+- `Squash and merge`のみ許可。コミット履歴をきれいにまとめる。
 
 ## 起動方法
 
