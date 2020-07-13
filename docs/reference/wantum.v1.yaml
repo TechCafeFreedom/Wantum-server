@@ -44,7 +44,7 @@ paths:
       responses: {}
       operationId: get-wishlists-wish_list_id
       description: |-
-        wish_listを返す。
+        wish_list詳細情報を取得する。
 
         そのwish_listに招待されている人だけが見られる。
 
@@ -119,23 +119,18 @@ paths:
         カテゴリーの削除。
 
         親のwish_listに招待されている人のみ可能。
-  '/wishlists/{wish_list_id}/categories':
-    parameters:
-      - schema:
-          type: integer
-        name: wish_list_id
-        in: path
-        required: true
+  /categories:
+    parameters: []
     post:
       summary: category create
       tags:
         - categories
       responses: {}
-      operationId: post-wishlists-wish_list_id-categories
+      operationId: post-categories
       description: |-
-        wish_listへのカテゴリーの追加。
+        カテゴリーの新規作成。
 
-        wish_listに招待されている人のみ可能。
+        指定したwish_listに招待されている人のみ可能。
   '/wishcards/{wish_card_id}':
     parameters:
       - schema:
@@ -163,22 +158,77 @@ paths:
         wish_cardの削除。
 
         親の親のwish_listに招待されている人のみ可能。
-  '/categories/{category_id}/wishcards':
-    parameters:
-      - schema:
-          type: integer
-        name: category_id
-        in: path
-        required: true
+  /wishcards:
+    parameters: []
     post:
       summary: wish_card create
       tags:
         - wish_cards
       responses: {}
-      operationId: post-categories-category_id-wishcards
+      operationId: post-wishcards
       description: |-
-        カテゴリーにwish_cardを追加する。
+        wish_cardを作成する。
 
-        カテゴリーの親wish_listに招待されている人のみ可能。
+        指定したカテゴリーの所属wish_listに招待されている人のみ可能。
+  '/albums/{album_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: album_id
+        in: path
+        required: true
+    get:
+      summary: album get
+      tags:
+        - albums
+      responses: {}
+      operationId: get-albums-album_id
+      description: |-
+        アルバム詳細情報を取得する。
+
+        アルバムに招待されている人のみ可能。
+    put:
+      summary: album update
+      tags:
+        - albums
+      responses: {}
+      operationId: put-albums-album_id
+      description: |-
+        アルバムを更新する。
+
+        アルバムに招待されている人のみ可能。
+    delete:
+      summary: album delete
+      tags:
+        - albums
+      responses: {}
+      operationId: delete-albums-album_id
+      description: |-
+        アルバムを削除する。
+
+        アルバムに招待されている人のみ可能。（ホストのみにすべき？）
+  /albums:
+    get:
+      summary: album list get
+      tags:
+        - albums
+      responses: {}
+      operationId: get-albums
+      description: 自分のアルバム一覧。
+    post:
+      summary: album create
+      tags:
+        - albums
+      responses: {}
+      operationId: post-albums
+      description: アルバム新規作成。
+  /memories:
+    post:
+      summary: memory create
+      tags:
+        - memories
+      responses: {}
+      operationId: post-memories
+      description: 思い出の新規作成。
 components:
   schemas: {}
