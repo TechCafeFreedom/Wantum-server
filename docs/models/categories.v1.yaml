@@ -1,0 +1,7 @@
+title: categories
+type: object
+x-tags:
+  - categories
+properties:
+  id:
+    type: string

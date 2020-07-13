@@ -1,0 +1,7 @@
+title: profiles
+type: object
+x-tags:
+  - profiles
+properties:
+  id:
+    type: string

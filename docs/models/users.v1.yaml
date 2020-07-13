@@ -1,0 +1,7 @@
+title: users
+type: object
+x-tags:
+  - users
+properties:
+  id:
+    type: string

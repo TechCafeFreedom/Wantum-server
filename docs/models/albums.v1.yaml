@@ -1,0 +1,29 @@
+title: albums
+type: object
+x-tags:
+  - albums
+properties:
+  id:
+    type: integer
+  title:
+    type: string
+  invite_url:
+    type: string
+  created_at:
+    type: string
+    format: date-time
+  updated_at:
+    type: string
+    format: date-time
+  deleted_at:
+    type: string
+    format: date-time
+  user_id:
+    type: integer
+required:
+  - id
+  - title
+  - invite_url
+  - created_at
+  - updated_at
+  - user_id

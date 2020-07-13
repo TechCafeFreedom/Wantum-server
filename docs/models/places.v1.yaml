@@ -1,0 +1,7 @@
+title: places
+type: object
+x-tags:
+  - places
+properties:
+  id:
+    type: string

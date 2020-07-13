@@ -1,0 +1,34 @@
+openapi: 3.0.0
+info:
+  title: wantum
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  '/users/{user_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: user_id
+        in: path
+        required: true
+    get:
+      summary: user get
+      tags:
+        - users
+      responses: {}
+      operationId: get-users-user_id
+    put:
+      summary: user update
+      tags:
+        - users
+      responses: {}
+      operationId: put-users-user_id
+    delete:
+      summary: user delete
+      tags:
+        - users
+      responses: {}
+      operationId: delete-users-user_id
+components:
+  schemas: {}

@@ -1,0 +1,7 @@
+title: memories
+type: object
+x-tags:
+  - memories
+properties:
+  id:
+    type: string

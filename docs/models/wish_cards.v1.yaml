@@ -1,0 +1,7 @@
+title: wish_cards
+type: object
+x-tags:
+  - wish_cards
+properties:
+  id:
+    type: string

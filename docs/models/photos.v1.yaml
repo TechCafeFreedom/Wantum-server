@@ -1,0 +1,7 @@
+title: photos
+type: object
+x-tags:
+  - photos
+properties:
+  id:
+    type: string

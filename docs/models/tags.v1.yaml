@@ -1,0 +1,7 @@
+title: tags
+type: object
+x-tags:
+  - tags
+properties:
+  id:
+    type: string
