@@ -4,4 +4,28 @@ x-tags:
   - memories
 properties:
   id:
+    type: integer
+  date:
     type: string
+  activity:
+    type: string
+  description:
+    type: string
+  place:
+    $ref: ./places.v1.yaml
+  photos:
+    type: array
+    items:
+      $ref: ./photos.v1.yaml
+  tags:
+    type: array
+    items:
+      $ref: ./tags.v1.yaml
+required:
+  - id
+  - date
+  - activity
+  - description
+  - place
+  - photos
+  - tags

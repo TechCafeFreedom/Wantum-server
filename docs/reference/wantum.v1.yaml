@@ -27,7 +27,7 @@ paths:
       description: |-
         wish_list詳細情報を取得する。
 
-        そのwish_listに招待されている人だけが見られる。
+        wish_listの管理者および招待されている人だけが見られる。
 
         category, wish_card をネストしたjsonを返す。
     put:
@@ -40,26 +40,12 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  title:
-                    type: string
-                  image_url:
-                    type: string
-                  invite_url:
-                    type: string
-                required:
-                  - id
-                  - title
-                  - image_url
-                  - invite_url
+                $ref: ../models/wish_lists.v1.yaml
       operationId: put-wishlists-wish_list_id
       description: |-
         wish_listの更新。
 
-        そのwish_listに招待されている人のみ可能（もしくはホストのみ？）。
+        wish_listの管理者のみ可能。
       requestBody:
         content:
           application/json:
@@ -68,6 +54,10 @@ paths:
               properties:
                 title:
                   type: string
+                members:
+                  type: array
+                  items:
+                    type: integer
           multipart/form-data:
             schema:
               type: object
@@ -84,7 +74,7 @@ paths:
       description: |-
         wish_listの削除。
 
-        そのwish_listに招待されている人のみ可能（もしくはホストのみ？）。
+        wish_listの管理者のみ可能。
   /wishlists:
     post:
       summary: wish_list create
@@ -107,8 +97,13 @@ paths:
               properties:
                 title:
                   type: string
+                members:
+                  type: array
+                  items:
+                    type: integer
               required:
                 - title
+                - members
           multipart/form-data:
             schema:
               type: object
@@ -136,17 +131,23 @@ paths:
                       type: string
                     invite_url:
                       type: string
+                    owner:
+                      $ref: ../models/users.v1.yaml
+                    members:
+                      type: array
+                      items:
+                        $ref: ../models/users.v1.yaml
                   required:
                     - id
                     - title
                     - image_url
                     - invite_url
+                    - owner
+                    - members
       tags:
         - wish_lists
       description: |-
-        wish_list一覧。
-
-        自分の所持している全wish_listを返す。
+        自分のwish_listの一覧を返す。
 
         レスポンスjsonは、category, wish_card をネストしない。
   '/categories/{category_id}':
@@ -171,7 +172,7 @@ paths:
       description: |-
         カテゴリーの更新。
 
-        親のwish_listに招待されている人のみ可能。
+        wish_listの管理者および招待されている人のみ可能。
       requestBody:
         content:
           application/json:
@@ -191,7 +192,7 @@ paths:
       description: |-
         カテゴリーの削除。
 
-        親のwish_listに招待されている人のみ可能。
+        wish_listの管理者および招待されている人のみ可能。
   /categories:
     parameters: []
     post:
@@ -209,7 +210,7 @@ paths:
       description: |-
         カテゴリーの新規作成。
 
-        指定したwish_listに招待されている人のみ可能。
+        wish_listの管理者および招待されている人のみ可能。
       requestBody:
         content:
           application/json:
@@ -245,7 +246,7 @@ paths:
       description: |-
         wish_cardの更新。
 
-        親の親のwish_listに招待されている人のみ可能。
+        wish_listの管理者および招待されている人のみ可能。
       requestBody:
         content:
           application/json:
@@ -273,7 +274,7 @@ paths:
       description: |-
         wish_cardの削除。
 
-        親の親のwish_listに招待されている人のみ可能。
+        wish_listの管理者および招待されている人のみ可能。
   /wishcards:
     parameters: []
     post:
@@ -291,7 +292,7 @@ paths:
       description: |-
         wish_cardを作成する。
 
-        指定したカテゴリーの所属wish_listに招待されている人のみ可能。
+        wish_listの管理者および招待されている人のみ可能。
       requestBody:
         content:
           application/json:
@@ -324,66 +325,164 @@ paths:
       summary: album get
       tags:
         - albums
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/albums.v1.yaml
       operationId: get-albums-album_id
       description: |-
         アルバム詳細情報を取得する。
 
-        アルバムに招待されている人のみ可能。
+        アルバムの管理者および招待されている人のみ可能。
 
         memoryをネストしたjsonを返す。
     put:
       summary: album update
       tags:
         - albums
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/albums.v1.yaml
       operationId: put-albums-album_id
       description: |-
         アルバムを更新する。
 
-        アルバムに招待されている人のみ可能。
+        アルバムの管理者のみ可能。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                members:
+                  type: array
+                  items:
+                    type: integer
     delete:
       summary: album delete
       tags:
         - albums
-      responses: {}
+      responses:
+        '200':
+          description: OK
       operationId: delete-albums-album_id
       description: |-
         アルバムを削除する。
 
-        アルバムに招待されている人のみ可能。（ホストのみにすべき？）
+        アルバムの管理者のみ可能。
   /albums:
     get:
       summary: album list get
       tags:
         - albums
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    invite_url:
+                      type: string
+                    owner:
+                      $ref: ../models/users.v1.yaml
+                    members:
+                      type: array
+                      items:
+                        $ref: ../models/users.v1.yaml
+                  required:
+                    - title
+                    - invite_url
+                    - owner
+                    - members
       operationId: get-albums
       description: 自分のアルバム一覧。
     post:
       summary: album create
       tags:
         - albums
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/albums.v1.yaml
       operationId: post-albums
       description: アルバム新規作成。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                members:
+                  type: array
+                  items:
+                    type: integer
+              required:
+                - title
+                - members
   /memories:
     post:
       summary: memory create
       tags:
         - memories
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/memories.v1.yaml
       operationId: post-memories
       description: |-
         思い出の新規作成。
 
         指定したwish_cardは削除される。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                wish_card_id:
+                  type: integer
+                album_id:
+                  type: integer
+              required:
+                - wish_card_id
+                - album_id
   /memories/timeline:
     get:
       summary: memory timeline
       tags:
         - memories
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/memories.v1.yaml
       operationId: get-memories-timeline
       description: |-
         タイムライン。
@@ -400,12 +499,35 @@ paths:
       summary: wish_card create by memory
       tags:
         - wish_cards
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/wish_cards.v1.yaml
       operationId: post-memories-memory_id-wishcards
       description: |-
         memoryをPickしてwish_cardを作成。
 
-        指定したcategoryの親wish_listに招待されている人のみ可能。
+        wish_listの管理者および招待されている人のみ可能。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                memory_id:
+                  type: integer
+                date:
+                  type: string
+                description:
+                  type: string
+                category_id:
+                  type: integer
+              required:
+                - memory_id
+                - category_id
   '/profiles/{profile_id}':
     parameters:
       - schema:

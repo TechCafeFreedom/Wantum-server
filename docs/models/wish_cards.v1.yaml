@@ -13,9 +13,14 @@ properties:
     type: string
   place:
     $ref: ./places.v1.yaml
+  tags:
+    type: array
+    items:
+      $ref: ./tags.v1.yaml
 required:
   - id
   - activity
   - description
   - date
   - place
+  - tags

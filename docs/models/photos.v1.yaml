@@ -4,4 +4,9 @@ x-tags:
   - photos
 properties:
   id:
+    type: integer
+  photo_url:
     type: string
+required:
+  - id
+  - photo_url

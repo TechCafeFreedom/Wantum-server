@@ -9,21 +9,20 @@ properties:
     type: string
   invite_url:
     type: string
-  created_at:
-    type: string
-    format: date-time
-  updated_at:
-    type: string
-    format: date-time
-  deleted_at:
-    type: string
-    format: date-time
-  user_id:
-    type: integer
+  owner:
+    $ref: ./users.v1.yaml
+  members:
+    type: array
+    items:
+      $ref: ./users.v1.yaml
+  memories:
+    type: array
+    items:
+      $ref: ./memories.v1.yaml
 required:
   - id
   - title
   - invite_url
-  - created_at
-  - updated_at
-  - user_id
+  - owner
+  - members
+  - memories
