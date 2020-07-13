@@ -30,5 +30,155 @@ paths:
         - users
       responses: {}
       operationId: delete-users-user_id
+  '/wishlists/{wish_list_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: wish_list_id
+        in: path
+        required: true
+    get:
+      summary: wish_list get
+      tags:
+        - wish_lists
+      responses: {}
+      operationId: get-wishlists-wish_list_id
+      description: |-
+        wish_listを返す。
+
+        そのwish_listに招待されている人だけが見られる。
+
+        category, wish_card をネストしたjsonを返す。
+    put:
+      summary: wish_list update
+      tags:
+        - wish_lists
+      responses: {}
+      operationId: put-wishlists-wish_list_id
+      description: |-
+        wish_listの更新。
+
+        そのwish_listに招待されている人のみ可能（もしくはホストのみ？）。
+    delete:
+      summary: wish_list delete
+      tags:
+        - wish_lists
+      responses: {}
+      operationId: delete-wishlists-wish_list_id
+      description: |-
+        wish_listの削除。
+
+        そのwish_listに招待されている人のみ可能（もしくはホストのみ？）。
+  /wishlists:
+    post:
+      summary: wish_list create
+      tags:
+        - wish_lists
+      responses: {}
+      operationId: post-wishlists
+      description: wish_listの新規作成。
+    parameters: []
+    get:
+      summary: wish_list list get
+      operationId: get-wishlists
+      responses:
+        '200':
+          description: OK
+      tags:
+        - wish_lists
+      description: |-
+        wish_list一覧。
+
+        自分の所持している全wish_listを返す。
+
+        レスポンスjsonは、category, wish_card をネストしない。
+  '/categories/{category_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: category_id
+        in: path
+        required: true
+    put:
+      summary: category update
+      tags:
+        - categories
+      responses: {}
+      operationId: put-categories-category_id
+      description: |-
+        カテゴリーの更新。
+
+        親のwish_listに招待されている人のみ可能。
+    delete:
+      summary: category delete
+      tags:
+        - categories
+      responses: {}
+      operationId: delete-categories-category_id
+      description: |-
+        カテゴリーの削除。
+
+        親のwish_listに招待されている人のみ可能。
+  '/wishlists/{wish_list_id}/categories':
+    parameters:
+      - schema:
+          type: integer
+        name: wish_list_id
+        in: path
+        required: true
+    post:
+      summary: category create
+      tags:
+        - categories
+      responses: {}
+      operationId: post-wishlists-wish_list_id-categories
+      description: |-
+        wish_listへのカテゴリーの追加。
+
+        wish_listに招待されている人のみ可能。
+  '/wishcards/{wish_card_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: wish_card_id
+        in: path
+        required: true
+    put:
+      summary: wish_card update
+      tags:
+        - wish_cards
+      responses: {}
+      operationId: put-wishcards-wish_card_id
+      description: |-
+        wish_cardの更新。
+
+        親の親のwish_listに招待されている人のみ可能。
+    delete:
+      summary: wish_card delete
+      tags:
+        - wish_cards
+      responses: {}
+      operationId: delete-wishcards-wish_card_id
+      description: |-
+        wish_cardの削除。
+
+        親の親のwish_listに招待されている人のみ可能。
+  '/categories/{category_id}/wishcards':
+    parameters:
+      - schema:
+          type: integer
+        name: category_id
+        in: path
+        required: true
+    post:
+      summary: wish_card create
+      tags:
+        - wish_cards
+      responses: {}
+      operationId: post-categories-category_id-wishcards
+      description: |-
+        カテゴリーにwish_cardを追加する。
+
+        カテゴリーの親wish_listに招待されている人のみ可能。
 components:
   schemas: {}
