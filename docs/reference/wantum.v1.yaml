@@ -5,32 +5,6 @@ info:
 servers:
   - url: 'http://localhost:3000'
 paths:
-  '/users/{user_id}':
-    parameters:
-      - schema:
-          type: integer
-        name: user_id
-        in: path
-        required: true
-    get:
-      summary: user get
-      tags:
-        - users
-      responses: {}
-      operationId: get-users-user_id
-      description: ''
-    put:
-      summary: user update
-      tags:
-        - users
-      responses: {}
-      operationId: put-users-user_id
-    delete:
-      summary: user delete
-      tags:
-        - users
-      responses: {}
-      operationId: delete-users-user_id
   '/wishlists/{wish_list_id}':
     parameters:
       - schema:
@@ -264,5 +238,58 @@ paths:
         memoryをPickしてwish_cardを作成。
 
         指定したcategoryの親wish_listに招待されている人のみ可能。
+  '/profiles/{profile_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: profile_id
+        in: path
+        required: true
+    get:
+      summary: profile get
+      tags:
+        - profiles
+      responses: {}
+      operationId: get-profiles-profile_id
+      description: ユーザのプロフィールを取得する。
+  /profiles:
+    put:
+      summary: profile update
+      tags:
+        - profiles
+      responses: {}
+      operationId: put-profiles
+      description: プロフィール情報の更新。
+    post:
+      summary: profile create
+      tags:
+        - profiles
+      responses: {}
+      operationId: post-profiles
+      description: |-
+        プロフィール情報の新規作成。
+
+        既に作成済みの場合エラー。
+  /auth/signup:
+    post:
+      summary: signup
+      tags:
+        - users
+      responses: {}
+      operationId: post-auth-signup
+      description: ユーザ新規登録。
+  /auth/signin:
+    get:
+      summary: signin
+      operationId: get-auth-signin
+      responses:
+        '200':
+          description: OK
+      tags:
+        - users
+      description: |-
+        ユーザログイン。
+
+        ヘッダにJWTを持たせてリクエストを送ってください。
 components:
   schemas: {}
