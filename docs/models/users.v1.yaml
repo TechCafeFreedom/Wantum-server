@@ -4,4 +4,12 @@ x-tags:
   - users
 properties:
   id:
+    type: integer
+  user_name:
     type: string
+  mail:
+    type: string
+required:
+  - id
+  - user_name
+  - mail

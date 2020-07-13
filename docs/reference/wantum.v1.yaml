@@ -249,35 +249,129 @@ paths:
       summary: profile get
       tags:
         - profiles
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/profiles.v1.yaml
+        '':
+          content:
+            application/json:
+              schema:
+                $ref: ../models/profiles.v1.yaml
+          description: OK
       operationId: get-profiles-profile_id
-      description: ユーザのプロフィールを取得する。
+      description: |-
+        ユーザのプロフィールを取得する。
+
+        レスポンスjsonにはユーザのmemoryも含む。
+
+        （公開・非公開機能が実装された場合：他人には公開のものが、本人には公開・非公開いずれも取得できる）
   /profiles:
     put:
       summary: profile update
       tags:
         - profiles
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/profiles.v1.yaml
       operationId: put-profiles
       description: プロフィール情報の更新。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                bio:
+                  type: string
+                gender:
+                  type: integer
+                phone:
+                  type: string
+                place:
+                  type: string
+                birth:
+                  type: string
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
     post:
       summary: profile create
       tags:
         - profiles
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/profiles.v1.yaml
       operationId: post-profiles
       description: |-
         プロフィール情報の新規作成。
 
         既に作成済みの場合エラー。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                bio:
+                  type: string
+                gender:
+                  type: integer
+                phone:
+                  type: string
+                place:
+                  type: string
+                birth:
+                  type: string
+              required:
+                - name
+                - gender
+                - phone
+                - birth
+          multipart/form-data:
+            schema:
+              type: object
+        description: サムネイル画像も同時に送る。
   /auth/signup:
     post:
       summary: signup
       tags:
         - users
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/users.v1.yaml
       operationId: post-auth-signup
       description: ユーザ新規登録。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+              required:
+                - user_name
   /auth/signin:
     get:
       summary: signin
@@ -285,6 +379,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/users.v1.yaml
       tags:
         - users
       description: |-
