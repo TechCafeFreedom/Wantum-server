@@ -16,7 +16,13 @@ paths:
       summary: wish_list get
       tags:
         - wish_lists
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/wish_lists.v1.yaml
       operationId: get-wishlists-wish_list_id
       description: |-
         wish_list詳細情報を取得する。
@@ -28,17 +34,52 @@ paths:
       summary: wish_list update
       tags:
         - wish_lists
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+                  image_url:
+                    type: string
+                  invite_url:
+                    type: string
+                required:
+                  - id
+                  - title
+                  - image_url
+                  - invite_url
       operationId: put-wishlists-wish_list_id
       description: |-
         wish_listの更新。
 
         そのwish_listに招待されている人のみ可能（もしくはホストのみ？）。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
+        description: ''
     delete:
       summary: wish_list delete
       tags:
         - wish_lists
-      responses: {}
+      responses:
+        '200':
+          description: OK
       operationId: delete-wishlists-wish_list_id
       description: |-
         wish_listの削除。
@@ -49,9 +90,30 @@ paths:
       summary: wish_list create
       tags:
         - wish_lists
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/wish_lists.v1.yaml
       operationId: post-wishlists
       description: wish_listの新規作成。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+              required:
+                - title
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
+        description: 必要であれば画像を同時に送る
     parameters: []
     get:
       summary: wish_list list get
@@ -59,6 +121,26 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    title:
+                      type: string
+                    image_url:
+                      type: string
+                    invite_url:
+                      type: string
+                  required:
+                    - id
+                    - title
+                    - image_url
+                    - invite_url
       tags:
         - wish_lists
       description: |-
@@ -78,17 +160,33 @@ paths:
       summary: category update
       tags:
         - categories
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/categories.v1.yaml
       operationId: put-categories-category_id
       description: |-
         カテゴリーの更新。
 
         親のwish_listに招待されている人のみ可能。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
     delete:
       summary: category delete
       tags:
         - categories
-      responses: {}
+      responses:
+        '200':
+          description: OK
       operationId: delete-categories-category_id
       description: |-
         カテゴリーの削除。
@@ -100,12 +198,31 @@ paths:
       summary: category create
       tags:
         - categories
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/categories.v1.yaml
       operationId: post-categories
       description: |-
         カテゴリーの新規作成。
 
         指定したwish_listに招待されている人のみ可能。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                wish_list_id:
+                  type: integer
+              required:
+                - title
+                - wish_list_id
   '/wishcards/{wish_card_id}':
     parameters:
       - schema:
@@ -117,17 +234,41 @@ paths:
       summary: wish_card update
       tags:
         - wish_cards
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/wish_cards.v1.yaml
       operationId: put-wishcards-wish_card_id
       description: |-
         wish_cardの更新。
 
         親の親のwish_listに招待されている人のみ可能。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                activity:
+                  type: string
+                description:
+                  type: string
+                date:
+                  type: string
+                category_id:
+                  type: integer
+                place_id:
+                  type: integer
     delete:
       summary: wish_card delete
       tags:
         - wish_cards
-      responses: {}
+      responses:
+        '200':
+          description: OK
       operationId: delete-wishcards-wish_card_id
       description: |-
         wish_cardの削除。
@@ -139,12 +280,39 @@ paths:
       summary: wish_card create
       tags:
         - wish_cards
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/wish_cards.v1.yaml
       operationId: post-wishcards
       description: |-
         wish_cardを作成する。
 
         指定したカテゴリーの所属wish_listに招待されている人のみ可能。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                activity:
+                  type: string
+                description:
+                  type: string
+                date:
+                  type: string
+                category_id:
+                  type: integer
+                place_id:
+                  type: integer
+              required:
+                - activity
+                - description
+                - category_id
+                - place_id
   '/albums/{album_id}':
     parameters:
       - schema:

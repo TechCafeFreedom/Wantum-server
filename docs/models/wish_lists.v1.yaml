@@ -4,4 +4,23 @@ x-tags:
   - wish_lists
 properties:
   id:
+    type: integer
+  title:
     type: string
+  image_url:
+    type: string
+  invite_url:
+    type: string
+  user:
+    $ref: ./users.v1.yaml
+  categories:
+    type: array
+    items:
+      $ref: ./categories.v1.yaml
+required:
+  - id
+  - title
+  - image_url
+  - invite_url
+  - user
+  - categories

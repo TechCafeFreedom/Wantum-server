@@ -4,4 +4,14 @@ x-tags:
   - categories
 properties:
   id:
+    type: integer
+  title:
     type: string
+  wish_cards:
+    type: array
+    items:
+      $ref: ./wish_cards.v1.yaml
+required:
+  - id
+  - title
+  - wish_cards

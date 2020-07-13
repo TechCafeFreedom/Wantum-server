@@ -4,4 +4,18 @@ x-tags:
   - wish_cards
 properties:
   id:
+    type: integer
+  activity:
     type: string
+  description:
+    type: string
+  date:
+    type: string
+  place:
+    $ref: ./places.v1.yaml
+required:
+  - id
+  - activity
+  - description
+  - date
+  - place
