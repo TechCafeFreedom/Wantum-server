@@ -18,6 +18,7 @@ paths:
         - users
       responses: {}
       operationId: get-users-user_id
+      description: ''
     put:
       summary: user update
       tags:
@@ -187,6 +188,8 @@ paths:
         アルバム詳細情報を取得する。
 
         アルバムに招待されている人のみ可能。
+
+        memoryをネストしたjsonを返す。
     put:
       summary: album update
       tags:
@@ -229,6 +232,37 @@ paths:
         - memories
       responses: {}
       operationId: post-memories
-      description: 思い出の新規作成。
+      description: |-
+        思い出の新規作成。
+
+        指定したwish_cardは削除される。
+  /memories/timeline:
+    get:
+      summary: memory timeline
+      tags:
+        - memories
+      responses: {}
+      operationId: get-memories-timeline
+      description: |-
+        タイムライン。
+
+        memoriesをcreated_atの新しい順で返す。
+  '/memories/{memory_id}/wishcards':
+    parameters:
+      - schema:
+          type: integer
+        name: memory_id
+        in: path
+        required: true
+    post:
+      summary: wish_card create by memory
+      tags:
+        - wish_cards
+      responses: {}
+      operationId: post-memories-memory_id-wishcards
+      description: |-
+        memoryをPickしてwish_cardを作成。
+
+        指定したcategoryの親wish_listに招待されている人のみ可能。
 components:
   schemas: {}
