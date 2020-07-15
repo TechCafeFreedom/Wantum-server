@@ -23,6 +23,12 @@ paths:
             application/json:
               schema:
                 $ref: ../models/wish_lists.v1.yaml
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '404':
+          description: やりたいことリストが見つかりませんでした
       operationId: get-wishlists-wish_list_id
       description: |-
         wish_list詳細情報を取得する。
@@ -41,6 +47,14 @@ paths:
             application/json:
               schema:
                 $ref: ../models/wish_lists.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '404':
+          description: やりたいことリストが見つかりませんでした／ユーザが見つかりませんでした
       operationId: put-wishlists-wish_list_id
       description: |-
         wish_listの更新。
@@ -70,6 +84,12 @@ paths:
       responses:
         '200':
           description: OK
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '404':
+          description: やりたいことリストが見つかりませんでした
       operationId: delete-wishlists-wish_list_id
       description: |-
         wish_listの削除。
@@ -87,6 +107,12 @@ paths:
             application/json:
               schema:
                 $ref: ../models/wish_lists.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: ログインしてください
+        '404':
+          description: ユーザが見つかりませんでした
       operationId: post-wishlists
       description: wish_listの新規作成。
       requestBody:
@@ -144,6 +170,8 @@ paths:
                     - invite_url
                     - owner
                     - members
+        '401':
+          description: ログインしてください
       tags:
         - wish_lists
       description: |-
@@ -168,6 +196,14 @@ paths:
             application/json:
               schema:
                 $ref: ../models/categories.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '404':
+          description: カテゴリーが見つかりませんでした
       operationId: put-categories-category_id
       description: |-
         カテゴリーの更新。
@@ -188,6 +224,12 @@ paths:
       responses:
         '200':
           description: OK
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '404':
+          description: カテゴリーが見つかりませんでした
       operationId: delete-categories-category_id
       description: |-
         カテゴリーの削除。
@@ -206,6 +248,14 @@ paths:
             application/json:
               schema:
                 $ref: ../models/categories.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '404':
+          description: やりたいことリストが見つかりませんでした
       operationId: post-categories
       description: |-
         カテゴリーの新規作成。
@@ -242,6 +292,14 @@ paths:
             application/json:
               schema:
                 $ref: ../models/wish_cards.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '404':
+          description: やりたいことが見つかりませんでした／カテゴリーが見つかりませんでした／場所が見つかりませんでした
       operationId: put-wishcards-wish_card_id
       description: |-
         wish_cardの更新。
@@ -270,6 +328,12 @@ paths:
       responses:
         '200':
           description: OK
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '404':
+          description: やりたいことが見つかりませんでした
       operationId: delete-wishcards-wish_card_id
       description: |-
         wish_cardの削除。
@@ -288,6 +352,14 @@ paths:
             application/json:
               schema:
                 $ref: ../models/wish_cards.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '404':
+          description: カテゴリーが見つかりませんでした／場所が見つかりませんでした
       operationId: post-wishcards
       description: |-
         wish_cardを作成する。
@@ -332,6 +404,12 @@ paths:
             application/json:
               schema:
                 $ref: ../models/albums.v1.yaml
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '404':
+          description: アルバムが見つかりませんでした
       operationId: get-albums-album_id
       description: |-
         アルバム詳細情報を取得する。
@@ -350,6 +428,14 @@ paths:
             application/json:
               schema:
                 $ref: ../models/albums.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '404':
+          description: アルバムが見つかりませんでした／ユーザが見つかりませんでした
       operationId: put-albums-album_id
       description: |-
         アルバムを更新する。
@@ -374,6 +460,12 @@ paths:
       responses:
         '200':
           description: OK
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '404':
+          description: アルバムが見つかりませんでした
       operationId: delete-albums-album_id
       description: |-
         アルバムを削除する。
@@ -409,6 +501,8 @@ paths:
                     - invite_url
                     - owner
                     - members
+        '401':
+          description: ログインしてください
       operationId: get-albums
       description: 自分のアルバム一覧。
     post:
@@ -422,6 +516,12 @@ paths:
             application/json:
               schema:
                 $ref: ../models/albums.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: ログインしてください
+        '404':
+          description: ユーザが見つかりませんでした
       operationId: post-albums
       description: アルバム新規作成。
       requestBody:
@@ -451,6 +551,16 @@ paths:
             application/json:
               schema:
                 $ref: ../models/memories.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '404':
+          description: やりたいことが見つかりませんでした／アルバムが見つかりませんでした
+        '409':
+          description: やりたいことは既に思い出になっています
       operationId: post-memories
       description: |-
         思い出の新規作成。
@@ -506,6 +616,14 @@ paths:
             application/json:
               schema:
                 $ref: ../models/wish_cards.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '404':
+          description: 思い出が見つかりませんでした／カテゴリーが見つかりませんでした
       operationId: post-memories-memory_id-wishcards
       description: |-
         memoryをPickしてwish_cardを作成。
@@ -546,6 +664,8 @@ paths:
             application/json:
               schema:
                 $ref: ../models/profiles.v1.yaml
+        '404':
+          description: プロフィールが見つかりませんでした
         '':
           content:
             application/json:
@@ -571,6 +691,14 @@ paths:
             application/json:
               schema:
                 $ref: ../models/profiles.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '409':
+          description: その電話番号は既に登録されています
       operationId: put-profiles
       description: プロフィール情報の更新。
       requestBody:
@@ -606,6 +734,14 @@ paths:
             application/json:
               schema:
                 $ref: ../models/profiles.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: ログインしてください
+        '403':
+          description: 操作が許可されていません
+        '409':
+          description: その電話番号は既に登録されています
       operationId: post-profiles
       description: |-
         プロフィール情報の新規作成。
@@ -650,6 +786,12 @@ paths:
             application/json:
               schema:
                 $ref: ../models/users.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: 認証に失敗しました
+        '409':
+          description: user_nameは既に使用されています
       operationId: post-auth-signup
       description: ユーザ新規登録。
       requestBody:
@@ -673,6 +815,8 @@ paths:
             application/json:
               schema:
                 $ref: ../models/users.v1.yaml
+        '401':
+          description: 認証に失敗しました
       tags:
         - users
       description: |-
