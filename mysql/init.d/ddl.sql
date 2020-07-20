@@ -135,11 +135,6 @@ CREATE TABLE IF NOT EXISTS albums(
     FOREIGN KEY (user_id)
     REFERENCES users (id)
     ON UPDATE CASCADE
-    ON DELETE CASCADE,
-  CONSTRAINT `fk_album_place`
-    FOREIGN KEY (place_id)
-    REFERENCES places (id)
-    ON UPDATE CASCADE
     ON DELETE CASCADE
 );
 
