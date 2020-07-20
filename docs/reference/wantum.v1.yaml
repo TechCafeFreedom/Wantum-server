@@ -4,6 +4,8 @@ info:
   version: '1.0'
 servers:
   - url: 'http://localhost:3000'
+  - url: 'https://stoplight.io/p/mocks/13862/146524/'
+    description: ''
 paths:
   '/wishlists/{wish_list_id}':
     parameters:
@@ -825,3 +827,4 @@ paths:
         ヘッダにJWTを持たせてリクエストを送ってください。
 components:
   schemas: {}
+  securitySchemes: {}
