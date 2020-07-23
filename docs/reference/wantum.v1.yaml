@@ -806,25 +806,6 @@ paths:
                   type: string
               required:
                 - user_name
-  /auth/signin:
-    get:
-      summary: signin
-      operationId: get-auth-signin
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: ../models/users.v1.yaml
-        '401':
-          description: 認証に失敗しました
-      tags:
-        - users
-      description: |-
-        ユーザログイン。
-
-        ヘッダにJWTを持たせてリクエストを送ってください。
 components:
   schemas: {}
   securitySchemes: {}
