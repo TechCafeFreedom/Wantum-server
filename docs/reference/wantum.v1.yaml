@@ -732,7 +732,7 @@ paths:
         '403':
           description: 操作が許可されていません
         '409':
-          description: その電話番号は既に登録されています
+          description: その電話番号は既に登録されています／そのuser_nameは既に登録されています
       operationId: put-users
       description: プロフィール情報の更新。
       requestBody:
@@ -782,16 +782,7 @@ paths:
           description: user_nameは既に使用されています
       operationId: post-auth-signup
       description: ユーザ新規登録。
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                user_name:
-                  type: string
-              required:
-                - user_name
+      requestBody: {}
 components:
   schemas: {}
   securitySchemes: {}
