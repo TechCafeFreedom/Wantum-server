@@ -21,6 +21,8 @@ properties:
     type: array
     items:
       $ref: ./tags.v1.yaml
+  author:
+    $ref: ./users.v1.yaml
 required:
   - id
   - date
@@ -29,3 +31,4 @@ required:
   - place
   - photos
   - tags
+  - author

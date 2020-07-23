@@ -25,3 +25,9 @@ required:
   - id
   - user_name
   - mail
+  - name
+  - thumbnail
+  - bio
+  - gender
+  - place
+  - birth
