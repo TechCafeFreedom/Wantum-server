@@ -648,17 +648,15 @@ paths:
               required:
                 - memory_id
                 - category_id
-  '/profiles/{profile_id}':
+  '/users/{user_id}':
     parameters:
       - schema:
-          type: integer
-        name: profile_id
+          type: string
+        name: user_id
         in: path
         required: true
     get:
-      summary: profile get
-      tags:
-        - profiles
+      summary: user get
       responses:
         '200':
           description: OK
@@ -672,27 +670,61 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/profiles.v1.yaml
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  user_name:
+                    type: string
+                  mail:
+                    type: string
+                  name:
+                    type: string
+                  thumbnail:
+                    type: string
+                  bio:
+                    type: string
+                  gender:
+                    type: integer
+                  place:
+                    type: string
+                  birth:
+                    type: string
+                  memories:
+                    type: array
+                    items:
+                      $ref: ../models/memories.v1.yaml
+                required:
+                  - id
+                  - user_name
+                  - mail
+                  - name
+                  - thumbnail
+                  - bio
+                  - gender
+                  - place
+                  - birth
+                  - memories
           description: OK
-      operationId: get-profiles-profile_id
+      operationId: get-users-user_id
       description: |-
         ユーザのプロフィールを取得する。
 
         レスポンスjsonにはユーザのmemoryも含む。
 
         （公開・非公開機能が実装された場合：他人には公開のものが、本人には公開・非公開いずれも取得できる）
-  /profiles:
-    put:
-      summary: profile update
       tags:
-        - profiles
+        - users
+  /users:
+    put:
+      summary: user update
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: ../models/profiles.v1.yaml
+                $ref: ../models/users.v1.yaml
         '400':
           description: パラメータが不正です
         '401':
@@ -701,7 +733,7 @@ paths:
           description: 操作が許可されていません
         '409':
           description: その電話番号は既に登録されています
-      operationId: put-profiles
+      operationId: put-users
       description: プロフィール情報の更新。
       requestBody:
         content:
@@ -721,10 +753,15 @@ paths:
                   type: string
                 birth:
                   type: string
+                user_name:
+                  type: string
           multipart/form-data:
             schema:
               type: object
               properties: {}
+      tags:
+        - users
+    parameters: []
   /auth/signup:
     post:
       summary: signup
