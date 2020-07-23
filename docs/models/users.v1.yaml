@@ -9,6 +9,18 @@ properties:
     type: string
   mail:
     type: string
+  name:
+    type: string
+  thumbnail:
+    type: string
+  bio:
+    type: string
+  gender:
+    type: integer
+  place:
+    type: string
+  birth:
+    type: string
 required:
   - id
   - user_name

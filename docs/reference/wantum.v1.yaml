@@ -725,57 +725,6 @@ paths:
             schema:
               type: object
               properties: {}
-    post:
-      summary: profile create
-      tags:
-        - profiles
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: ../models/profiles.v1.yaml
-        '400':
-          description: パラメータが不正です
-        '401':
-          description: ログインしてください
-        '403':
-          description: 操作が許可されていません
-        '409':
-          description: その電話番号は既に登録されています
-      operationId: post-profiles
-      description: |-
-        プロフィール情報の新規作成。
-
-        既に作成済みの場合エラー。
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                bio:
-                  type: string
-                gender:
-                  type: integer
-                phone:
-                  type: string
-                place:
-                  type: string
-                birth:
-                  type: string
-              required:
-                - name
-                - gender
-                - phone
-                - birth
-          multipart/form-data:
-            schema:
-              type: object
-        description: サムネイル画像も同時に送る。
   /auth/signup:
     post:
       summary: signup
