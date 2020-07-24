@@ -1,0 +1,26 @@
+{
+  "name": "debug",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "bootstrap-vue": "^2.15.0",
+    "firebase": "^7.15.0",
+    "js-cookie": "^2.2.1",
+    "vue": "^2.6.11",
+    "vue-head": "^2.2.0",
+    "vue-router": "^3.2.0"
+  },
+  "devDependencies": {
+    "@vue/cli-service": "^4.4.0",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
