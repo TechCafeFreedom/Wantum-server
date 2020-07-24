@@ -31,6 +31,8 @@ paths:
           description: 操作が許可されていません
         '404':
           description: やりたいことリストが見つかりませんでした
+        '500':
+          description: Internal Server Error
       operationId: get-wishlists-wish_list_id
       description: |-
         wish_list詳細情報を取得する。
@@ -57,6 +59,8 @@ paths:
           description: 操作が許可されていません
         '404':
           description: やりたいことリストが見つかりませんでした
+        '500':
+          description: Internal Server Error
       operationId: put-wishlists-wish_list_id
       description: |-
         wish_listの更新。
@@ -88,6 +92,8 @@ paths:
           description: 操作が許可されていません
         '404':
           description: やりたいことリストが見つかりませんでした
+        '500':
+          description: Internal Server Error
       operationId: delete-wishlists-wish_list_id
       description: |-
         wish_listの削除。
@@ -109,6 +115,8 @@ paths:
           description: パラメータが不正です
         '401':
           description: ログインしてください
+        '500':
+          description: Internal Server Error
       operationId: post-wishlists
       description: wish_listの新規作成。
       requestBody:
@@ -163,6 +171,8 @@ paths:
                     - members
         '401':
           description: ログインしてください
+        '500':
+          description: Internal Server Error
       tags:
         - wish_lists
       description: |-
@@ -195,6 +205,8 @@ paths:
           description: 操作が許可されていません
         '404':
           description: カテゴリーが見つかりませんでした
+        '500':
+          description: Internal Server Error
       operationId: put-categories-category_id
       description: |-
         カテゴリーの更新。
@@ -221,6 +233,8 @@ paths:
           description: 操作が許可されていません
         '404':
           description: カテゴリーが見つかりませんでした
+        '500':
+          description: Internal Server Error
       operationId: delete-categories-category_id
       description: |-
         カテゴリーの削除。
@@ -247,6 +261,8 @@ paths:
           description: 操作が許可されていません
         '404':
           description: やりたいことリストが見つかりませんでした
+        '500':
+          description: Internal Server Error
       operationId: post-categories
       description: |-
         カテゴリーの新規作成。
@@ -291,6 +307,8 @@ paths:
           description: 操作が許可されていません
         '404':
           description: やりたいことが見つかりませんでした／カテゴリーが見つかりませんでした／場所が見つかりませんでした
+        '500':
+          description: Internal Server Error
       operationId: put-wishcards-wish_card_id
       description: |-
         wish_cardの更新。
@@ -325,6 +343,8 @@ paths:
           description: 操作が許可されていません
         '404':
           description: やりたいことが見つかりませんでした
+        '500':
+          description: Internal Server Error
       operationId: delete-wishcards-wish_card_id
       description: |-
         wish_cardの削除。
@@ -351,6 +371,8 @@ paths:
           description: 操作が許可されていません
         '404':
           description: カテゴリーが見つかりませんでした／場所が見つかりませんでした
+        '500':
+          description: Internal Server Error
       operationId: post-wishcards
       description: |-
         wish_cardを作成する。
@@ -401,6 +423,8 @@ paths:
           description: 操作が許可されていません
         '404':
           description: アルバムが見つかりませんでした
+        '500':
+          description: Internal Server Error
       operationId: get-albums-album_id
       description: |-
         アルバム詳細情報を取得する。
@@ -427,6 +451,8 @@ paths:
           description: 操作が許可されていません
         '404':
           description: アルバムが見つかりませんでした
+        '500':
+          description: Internal Server Error
       operationId: put-albums-album_id
       description: |-
         アルバムを更新する。
@@ -453,6 +479,8 @@ paths:
           description: 操作が許可されていません
         '404':
           description: アルバムが見つかりませんでした
+        '500':
+          description: Internal Server Error
       operationId: delete-albums-album_id
       description: |-
         アルバムを削除する。
@@ -493,6 +521,8 @@ paths:
                     - members
         '401':
           description: ログインしてください
+        '500':
+          description: Internal Server Error
       operationId: get-albums
       description: 自分のアルバム一覧。
     post:
@@ -510,6 +540,8 @@ paths:
           description: パラメータが不正です
         '401':
           description: ログインしてください
+        '500':
+          description: Internal Server Error
       operationId: post-albums
       description: アルバム新規作成。
       requestBody:
@@ -544,6 +576,8 @@ paths:
           description: やりたいことが見つかりませんでした／アルバムが見つかりませんでした
         '409':
           description: やりたいことは既に思い出になっています
+        '500':
+          description: Internal Server Error
       operationId: post-memories
       description: |-
         思い出の新規作成。
@@ -576,6 +610,8 @@ paths:
                 type: array
                 items:
                   $ref: ../models/memories.v1.yaml
+        '500':
+          description: Internal Server Error
       operationId: get-memories-timeline
       description: |-
         タイムライン。
@@ -607,6 +643,8 @@ paths:
           description: 操作が許可されていません
         '404':
           description: 思い出が見つかりませんでした／カテゴリーが見つかりませんでした
+        '500':
+          description: Internal Server Error
       operationId: post-memories-memory_id-wishcards
       description: |-
         memoryをPickしてwish_cardを作成。
@@ -647,6 +685,8 @@ paths:
                 $ref: ../models/profiles.v1.yaml
         '404':
           description: プロフィールが見つかりませんでした
+        '500':
+          description: Internal Server Error
         '':
           content:
             application/json:
@@ -714,6 +754,8 @@ paths:
           description: 操作が許可されていません
         '409':
           description: その電話番号は既に登録されています／そのuser_nameは既に登録されています
+        '500':
+          description: Internal Server Error
       operationId: put-users
       description: プロフィール情報の更新。
       requestBody:
@@ -761,6 +803,8 @@ paths:
           description: 認証に失敗しました
         '409':
           description: user_nameは既に使用されています
+        '500':
+          description: Internal Server Error
       operationId: post-auth-signup
       description: ユーザ新規登録。
       requestBody: {}
@@ -795,6 +839,8 @@ paths:
           description: アルバムが見つかりませんでした
         '409':
           description: すでにアルバムに参加しています
+        '500':
+          description: Internal Server Error
       operationId: get-albums-album_id-join-invite_id
       description: |-
         招待リンクを踏んだときにこのAPIが叩かれる。
@@ -831,6 +877,8 @@ paths:
           description: やりたいことリストが見つかりませんでした
         '409':
           description: すでにやりたいことリストに参加しています
+        '500':
+          description: Internal Server Error
       operationId: get-wishlists-wish_list_id-join-invite_id
       description: |-
         招待リンクを踏んだときにこのAPIが叩かれる。
