@@ -15,7 +15,7 @@ paths:
         in: path
         required: true
     get:
-      summary: wish_list get
+      summary: やりたいことリスト詳細の取得
       tags:
         - wish_lists
       responses:
@@ -43,7 +43,7 @@ paths:
       security:
         - JWT-Auth: []
     put:
-      summary: wish_list update
+      summary: やりたいことリスト情報の更新
       tags:
         - wish_lists
       responses:
@@ -84,7 +84,7 @@ paths:
       security:
         - JWT-Auth: []
     delete:
-      summary: wish_list delete
+      summary: やりたいことリストの削除
       tags:
         - wish_lists
       responses:
@@ -107,7 +107,7 @@ paths:
         - JWT-Auth: []
   /wishlists:
     post:
-      summary: wish_list create
+      summary: やりたいことリスト新規作成
       tags:
         - wish_lists
       responses:
@@ -144,7 +144,7 @@ paths:
         - JWT-Auth: []
     parameters: []
     get:
-      summary: wish_list list get
+      summary: 所持／所属やりたいことリスト一覧を取得
       operationId: get-wishlists
       responses:
         '200':
@@ -197,7 +197,7 @@ paths:
         in: path
         required: true
     put:
-      summary: category update
+      summary: カテゴリー情報の更新
       tags:
         - categories
       responses:
@@ -233,7 +233,7 @@ paths:
       security:
         - JWT-Auth: []
     delete:
-      summary: category delete
+      summary: カテゴリー削除
       tags:
         - categories
       responses:
@@ -257,7 +257,7 @@ paths:
   /categories:
     parameters: []
     post:
-      summary: category create
+      summary: カテゴリー新規作成
       tags:
         - categories
       responses:
@@ -305,7 +305,7 @@ paths:
         in: path
         required: true
     put:
-      summary: wish_card update
+      summary: やりたいこと情報の更新
       tags:
         - wish_cards
       responses:
@@ -349,7 +349,7 @@ paths:
       security:
         - JWT-Auth: []
     delete:
-      summary: wish_card delete
+      summary: やりたいことの削除
       tags:
         - wish_cards
       responses:
@@ -373,7 +373,7 @@ paths:
   /wishcards:
     parameters: []
     post:
-      summary: wish_card create
+      summary: やりたいこと新規作成
       tags:
         - wish_cards
       responses:
@@ -429,7 +429,7 @@ paths:
         in: path
         required: true
     get:
-      summary: album get
+      summary: アルバム詳細の取得
       tags:
         - albums
       responses:
@@ -458,7 +458,7 @@ paths:
       security:
         - JWT-Auth: []
     put:
-      summary: album update
+      summary: アルバム情報の更新
       tags:
         - albums
       responses:
@@ -494,7 +494,7 @@ paths:
       security:
         - JWT-Auth: []
     delete:
-      summary: album delete
+      summary: アルバムの削除
       tags:
         - albums
       responses:
@@ -517,7 +517,7 @@ paths:
         - JWT-Auth: []
   /albums:
     get:
-      summary: album list get
+      summary: 所持／所属アルバム一覧を取得
       tags:
         - albums
       responses:
@@ -553,11 +553,11 @@ paths:
         '500':
           description: Internal Server Error
       operationId: get-albums
-      description: 自分のアルバム一覧。
+      description: 自分が所持している、または参加しているアルバムを一覧で取得する。
       security:
         - JWT-Auth: []
     post:
-      summary: album create
+      summary: アルバム新規作成
       tags:
         - albums
       responses:
@@ -589,7 +589,7 @@ paths:
         - JWT-Auth: []
   /memories:
     post:
-      summary: memory create
+      summary: 思い出の新規作成
       tags:
         - memories
       responses:
@@ -633,7 +633,7 @@ paths:
         - JWT-Auth: []
   /memories/timeline:
     get:
-      summary: memory timeline
+      summary: タイムライン
       tags:
         - memories
       responses:
@@ -649,7 +649,7 @@ paths:
           description: Internal Server Error
       operationId: get-memories-timeline
       description: |-
-        タイムライン。
+        思い出のタイムライン。
 
         memoriesをcreated_atの新しい順で返す。
   '/memories/{memory_id}/wishcards':
@@ -660,7 +660,7 @@ paths:
         in: path
         required: true
     post:
-      summary: wish_card create by memory
+      summary: 思い出Pickによるやりたいこと新規作成
       tags:
         - wish_cards
       responses:
@@ -712,7 +712,7 @@ paths:
         in: path
         required: true
     get:
-      summary: user get
+      summary: ユーザのプロフィール取得
       responses:
         '200':
           description: OK
@@ -775,7 +775,7 @@ paths:
         - users
   /users:
     put:
-      summary: user update
+      summary: プロフィール情報の更新
       responses:
         '200':
           description: OK
@@ -826,7 +826,7 @@ paths:
     parameters: []
   /auth/signup:
     get:
-      summary: signup
+      summary: サインアップ
       tags:
         - users
       responses:
@@ -858,7 +858,7 @@ paths:
         in: path
         required: true
     get:
-      summary: album join
+      summary: アルバムへの参加
       tags:
         - albums
       responses:
@@ -898,7 +898,7 @@ paths:
         in: path
         required: true
     get:
-      summary: wish_list join
+      summary: やりたいことリストへの参加
       tags:
         - wish_lists
       responses:
