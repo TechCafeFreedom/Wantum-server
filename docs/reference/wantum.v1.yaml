@@ -786,7 +786,7 @@ paths:
         - users
     parameters: []
   /auth/signup:
-    post:
+    get:
       summary: signup
       tags:
         - users
@@ -797,15 +797,11 @@ paths:
             application/json:
               schema:
                 $ref: ../models/users.v1.yaml
-        '400':
-          description: パラメータが不正です
         '401':
           description: 認証に失敗しました
-        '409':
-          description: user_nameは既に使用されています
         '500':
           description: Internal Server Error
-      operationId: post-auth-signup
+      operationId: get-auth-signup
       description: ユーザ新規登録。
       requestBody: {}
   '/albums/{album_id}/join/{invite_id}':
