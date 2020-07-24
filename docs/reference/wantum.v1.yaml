@@ -40,6 +40,8 @@ paths:
         wish_listの管理者および招待されている人だけが見られる。
 
         category, wish_card をネストしたjsonを返す。
+      security:
+        - JWT-Auth: []
     put:
       summary: wish_list update
       tags:
@@ -79,6 +81,8 @@ paths:
               type: object
               properties: {}
         description: ''
+      security:
+        - JWT-Auth: []
     delete:
       summary: wish_list delete
       tags:
@@ -99,6 +103,8 @@ paths:
         wish_listの削除。
 
         wish_listの管理者のみ可能。
+      security:
+        - JWT-Auth: []
   /wishlists:
     post:
       summary: wish_list create
@@ -134,6 +140,8 @@ paths:
               type: object
               properties: {}
         description: 必要であれば画像を同時に送る
+      security:
+        - JWT-Auth: []
     parameters: []
     get:
       summary: wish_list list get
@@ -179,6 +187,8 @@ paths:
         自分のwish_listの一覧を返す。
 
         レスポンスjsonは、category, wish_card をネストしない。
+      security:
+        - JWT-Auth: []
   '/categories/{category_id}':
     parameters:
       - schema:
@@ -220,6 +230,8 @@ paths:
               properties:
                 title:
                   type: string
+      security:
+        - JWT-Auth: []
     delete:
       summary: category delete
       tags:
@@ -240,6 +252,8 @@ paths:
         カテゴリーの削除。
 
         wish_listの管理者および招待されている人のみ可能。
+      security:
+        - JWT-Auth: []
   /categories:
     parameters: []
     post:
@@ -281,6 +295,8 @@ paths:
               required:
                 - title
                 - wish_list_id
+      security:
+        - JWT-Auth: []
   '/wishcards/{wish_card_id}':
     parameters:
       - schema:
@@ -330,6 +346,8 @@ paths:
                   type: integer
                 place_id:
                   type: integer
+      security:
+        - JWT-Auth: []
     delete:
       summary: wish_card delete
       tags:
@@ -350,6 +368,8 @@ paths:
         wish_cardの削除。
 
         wish_listの管理者および招待されている人のみ可能。
+      security:
+        - JWT-Auth: []
   /wishcards:
     parameters: []
     post:
@@ -399,6 +419,8 @@ paths:
                 - description
                 - category_id
                 - place_id
+      security:
+        - JWT-Auth: []
   '/albums/{album_id}':
     parameters:
       - schema:
@@ -432,6 +454,9 @@ paths:
         アルバムの管理者および招待されている人のみ可能。
 
         memoryをネストしたjsonを返す。
+      parameters: []
+      security:
+        - JWT-Auth: []
     put:
       summary: album update
       tags:
@@ -466,6 +491,8 @@ paths:
               properties:
                 title:
                   type: string
+      security:
+        - JWT-Auth: []
     delete:
       summary: album delete
       tags:
@@ -486,6 +513,8 @@ paths:
         アルバムを削除する。
 
         アルバムの管理者のみ可能。
+      security:
+        - JWT-Auth: []
   /albums:
     get:
       summary: album list get
@@ -525,6 +554,8 @@ paths:
           description: Internal Server Error
       operationId: get-albums
       description: 自分のアルバム一覧。
+      security:
+        - JWT-Auth: []
     post:
       summary: album create
       tags:
@@ -554,6 +585,8 @@ paths:
                   type: string
               required:
                 - title
+      security:
+        - JWT-Auth: []
   /memories:
     post:
       summary: memory create
@@ -596,6 +629,8 @@ paths:
               required:
                 - wish_card_id
                 - album_id
+      security:
+        - JWT-Auth: []
   /memories/timeline:
     get:
       summary: memory timeline
@@ -667,6 +702,8 @@ paths:
               required:
                 - memory_id
                 - category_id
+      security:
+        - JWT-Auth: []
   '/users/{user_id}':
     parameters:
       - schema:
@@ -784,6 +821,8 @@ paths:
               properties: {}
       tags:
         - users
+      security:
+        - JWT-Auth: []
     parameters: []
   /auth/signup:
     get:
@@ -804,6 +843,8 @@ paths:
       operationId: get-auth-signup
       description: ユーザ新規登録。
       requestBody: {}
+      security:
+        - JWT-Auth: []
   '/albums/{album_id}/join/{invite_id}':
     parameters:
       - schema:
@@ -842,6 +883,8 @@ paths:
         招待リンクを踏んだときにこのAPIが叩かれる。
 
         URLに誤りがあると参加リクエストは拒否される。
+      security:
+        - JWT-Auth: []
   '/wishlists/{wish_list_id}/join/{invite_id}':
     parameters:
       - schema:
@@ -880,6 +923,11 @@ paths:
         招待リンクを踏んだときにこのAPIが叩かれる。
 
         URLに誤りがあると参加リクエストは拒否される。
+      security:
+        - JWT-Auth: []
 components:
   schemas: {}
-  securitySchemes: {}
+  securitySchemes:
+    JWT-Auth:
+      type: http
+      scheme: bearer
