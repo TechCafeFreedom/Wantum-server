@@ -56,7 +56,7 @@ paths:
         '403':
           description: 操作が許可されていません
         '404':
-          description: やりたいことリストが見つかりませんでした／ユーザが見つかりませんでした
+          description: やりたいことリストが見つかりませんでした
       operationId: put-wishlists-wish_list_id
       description: |-
         wish_listの更新。
@@ -70,10 +70,6 @@ paths:
               properties:
                 title:
                   type: string
-                members:
-                  type: array
-                  items:
-                    type: integer
           multipart/form-data:
             schema:
               type: object
@@ -113,8 +109,6 @@ paths:
           description: パラメータが不正です
         '401':
           description: ログインしてください
-        '404':
-          description: ユーザが見つかりませんでした
       operationId: post-wishlists
       description: wish_listの新規作成。
       requestBody:
@@ -125,13 +119,8 @@ paths:
               properties:
                 title:
                   type: string
-                members:
-                  type: array
-                  items:
-                    type: integer
               required:
                 - title
-                - members
           multipart/form-data:
             schema:
               type: object
@@ -437,7 +426,7 @@ paths:
         '403':
           description: 操作が許可されていません
         '404':
-          description: アルバムが見つかりませんでした／ユーザが見つかりませんでした
+          description: アルバムが見つかりませんでした
       operationId: put-albums-album_id
       description: |-
         アルバムを更新する。
@@ -451,10 +440,6 @@ paths:
               properties:
                 title:
                   type: string
-                members:
-                  type: array
-                  items:
-                    type: integer
     delete:
       summary: album delete
       tags:
@@ -488,6 +473,8 @@ paths:
                 items:
                   type: object
                   properties:
+                    id:
+                      type: integer
                     title:
                       type: string
                     invite_url:
@@ -499,6 +486,7 @@ paths:
                       items:
                         $ref: ../models/users.v1.yaml
                   required:
+                    - id
                     - title
                     - invite_url
                     - owner
@@ -522,8 +510,6 @@ paths:
           description: パラメータが不正です
         '401':
           description: ログインしてください
-        '404':
-          description: ユーザが見つかりませんでした
       operationId: post-albums
       description: アルバム新規作成。
       requestBody:
@@ -534,13 +520,8 @@ paths:
               properties:
                 title:
                   type: string
-                members:
-                  type: array
-                  items:
-                    type: integer
               required:
                 - title
-                - members
   /memories:
     post:
       summary: memory create
