@@ -764,6 +764,78 @@ paths:
       operationId: post-auth-signup
       description: ユーザ新規登録。
       requestBody: {}
+  '/albums/{album_id}/join/{invite_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: album_id
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: invite_id
+        in: path
+        required: true
+    get:
+      summary: album join
+      tags:
+        - albums
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/albums.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: ログインしてください
+        '404':
+          description: アルバムが見つかりませんでした
+        '409':
+          description: すでにアルバムに参加しています
+      operationId: get-albums-album_id-join-invite_id
+      description: |-
+        招待リンクを踏んだときにこのAPIが叩かれる。
+
+        URLに誤りがあると参加リクエストは拒否される。
+  '/wishlists/{wish_list_id}/join/{invite_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: wish_list_id
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: invite_id
+        in: path
+        required: true
+    get:
+      summary: wish_list join
+      tags:
+        - wish_lists
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/wish_lists.v1.yaml
+        '400':
+          description: パラメータが不正です
+        '401':
+          description: ログインしてください
+        '404':
+          description: やりたいことリストが見つかりませんでした
+        '409':
+          description: すでにやりたいことリストに参加しています
+      operationId: get-wishlists-wish_list_id-join-invite_id
+      description: |-
+        招待リンクを踏んだときにこのAPIが叩かれる。
+
+        URLに誤りがあると参加リクエストは拒否される。
 components:
   schemas: {}
   securitySchemes: {}
