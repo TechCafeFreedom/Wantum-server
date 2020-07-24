@@ -652,6 +652,25 @@ paths:
         思い出のタイムライン。
 
         memoriesをcreated_atの新しい順で返す。
+
+        クエリパラメータでページング設定をする
+      parameters:
+        - schema:
+            type: string
+            format: date-time
+          in: query
+          name: until
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: offset
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: limit
+          required: true
   '/memories/{memory_id}/wishcards':
     parameters:
       - schema:
