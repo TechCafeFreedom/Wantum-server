@@ -30,6 +30,7 @@ properties:
     type: string
     format: date
     example: 2000/01/01
+    description: yyyy/mm/dd
 required:
   - id
   - user_name

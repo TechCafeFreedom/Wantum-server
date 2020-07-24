@@ -162,8 +162,10 @@ paths:
                       type: string
                     image_url:
                       type: string
+                      format: uri
                     invite_url:
                       type: string
+                      format: uri
                     owner:
                       $ref: ../models/users.v1.yaml
                     members:
@@ -344,6 +346,7 @@ paths:
                   type: string
                   format: date-time
                   example: '2020/01/01 00:00:00'
+                  description: 'yyyy/mm/dd hh:mm:ss'
                 category_id:
                   type: integer
                 place_id:
@@ -414,6 +417,7 @@ paths:
                   type: string
                   format: date-time
                   example: '2020/01/01 00:00:00'
+                  description: 'yyyy/mm/dd hh:mm:ss'
                 category_id:
                   type: integer
                 place_id:
@@ -540,6 +544,7 @@ paths:
                       type: string
                     invite_url:
                       type: string
+                      format: uri
                     owner:
                       $ref: ../models/users.v1.yaml
                     members:
@@ -667,19 +672,23 @@ paths:
         - schema:
             type: string
             format: date-time
+            example: '2020/01/01 00:00:00'
           in: query
           name: until
           required: true
+          description: created_atの基準の時間
         - schema:
             type: integer
           in: query
           name: offset
           required: true
+          description: untilから数えて何番目から
         - schema:
             type: integer
           in: query
           name: limit
           required: true
+          description: いくつ持ってくる
   '/memories/{memory_id}/wishcards':
     parameters:
       - schema:
@@ -725,6 +734,7 @@ paths:
                   type: string
                   format: date-time
                   example: '2020/01/01 00:00:00'
+                  description: 'yyyy/mm/dd hh:mm:ss'
                 description:
                   type: string
                 category_id:
@@ -766,18 +776,28 @@ paths:
                     type: string
                   mail:
                     type: string
+                    format: email
                   name:
                     type: string
                   thumbnail:
                     type: string
+                    format: uri
                   bio:
                     type: string
                   gender:
                     type: integer
+                    description: '1=man, 2=woman, 3=other'
+                    enum:
+                      - 1
+                      - 2
+                      - 3
                   place:
                     type: string
                   birth:
                     type: string
+                    description: yyyy/mm/dd
+                    format: date
+                    example: 2000/01/01
                   memories:
                     type: array
                     items:
@@ -850,6 +870,7 @@ paths:
                   type: string
                   format: date
                   example: 2000/01/01
+                  description: yyyy/mm/dd
                 user_name:
                   type: string
           multipart/form-data:

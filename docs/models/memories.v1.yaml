@@ -9,6 +9,7 @@ properties:
     type: string
     format: date-time
     example: '2020/01/01 00:00:00'
+    description: 'yyyy/mm/dd hh:mm:ss'
   activity:
     type: string
   description:
@@ -29,6 +30,7 @@ properties:
     type: string
     format: date-time
     example: '2020/01/01 12:34:56'
+    description: 'yyyy/mm/dd hh:mm:ss'
 required:
   - id
   - date
