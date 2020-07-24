@@ -342,6 +342,8 @@ paths:
                   type: string
                 date:
                   type: string
+                  format: date-time
+                  example: '2020/01/01 00:00:00'
                 category_id:
                   type: integer
                 place_id:
@@ -410,6 +412,8 @@ paths:
                   type: string
                 date:
                   type: string
+                  format: date-time
+                  example: '2020/01/01 00:00:00'
                 category_id:
                   type: integer
                 place_id:
@@ -629,6 +633,11 @@ paths:
               required:
                 - wish_card_id
                 - album_id
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
+        description: 画像（複数可能）を付加
       security:
         - JWT-Auth: []
   /memories/timeline:
@@ -714,6 +723,8 @@ paths:
                   type: integer
                 date:
                   type: string
+                  format: date-time
+                  example: '2020/01/01 00:00:00'
                 description:
                   type: string
                 category_id:
@@ -826,12 +837,19 @@ paths:
                   type: string
                 gender:
                   type: integer
+                  enum:
+                    - 1
+                    - 2
+                    - 3
+                  description: '1=man, 2=woman, 3=other'
                 phone:
                   type: string
                 place:
                   type: string
                 birth:
                   type: string
+                  format: date
+                  example: 2000/01/01
                 user_name:
                   type: string
           multipart/form-data:

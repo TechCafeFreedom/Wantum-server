@@ -19,6 +19,11 @@ properties:
     type: string
   gender:
     type: integer
+    enum:
+      - 1
+      - 2
+      - 3
+    description: '1=man, 2=woman, 3=other'
   place:
     type: string
   birth:
