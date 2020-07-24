@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# idea
+*.idea
+
+# sqlboiler
+sqlboiler.toml
+
+# env
+.env
+
+# binary
+/binary
+
+# secret
+wantum-firebase-adminsdk-cz9e4-4c4789f0f4.json
+
+# config
+mysql-config.json
