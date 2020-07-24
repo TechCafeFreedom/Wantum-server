@@ -9,6 +9,7 @@ properties:
     type: string
   invite_url:
     type: string
+    format: uri
   owner:
     $ref: ./users.v1.yaml
   members:

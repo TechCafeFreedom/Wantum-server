@@ -7,6 +7,7 @@ properties:
     type: integer
   photo_url:
     type: string
+    format: uri
 required:
   - id
   - photo_url

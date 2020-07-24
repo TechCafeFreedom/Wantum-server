@@ -7,6 +7,8 @@ properties:
     type: integer
   date:
     type: string
+    format: date-time
+    example: '2020/01/01 00:00:00'
   activity:
     type: string
   description:
@@ -23,6 +25,10 @@ properties:
       $ref: ./tags.v1.yaml
   author:
     $ref: ./users.v1.yaml
+  created_at:
+    type: string
+    format: date-time
+    example: '2020/01/01 12:34:56'
 required:
   - id
   - date
@@ -32,3 +38,4 @@ required:
   - photos
   - tags
   - author
+  - created_at

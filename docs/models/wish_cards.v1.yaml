@@ -11,6 +11,8 @@ properties:
     type: string
   date:
     type: string
+    format: date-time
+    example: '2020/01/01 00:00:00'
   place:
     $ref: ./places.v1.yaml
   tags:
