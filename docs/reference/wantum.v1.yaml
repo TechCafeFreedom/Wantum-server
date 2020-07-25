@@ -1,10 +1,14 @@
 openapi: 3.0.0
 info:
   title: wantum
+  description: wantum ver.1 API document
+  contact:
+    name: sana37
+    email: yusakinatadaka@gmail.com
   version: '1.0'
 servers:
   - url: 'http://localhost:3000'
-  - url: 'https://stoplight.io/p/mocks/13862/146524/'
+  - url: 'https://stoplight.io/p/mocks/13862/146524'
     description: ''
 paths:
   '/wishlists/{wish_list_id}':
@@ -992,3 +996,10 @@ components:
     JWT-Auth:
       type: http
       scheme: bearer
+tags:
+  - name: albums
+  - name: categories
+  - name: memories
+  - name: users
+  - name: wish_cards
+  - name: wish_lists
