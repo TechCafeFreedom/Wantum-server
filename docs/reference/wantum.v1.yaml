@@ -1,11 +1,11 @@
 openapi: 3.0.0
 info:
   title: wantum
+  version: '1.0'
   description: wantum ver.1 API document
   contact:
     name: sana37
     email: yusakinatadaka@gmail.com
-  version: '1.0'
 servers:
   - url: 'http://localhost:3000'
   - url: 'https://stoplight.io/p/mocks/13862/146524'
@@ -74,17 +74,17 @@ paths:
         wish_listの管理者のみ可能。
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
                 title:
                   type: string
-          multipart/form-data:
-            schema:
-              type: object
-              properties: {}
-        description: ''
+                image:
+                  type: string
+                  format: binary
+                  description: 画像ファイル
+        description: multipart/form-dataで文字列データと画像をうめこむ
       security:
         - JWT-Auth: []
     delete:
@@ -131,19 +131,18 @@ paths:
       description: wish_listの新規作成。
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
                 title:
                   type: string
+                image:
+                  type: string
+                  format: binary
               required:
                 - title
-          multipart/form-data:
-            schema:
-              type: object
-              properties: {}
-        description: 必要であれば画像を同時に送る
+        description: multipart/form-data形式でtitle(文字列データ)とimage(画像)をうめこむ。titleは必須
       security:
         - JWT-Auth: []
     parameters: []
@@ -773,7 +772,17 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                required:
+                  - id
+                  - user_name
+                  - mail
+                  - name
+                  - thumbnail
+                  - bio
+                  - gender
+                  - place
+                  - birth
+                  - memories
                 properties:
                   id:
                     type: integer
@@ -802,22 +811,12 @@ paths:
                     type: string
                     description: yyyy-mm-dd
                     format: date
-                    example: 2000-01-01
+                    example: '2000-01-01'
                   memories:
                     type: array
                     items:
                       $ref: ../models/memories.v1.yaml
-                required:
-                  - id
-                  - user_name
-                  - mail
-                  - name
-                  - thumbnail
-                  - bio
-                  - gender
-                  - place
-                  - birth
-                  - memories
+                type: object
         '404':
           description: プロフィールが見つかりませんでした
         '500':
@@ -855,36 +854,40 @@ paths:
       description: プロフィール情報の更新。
       requestBody:
         content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                bio:
-                  type: string
-                gender:
-                  type: integer
-                  enum:
-                    - 1
-                    - 2
-                    - 3
-                  description: '1=man, 2=woman, 3=other'
-                phone:
-                  type: string
-                place:
-                  type: string
-                birth:
-                  type: string
-                  format: date
-                  example: 2000-01-01
-                  description: yyyy-mm-dd
-                user_name:
-                  type: string
           multipart/form-data:
             schema:
               type: object
-              properties: {}
+              properties:
+                json:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    bio:
+                      type: string
+                    gender:
+                      type: integer
+                      enum:
+                        - 1
+                        - 2
+                        - 3
+                      description: '1=man, 2=woman, 3=other'
+                    phone:
+                      type: string
+                    place:
+                      type: string
+                    birth:
+                      type: string
+                      format: date
+                      example: '2000-01-01'
+                      description: yyyy-mm-dd
+                    user_name:
+                      type: string
+                thumbnail:
+                  type: string
+                  format: binary
+                  description: 画像ファイル
+        description: multipart/form-dataでjsonと画像ファイルをうめこむ。両方ともoptionalとする。
       tags:
         - users
       security:
