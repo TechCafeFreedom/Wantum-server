@@ -345,8 +345,8 @@ paths:
                 date:
                   type: string
                   format: date-time
-                  example: '2020/01/01 00:00:00'
-                  description: 'yyyy/mm/dd hh:mm:ss'
+                  example: '2020-01-01 00:00:00Z'
+                  description: 'yyyy-mm-dd hh:mm:ssZ'
                 category_id:
                   type: integer
                 place_id:
@@ -416,8 +416,8 @@ paths:
                 date:
                   type: string
                   format: date-time
-                  example: '2020/01/01 00:00:00'
-                  description: 'yyyy/mm/dd hh:mm:ss'
+                  example: '2020-01-01 00:00:00Z'
+                  description: 'yyyy-mm-dd hh:mm:ssZ'
                 category_id:
                   type: integer
                 place_id:
@@ -682,7 +682,7 @@ paths:
         - schema:
             type: string
             format: date-time
-            example: '2020/01/01 00:00:00'
+            example: '2020-01-01 00:00:00Z'
           in: query
           name: until
           required: true
@@ -743,8 +743,8 @@ paths:
                 date:
                   type: string
                   format: date-time
-                  example: '2020/01/01 00:00:00'
-                  description: 'yyyy/mm/dd hh:mm:ss'
+                  example: '2020-01-01 00:00:00Z'
+                  description: 'yyyy-mm-dd hh:mm:ssZ'
                 description:
                   type: string
                 category_id:
@@ -766,15 +766,6 @@ paths:
       responses:
         '200':
           description: OK
-          content:
-            application/json:
-              schema:
-                $ref: ../models/profiles.v1.yaml
-        '404':
-          description: プロフィールが見つかりませんでした
-        '500':
-          description: Internal Server Error
-        '':
           content:
             application/json:
               schema:
@@ -805,9 +796,9 @@ paths:
                     type: string
                   birth:
                     type: string
-                    description: yyyy/mm/dd
+                    description: yyyy-mm-dd
                     format: date
-                    example: 2000/01/01
+                    example: 2000-01-01
                   memories:
                     type: array
                     items:
@@ -823,7 +814,10 @@ paths:
                   - place
                   - birth
                   - memories
-          description: OK
+        '404':
+          description: プロフィールが見つかりませんでした
+        '500':
+          description: Internal Server Error
       operationId: get-users-user_id
       description: |-
         ユーザのプロフィールを取得する。
@@ -879,8 +873,8 @@ paths:
                 birth:
                   type: string
                   format: date
-                  example: 2000/01/01
-                  description: yyyy/mm/dd
+                  example: 2000-01-01
+                  description: yyyy-mm-dd
                 user_name:
                   type: string
           multipart/form-data:
@@ -910,7 +904,6 @@ paths:
           description: Internal Server Error
       operationId: get-auth-signup
       description: ユーザ新規登録。
-      requestBody: {}
       security:
         - JWT-Auth: []
   '/albums/{album_id}/join/{invite_id}':
