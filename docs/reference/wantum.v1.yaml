@@ -627,22 +627,32 @@ paths:
         指定したwish_cardは削除される。
       requestBody:
         content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                wish_card_id:
-                  type: integer
-                album_id:
-                  type: integer
-              required:
-                - wish_card_id
-                - album_id
           multipart/form-data:
             schema:
               type: object
-              properties: {}
-        description: 画像（複数可能）を付加
+              properties:
+                json:
+                  type: object
+                  required:
+                    - wish_card_id
+                    - album_id
+                  properties:
+                    wish_card_id:
+                      type: integer
+                    album_id:
+                      type: integer
+                photos:
+                  type: array
+                  description: |-
+                    name="photos"で複数のファイルを追加してください
+                    参考 https://swagger.io/docs/specification/describing-request-body/file-upload/
+                  items:
+                    type: string
+                    format: binary
+              required:
+                - json
+            examples: {}
+        description: multipart/form-dataで、jsonと画像（複数可能）をうめこむ
       security:
         - JWT-Auth: []
   /memories/timeline:
