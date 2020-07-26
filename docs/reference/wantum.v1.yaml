@@ -80,7 +80,7 @@ paths:
               properties:
                 title:
                   type: string
-                image:
+                background_image:
                   type: string
                   format: binary
                   description: 画像ファイル
@@ -137,12 +137,12 @@ paths:
               properties:
                 title:
                   type: string
-                image:
+                background_image:
                   type: string
                   format: binary
               required:
                 - title
-        description: multipart/form-data形式でtitle(文字列データ)とimage(画像)をうめこむ。titleは必須
+        description: multipart/form-data形式でtitle(文字列データ)とbackground_image(画像)をうめこむ。titleは必須
       security:
         - JWT-Auth: []
     parameters: []
@@ -163,7 +163,7 @@ paths:
                       type: integer
                     title:
                       type: string
-                    image_url:
+                    background_image_url:
                       type: string
                       format: uri
                     invite_url:
@@ -178,7 +178,7 @@ paths:
                   required:
                     - id
                     - title
-                    - image_url
+                    - background_image_url
                     - invite_url
                     - owner
                     - members
@@ -259,8 +259,13 @@ paths:
         wish_listの管理者および招待されている人のみ可能。
       security:
         - JWT-Auth: []
-  /categories:
-    parameters: []
+  '/wishlists/{wish_list_id}/categories':
+    parameters:
+      - schema:
+          type: integer
+        name: wish_list_id
+        in: path
+        required: true
     post:
       summary: カテゴリー新規作成
       tags:
@@ -295,11 +300,8 @@ paths:
               properties:
                 title:
                   type: string
-                wish_list_id:
-                  type: integer
               required:
                 - title
-                - wish_list_id
       security:
         - JWT-Auth: []
   '/wishcards/{wish_card_id}':
@@ -378,8 +380,13 @@ paths:
         wish_listの管理者および招待されている人のみ可能。
       security:
         - JWT-Auth: []
-  /wishcards:
-    parameters: []
+  '/categories/{category_id}/wishcards':
+    parameters:
+      - schema:
+          type: integer
+        name: category_id
+        in: path
+        required: true
     post:
       summary: やりたいこと新規作成
       tags:
@@ -421,14 +428,11 @@ paths:
                   format: date-time
                   example: '2020-01-01 00:00:00Z'
                   description: 'yyyy-mm-dd hh:mm:ssZ'
-                category_id:
-                  type: integer
                 place_id:
                   type: integer
               required:
                 - activity
                 - description
-                - category_id
                 - place_id
       security:
         - JWT-Auth: []
@@ -599,7 +603,7 @@ paths:
                 - title
       security:
         - JWT-Auth: []
-  /memories:
+  '/albums/{album_id}/memories':
     post:
       summary: 思い出の新規作成
       tags:
@@ -638,11 +642,8 @@ paths:
                   type: object
                   required:
                     - wish_card_id
-                    - album_id
                   properties:
                     wish_card_id:
-                      type: integer
-                    album_id:
                       type: integer
                 photos:
                   type: array
@@ -658,6 +659,12 @@ paths:
         description: multipart/form-dataで、jsonと画像（複数可能）をうめこむ
       security:
         - JWT-Auth: []
+    parameters:
+      - schema:
+          type: integer
+        name: album_id
+        in: path
+        required: true
   /memories/timeline:
     get:
       summary: タイムライン

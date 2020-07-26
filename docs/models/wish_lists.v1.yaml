@@ -7,7 +7,7 @@ properties:
     type: integer
   title:
     type: string
-  image_url:
+  background_image_url:
     type: string
     format: uri
   invite_url:
@@ -26,7 +26,7 @@ properties:
 required:
   - id
   - title
-  - image_url
+  - background_image_url
   - invite_url
   - owner
   - members
