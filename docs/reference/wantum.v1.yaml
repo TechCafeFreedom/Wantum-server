@@ -709,11 +709,11 @@ paths:
           name: limit
           required: true
           description: いくつ持ってくる
-  '/users/{user_id}':
+  '/users/{user_name}':
     parameters:
       - schema:
           type: string
-        name: user_id
+        name: user_name
         in: path
         required: true
     get:
@@ -773,16 +773,16 @@ paths:
           description: プロフィールが見つかりませんでした
         '500':
           description: Internal Server Error
-      operationId: get-users-user_id
+      operationId: get-users-user_name
       description: |-
-        ユーザのプロフィールを取得する。
+        user_name(ユーザごとにユニーク)をもとにユーザのプロフィールを取得する。
 
         レスポンスjsonにはユーザのmemoryも含む。
 
         （公開・非公開機能が実装された場合：他人には公開のものが、本人には公開・非公開いずれも取得できる）
       tags:
         - users
-  /users:
+  /users/profile:
     patch:
       summary: プロフィール情報の更新
       responses:
@@ -802,7 +802,7 @@ paths:
           description: その電話番号は既に登録されています／そのuser_nameは既に登録されています
         '500':
           description: Internal Server Error
-      operationId: patch-users
+      operationId: patch-users-profile
       description: プロフィール情報の更新。
       requestBody:
         content:
