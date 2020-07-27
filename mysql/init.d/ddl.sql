@@ -2,25 +2,9 @@ CREATE DATABASE IF NOT EXISTS wantum DEFAULT CHARACTER SET utf8mb4;
 
 USE wantum;
 
+SET foreign_key_checks=0;
+
 -- define table
-CREATE TABLE IF NOT EXISTS places(
-  id int NOT NULL AUTO_INCREMENT,
-  name varchar(200) NOT NULL,
-  created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  deleted_at datetime,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE IF NOT EXISTS tags(
-  id int NOT NULL AUTO_INCREMENT,
-  name varchar(100) NOT NULL UNIQUE,
-  created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  deleted_at datetime,
-  PRIMARY KEY (id)
-);
-
 CREATE TABLE IF NOT EXISTS users(
   id int NOT NULL AUTO_INCREMENT,
   auth_id varchar(128) NOT NULL UNIQUE,
@@ -36,18 +20,18 @@ CREATE TABLE IF NOT EXISTS profiles(
   id int NOT NULL AUTO_INCREMENT,
   name varchar(50) NOT NULL,
   thumbnail varchar(2048) NOT NULL,
-  bio varchar(100) NOT NULL,
+  bio varchar(100) NOT NULL COMMENT '自己紹介',
   gender int NOT NULL COMMENT '1=man, 2=woman, 3=other',
-  phone varchar(15) NOT NULL,
-  place varchar(30) NOT NULL,
-  birth date NOT NULL,
+  phone varchar(15) NOT NULL COMMENT '電話番号',
+  place varchar(30) NOT NULL COMMENT '現在地',
+  birth date DEFAULT NULL,
   created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at datetime,
   user_id int NOT NULL,
   PRIMARY KEY (id),
   CONSTRAINT `fk_profile_user`
-  	FOREIGN KEY (id)
+  	FOREIGN KEY (user_id)
   	REFERENCES users (id)
   	ON UPDATE CASCADE
   	ON DELETE CASCADE
@@ -56,8 +40,8 @@ CREATE TABLE IF NOT EXISTS profiles(
 CREATE TABLE IF NOT EXISTS wish_lists(
   id int NOT NULL AUTO_INCREMENT,
   title varchar(30) NOT NULL,
-  image_url varchar(2048) NOT NULL,
-  invite_url varchar(2048) NOT NULL,
+  background_image_url varchar(2048) NOT NULL,
+  invite_url varchar(2048) NOT NULL UNIQUE,
   created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at datetime,
@@ -76,14 +60,8 @@ CREATE TABLE IF NOT EXISTS categories(
   created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at datetime,
-  user_id int NOT NULL,
   wish_list_id int NOT NULL,
   PRIMARY KEY (id),
-  CONSTRAINT `fk_categories_user`
-    FOREIGN KEY (user_id)
-    REFERENCES users (id)
-    ON UPDATE CASCADE
-    ON DELETE CASCADE,
   CONSTRAINT `fk_categories_wish_list`
     FOREIGN KEY (wish_list_id)
     REFERENCES wish_lists (id)
@@ -93,8 +71,8 @@ CREATE TABLE IF NOT EXISTS categories(
 
 CREATE TABLE IF NOT EXISTS wish_cards(
   id int NOT NULL AUTO_INCREMENT,
-  activity varchar(50) NOT NULL,
-  description varchar(100) NOT NULL,
+  activity varchar(50) NOT NULL COMMENT 'places.nameでactivityしたい',
+  description varchar(500) NOT NULL,
   date datetime NOT NULL,
   done_at datetime,
   created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -124,12 +102,11 @@ CREATE TABLE IF NOT EXISTS wish_cards(
 CREATE TABLE IF NOT EXISTS albums(
   id int NOT NULL AUTO_INCREMENT,
   title varchar(30) NOT NULL,
-  invite_url varchar(2048) NOT NULL,
+  invite_url varchar(2048) NOT NULL UNIQUE,
   created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at datetime,
   user_id int NOT NULL,
-  place_id int NOT NULL,
   PRIMARY KEY (id),
   CONSTRAINT `fk_albums_user`
     FOREIGN KEY (user_id)
@@ -141,8 +118,8 @@ CREATE TABLE IF NOT EXISTS albums(
 CREATE TABLE IF NOT EXISTS memories(
   id int NOT NULL AUTO_INCREMENT,
   date datetime NOT NULL,
-  activity varchar(50) NOT NULL,
-  description varchar(100) NOT NULL,
+  activity varchar(50) NOT NULL COMMENT 'places.nameでactivityした',
+  description varchar(500) NOT NULL,
   created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at datetime,
@@ -165,6 +142,24 @@ CREATE TABLE IF NOT EXISTS memories(
     REFERENCES albums (id)
     ON UPDATE CASCADE
     ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS places(
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(200) NOT NULL,
+  created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted_at datetime,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS tags(
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(100) NOT NULL UNIQUE,
+  created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted_at datetime,
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS photos(
