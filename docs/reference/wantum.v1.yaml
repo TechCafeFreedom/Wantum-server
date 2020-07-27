@@ -46,7 +46,7 @@ paths:
         category, wish_card をネストしたjsonを返す。
       security:
         - JWT-Auth: []
-    put:
+    patch:
       summary: やりたいことリスト情報の更新
       tags:
         - wish_lists
@@ -67,7 +67,7 @@ paths:
           description: やりたいことリストが見つかりませんでした
         '500':
           description: Internal Server Error
-      operationId: put-wishlists-wish_list_id
+      operationId: patch-wishlists-wish_list_id
       description: |-
         wish_listの更新。
 
@@ -201,7 +201,7 @@ paths:
         name: category_id
         in: path
         required: true
-    put:
+    patch:
       summary: カテゴリー情報の更新
       tags:
         - categories
@@ -222,7 +222,7 @@ paths:
           description: カテゴリーが見つかりませんでした
         '500':
           description: Internal Server Error
-      operationId: put-categories-category_id
+      operationId: patch-categories-category_id
       description: |-
         カテゴリーの更新。
 
@@ -311,7 +311,7 @@ paths:
         name: wish_card_id
         in: path
         required: true
-    put:
+    patch:
       summary: やりたいこと情報の更新
       tags:
         - wish_cards
@@ -332,7 +332,7 @@ paths:
           description: やりたいことが見つかりませんでした／カテゴリーが見つかりませんでした／場所が見つかりませんでした
         '500':
           description: Internal Server Error
-      operationId: put-wishcards-wish_card_id
+      operationId: patch-wishcards-wish_card_id
       description: |-
         wish_cardの更新。
 
@@ -472,7 +472,7 @@ paths:
       parameters: []
       security:
         - JWT-Auth: []
-    put:
+    patch:
       summary: アルバム情報の更新
       tags:
         - albums
@@ -493,7 +493,7 @@ paths:
           description: アルバムが見つかりませんでした
         '500':
           description: Internal Server Error
-      operationId: put-albums-album_id
+      operationId: patch-albums-album_id
       description: |-
         アルバムを更新する。
 
@@ -838,7 +838,7 @@ paths:
       tags:
         - users
   /users:
-    put:
+    patch:
       summary: プロフィール情報の更新
       responses:
         '200':
@@ -857,7 +857,7 @@ paths:
           description: その電話番号は既に登録されています／そのuser_nameは既に登録されています
         '500':
           description: Internal Server Error
-      operationId: put-users
+      operationId: patch-users
       description: プロフィール情報の更新。
       requestBody:
         content:
