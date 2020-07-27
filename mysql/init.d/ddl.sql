@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS wish_lists(
   id int NOT NULL AUTO_INCREMENT,
   title varchar(30) NOT NULL,
   background_image_url varchar(2048) NOT NULL,
-  invite_url varchar(2048) NOT NULL UNIQUE,
+  invite_url varchar(2048) NOT NULL,
   created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at datetime,
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS wish_cards(
 CREATE TABLE IF NOT EXISTS albums(
   id int NOT NULL AUTO_INCREMENT,
   title varchar(30) NOT NULL,
-  invite_url varchar(2048) NOT NULL UNIQUE,
+  invite_url varchar(2048) NOT NULL,
   created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at datetime,
