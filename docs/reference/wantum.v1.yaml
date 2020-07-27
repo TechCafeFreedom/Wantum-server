@@ -31,12 +31,28 @@ paths:
                 $ref: ../models/wish_lists.v1.yaml
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '403':
           description: 操作が許可されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: やりたいことリストが見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: get-wishlists-wish_list_id
       description: |-
         wish_list詳細情報を取得する。
@@ -59,14 +75,34 @@ paths:
                 $ref: ../models/wish_lists.v1.yaml
         '400':
           description: パラメータが不正です
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '403':
           description: 操作が許可されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: やりたいことリストが見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: patch-wishlists-wish_list_id
       description: |-
         wish_listの更新。
@@ -96,12 +132,28 @@ paths:
           description: OK
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '403':
           description: 操作が許可されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: やりたいことリストが見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: delete-wishlists-wish_list_id
       description: |-
         wish_listの削除。
@@ -123,10 +175,22 @@ paths:
                 $ref: ../models/wish_lists.v1.yaml
         '400':
           description: パラメータが不正です
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: post-wishlists
       description: wish_listの新規作成。
       requestBody:
@@ -184,8 +248,16 @@ paths:
                     - members
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       tags:
         - wish_lists
       description: |-
@@ -219,14 +291,34 @@ paths:
                 $ref: ../models/categories.v1.yaml
         '400':
           description: パラメータが不正です
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '403':
           description: 操作が許可されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: カテゴリーが見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: patch-wishlists-wish_list_id-categories-category_id
       description: |-
         カテゴリーの更新。
@@ -251,12 +343,28 @@ paths:
           description: OK
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '403':
           description: 操作が許可されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: カテゴリーが見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: delete-wishlists-wish_list_id-categories-category_id
       description: |-
         カテゴリーの削除。
@@ -284,14 +392,34 @@ paths:
                 $ref: ../models/categories.v1.yaml
         '400':
           description: パラメータが不正です
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '403':
           description: 操作が許可されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: やりたいことリストが見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: post-wishlists-wish_list_id-categories
       description: |-
         カテゴリーの新規作成。
@@ -339,14 +467,34 @@ paths:
                 $ref: ../models/wish_cards.v1.yaml
         '400':
           description: パラメータが不正です
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '403':
           description: 操作が許可されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: やりたいことが見つかりませんでした／カテゴリーが見つかりませんでした／場所が見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: patch-wishlists-wish_list_id-categories-category_id-wishcards-wish_card_id
       description: |-
         wish_cardの更新。
@@ -382,12 +530,28 @@ paths:
           description: OK
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '403':
           description: 操作が許可されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: やりたいことが見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: delete-wishlists-wish_list_id-categories-category_id-wishcards-wish_card_id
       description: |-
         wish_cardの削除。
@@ -420,14 +584,34 @@ paths:
                 $ref: ../models/wish_cards.v1.yaml
         '400':
           description: パラメータが不正です
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '403':
           description: 操作が許可されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: カテゴリーが見つかりませんでした／場所が見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: post-wishlists-wish_list_id-categories-category_id-wishcards
       description: |-
         wish_cardを作成する。
@@ -476,12 +660,28 @@ paths:
                 $ref: ../models/albums.v1.yaml
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '403':
           description: 操作が許可されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: アルバムが見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: get-albums-album_id
       description: |-
         アルバム詳細情報を取得する。
@@ -505,14 +705,34 @@ paths:
                 $ref: ../models/albums.v1.yaml
         '400':
           description: パラメータが不正です
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '403':
           description: 操作が許可されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: アルバムが見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: patch-albums-album_id
       description: |-
         アルバムを更新する。
@@ -537,12 +757,28 @@ paths:
           description: OK
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '403':
           description: 操作が許可されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: アルバムが見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: delete-albums-album_id
       description: |-
         アルバムを削除する。
@@ -586,8 +822,16 @@ paths:
                     - members
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: get-albums
       description: 自分が所持している、または参加しているアルバムを一覧で取得する。
       security:
@@ -605,10 +849,22 @@ paths:
                 $ref: ../models/albums.v1.yaml
         '400':
           description: パラメータが不正です
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: post-albums
       description: アルバム新規作成。
       requestBody:
@@ -637,16 +893,40 @@ paths:
                 $ref: ../models/memories.v1.yaml
         '400':
           description: パラメータが不正です
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '403':
           description: 操作が許可されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: やりたいことが見つかりませんでした／アルバムが見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '409':
           description: やりたいことは既に思い出になっています
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: post-albums-album_id-memories
       description: |-
         思い出の新規作成。
@@ -701,6 +981,10 @@ paths:
                   $ref: ../models/memories.v1.yaml
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: get-memories-timeline
       description: |-
         思い出のタイムライン。
@@ -791,8 +1075,16 @@ paths:
                 type: object
         '404':
           description: プロフィールが見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: get-users-user_name
       description: |-
         user_name(ユーザごとにユニーク)をもとにユーザのプロフィールを取得する。
@@ -814,14 +1106,34 @@ paths:
                 $ref: ../models/users.v1.yaml
         '400':
           description: パラメータが不正です
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '403':
           description: 操作が許可されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '409':
           description: その電話番号は既に登録されています／そのuser_nameは既に登録されています
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: patch-users-profile
       description: プロフィール情報の更新。
       requestBody:
@@ -879,8 +1191,16 @@ paths:
                 $ref: ../models/users.v1.yaml
         '401':
           description: 認証に失敗しました
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: get-auth-signup
       description: ユーザ新規登録。
       security:
@@ -910,14 +1230,34 @@ paths:
                 $ref: ../models/albums.v1.yaml
         '400':
           description: パラメータが不正です
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: アルバムが見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '409':
           description: すでにアルバムに参加しています
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: get-albums-album_id-join-invite_id
       description: |-
         招待リンクを踏んだときにこのAPIが叩かれる。
@@ -950,14 +1290,34 @@ paths:
                 $ref: ../models/wish_lists.v1.yaml
         '400':
           description: パラメータが不正です
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '401':
           description: ログインしてください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '404':
           description: やりたいことリストが見つかりませんでした
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '409':
           description: すでにやりたいことリストに参加しています
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: get-wishlists-wish_list_id-join-invite_id
       description: |-
         招待リンクを踏んだときにこのAPIが叩かれる。
@@ -966,7 +1326,33 @@ paths:
       security:
         - JWT-Auth: []
 components:
-  schemas: {}
+  schemas:
+    error:
+      title: error
+      type: object
+      description: ''
+      properties:
+        error:
+          type: object
+          required:
+            - message_jp
+            - message_en
+            - code
+          properties:
+            message_jp:
+              type: string
+              example: やりたいことが見つかりませんでした。
+              description: 表示するエラーメッセージ（日本語）
+            message_en:
+              type: string
+              example: wish_card not found.
+              description: 表示するエラーメッセージ（英語）
+            code:
+              type: string
+              example: wishcard.notfound
+              description: エラーコード。開発者が使う
+      required:
+        - error
   securitySchemes:
     JWT-Auth:
       type: http
