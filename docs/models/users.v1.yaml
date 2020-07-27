@@ -28,9 +28,9 @@ properties:
     type: string
   birth:
     type: string
+    description: yyyy-mm-dd
     format: date
-    example: 2000/01/01
-    description: yyyy/mm/dd
+    example: '2000-01-01'
 required:
   - id
   - user_name
