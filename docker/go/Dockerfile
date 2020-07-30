@@ -1,8 +1,10 @@
-FROM golang:1.14
+FROM golang:1.12
 
 WORKDIR /go/src/wantum
 
 ADD . .
+
+ENV GO111MODULE=on
 
 # realizeはgomodに対応していないらしい
 RUN GO111MODULE=off go get github.com/oxequa/realize \
