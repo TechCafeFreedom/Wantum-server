@@ -35,8 +35,9 @@ func main() {
 	r := mux.NewRouter()
 
 	// connection testAPI
-	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "Hello, world!")
+	r.HandleFunc("/ping/{hoge}/{fuga}", func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		fmt.Fprintf(w, "Hello %v, world! %v", vars["hoge"], vars["fuga"])
 	})
 
 	// userAPI
