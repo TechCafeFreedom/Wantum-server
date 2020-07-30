@@ -1,6 +1,6 @@
 FROM golang:1.14
 
-WORKDIR /go/src/app
+WORKDIR /go/src/wantum
 
 ADD . .
 
