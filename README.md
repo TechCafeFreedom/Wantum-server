@@ -46,5 +46,5 @@ env-api-log   apiのログを吐く
 env-db-watch  DBのログを監視
 env-db-log    DBのログを吐く
 env-db-init   DBの初期化する。DBをDROPしてから再構築する
-env-db-dump   DBをダンプする
+env-db-dump   DBをダンプする。出力先は /db/mysql/dump
 ```
