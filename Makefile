@@ -1,6 +1,9 @@
 env-up: # 開発環境の起動
 	docker-compose up -d
 
+env-start: # 全コンテナを起動
+	docker-compose start
+
 env-stop: # 全コンテナを止める
 	docker-compose stop
 

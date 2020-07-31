@@ -38,7 +38,8 @@
 接頭辞に`env-`がついています。
 
 ```
-env-up        環境をバックグラウンドで起動
+env-up        環境をバックグラウンドで構築&起動
+env-start     環境の起動
 env-stop      環境の停止
 env-down      環境の停止&削除
 env-api-watch apiのログを監視
