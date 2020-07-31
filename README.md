@@ -11,8 +11,9 @@
 
 ### 作業まわり
 #### 起動 & 停止
-- `make env-up`にて、全コンテナを起動
+- `make env-up`にて、全コンテナを構築&起動
 - `make env-stop`にて、全コンテナの停止
+- `make env-start`にて、全コンテナの起動
 - `make env-down`にて、imageを含めたコンテナの停止&削除
 
 #### 初期化
