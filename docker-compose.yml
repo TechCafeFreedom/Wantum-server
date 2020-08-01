@@ -6,6 +6,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/go/Dockerfile
+      target: build
     container_name: wantum_api
     environment:
       MYSQL_USER: worker
@@ -18,7 +19,7 @@ services:
     ports:
       - 8080:8080
     restart: always
-    command: realize start --run
+    command: realize start
 
   db:
     image: mysql:5.7
