@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: wantum
-  version: '1.0'
+  version: '1.0.0'
   description: wantum ver.1 API document
   contact:
     name: sana37
