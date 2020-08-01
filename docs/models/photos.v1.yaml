@@ -1,0 +1,13 @@
+title: photos
+type: object
+x-tags:
+  - photos
+properties:
+  id:
+    type: integer
+  photo_url:
+    type: string
+    format: uri
+required:
+  - id
+  - photo_url

@@ -1,0 +1,32 @@
+title: wish_cards
+type: object
+x-tags:
+  - wish_cards
+properties:
+  id:
+    type: integer
+  activity:
+    type: string
+  description:
+    type: string
+  date:
+    type: string
+    description: 'yyyy-mm-dd hh:mm:ssZ'
+    format: date-time
+    example: '2020-01-01 00:00:00Z'
+  place:
+    $ref: ./places.v1.yaml
+  tags:
+    type: array
+    items:
+      $ref: ./tags.v1.yaml
+  author:
+    $ref: ./users.v1.yaml
+required:
+  - id
+  - activity
+  - description
+  - date
+  - place
+  - tags
+  - author
