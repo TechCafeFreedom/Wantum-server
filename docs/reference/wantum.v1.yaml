@@ -128,8 +128,8 @@ paths:
       tags:
         - wish_lists
       responses:
-        '200':
-          description: OK
+        '204':
+          description: No Content
         '401':
           description: ログインしてください
           content:
@@ -339,8 +339,8 @@ paths:
       tags:
         - categories
       responses:
-        '200':
-          description: OK
+        '204':
+          description: No Content
         '401':
           description: ログインしてください
           content:
@@ -526,8 +526,8 @@ paths:
       tags:
         - wish_cards
       responses:
-        '200':
-          description: OK
+        '204':
+          description: No Content
         '401':
           description: ログインしてください
           content:
@@ -753,8 +753,8 @@ paths:
       tags:
         - albums
       responses:
-        '200':
-          description: OK
+        '204':
+          description: No Content
         '401':
           description: ログインしてください
           content:
