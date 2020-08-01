@@ -1,8 +1,5 @@
-env-up: # 開発環境の起動
+env-up: # 全コンテナの起動
 	docker-compose up -d
-
-env-start: # 全コンテナを起動
-	docker-compose start
 
 env-stop: # 全コンテナを止める
 	docker-compose stop
@@ -28,4 +25,4 @@ env-db-init: # 環境内のDB初期化
 
 env-db-dump: # mysqlDump
 	mkdir -p ./db/mysql/dump
-	docker exec -it wantum_db /usr/bin/mysqldump -u root -proot wantum > /dev/null > ./db/mysql/dump/mysqldump.sql
+	docker-compose exec db /usr/bin/mysqldump -u root -proot wantum > /dev/null > ./db/mysql/dump/mysqldump.sql

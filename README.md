@@ -13,7 +13,6 @@
 #### 起動 & 停止
 - `make env-up`にて、全コンテナを構築&起動
 - `make env-stop`にて、全コンテナの停止
-- `make env-start`にて、全コンテナの起動
 - `make env-down`にて、imageを含めたコンテナの停止&削除
 
 #### 初期化
@@ -40,7 +39,6 @@
 
 ```
 env-up        環境をバックグラウンドで構築&起動
-env-start     環境の起動
 env-stop      環境の停止
 env-down      環境の停止&削除
 env-api-watch apiのログを監視
@@ -48,5 +46,5 @@ env-api-log   apiのログを吐く
 env-db-watch  DBのログを監視
 env-db-log    DBのログを吐く
 env-db-init   DBの初期化する。DBをDROPしてから再構築する
-env-db-dump   DBをダンプする。出力先は /db/mysql/dump
+env-db-dump   DBをダンプする。出力先は /db/mysql/dump。ディレクトリは自動で作成されます。
 ```
