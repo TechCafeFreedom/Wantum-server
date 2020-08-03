@@ -1,28 +1,28 @@
-env-up: ## 全コンテナの起動
+dev-up: ## 全コンテナの起動
 	docker-compose up -d
 
-env-stop: ## 全コンテナを止める
+dev-stop: ## 全コンテナを止める
 	docker-compose stop
 
-env-down: ## 全コンテナを停止し、かつイメージを削除
+dev-down: ## 全コンテナを停止し、かつイメージを削除
 	docker-compose down --rmi local
 
-env-api-watch: ## apiのログを監視
+dev-api-watch: ## apiのログを監視
 	docker-compose logs -f api
 
-env-api-log: ## apiのログを出力
+dev-api-log: ## apiのログを出力
 	docker-compose logs api
 
-env-db-watch: ## dbのログを監視
+dev-db-watch: ## dbのログを監視
 	docker-compose logs -f db
 
-env-db-log: ## dbのログを出力
+dev-db-log: ## dbのログを出力
 	docker-compose logs log
 
-env-db-init: ## 環境内のDB初期化
+dev-db-init: ## 環境内のDB初期化
 	chmod u+x init-mysql.sh
 	./init-mysql.sh
 
-env-db-dump: ## mysqlDump
+dev-db-dump: ## mysqlDump
 	mkdir -p ./db/mysql/dump
 	docker-compose exec db /usr/bin/mysqldump -u root -proot wantum > /dev/null > ./db/mysql/dump/mysqldump.sql

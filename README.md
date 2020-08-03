@@ -11,40 +11,40 @@
 
 ### 作業まわり
 #### 起動 & 停止
-- `make env-up`にて、全コンテナを構築&起動
-- `make env-stop`にて、全コンテナの停止
-- `make env-down`にて、imageを含めたコンテナの停止&削除
+- `make dev-up`にて、全コンテナを構築&起動
+- `make dev-stop`にて、全コンテナの停止
+- `make dev-down`にて、imageを含めたコンテナの停止&削除
 
 #### 初期化
 - 環境の初期化
-	1. `make env-down`にて、全コンテナを停止&削除
-	2. `make env-up`にて、起動
+	1. `make dev-down`にて、全コンテナを停止&削除
+	2. `make dev-up`にて、起動
 - DBの初期化
-	1. `make env-db-init`にて、初期化
+	1. `make dev-db-init`にて、データベースの初期化
 
 #### ログまわり
 監視
 
-- `make env-api-watch`にて、APIのログを監視
-- `make env-db-watch`にて、DBのログを監視
+- `make dev-api-watch`にて、APIのログを監視
+- `make dev-db-watch`にて、DBのログを監視
 
 出力。パイプなどで繋いで処理可。
 
-- `make env-api-log`にて、APIのログを全取得
-- `make env-db-log`にて、DBのログを全取得
+- `make dev-api-log`にて、APIのログを全取得
+- `make dev-db-log`にて、DBのログを全取得
 
 ### Makeコマンド
 
-接頭辞に`env-`がついています。
+接頭辞に`dev-`がついています。
 
 ```
-env-up        環境をバックグラウンドで構築&起動
-env-stop      環境の停止
-env-down      環境の停止&削除
-env-api-watch apiのログを監視
-env-api-log   apiのログを吐く
-env-db-watch  DBのログを監視
-env-db-log    DBのログを吐く
-env-db-init   DBの初期化する。DBをDROPしてから再構築する
-env-db-dump   DBをダンプする。出力先は /db/mysql/dump。ディレクトリは自動で作成されます。
+dev-up        環境をバックグラウンドで構築&起動
+dev-stop      環境の停止
+dev-down      環境の停止&削除
+dev-api-watch apiのログを監視
+dev-api-log   apiのログを吐く
+dev-db-watch  DBのログを監視
+dev-db-log    DBのログを吐く
+dev-db-init   DBの初期化する。DBをDROPしてから再構築する
+dev-db-dump   DBをダンプする。出力先は /db/mysql/dump。ディレクトリは自動で作成されます。
 ```
