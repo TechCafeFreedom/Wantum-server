@@ -1,0 +1,44 @@
+title: memories
+type: object
+x-tags:
+  - memories
+properties:
+  id:
+    type: integer
+  date:
+    type: string
+    description: 'yyyy-mm-dd hh:mm:ssZ'
+    format: date-time
+    example: '2020-01-01 00:00:00Z'
+  activity:
+    type: string
+  description:
+    type: string
+  place:
+    $ref: ./places.v1.yaml
+  photos:
+    type: array
+    items:
+      $ref: ./photos.v1.yaml
+  tags:
+    type: array
+    items:
+      $ref: ./tags.v1.yaml
+  author:
+    $ref: ./users.v1.yaml
+  created_at:
+    type: string
+    format: date-time
+    example: '2020/01/01 12:34:56'
+    description: 'yyyy/mm/dd hh:mm:ss'
+required:
+  - id
+  - date
+  - activity
+  - description
+  - place
+  - photos
+  - tags
+  - author
+  - created_at
+description: ''

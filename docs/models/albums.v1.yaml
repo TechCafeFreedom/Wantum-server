@@ -1,0 +1,29 @@
+title: albums
+type: object
+x-tags:
+  - albums
+properties:
+  id:
+    type: integer
+  title:
+    type: string
+  invite_url:
+    type: string
+    format: uri
+  owner:
+    $ref: ./users.v1.yaml
+  members:
+    type: array
+    items:
+      $ref: ./users.v1.yaml
+  memories:
+    type: array
+    items:
+      $ref: ./memories.v1.yaml
+required:
+  - id
+  - title
+  - invite_url
+  - owner
+  - members
+  - memories

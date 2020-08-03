@@ -1,0 +1,33 @@
+title: wish_lists
+type: object
+x-tags:
+  - wish_lists
+properties:
+  id:
+    type: integer
+  title:
+    type: string
+  background_image_url:
+    type: string
+    format: uri
+  invite_url:
+    type: string
+    format: uri
+  owner:
+    $ref: ./users.v1.yaml
+  members:
+    type: array
+    items:
+      $ref: ./users.v1.yaml
+  categories:
+    type: array
+    items:
+      $ref: ./categories.v1.yaml
+required:
+  - id
+  - title
+  - background_image_url
+  - invite_url
+  - owner
+  - members
+  - categories

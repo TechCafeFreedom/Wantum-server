@@ -1,0 +1,43 @@
+title: users
+type: object
+x-tags:
+  - users
+properties:
+  id:
+    type: integer
+  user_name:
+    type: string
+  mail:
+    type: string
+    format: email
+  name:
+    type: string
+  thumbnail:
+    type: string
+    format: uri
+  bio:
+    type: string
+  gender:
+    type: integer
+    enum:
+      - 1
+      - 2
+      - 3
+    description: '1=man, 2=woman, 3=other'
+  place:
+    type: string
+  birth:
+    type: string
+    description: yyyy-mm-dd
+    format: date
+    example: '2000-01-01'
+required:
+  - id
+  - user_name
+  - mail
+  - name
+  - thumbnail
+  - bio
+  - gender
+  - place
+  - birth
