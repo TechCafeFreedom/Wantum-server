@@ -6,10 +6,10 @@ import (
 	"errors"
 	"io"
 	"net/http"
-	"wantum/pkg/api/middleware"
 	"wantum/pkg/api/request/reqbody"
 	"wantum/pkg/api/response"
 	userinteractor "wantum/pkg/api/usecase/user"
+	"wantum/pkg/constants"
 	"wantum/pkg/werrors"
 )
 
@@ -38,7 +38,7 @@ func (s *Server) CreateNewUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uid, ok := r.Context().Value(middleware.AuthCtxKey).(string)
+	uid, ok := r.Context().Value(constants.AuthCtxKey).(string)
 	if !ok {
 		errMessageJP := "不正なユーザからのアクセスをブロックしました。"
 		errMessageEN := "The content blocked because user is not certified."
@@ -55,7 +55,7 @@ func (s *Server) CreateNewUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) GetUserProfile(w http.ResponseWriter, r *http.Request) {
-	uid, ok := r.Context().Value(middleware.AuthCtxKey).(string)
+	uid, ok := r.Context().Value(constants.AuthCtxKey).(string)
 	if !ok {
 		errMessageJP := "不正なユーザからのアクセスをブロックしました。"
 		errMessageEN := "The content blocked because user is not certified."

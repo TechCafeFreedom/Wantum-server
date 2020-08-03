@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"runtime"
 	"time"
-	"wantum/pkg/api/middleware"
+	"wantum/pkg/constants"
 	"wantum/pkg/domain/entity"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/user"
@@ -45,7 +45,7 @@ func (u *userRepositoryImpliment) InsertUser(ctx context.Context, masterTx repos
 		funcName := runtime.FuncForPC(pt).Name()
 
 		// エラーログ出力
-		uid, ok := ctx.Value(middleware.AuthCtxKey).(string)
+		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
 		if !ok {
 			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
 		} else {
@@ -59,7 +59,7 @@ func (u *userRepositoryImpliment) InsertUser(ctx context.Context, masterTx repos
 		funcName := runtime.FuncForPC(pt).Name()
 
 		// エラーログ出力
-		uid, ok := ctx.Value(middleware.AuthCtxKey).(string)
+		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
 		if !ok {
 			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
 		} else {
@@ -85,7 +85,7 @@ func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repos
 		funcName := runtime.FuncForPC(pt).Name()
 
 		// エラーログ出力
-		uid, ok := ctx.Value(middleware.AuthCtxKey).(string)
+		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
 		if !ok {
 			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
 		} else {
@@ -102,7 +102,7 @@ func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repos
 		funcName := runtime.FuncForPC(pt).Name()
 
 		// エラーログ出力
-		uid, ok := ctx.Value(middleware.AuthCtxKey).(string)
+		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
 		if !ok {
 			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
 		} else {
@@ -126,7 +126,7 @@ func (u *userRepositoryImpliment) SelectByUID(ctx context.Context, masterTx repo
 		funcName := runtime.FuncForPC(pt).Name()
 
 		// エラーログ出力
-		uid, ok := ctx.Value(middleware.AuthCtxKey).(string)
+		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
 		if !ok {
 			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
 		} else {
@@ -143,7 +143,7 @@ func (u *userRepositoryImpliment) SelectByUID(ctx context.Context, masterTx repo
 		funcName := runtime.FuncForPC(pt).Name()
 
 		// エラーログ出力
-		uid, ok := ctx.Value(middleware.AuthCtxKey).(string)
+		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
 		if !ok {
 			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
 		} else {
@@ -167,7 +167,7 @@ func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx reposi
 		funcName := runtime.FuncForPC(pt).Name()
 
 		// エラーログ出力
-		uid, ok := ctx.Value(middleware.AuthCtxKey).(string)
+		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
 		if !ok {
 			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
 		} else {
@@ -183,7 +183,7 @@ func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx reposi
 		funcName := runtime.FuncForPC(pt).Name()
 
 		// エラーログ出力
-		uid, ok := ctx.Value(middleware.AuthCtxKey).(string)
+		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
 		if !ok {
 			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
 		} else {
@@ -205,7 +205,7 @@ func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx reposi
 			funcName := runtime.FuncForPC(pt).Name()
 
 			// エラーログ出力
-			uid, ok := ctx.Value(middleware.AuthCtxKey).(string)
+			uid, ok := ctx.Value(constants.AuthCtxKey).(string)
 			if !ok {
 				tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
 			} else {

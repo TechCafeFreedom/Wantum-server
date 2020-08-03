@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"strings"
 	"wantum/pkg/api/response"
+	"wantum/pkg/constants"
 	"wantum/pkg/tlog"
 	"wantum/pkg/werrors"
 
@@ -27,12 +28,6 @@ type firebaseAuth struct {
 	client *auth.Client
 }
 
-type key string
-
-const (
-	AuthCtxKey key = "AUTHED_UID"
-)
-
 func (fa *firebaseAuth) MiddlewareFunc(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Authorizationヘッダーからjwtトークンを取得
@@ -44,7 +39,7 @@ func (fa *firebaseAuth) MiddlewareFunc(next http.Handler) http.Handler {
 			funcName := runtime.FuncForPC(pt).Name()
 
 			// エラーログ出力
-			uid, ok := r.Context().Value(AuthCtxKey).(string)
+			uid, ok := r.Context().Value(constants.AuthCtxKey).(string)
 			if !ok {
 				tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
 			} else {
@@ -62,7 +57,7 @@ func (fa *firebaseAuth) MiddlewareFunc(next http.Handler) http.Handler {
 			return
 		}
 		// contextにuidを格納
-		r = r.WithContext(context.WithValue(r.Context(), AuthCtxKey, authedUserToken.UID))
+		r = r.WithContext(context.WithValue(r.Context(), constants.AuthCtxKey, authedUserToken.UID))
 		next.ServeHTTP(w, r)
 	})
 }
