@@ -9,7 +9,7 @@ import (
 )
 
 type Service interface {
-	CreateNewUser(ctx context.Context, masterTx repository.MasterTx, uid, name, thumbnail string) error
+	CreateNewUser(masterTx repository.MasterTx, uid, name, thumbnail string) error
 	GetByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.User, error)
 	GetByUID(ctx context.Context, masterTx repository.MasterTx, uid string) (*entity.User, error)
 	GetAll(ctx context.Context, masterTx repository.MasterTx) (entity.UserSlice, error)
@@ -25,8 +25,8 @@ func New(userRepository user.Repository) Service {
 	}
 }
 
-func (s *service) CreateNewUser(ctx context.Context, masterTx repository.MasterTx, uid, name, thumbnail string) error {
-	if err := s.userRepository.InsertUser(ctx, masterTx, uid, name, thumbnail); err != nil {
+func (s *service) CreateNewUser(masterTx repository.MasterTx, uid, name, thumbnail string) error {
+	if err := s.userRepository.InsertUser(masterTx, uid, name, thumbnail); err != nil {
 		return werrors.Stack(err)
 	}
 	return nil

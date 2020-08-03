@@ -27,7 +27,7 @@ func TestIntereractor_CreateNewUser(t *testing.T) {
 	masterTxManager := repository.NewMockMasterTxManager(masterTx)
 
 	userService := mock_user.NewMockService(ctrl)
-	userService.EXPECT().CreateNewUser(ctx, masterTx, uid, name, thumbnail).Return(nil).Times(1)
+	userService.EXPECT().CreateNewUser(masterTx, uid, name, thumbnail).Return(nil).Times(1)
 
 	interactor := New(masterTxManager, userService)
 	err := interactor.CreateNewUser(ctx, uid, name, thumbnail)

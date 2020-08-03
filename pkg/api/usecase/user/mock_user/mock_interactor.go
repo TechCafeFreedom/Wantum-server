@@ -5,11 +5,10 @@
 package mock_user
 
 import (
-	"context"
+	context "context"
+	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 	entity "wantum/pkg/domain/entity"
-
-	gomock "github.com/golang/mock/gomock"
 )
 
 // MockInteractor is a mock of Interactor interface
@@ -36,17 +35,17 @@ func (m *MockInteractor) EXPECT() *MockInteractorMockRecorder {
 }
 
 // CreateNewUser mocks base method
-func (m *MockInteractor) CreateNewUser(ctx context.Context, uid, title, description string) error {
+func (m *MockInteractor) CreateNewUser(ctx context.Context, uid, name, thumbnail string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateNewUser", ctx, uid, title, description)
+	ret := m.ctrl.Call(m, "CreateNewUser", ctx, uid, name, thumbnail)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // CreateNewUser indicates an expected call of CreateNewUser
-func (mr *MockInteractorMockRecorder) CreateNewUser(ctx, uid, title, description interface{}) *gomock.Call {
+func (mr *MockInteractorMockRecorder) CreateNewUser(ctx, uid, name, thumbnail interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewUser", reflect.TypeOf((*MockInteractor)(nil).CreateNewUser), ctx, uid, title, description)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewUser", reflect.TypeOf((*MockInteractor)(nil).CreateNewUser), ctx, uid, name, thumbnail)
 }
 
 // GetUserProfile mocks base method

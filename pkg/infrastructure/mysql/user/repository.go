@@ -37,7 +37,7 @@ func New(masterTxManager repository.MasterTxManager) user.Repository {
 	}
 }
 
-func (u *userRepositoryImpliment) InsertUser(ctx context.Context, masterTx repository.MasterTx, uid, name, thumbnail string) error {
+func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, uid, name, thumbnail string) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		// どこで起きたエラーかを特定するための情報を取得
@@ -45,8 +45,7 @@ func (u *userRepositoryImpliment) InsertUser(ctx context.Context, masterTx repos
 		funcName := runtime.FuncForPC(pt).Name()
 
 		// エラーログ出力
-		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
-		if !ok {
+		if uid == "" {
 			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
 		} else {
 			tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
@@ -59,8 +58,7 @@ func (u *userRepositoryImpliment) InsertUser(ctx context.Context, masterTx repos
 		funcName := runtime.FuncForPC(pt).Name()
 
 		// エラーログ出力
-		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
-		if !ok {
+		if uid == "" {
 			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
 		} else {
 			tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))

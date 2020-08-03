@@ -29,7 +29,7 @@ func New(masterTxManager repository.MasterTxManager, userService userservice.Ser
 func (i *intereractor) CreateNewUser(ctx context.Context, uid, name, thumbnail string) error {
 	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		// 新規ユーザ作成
-		if err := i.userService.CreateNewUser(ctx, masterTx, uid, name, thumbnail); err != nil {
+		if err := i.userService.CreateNewUser(masterTx, uid, name, thumbnail); err != nil {
 			return werrors.Stack(err)
 		}
 		return nil

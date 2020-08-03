@@ -5,12 +5,11 @@
 package mock_user
 
 import (
-	"context"
+	context "context"
+	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 	entity "wantum/pkg/domain/entity"
 	repository "wantum/pkg/domain/repository"
-
-	gomock "github.com/golang/mock/gomock"
 )
 
 // MockService is a mock of Service interface
@@ -37,17 +36,17 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 }
 
 // CreateNewUser mocks base method
-func (m *MockService) CreateNewUser(ctx context.Context, masterTx repository.MasterTx, uid, name, thumbnail string) error {
+func (m *MockService) CreateNewUser(masterTx repository.MasterTx, uid, name, thumbnail string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateNewUser", ctx, masterTx, uid, name, thumbnail)
+	ret := m.ctrl.Call(m, "CreateNewUser", masterTx, uid, name, thumbnail)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // CreateNewUser indicates an expected call of CreateNewUser
-func (mr *MockServiceMockRecorder) CreateNewUser(ctx, masterTx, uid, name, thumbnail interface{}) *gomock.Call {
+func (mr *MockServiceMockRecorder) CreateNewUser(masterTx, uid, name, thumbnail interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewUser", reflect.TypeOf((*MockService)(nil).CreateNewUser), ctx, masterTx, uid, name, thumbnail)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewUser", reflect.TypeOf((*MockService)(nil).CreateNewUser), masterTx, uid, name, thumbnail)
 }
 
 // GetByPK mocks base method

@@ -19,17 +19,16 @@ const (
 )
 
 func TestService_CreateNewUser(t *testing.T) {
-	ctx := &gin.Context{}
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	masterTx := repository.NewMockMasterTx()
 
 	userRepository := mock_user.NewMockRepository(ctrl)
-	userRepository.EXPECT().InsertUser(ctx, masterTx, uid, name, thumbnail).Return(nil).Times(1)
+	userRepository.EXPECT().InsertUser(masterTx, uid, name, thumbnail).Return(nil).Times(1)
 
 	service := New(userRepository)
-	err := service.CreateNewUser(ctx, masterTx, uid, name, thumbnail)
+	err := service.CreateNewUser(masterTx, uid, name, thumbnail)
 
 	assert.NoError(t, err)
 }

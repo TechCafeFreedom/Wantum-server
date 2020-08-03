@@ -5,12 +5,11 @@
 package mock_user
 
 import (
-	"context"
+	context "context"
+	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 	entity "wantum/pkg/domain/entity"
 	repository "wantum/pkg/domain/repository"
-
-	gomock "github.com/golang/mock/gomock"
 )
 
 // MockRepository is a mock of Repository interface
@@ -37,17 +36,17 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // InsertUser mocks base method
-func (m *MockRepository) InsertUser(ctx context.Context, masterTx repository.MasterTx, uid, name, thumbnail string) error {
+func (m *MockRepository) InsertUser(masterTx repository.MasterTx, uid, name, thumbnail string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "InsertUser", ctx, masterTx, uid, name, thumbnail)
+	ret := m.ctrl.Call(m, "InsertUser", masterTx, uid, name, thumbnail)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // InsertUser indicates an expected call of InsertUser
-func (mr *MockRepositoryMockRecorder) InsertUser(ctx, masterTx, uid, name, thumbnail interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) InsertUser(masterTx, uid, name, thumbnail interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertUser", reflect.TypeOf((*MockRepository)(nil).InsertUser), ctx, masterTx, uid, name, thumbnail)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertUser", reflect.TypeOf((*MockRepository)(nil).InsertUser), masterTx, uid, name, thumbnail)
 }
 
 // SelectByPK mocks base method
