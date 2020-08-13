@@ -50,12 +50,16 @@ func connectLocalSQL() *sql.DB {
 	if dbhost == "" {
 		dbhost = "localhost"
 	}
+	dbport := os.Getenv("MYSQL_PORT")
+	if dbport == "" {
+		dbport = "3306"
+	}
 	dbname := os.Getenv("MYSQL_DATABASE")
 	if dbname == "" {
 		dbname = "wantum"
 	}
 
-	dataSource := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?parseTime=true", dbuser, dbpassword, dbhost, dbname)
+	dataSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", dbuser, dbpassword, dbhost, dbport, dbname)
 
 	db, err := sql.Open("mysql", dataSource)
 	if err != nil {
