@@ -58,7 +58,7 @@ func Error(w http.ResponseWriter, r *http.Request, err error) {
 		}
 		Error(w, r, werrors.Newf(nil, http.StatusInternalServerError, "サーバで予期せぬエラーが発生しました。", "Unexpected error occurred."))
 	}
-	_, _ = w.Write(data)
+	w.Write(data)
 }
 
 func JSON(w http.ResponseWriter, r *http.Request, result interface{}) {
@@ -79,5 +79,5 @@ func JSON(w http.ResponseWriter, r *http.Request, result interface{}) {
 		}
 		Error(w, r, werrors.Newf(nil, http.StatusInternalServerError, "サーバで予期せぬエラーが発生しました。", "Unexpected error occurred."))
 	}
-	_, _ = w.Write(data)
+	w.Write(data)
 }
