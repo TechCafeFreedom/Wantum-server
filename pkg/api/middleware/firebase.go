@@ -32,7 +32,7 @@ func (fa *firebaseAuth) MiddlewareFunc(next http.Handler) http.Handler {
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
 			err := errors.New("ユーザのAuthorizationが空だっためエラーとしました。")
-			tlog.PrintLogWithCtx(r.Context(), err)
+			tlog.PrintErrorLogWithCtx(r.Context(), err)
 			response.Error(w, r, werrors.Newf(err, http.StatusBadRequest, "認証情報がありませんでした。", "Authorization header was not found."))
 			return
 		}
@@ -41,8 +41,7 @@ func (fa *firebaseAuth) MiddlewareFunc(next http.Handler) http.Handler {
 		// JWT の検証
 		authedUserToken, err := fa.client.VerifyIDToken(r.Context(), jwtToken)
 		if err != nil {
-			err := errors.New("無効なトークンでアクセスされたためエラーとしました。")
-			tlog.PrintLogWithCtx(r.Context(), err)
+			tlog.PrintErrorLogWithCtx(r.Context(), err)
 			response.Error(w, r, werrors.Newf(err, http.StatusUnauthorized, "トークンが無効です", "invalid token error."))
 			return
 		}

@@ -26,7 +26,7 @@ func New(masterTxManager repository.MasterTxManager) user.Repository {
 func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, userEntity *entity.User) (*entity.User, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
-		tlog.PrintLogWithUID(userEntity.AuthID, err)
+		tlog.PrintErrorLogWithAuthID(userEntity.AuthID, err)
 		return nil, werrors.Stack(err)
 	}
 	createdUser, err := tx.Exec(`
@@ -36,7 +36,7 @@ func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, userE
 			VALUES (?, ?, ?)
 	`, userEntity.AuthID, userEntity.UserName, userEntity.Mail)
 	if err != nil {
-		tlog.PrintLogWithUID(userEntity.AuthID, err)
+		tlog.PrintErrorLogWithAuthID(userEntity.AuthID, err)
 
 		return nil, werrors.Newf(
 			err,
@@ -48,7 +48,7 @@ func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, userE
 
 	createdUserID, err := createdUser.LastInsertId()
 	if err != nil {
-		tlog.PrintLogWithUID(userEntity.AuthID, err)
+		tlog.PrintErrorLogWithAuthID(userEntity.AuthID, err)
 
 		return nil, werrors.Newf(
 			err,
@@ -73,7 +73,7 @@ func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, userE
 		userEntity.Profile.Birth,
 	)
 	if err != nil {
-		tlog.PrintLogWithUID(userEntity.AuthID, err)
+		tlog.PrintErrorLogWithAuthID(userEntity.AuthID, err)
 
 		return nil, werrors.Newf(
 			err,
@@ -89,7 +89,7 @@ func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, userE
 func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.User, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
-		tlog.PrintLogWithCtx(ctx, err)
+		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.Stack(err)
 	}
 
@@ -123,7 +123,7 @@ func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repos
 		&userData.Profile.DeletedAt,
 	)
 	if err != nil {
-		tlog.PrintLogWithCtx(ctx, err)
+		tlog.PrintErrorLogWithCtx(ctx, err)
 
 		if err == sql.ErrNoRows {
 			return nil, werrors.Newf(err, http.StatusInternalServerError, "ユーザが見つかりませんでした。ユーザ登録されているか確認してください。", "User not found. Please make sure signup.")
@@ -137,7 +137,7 @@ func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repos
 func (u *userRepositoryImpliment) SelectByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*entity.User, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
-		tlog.PrintLogWithCtx(ctx, err)
+		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.Stack(err)
 	}
 
@@ -171,7 +171,7 @@ func (u *userRepositoryImpliment) SelectByAuthID(ctx context.Context, masterTx r
 		&userData.Profile.DeletedAt,
 	)
 	if err != nil {
-		tlog.PrintLogWithCtx(ctx, err)
+		tlog.PrintErrorLogWithCtx(ctx, err)
 
 		if err == sql.ErrNoRows {
 			return nil, werrors.Newf(err, http.StatusUnauthorized, "不正なユーザです。", "Invalid user.")
@@ -185,7 +185,7 @@ func (u *userRepositoryImpliment) SelectByAuthID(ctx context.Context, masterTx r
 func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx repository.MasterTx) (entity.UserSlice, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
-		tlog.PrintLogWithCtx(ctx, err)
+		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.Stack(err)
 	}
 
@@ -196,7 +196,7 @@ func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx reposi
 		ON users.id = profiles.user_id
 	`)
 	if err != nil {
-		tlog.PrintLogWithCtx(ctx, err)
+		tlog.PrintErrorLogWithCtx(ctx, err)
 
 		if err == sql.ErrNoRows {
 			return nil, werrors.Newf(err, http.StatusInternalServerError, "ユーザは1人も登録されていません。", "User doesn't exists.")
@@ -229,7 +229,7 @@ func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx reposi
 			&userData.Profile.DeletedAt,
 		)
 		if err != nil {
-			tlog.PrintLogWithCtx(ctx, err)
+			tlog.PrintErrorLogWithCtx(ctx, err)
 			return nil, werrors.Wrapf(err, http.StatusInternalServerError, "サーバでエラーが発生しました。", "Error occured at server.")
 		}
 		userSlice = append(userSlice, &userData)
