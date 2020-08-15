@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"runtime"
 	"strings"
@@ -79,13 +78,13 @@ func CreateFirebaseInstance() FirebaseAuth {
 	// firebase appの作成
 	app, err := firebase.NewApp(ctx, nil, opt)
 	if err != nil {
-		log.Panic(fmt.Errorf("error initializing firebase app: %v", err))
+		tlog.GetAppLogger().Panic(fmt.Sprintf("error initializing firebase app: %v", err))
 	}
 
 	// firebase admin clientの作成
 	client, err := app.Auth(ctx)
 	if err != nil {
-		log.Panic(fmt.Errorf("error initialize firebase instance. %v", err))
+		tlog.GetAppLogger().Panic(fmt.Sprintf("error initialize firebase instance. %v", err))
 	}
 
 	return &firebaseAuth{
@@ -105,7 +104,7 @@ func getFirebaseCredentialJSON(ctx context.Context, client *secretmanager.Client
 	// get secret value
 	result, err := client.AccessSecretVersion(ctx, accessRequest)
 	if err != nil {
-		log.Panicf("failed to access secret version: %v", err)
+		tlog.GetAppLogger().Panic(fmt.Sprintf("failed to access secret version: %v", err))
 	}
 
 	return result.Payload.Data

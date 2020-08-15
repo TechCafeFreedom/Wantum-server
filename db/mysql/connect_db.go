@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
+	"wantum/pkg/tlog"
 
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	_ "github.com/go-sql-driver/mysql"
@@ -37,7 +37,7 @@ func CreateSQLInstance() *sql.DB {
 
 // connectLocalSQL localのmysqlのコネクション作成
 func connectLocalSQL() *sql.DB {
-	log.Println("connectDB: local")
+	tlog.GetAppLogger().Debug("connectDB: local")
 	dbuser := os.Getenv("MYSQL_USER")
 	if dbuser == "" {
 		dbuser = "root"
@@ -63,14 +63,14 @@ func connectLocalSQL() *sql.DB {
 
 	db, err := sql.Open("mysql", dataSource)
 	if err != nil {
-		panic(err.Error())
+		tlog.GetAppLogger().Panic(err.Error())
 	}
 	return db
 }
 
 // connectCloudSQL cloudSQLのコネクション作成
 func connectCloudSQL(client *secretmanager.Client, ctx *context.Context) *sql.DB {
-	log.Println("connectDB: cloudSQL")
+	tlog.GetAppLogger().Debug("connectDB: cloudSQL")
 	projectID := "wantum-server"
 	secretID := "mysql-config"
 	// requestの作成
@@ -81,20 +81,20 @@ func connectCloudSQL(client *secretmanager.Client, ctx *context.Context) *sql.DB
 	// get secret value
 	result, err := client.AccessSecretVersion(*ctx, accessRequest)
 	if err != nil {
-		log.Panicf("failed to access secret version: %v", err)
+		tlog.GetAppLogger().Panic(fmt.Sprintf("failed to access secret version: %v", err))
 	}
 
 	// decode json
 	var config mysqlConfig
 	err = json.Unmarshal(result.Payload.Data, &config)
 	if err != nil {
-		log.Panicf("failed to marshal json: %v", err)
+		tlog.GetAppLogger().Panic(fmt.Sprintf("failed to marshal json: %v", err))
 	}
 
 	// connect db
 	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@%s(%s)/%s", config.User, config.Password, config.Protocol, config.Instance, config.DBName))
 	if err != nil {
-		log.Panicf("failed to open sql: %v", err)
+		tlog.GetAppLogger().Panic(fmt.Sprintf("failed to open sql: %v", err))
 	}
 	return db
 }

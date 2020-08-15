@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"wantum/db/mysql"
 	"wantum/pkg/api/middleware"
 	tx "wantum/pkg/infrastructure/mysql"
+	"wantum/pkg/tlog"
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
@@ -16,7 +16,7 @@ import (
 func main() {
 	// .envファイルの読み込み
 	if err := godotenv.Load(); err != nil {
-		log.Printf("failed to load .env file: %v", err)
+		tlog.GetAppLogger().Error(fmt.Sprintf("failed to load .env file: %v", err))
 	}
 
 	// DBインスタンスの作成
@@ -64,5 +64,7 @@ func main() {
 		Addr:    ":8080",
 		Handler: c.Handler(r),
 	}
-	log.Fatal(srv.ListenAndServe())
+	if err := srv.ListenAndServe(); err != nil {
+		tlog.GetAppLogger().Fatal(err.Error())
+	}
 }
