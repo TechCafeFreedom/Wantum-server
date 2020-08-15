@@ -1,0 +1,13 @@
+# image
+**/*.png
+
+# db
+init-mysql.sh
+db/mysql/init.d
+
+# docker
+docker
+docker-compose.yml
+.dockerignore
+
+
