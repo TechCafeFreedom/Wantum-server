@@ -38,7 +38,7 @@ func Error(w http.ResponseWriter, r *http.Request, err error) {
 			}
 			Error(w, r, werrors.Newf(nil, http.StatusInternalServerError, "サーバで予期せぬエラーが発生しました。", "Unexpected error occurred."))
 		}
-		_, _ = w.Write(data)
+		w.Write(data)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
