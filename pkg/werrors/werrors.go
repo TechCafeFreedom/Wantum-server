@@ -62,13 +62,9 @@ func Stack(err error) error {
 		errorMessageJP = wantumError.ErrorMessageJP
 		errorMessageEN = wantumError.ErrorMessageEN
 	} else {
-		return &WantumError{
-			ErrorCode:      http.StatusInternalServerError,
-			ErrorMessageJP: "エラーのコンバート時にエラーが発生しました",
-			ErrorMessageEN: "Error occured at covert to original error",
-			err:            err,
-			frame:          xerrors.Caller(1),
-		}
+		errorCode = http.StatusInternalServerError
+		errorMessageJP = "サーバでエラーが発生しました。"
+		errorMessageEN = "Error occurred in server."
 	}
 	return &WantumError{
 		ErrorCode:      errorCode,
