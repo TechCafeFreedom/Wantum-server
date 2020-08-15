@@ -26,7 +26,7 @@ func Error(w http.ResponseWriter, r *http.Request, err error) {
 			tlog.PrintLogWithCtx(r.Context(), err)
 			Error(w, r, werrors.Newf(nil, http.StatusInternalServerError, "サーバで予期せぬエラーが発生しました。", "Unexpected error occurred."))
 		}
-		w.Write(data)
+		_, _ = w.Write(data)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -36,7 +36,7 @@ func Error(w http.ResponseWriter, r *http.Request, err error) {
 		tlog.PrintLogWithCtx(r.Context(), err)
 		Error(w, r, werrors.Newf(nil, http.StatusInternalServerError, "サーバで予期せぬエラーが発生しました。", "Unexpected error occurred."))
 	}
-	w.Write(data)
+	_, _ = w.Write(data)
 }
 
 func JSON(w http.ResponseWriter, r *http.Request, result interface{}) {
@@ -47,5 +47,5 @@ func JSON(w http.ResponseWriter, r *http.Request, result interface{}) {
 		tlog.PrintLogWithCtx(r.Context(), err)
 		Error(w, r, werrors.Newf(nil, http.StatusInternalServerError, "サーバで予期せぬエラーが発生しました。", "Unexpected error occurred."))
 	}
-	w.Write(data)
+	_, _ = w.Write(data)
 }
