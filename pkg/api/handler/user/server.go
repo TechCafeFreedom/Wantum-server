@@ -1,11 +1,10 @@
 package user
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
-	"io"
 	"net/http"
+	"wantum/pkg/api/request"
 	"wantum/pkg/api/request/reqbody"
 	"wantum/pkg/api/response"
 	userinteractor "wantum/pkg/api/usecase/user"
@@ -23,13 +22,9 @@ func New(userInteractor userinteractor.Interactor) Server {
 }
 
 func (s *Server) CreateNewUser(w http.ResponseWriter, r *http.Request) {
-	body := r.Body
-	defer body.Close()
-
-	buf := new(bytes.Buffer)
-	if _, err := io.Copy(buf, body); err != nil {
-		tlog.PrintErrorLogWithCtx(r.Context(), err)
-		response.Error(w, r, werrors.Wrapf(err, http.StatusBadRequest, "リクエストされたユーザ情報が空でした", "requested user data is empty"))
+	buf, err := request.BodyToBuffer(w, r)
+	if err != nil {
+		response.Error(w, r, werrors.Stack(err))
 		return
 	}
 
