@@ -7,8 +7,8 @@ import (
 )
 
 type Repository interface {
-	InsertUser(masterTx repository.MasterTx, uid, name, thumbnail string) error
+	InsertUser(masterTx repository.MasterTx, userEntity *entity.User) (*entity.User, error)
 	SelectByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.User, error)
-	SelectByUID(ctx context.Context, masterTx repository.MasterTx, uid string) (*entity.User, error)
+	SelectByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*entity.User, error)
 	SelectAll(ctx context.Context, masterTx repository.MasterTx) (entity.UserSlice, error)
 }
