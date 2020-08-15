@@ -10,6 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -32,6 +33,14 @@ func main() {
 	firebaseClient := middleware.CreateFirebaseInstance()
 
 	// CORS対応
+	c := cors.New(
+		cors.Options{
+			AllowedHeaders:   []string{"*"},
+			AllowedOrigins:   []string{"*"},
+			AllowedMethods:   []string{"*"},
+			AllowCredentials: true,
+		},
+	)
 	r := mux.NewRouter()
 
 	// connection testAPI
@@ -53,7 +62,7 @@ func main() {
 	// port: 8080
 	srv := &http.Server{
 		Addr:    ":8080",
-		Handler: r,
+		Handler: c.Handler(r),
 	}
 	log.Fatal(srv.ListenAndServe())
 }
