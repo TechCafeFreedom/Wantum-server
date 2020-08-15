@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"runtime"
 	"strings"
 	"wantum/pkg/api/response"
 	"wantum/pkg/constants"
@@ -33,17 +32,7 @@ func (fa *firebaseAuth) MiddlewareFunc(next http.Handler) http.Handler {
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
 			err := errors.New("ユーザのAuthorizationが空だっためエラーとしました。")
-			// どこで起きたエラーかを特定するための情報を取得
-			pt, file, line, _ := runtime.Caller(0)
-			funcName := runtime.FuncForPC(pt).Name()
-
-			// エラーログ出力
-			uid, ok := r.Context().Value(constants.AuthCtxKey).(string)
-			if !ok {
-				tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
-			} else {
-				tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
-			}
+			tlog.PrintLogWithCtx(r.Context(), err)
 			response.Error(w, r, werrors.Newf(err, http.StatusBadRequest, "認証情報がありませんでした。", "Authorization header was not found."))
 			return
 		}
@@ -53,17 +42,7 @@ func (fa *firebaseAuth) MiddlewareFunc(next http.Handler) http.Handler {
 		authedUserToken, err := fa.client.VerifyIDToken(r.Context(), jwtToken)
 		if err != nil {
 			err := errors.New("無効なトークンでアクセスされたためエラーとしました。")
-			// どこで起きたエラーかを特定するための情報を取得
-			pt, file, line, _ := runtime.Caller(0)
-			funcName := runtime.FuncForPC(pt).Name()
-
-			// エラーログ出力
-			uid, ok := r.Context().Value(constants.AuthCtxKey).(string)
-			if !ok {
-				tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
-			} else {
-				tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
-			}
+			tlog.PrintLogWithCtx(r.Context(), err)
 			response.Error(w, r, werrors.Newf(err, http.StatusUnauthorized, "トークンが無効です", "invalid token error."))
 			return
 		}

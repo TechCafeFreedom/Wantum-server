@@ -3,11 +3,8 @@ package user
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"net/http"
-	"runtime"
 	"time"
-	"wantum/pkg/constants"
 	"wantum/pkg/domain/entity"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/user"
@@ -40,29 +37,11 @@ func New(masterTxManager repository.MasterTxManager) user.Repository {
 func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, uid, name, thumbnail string) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
-		// どこで起きたエラーかを特定するための情報を取得
-		pt, file, line, _ := runtime.Caller(0)
-		funcName := runtime.FuncForPC(pt).Name()
-
-		// エラーログ出力
-		if uid == "" {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
-		} else {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
-		}
+		tlog.PrintLogWithUID(uid, err)
 		return werrors.Stack(err)
 	}
 	if _, err := tx.Exec("INSERT INTO users(uid, name, thumbnail) VALUES (?, ?, ?)", uid, name, thumbnail); err != nil {
-		// どこで起きたエラーかを特定するための情報を取得
-		pt, file, line, _ := runtime.Caller(0)
-		funcName := runtime.FuncForPC(pt).Name()
-
-		// エラーログ出力
-		if uid == "" {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
-		} else {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
-		}
+		tlog.PrintLogWithUID(uid, err)
 
 		return werrors.Newf(
 			err,
@@ -78,34 +57,14 @@ func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, uid, 
 func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.User, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
-		// どこで起きたエラーかを特定するための情報を取得
-		pt, file, line, _ := runtime.Caller(0)
-		funcName := runtime.FuncForPC(pt).Name()
-
-		// エラーログ出力
-		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
-		if !ok {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
-		} else {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
-		}
+		tlog.PrintLogWithCtx(ctx, err)
 		return nil, werrors.Stack(err)
 	}
 
 	var userData userModel
 	row := tx.QueryRow("SELECT * FROM users WHERE id = ?", userID)
 	if err := row.Scan(&userData.id, &userData.uid, &userData.name, &userData.thumbnail, &userData.createdAt, &userData.updatedAt); err != nil {
-		// どこで起きたエラーかを特定するための情報を取得
-		pt, file, line, _ := runtime.Caller(0)
-		funcName := runtime.FuncForPC(pt).Name()
-
-		// エラーログ出力
-		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
-		if !ok {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
-		} else {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
-		}
+		tlog.PrintLogWithCtx(ctx, err)
 
 		if err == sql.ErrNoRows {
 			return nil, werrors.Newf(err, http.StatusInternalServerError, "ユーザが見つかりませんでした。ユーザ登録されているか確認してください。", "User not found. Please make sure signup.")
@@ -119,34 +78,14 @@ func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repos
 func (u *userRepositoryImpliment) SelectByUID(ctx context.Context, masterTx repository.MasterTx, uid string) (*entity.User, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
-		// どこで起きたエラーかを特定するための情報を取得
-		pt, file, line, _ := runtime.Caller(0)
-		funcName := runtime.FuncForPC(pt).Name()
-
-		// エラーログ出力
-		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
-		if !ok {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
-		} else {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
-		}
+		tlog.PrintLogWithCtx(ctx, err)
 		return nil, werrors.Stack(err)
 	}
 
 	var userData userModel
 	row := tx.QueryRow("SELECT * FROM users WHERE uid = ?", uid)
 	if err := row.Scan(&userData.id, &userData.uid, &userData.name, &userData.thumbnail, &userData.createdAt, &userData.updatedAt); err != nil {
-		// どこで起きたエラーかを特定するための情報を取得
-		pt, file, line, _ := runtime.Caller(0)
-		funcName := runtime.FuncForPC(pt).Name()
-
-		// エラーログ出力
-		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
-		if !ok {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
-		} else {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
-		}
+		tlog.PrintLogWithCtx(ctx, err)
 
 		if err == sql.ErrNoRows {
 			return nil, werrors.Newf(err, http.StatusUnauthorized, "不正なユーザです。", "Invalid user.")
@@ -160,33 +99,13 @@ func (u *userRepositoryImpliment) SelectByUID(ctx context.Context, masterTx repo
 func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx repository.MasterTx) (entity.UserSlice, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
-		// どこで起きたエラーかを特定するための情報を取得
-		pt, file, line, _ := runtime.Caller(0)
-		funcName := runtime.FuncForPC(pt).Name()
-
-		// エラーログ出力
-		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
-		if !ok {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
-		} else {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
-		}
+		tlog.PrintLogWithCtx(ctx, err)
 		return nil, werrors.Stack(err)
 	}
 
 	rows, err := tx.Query("SELECT * FROM users")
 	if err != nil {
-		// どこで起きたエラーかを特定するための情報を取得
-		pt, file, line, _ := runtime.Caller(0)
-		funcName := runtime.FuncForPC(pt).Name()
-
-		// エラーログ出力
-		uid, ok := ctx.Value(constants.AuthCtxKey).(string)
-		if !ok {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
-		} else {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
-		}
+		tlog.PrintLogWithCtx(ctx, err)
 
 		if err == sql.ErrNoRows {
 			return nil, werrors.Newf(err, http.StatusInternalServerError, "ユーザは1人も登録されていません。", "User doesn't exists.")
@@ -198,17 +117,7 @@ func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx reposi
 	for rows.Next() {
 		var userData userModel
 		if err := rows.Scan(&userData.id, &userData.uid, &userData.name, &userData.thumbnail, &userData.createdAt, &userData.updatedAt); err != nil {
-			// どこで起きたエラーかを特定するための情報を取得
-			pt, file, line, _ := runtime.Caller(0)
-			funcName := runtime.FuncForPC(pt).Name()
-
-			// エラーログ出力
-			uid, ok := ctx.Value(constants.AuthCtxKey).(string)
-			if !ok {
-				tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
-			} else {
-				tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
-			}
+			tlog.PrintLogWithCtx(ctx, err)
 			return nil, werrors.Wrapf(err, http.StatusInternalServerError, "サーバでエラーが発生しました。", "Error occured at server.")
 		}
 		userSlice = append(userSlice, &userData)

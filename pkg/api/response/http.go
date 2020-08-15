@@ -2,9 +2,7 @@ package response
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"runtime"
 	"wantum/pkg/tlog"
 	"wantum/pkg/werrors"
 
@@ -25,17 +23,7 @@ func Error(w http.ResponseWriter, r *http.Request, err error) {
 		w.WriteHeader(wantumError.ErrorCode)
 		data, err := json.Marshal(err)
 		if err != nil {
-			// どこで起きたエラーかを特定するための情報を取得
-			pt, file, line, _ := runtime.Caller(0)
-			funcName := runtime.FuncForPC(pt).Name()
-
-			// エラーログ出力
-			uid, ok := r.Context().Value(AuthCtxKey).(string)
-			if !ok {
-				tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
-			} else {
-				tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
-			}
+			tlog.PrintLogWithCtx(r.Context(), err)
 			Error(w, r, werrors.Newf(nil, http.StatusInternalServerError, "サーバで予期せぬエラーが発生しました。", "Unexpected error occurred."))
 		}
 		w.Write(data)
@@ -45,17 +33,7 @@ func Error(w http.ResponseWriter, r *http.Request, err error) {
 	w.WriteHeader(http.StatusInternalServerError)
 	data, err := json.Marshal(err)
 	if err != nil {
-		// どこで起きたエラーかを特定するための情報を取得
-		pt, file, line, _ := runtime.Caller(0)
-		funcName := runtime.FuncForPC(pt).Name()
-
-		// エラーログ出力
-		uid, ok := r.Context().Value(AuthCtxKey).(string)
-		if !ok {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
-		} else {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
-		}
+		tlog.PrintLogWithCtx(r.Context(), err)
 		Error(w, r, werrors.Newf(nil, http.StatusInternalServerError, "サーバで予期せぬエラーが発生しました。", "Unexpected error occurred."))
 	}
 	w.Write(data)
@@ -66,17 +44,7 @@ func JSON(w http.ResponseWriter, r *http.Request, result interface{}) {
 	w.WriteHeader(http.StatusOK)
 	data, err := json.Marshal(result)
 	if err != nil {
-		// どこで起きたエラーかを特定するための情報を取得
-		pt, file, line, _ := runtime.Caller(0)
-		funcName := runtime.FuncForPC(pt).Name()
-
-		// エラーログ出力
-		uid, ok := r.Context().Value(AuthCtxKey).(string)
-		if !ok {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
-		} else {
-			tlog.GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
-		}
+		tlog.PrintLogWithCtx(r.Context(), err)
 		Error(w, r, werrors.Newf(nil, http.StatusInternalServerError, "サーバで予期せぬエラーが発生しました。", "Unexpected error occurred."))
 	}
 	w.Write(data)
