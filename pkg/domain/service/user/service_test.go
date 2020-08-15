@@ -13,9 +13,16 @@ import (
 
 const (
 	userID    = 1
-	uid       = "uid"
+	authID    = "authID"
+	userName  = "userName"
+	mail      = "test@test.com"
 	name      = "name"
 	thumbnail = "thumbnail"
+	bio       = "bio"
+	gender    = 1
+	phone     = "000-0000-0000"
+	place     = "place"
+	birth     = "1998-05-03"
 )
 
 func TestService_CreateNewUser(t *testing.T) {
@@ -25,12 +32,27 @@ func TestService_CreateNewUser(t *testing.T) {
 	masterTx := repository.NewMockMasterTx()
 
 	userRepository := mock_user.NewMockRepository(ctrl)
-	userRepository.EXPECT().InsertUser(masterTx, uid, name, thumbnail).Return(nil).Times(1)
+	userEntity := &entity.User{
+		AuthID:   authID,
+		UserName: userName,
+		Mail:     mail,
+		Profile: &entity.Profile{
+			Name:      name,
+			Thumbnail: thumbnail,
+			Bio:       bio,
+			Gender:    gender,
+			Phone:     phone,
+			Place:     place,
+			Birth:     birth,
+		},
+	}
+	userRepository.EXPECT().InsertUser(masterTx, userEntity).Return(userEntity, nil).Times(1)
 
 	service := New(userRepository)
-	err := service.CreateNewUser(masterTx, uid, name, thumbnail)
+	createdUser, err := service.CreateNewUser(masterTx, authID, userName, mail, name, thumbnail, bio, phone, place, birth, gender)
 
 	assert.NoError(t, err)
+	assert.NotNil(t, createdUser)
 }
 
 func TestService_GetByPK(t *testing.T) {
@@ -41,9 +63,19 @@ func TestService_GetByPK(t *testing.T) {
 	masterTx := repository.NewMockMasterTx()
 
 	existedUser := &entity.User{
-		ID:        userID,
-		Name:      name,
-		Thumbnail: thumbnail,
+		ID:       userID,
+		AuthID:   authID,
+		UserName: userName,
+		Mail:     mail,
+		Profile: &entity.Profile{
+			Name:      name,
+			Thumbnail: thumbnail,
+			Bio:       bio,
+			Gender:    gender,
+			Phone:     phone,
+			Place:     place,
+			Birth:     birth,
+		},
 	}
 
 	userRepository := mock_user.NewMockRepository(ctrl)
@@ -65,9 +97,19 @@ func TestService_SelectAll(t *testing.T) {
 
 	existedUsers := entity.UserSlice{
 		{
-			ID:        userID,
-			Name:      name,
-			Thumbnail: thumbnail,
+			ID:       userID,
+			AuthID:   authID,
+			UserName: userName,
+			Mail:     mail,
+			Profile: &entity.Profile{
+				Name:      name,
+				Thumbnail: thumbnail,
+				Bio:       bio,
+				Gender:    gender,
+				Phone:     phone,
+				Place:     place,
+				Birth:     birth,
+			},
 		},
 	}
 

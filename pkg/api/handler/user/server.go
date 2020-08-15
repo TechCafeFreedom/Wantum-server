@@ -27,7 +27,6 @@ func (s *Server) CreateNewUser(w http.ResponseWriter, r *http.Request) {
 
 	buf := new(bytes.Buffer)
 	if _, err := io.Copy(buf, body); err != nil {
-
 		response.Error(w, r, werrors.Stack(err))
 		return
 	}
@@ -38,7 +37,7 @@ func (s *Server) CreateNewUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uid, ok := r.Context().Value(constants.AuthCtxKey).(string)
+	authID, ok := r.Context().Value(constants.AuthCtxKey).(string)
 	if !ok {
 		errMessageJP := "不正なユーザからのアクセスをブロックしました。"
 		errMessageEN := "The content blocked because user is not certified."
@@ -46,12 +45,25 @@ func (s *Server) CreateNewUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := s.userInteractor.CreateNewUser(r.Context(), uid, reqBody.Name, reqBody.Thumbnail); err != nil {
+	createdUser, err := s.userInteractor.CreateNewUser(
+		r.Context(),
+		authID,
+		reqBody.UserName,
+		reqBody.Mail,
+		reqBody.Name,
+		reqBody.Thumbnail,
+		reqBody.Bio,
+		reqBody.Phone,
+		reqBody.Place,
+		reqBody.Birth,
+		reqBody.Gender,
+	)
+	if err != nil {
 		response.Error(w, r, werrors.Stack(err))
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	response.JSON(w, r, response.ConvertToUserResponse(createdUser))
 }
 
 func (s *Server) GetUserProfile(w http.ResponseWriter, r *http.Request) {
@@ -69,7 +81,7 @@ func (s *Server) GetUserProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response.JSON(w, r, user)
+	response.JSON(w, r, response.ConvertToUserResponse(user))
 }
 
 func (s *Server) GetAllUsers(w http.ResponseWriter, r *http.Request) {
@@ -79,5 +91,5 @@ func (s *Server) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response.JSON(w, r, users)
+	response.JSON(w, r, response.ConvertToUsersResponse(users))
 }

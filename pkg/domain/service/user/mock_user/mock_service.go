@@ -6,10 +6,11 @@ package mock_user
 
 import (
 	context "context"
-	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 	entity "wantum/pkg/domain/entity"
 	repository "wantum/pkg/domain/repository"
+
+	gomock "github.com/golang/mock/gomock"
 )
 
 // MockService is a mock of Service interface
@@ -36,17 +37,18 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 }
 
 // CreateNewUser mocks base method
-func (m *MockService) CreateNewUser(masterTx repository.MasterTx, uid, name, thumbnail string) error {
+func (m *MockService) CreateNewUser(masterTx repository.MasterTx, authID, userName, mail, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateNewUser", masterTx, uid, name, thumbnail)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret := m.ctrl.Call(m, "CreateNewUser", masterTx, authID, userName, mail, name, thumbnail, bio, phone, place, birth, gender)
+	ret0, _ := ret[0].(*entity.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // CreateNewUser indicates an expected call of CreateNewUser
-func (mr *MockServiceMockRecorder) CreateNewUser(masterTx, uid, name, thumbnail interface{}) *gomock.Call {
+func (mr *MockServiceMockRecorder) CreateNewUser(masterTx, authID, userName, mail, name, thumbnail, bio, phone, place, birth, gender interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewUser", reflect.TypeOf((*MockService)(nil).CreateNewUser), masterTx, uid, name, thumbnail)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewUser", reflect.TypeOf((*MockService)(nil).CreateNewUser), masterTx, authID, userName, mail, name, thumbnail, bio, phone, place, birth, gender)
 }
 
 // GetByPK mocks base method
@@ -64,19 +66,19 @@ func (mr *MockServiceMockRecorder) GetByPK(ctx, masterTx, userID interface{}) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByPK", reflect.TypeOf((*MockService)(nil).GetByPK), ctx, masterTx, userID)
 }
 
-// GetByUID mocks base method
-func (m *MockService) GetByUID(ctx context.Context, masterTx repository.MasterTx, uid string) (*entity.User, error) {
+// GetByAuthID mocks base method
+func (m *MockService) GetByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*entity.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetByUID", ctx, masterTx, uid)
+	ret := m.ctrl.Call(m, "GetByAuthID", ctx, masterTx, authID)
 	ret0, _ := ret[0].(*entity.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetByUID indicates an expected call of GetByUID
-func (mr *MockServiceMockRecorder) GetByUID(ctx, masterTx, uid interface{}) *gomock.Call {
+// GetByAuthID indicates an expected call of GetByAuthID
+func (mr *MockServiceMockRecorder) GetByAuthID(ctx, masterTx, authID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByUID", reflect.TypeOf((*MockService)(nil).GetByUID), ctx, masterTx, uid)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByAuthID", reflect.TypeOf((*MockService)(nil).GetByAuthID), ctx, masterTx, authID)
 }
 
 // GetAll mocks base method

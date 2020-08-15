@@ -9,9 +9,9 @@ import (
 )
 
 type Service interface {
-	CreateNewUser(masterTx repository.MasterTx, uid, name, thumbnail string) error
+	CreateNewUser(masterTx repository.MasterTx, authID, userName, mail, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.User, error)
 	GetByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.User, error)
-	GetByUID(ctx context.Context, masterTx repository.MasterTx, uid string) (*entity.User, error)
+	GetByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*entity.User, error)
 	GetAll(ctx context.Context, masterTx repository.MasterTx) (entity.UserSlice, error)
 }
 
@@ -25,11 +25,26 @@ func New(userRepository user.Repository) Service {
 	}
 }
 
-func (s *service) CreateNewUser(masterTx repository.MasterTx, uid, name, thumbnail string) error {
-	if err := s.userRepository.InsertUser(masterTx, uid, name, thumbnail); err != nil {
-		return werrors.Stack(err)
+func (s *service) CreateNewUser(masterTx repository.MasterTx, authID, userName, mail, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.User, error) {
+	newUser := &entity.User{
+		AuthID:   authID,
+		UserName: userName,
+		Mail:     mail,
+		Profile: &entity.Profile{
+			Name:      name,
+			Thumbnail: thumbnail,
+			Bio:       bio,
+			Gender:    gender,
+			Phone:     phone,
+			Place:     place,
+			Birth:     birth,
+		},
 	}
-	return nil
+	createdUser, err := s.userRepository.InsertUser(masterTx, newUser)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	return createdUser, nil
 }
 
 func (s *service) GetByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.User, error) {
@@ -40,8 +55,8 @@ func (s *service) GetByPK(ctx context.Context, masterTx repository.MasterTx, use
 	return userData, nil
 }
 
-func (s *service) GetByUID(ctx context.Context, masterTx repository.MasterTx, uid string) (*entity.User, error) {
-	userData, err := s.userRepository.SelectByUID(ctx, masterTx, uid)
+func (s *service) GetByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*entity.User, error) {
+	userData, err := s.userRepository.SelectByAuthID(ctx, masterTx, authID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}

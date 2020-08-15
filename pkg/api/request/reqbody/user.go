@@ -1,6 +1,14 @@
 package reqbody
 
 type UserCreate struct {
-	Name      string `json:"name"`
-	Thumbnail string `json:"thumbnail"`
+	AuthID    string
+	UserName  string
+	Mail      string
+	Name      string
+	Thumbnail string
+	Bio       string
+	Gender    int
+	Phone     string
+	Place     string
+	Birth     string
 }
