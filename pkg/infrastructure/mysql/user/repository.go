@@ -199,7 +199,7 @@ func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx reposi
 		tlog.PrintErrorLogWithCtx(ctx, err)
 
 		if err == sql.ErrNoRows {
-			return nil, werrors.Newf(err, http.StatusInternalServerError, "ユーザは1人も登録されていません。", "User doesn't exists.")
+			return nil, nil // 一件もユーザが登録されていない場合は何も返さない
 		}
 		return nil, werrors.Wrapf(err, http.StatusInternalServerError, "サーバでエラーが発生しました。", "Error occured at server.")
 	}
