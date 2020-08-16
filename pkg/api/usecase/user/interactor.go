@@ -32,6 +32,10 @@ func New(masterTxManager repository.MasterTxManager, userService userservice.Ser
 }
 
 func (i *intereractor) CreateNewUser(ctx context.Context, authID, userName, mail, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.User, error) {
+	if mail == "" {
+		return nil, werrors.Newf(errors.New("mail is empty error"), http.StatusBadRequest, "メール情報は必須項目です。", "mail is required.")
+	}
+
 	var createdUser *entity.User
 	var err error
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
