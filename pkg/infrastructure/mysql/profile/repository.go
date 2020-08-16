@@ -26,7 +26,7 @@ func (p *profileRepositoryImpliment) InsertProfile(ctx context.Context, masterTx
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	_, err = tx.Exec(`
+	result, err := tx.Exec(`
 		INSERT INTO profiles(
 			user_id, name, thumbnail, bio, gender, phone, place, birth
 		)
@@ -42,9 +42,13 @@ func (p *profileRepositoryImpliment) InsertProfile(ctx context.Context, masterTx
 	)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
-
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-
+	lastInsertedID, err := result.LastInsertId()
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
+	}
+	profileModel.ID = int(lastInsertedID)
 	return profileModel, nil
 }
