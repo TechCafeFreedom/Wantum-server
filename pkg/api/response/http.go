@@ -9,12 +9,6 @@ import (
 	"golang.org/x/xerrors"
 )
 
-type key string
-
-const (
-	AuthCtxKey key = "AUTHED_UID"
-)
-
 func Error(w http.ResponseWriter, r *http.Request, err error) {
 	// エラーレスポンスの送信
 	var wantumError *werrors.WantumError
