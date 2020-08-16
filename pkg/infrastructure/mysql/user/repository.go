@@ -58,12 +58,32 @@ func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repos
 	}
 
 	var userData model.UserModel
+	var profileData model.ProfileModel
 	row := tx.QueryRow(`
-		SELECT *
-		FROM users
-		JOIN profiles
-		ON users.id = profiles.user_id
-		WHERE users.id = ?
+		SELECT
+		       u.id,
+		       u.auth_id,
+		       u.user_name,
+		       u.mail,
+		       u.created_at,
+		       u.updated_at,
+		       u.deleted_at,
+		       p.id,
+		       p.user_id,
+		       p.name,
+		       p.thumbnail,
+		       p.bio,
+		       p.gender,
+		       p.phone,
+		       p.place,
+		       p.birth,
+		       p.created_at,
+		       p.updated_at,
+		       p.deleted_at
+		FROM users AS u
+		JOIN profiles AS p
+		ON u.id = p.user_id
+		WHERE u.id = ?
 	`, userID)
 	err = row.Scan(
 		&userData.ID,
@@ -73,18 +93,18 @@ func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repos
 		&userData.CreatedAt,
 		&userData.UpdatedAt,
 		&userData.DeletedAt,
-		&userData.Profile.ID,
-		&userData.Profile.UserID,
-		&userData.Profile.Name,
-		&userData.Profile.Thumbnail,
-		&userData.Profile.Bio,
-		&userData.Profile.Gender,
-		&userData.Profile.Phone,
-		&userData.Profile.Place,
-		&userData.Profile.Birth,
-		&userData.Profile.CreatedAt,
-		&userData.Profile.UpdatedAt,
-		&userData.Profile.DeletedAt,
+		&profileData.ID,
+		&profileData.UserID,
+		&profileData.Name,
+		&profileData.Thumbnail,
+		&profileData.Bio,
+		&profileData.Gender,
+		&profileData.Phone,
+		&profileData.Place,
+		&profileData.Birth,
+		&profileData.CreatedAt,
+		&profileData.UpdatedAt,
+		&profileData.DeletedAt,
 	)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -95,6 +115,9 @@ func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repos
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
+	if profileData.ID != 0 {
+		userData.Profile = &profileData
+	}
 	return &userData, nil
 }
 
@@ -106,11 +129,31 @@ func (u *userRepositoryImpliment) SelectByAuthID(ctx context.Context, masterTx r
 	}
 
 	var userData model.UserModel
+	var profileData model.ProfileModel
 	row := tx.QueryRow(`
-		SELECT *
-		FROM users
-		JOIN profiles
-		ON users.id = profiles.user_id
+		SELECT
+		       u.id,
+		       u.auth_id,
+		       u.user_name,
+		       u.mail,
+		       u.created_at,
+		       u.updated_at,
+		       u.deleted_at,
+		       p.id,
+		       p.user_id,
+		       p.name,
+		       p.thumbnail,
+		       p.bio,
+		       p.gender,
+		       p.phone,
+		       p.place,
+		       p.birth,
+		       p.created_at,
+		       p.updated_at,
+		       p.deleted_at
+		FROM users AS u
+		JOIN profiles AS p
+		ON u.id = p.user_id
 		WHERE auth_id = ?
 	`, authID)
 	err = row.Scan(
@@ -121,18 +164,18 @@ func (u *userRepositoryImpliment) SelectByAuthID(ctx context.Context, masterTx r
 		&userData.CreatedAt,
 		&userData.UpdatedAt,
 		&userData.DeletedAt,
-		&userData.Profile.ID,
-		&userData.Profile.UserID,
-		&userData.Profile.Name,
-		&userData.Profile.Thumbnail,
-		&userData.Profile.Bio,
-		&userData.Profile.Gender,
-		&userData.Profile.Phone,
-		&userData.Profile.Place,
-		&userData.Profile.Birth,
-		&userData.Profile.CreatedAt,
-		&userData.Profile.UpdatedAt,
-		&userData.Profile.DeletedAt,
+		&profileData.ID,
+		&profileData.UserID,
+		&profileData.Name,
+		&profileData.Thumbnail,
+		&profileData.Bio,
+		&profileData.Gender,
+		&profileData.Phone,
+		&profileData.Place,
+		&profileData.Birth,
+		&profileData.CreatedAt,
+		&profileData.UpdatedAt,
+		&profileData.DeletedAt,
 	)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -143,6 +186,9 @@ func (u *userRepositoryImpliment) SelectByAuthID(ctx context.Context, masterTx r
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
+	if profileData.ID != 0 {
+		userData.Profile = &profileData
+	}
 	return &userData, nil
 }
 
@@ -154,10 +200,29 @@ func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx reposi
 	}
 
 	rows, err := tx.Query(`
-		SELECT *
-		FROM users
-		JOIN profiles
-		ON users.id = profiles.user_id
+		SELECT
+		       u.id,
+		       u.auth_id,
+		       u.user_name,
+		       u.mail,
+		       u.created_at,
+		       u.updated_at,
+		       u.deleted_at,
+		       p.id,
+		       p.user_id,
+		       p.name,
+		       p.thumbnail,
+		       p.bio,
+		       p.gender,
+		       p.phone,
+		       p.place,
+		       p.birth,
+		       p.created_at,
+		       p.updated_at,
+		       p.deleted_at
+		FROM users AS u
+		JOIN profiles AS p
+		ON u.id = p.user_id
 	`)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -171,6 +236,7 @@ func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx reposi
 	var userSlice model.UserModelSlice
 	for rows.Next() {
 		var userData model.UserModel
+		var profileData model.ProfileModel
 		err = rows.Scan(
 			&userData.ID,
 			&userData.AuthID,
@@ -179,22 +245,25 @@ func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx reposi
 			&userData.CreatedAt,
 			&userData.UpdatedAt,
 			&userData.DeletedAt,
-			&userData.Profile.ID,
-			&userData.Profile.UserID,
-			&userData.Profile.Name,
-			&userData.Profile.Thumbnail,
-			&userData.Profile.Bio,
-			&userData.Profile.Gender,
-			&userData.Profile.Phone,
-			&userData.Profile.Place,
-			&userData.Profile.Birth,
-			&userData.Profile.CreatedAt,
-			&userData.Profile.UpdatedAt,
-			&userData.Profile.DeletedAt,
+			&profileData.ID,
+			&profileData.UserID,
+			&profileData.Name,
+			&profileData.Thumbnail,
+			&profileData.Bio,
+			&profileData.Gender,
+			&profileData.Phone,
+			&profileData.Place,
+			&profileData.Birth,
+			&profileData.CreatedAt,
+			&profileData.UpdatedAt,
+			&profileData.DeletedAt,
 		)
 		if err != nil {
 			tlog.PrintErrorLogWithCtx(ctx, err)
 			return nil, werrors.FromConstant(err, werrors.ServerError)
+		}
+		if profileData.ID != 0 {
+			userData.Profile = &profileData
 		}
 		userSlice = append(userSlice, &userData)
 	}
