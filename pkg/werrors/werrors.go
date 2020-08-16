@@ -41,6 +41,11 @@ func Wrapf(cause error, errorCode int, messageJP, messageEN string) error {
 	return newError(cause, errorCode, messageJP, messageEN)
 }
 
+// FromConstant AuthFailなどのように予め定数として用意してあるWantumエラーから生成する
+func FromConstant(cause error, wantumError *WantumError) error {
+	return newError(cause, wantumError.ErrorCode, wantumError.ErrorMessageJP, wantumError.ErrorMessageEN)
+}
+
 func newError(cause error, errorCode int, errorMessageJP, errorMessageEN string) error {
 	return &WantumError{
 		ErrorCode:      errorCode,

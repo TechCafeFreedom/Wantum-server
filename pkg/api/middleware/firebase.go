@@ -33,7 +33,7 @@ func (fa *firebaseAuth) MiddlewareFunc(next http.Handler) http.Handler {
 		if authHeader == "" {
 			err := errors.New("ユーザのAuthorizationが空だっためエラーとしました。")
 			tlog.PrintErrorLogWithCtx(r.Context(), err)
-			response.Error(w, r, werrors.Newf(err, http.StatusBadRequest, "認証情報がありませんでした。", "Authorization header was not found."))
+			response.Error(w, r, werrors.FromConstant(err, werrors.AuthFail))
 			return
 		}
 		jwtToken := strings.Replace(authHeader, "Bearer ", "", 1)
@@ -42,7 +42,7 @@ func (fa *firebaseAuth) MiddlewareFunc(next http.Handler) http.Handler {
 		authedUserToken, err := fa.client.VerifyIDToken(r.Context(), jwtToken)
 		if err != nil {
 			tlog.PrintErrorLogWithCtx(r.Context(), err)
-			response.Error(w, r, werrors.Newf(err, http.StatusUnauthorized, "トークンが無効です", "invalid token error."))
+			response.Error(w, r, werrors.FromConstant(err, werrors.AuthFail))
 			return
 		}
 		// contextにuidを格納

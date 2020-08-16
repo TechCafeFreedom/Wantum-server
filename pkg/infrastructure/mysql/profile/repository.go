@@ -2,7 +2,6 @@ package profile
 
 import (
 	"context"
-	"net/http"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/profile"
 	"wantum/pkg/infrastructure/mysql"
@@ -25,7 +24,7 @@ func (p *profileRepositoryImpliment) InsertProfile(ctx context.Context, masterTx
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
-		return nil, werrors.Stack(err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 	_, err = tx.Exec(`
 		INSERT INTO profiles(
@@ -44,12 +43,7 @@ func (p *profileRepositoryImpliment) InsertProfile(ctx context.Context, masterTx
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 
-		return nil, werrors.Newf(
-			err,
-			http.StatusInternalServerError,
-			"DBインサート時にエラーが発生しました。",
-			"Error occurred when DB insert.",
-		)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
 	return profileModel, nil

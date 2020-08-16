@@ -3,7 +3,6 @@ package user
 import (
 	"context"
 	"database/sql"
-	"net/http"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/user"
 	"wantum/pkg/infrastructure/mysql"
@@ -26,7 +25,7 @@ func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, userM
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithAuthID(userModel.AuthID, err)
-		return nil, werrors.Stack(err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 	result, err := tx.Exec(`
 			INSERT INTO users(
@@ -37,24 +36,14 @@ func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, userM
 	if err != nil {
 		tlog.PrintErrorLogWithAuthID(userModel.AuthID, err)
 
-		return nil, werrors.Newf(
-			err,
-			http.StatusInternalServerError,
-			"DBインサート時にエラーが発生しました。",
-			"Error occurred when DB insert.",
-		)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
 	createdUserID, err := result.LastInsertId()
 	if err != nil {
 		tlog.PrintErrorLogWithAuthID(userModel.AuthID, err)
 
-		return nil, werrors.Newf(
-			err,
-			http.StatusInternalServerError,
-			"DBインサート時にエラーが発生しました。",
-			"Error occurred when DB insert.",
-		)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 	userModel.ID = int(createdUserID)
 
@@ -65,7 +54,7 @@ func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repos
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
-		return nil, werrors.Stack(err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
 	var userData model.UserModel
@@ -101,9 +90,9 @@ func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repos
 		tlog.PrintErrorLogWithCtx(ctx, err)
 
 		if err == sql.ErrNoRows {
-			return nil, werrors.Newf(err, http.StatusInternalServerError, "ユーザが見つかりませんでした。ユーザ登録されているか確認してください。", "User not found. Please make sure signup.")
+			return nil, werrors.FromConstant(err, werrors.UserNotFound)
 		}
-		return nil, werrors.Wrapf(err, http.StatusInternalServerError, "サーバでエラーが発生しました。", "Error occurred at server.")
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
 	return &userData, nil
@@ -113,7 +102,7 @@ func (u *userRepositoryImpliment) SelectByAuthID(ctx context.Context, masterTx r
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
-		return nil, werrors.Stack(err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
 	var userData model.UserModel
@@ -149,9 +138,9 @@ func (u *userRepositoryImpliment) SelectByAuthID(ctx context.Context, masterTx r
 		tlog.PrintErrorLogWithCtx(ctx, err)
 
 		if err == sql.ErrNoRows {
-			return nil, werrors.Newf(err, http.StatusUnauthorized, "不正なユーザです。", "Invalid user.")
+			return nil, werrors.FromConstant(err, werrors.UserNotFound)
 		}
-		return nil, werrors.Wrapf(err, http.StatusInternalServerError, "サーバでエラーが発生しました。", "Error occured at server.")
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
 	return &userData, nil
@@ -161,7 +150,7 @@ func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx reposi
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
-		return nil, werrors.Stack(err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
 	rows, err := tx.Query(`
@@ -176,7 +165,7 @@ func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx reposi
 		if err == sql.ErrNoRows {
 			return nil, nil // 一件もユーザが登録されていない場合は何も返さない
 		}
-		return nil, werrors.Wrapf(err, http.StatusInternalServerError, "サーバでエラーが発生しました。", "Error occured at server.")
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
 	var userSlice model.UserModelSlice
@@ -205,7 +194,7 @@ func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx reposi
 		)
 		if err != nil {
 			tlog.PrintErrorLogWithCtx(ctx, err)
-			return nil, werrors.Wrapf(err, http.StatusInternalServerError, "サーバでエラーが発生しました。", "Error occured at server.")
+			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}
 		userSlice = append(userSlice, &userData)
 	}
