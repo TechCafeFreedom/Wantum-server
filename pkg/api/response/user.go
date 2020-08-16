@@ -36,6 +36,13 @@ func ConvertToUserResponse(userData *entity.User) *UserResponse {
 	// nilチェック
 	if userData == nil {
 		return nil
+	} else if userData.Profile == nil {
+		return &UserResponse{
+			ID:       userData.ID,
+			AuthID:   userData.AuthID,
+			UserName: userData.UserName,
+			Mail:     userData.Mail,
+		}
 	}
 
 	return &UserResponse{
