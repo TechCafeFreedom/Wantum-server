@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"net/http"
-	"wantum/pkg/domain/entity"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/user"
 	"wantum/pkg/infrastructure/mysql"
@@ -23,20 +22,20 @@ func New(masterTxManager repository.MasterTxManager) user.Repository {
 	}
 }
 
-func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, userEntity *entity.User) (*entity.User, error) {
+func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, userModel *model.UserModel) (*model.UserModel, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
-		tlog.PrintErrorLogWithAuthID(userEntity.AuthID, err)
+		tlog.PrintErrorLogWithAuthID(userModel.AuthID, err)
 		return nil, werrors.Stack(err)
 	}
-	createdUser, err := tx.Exec(`
+	result, err := tx.Exec(`
 			INSERT INTO users(
 			    auth_id, user_name, mail
 			)
 			VALUES (?, ?, ?)
-	`, userEntity.AuthID, userEntity.UserName, userEntity.Mail)
+	`, userModel.AuthID, userModel.UserName, userModel.Mail)
 	if err != nil {
-		tlog.PrintErrorLogWithAuthID(userEntity.AuthID, err)
+		tlog.PrintErrorLogWithAuthID(userModel.AuthID, err)
 
 		return nil, werrors.Newf(
 			err,
@@ -46,9 +45,9 @@ func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, userE
 		)
 	}
 
-	createdUserID, err := createdUser.LastInsertId()
+	createdUserID, err := result.LastInsertId()
 	if err != nil {
-		tlog.PrintErrorLogWithAuthID(userEntity.AuthID, err)
+		tlog.PrintErrorLogWithAuthID(userModel.AuthID, err)
 
 		return nil, werrors.Newf(
 			err,
@@ -57,36 +56,12 @@ func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, userE
 			"Error occurred when DB insert.",
 		)
 	}
-	userEntity.ID = int(createdUserID)
-	_, err = tx.Exec(`
-		INSERT INTO profiles(
-			    user_id, name, thumbnail, bio, gender, phone, place, birth
-			)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-	`, userEntity.ID,
-		userEntity.Profile.Name,
-		userEntity.Profile.Thumbnail,
-		userEntity.Profile.Bio,
-		userEntity.Profile.Gender,
-		userEntity.Profile.Phone,
-		userEntity.Profile.Place,
-		userEntity.Profile.Birth,
-	)
-	if err != nil {
-		tlog.PrintErrorLogWithAuthID(userEntity.AuthID, err)
+	userModel.ID = int(createdUserID)
 
-		return nil, werrors.Newf(
-			err,
-			http.StatusInternalServerError,
-			"DBインサート時にエラーが発生しました。",
-			"Error occurred when DB insert.",
-		)
-	}
-
-	return userEntity, nil
+	return userModel, nil
 }
 
-func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.User, error) {
+func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*model.UserModel, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -131,10 +106,10 @@ func (u *userRepositoryImpliment) SelectByPK(ctx context.Context, masterTx repos
 		return nil, werrors.Wrapf(err, http.StatusInternalServerError, "サーバでエラーが発生しました。", "Error occurred at server.")
 	}
 
-	return model.ConvertToUserEntity(&userData), nil
+	return &userData, nil
 }
 
-func (u *userRepositoryImpliment) SelectByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*entity.User, error) {
+func (u *userRepositoryImpliment) SelectByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*model.UserModel, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -179,10 +154,10 @@ func (u *userRepositoryImpliment) SelectByAuthID(ctx context.Context, masterTx r
 		return nil, werrors.Wrapf(err, http.StatusInternalServerError, "サーバでエラーが発生しました。", "Error occured at server.")
 	}
 
-	return model.ConvertToUserEntity(&userData), nil
+	return &userData, nil
 }
 
-func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx repository.MasterTx) (entity.UserSlice, error) {
+func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx repository.MasterTx) (model.UserModelSlice, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -235,5 +210,5 @@ func (u *userRepositoryImpliment) SelectAll(ctx context.Context, masterTx reposi
 		userSlice = append(userSlice, &userData)
 	}
 
-	return model.ConvertToUserSliceEntity(userSlice), nil
+	return userSlice, nil
 }

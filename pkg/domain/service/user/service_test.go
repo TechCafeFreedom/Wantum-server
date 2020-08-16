@@ -1,12 +1,12 @@
 package user
 
 import (
+	"context"
 	"testing"
-	"wantum/pkg/domain/entity"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/user/mock_user"
+	"wantum/pkg/infrastructure/mysql/model"
 
-	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )
@@ -32,42 +32,33 @@ func TestService_CreateNewUser(t *testing.T) {
 	masterTx := repository.NewMockMasterTx()
 
 	userRepository := mock_user.NewMockRepository(ctrl)
-	userEntity := &entity.User{
+	userModel := &model.UserModel{
 		AuthID:   authID,
 		UserName: userName,
 		Mail:     mail,
-		Profile: &entity.Profile{
-			Name:      name,
-			Thumbnail: thumbnail,
-			Bio:       bio,
-			Gender:    gender,
-			Phone:     phone,
-			Place:     place,
-			Birth:     birth,
-		},
 	}
-	userRepository.EXPECT().InsertUser(masterTx, userEntity).Return(userEntity, nil).Times(1)
+	userRepository.EXPECT().InsertUser(masterTx, userModel).Return(userModel, nil).Times(1)
 
 	service := New(userRepository)
-	createdUser, err := service.CreateNewUser(masterTx, authID, userName, mail, name, thumbnail, bio, phone, place, birth, gender)
+	createdUser, err := service.CreateNewUser(masterTx, authID, userName, mail)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, createdUser)
 }
 
 func TestService_GetByPK(t *testing.T) {
-	ctx := &gin.Context{}
+	ctx := context.Background()
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	masterTx := repository.NewMockMasterTx()
 
-	existedUser := &entity.User{
+	existedUser := &model.UserModel{
 		ID:       userID,
 		AuthID:   authID,
 		UserName: userName,
 		Mail:     mail,
-		Profile: &entity.Profile{
+		Profile: &model.ProfileModel{
 			Name:      name,
 			Thumbnail: thumbnail,
 			Bio:       bio,
@@ -82,26 +73,26 @@ func TestService_GetByPK(t *testing.T) {
 	userRepository.EXPECT().SelectByPK(ctx, masterTx, userID).Return(existedUser, nil).Times(1)
 
 	service := New(userRepository)
-	users, err := service.GetByPK(ctx, masterTx, userID)
+	user, err := service.GetByPK(ctx, masterTx, userID)
 
 	assert.NoError(t, err)
-	assert.NotNil(t, users)
+	assert.NotNil(t, user)
 }
 
 func TestService_SelectAll(t *testing.T) {
-	ctx := &gin.Context{}
+	ctx := context.Background()
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	masterTx := repository.NewMockMasterTx()
 
-	existedUsers := entity.UserSlice{
+	existedUsers := model.UserModelSlice{
 		{
 			ID:       userID,
 			AuthID:   authID,
 			UserName: userName,
 			Mail:     mail,
-			Profile: &entity.Profile{
+			Profile: &model.ProfileModel{
 				Name:      name,
 				Thumbnail: thumbnail,
 				Bio:       bio,

@@ -2,13 +2,13 @@ package user
 
 import (
 	"context"
-	"wantum/pkg/domain/entity"
 	"wantum/pkg/domain/repository"
+	"wantum/pkg/infrastructure/mysql/model"
 )
 
 type Repository interface {
-	InsertUser(masterTx repository.MasterTx, userEntity *entity.User) (*entity.User, error)
-	SelectByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.User, error)
-	SelectByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*entity.User, error)
-	SelectAll(ctx context.Context, masterTx repository.MasterTx) (entity.UserSlice, error)
+	InsertUser(masterTx repository.MasterTx, userModel *model.UserModel) (*model.UserModel, error)
+	SelectByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*model.UserModel, error)
+	SelectByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*model.UserModel, error)
+	SelectAll(ctx context.Context, masterTx repository.MasterTx) (model.UserModelSlice, error)
 }

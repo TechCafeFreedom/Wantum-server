@@ -6,10 +6,9 @@ package mock_user
 
 import (
 	context "context"
+	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 	entity "wantum/pkg/domain/entity"
-
-	gomock "github.com/golang/mock/gomock"
 )
 
 // MockInteractor is a mock of Interactor interface
@@ -51,18 +50,18 @@ func (mr *MockInteractorMockRecorder) CreateNewUser(ctx, authID, userName, mail,
 }
 
 // GetUserProfile mocks base method
-func (m *MockInteractor) GetUserProfile(ctx context.Context, uid string) (*entity.User, error) {
+func (m *MockInteractor) GetUserProfile(ctx context.Context, authID string) (*entity.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUserProfile", ctx, uid)
+	ret := m.ctrl.Call(m, "GetUserProfile", ctx, authID)
 	ret0, _ := ret[0].(*entity.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetUserProfile indicates an expected call of GetUserProfile
-func (mr *MockInteractorMockRecorder) GetUserProfile(ctx, uid interface{}) *gomock.Call {
+func (mr *MockInteractorMockRecorder) GetUserProfile(ctx, authID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserProfile", reflect.TypeOf((*MockInteractor)(nil).GetUserProfile), ctx, uid)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserProfile", reflect.TypeOf((*MockInteractor)(nil).GetUserProfile), ctx, authID)
 }
 
 // GetAll mocks base method

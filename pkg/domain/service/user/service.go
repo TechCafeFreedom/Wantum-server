@@ -5,11 +5,12 @@ import (
 	"wantum/pkg/domain/entity"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/user"
+	"wantum/pkg/infrastructure/mysql/model"
 	"wantum/pkg/werrors"
 )
 
 type Service interface {
-	CreateNewUser(masterTx repository.MasterTx, authID, userName, mail, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.User, error)
+	CreateNewUser(masterTx repository.MasterTx, authID, userName, mail string) (*entity.User, error)
 	GetByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.User, error)
 	GetByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*entity.User, error)
 	GetAll(ctx context.Context, masterTx repository.MasterTx) (entity.UserSlice, error)
@@ -25,26 +26,17 @@ func New(userRepository user.Repository) Service {
 	}
 }
 
-func (s *service) CreateNewUser(masterTx repository.MasterTx, authID, userName, mail, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.User, error) {
-	newUser := &entity.User{
+func (s *service) CreateNewUser(masterTx repository.MasterTx, authID, userName, mail string) (*entity.User, error) {
+	newUser := &model.UserModel{
 		AuthID:   authID,
 		UserName: userName,
 		Mail:     mail,
-		Profile: &entity.Profile{
-			Name:      name,
-			Thumbnail: thumbnail,
-			Bio:       bio,
-			Gender:    gender,
-			Phone:     phone,
-			Place:     place,
-			Birth:     birth,
-		},
 	}
 	createdUser, err := s.userRepository.InsertUser(masterTx, newUser)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return createdUser, nil
+	return model.ConvertToUserEntity(createdUser), nil
 }
 
 func (s *service) GetByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.User, error) {
@@ -52,7 +44,7 @@ func (s *service) GetByPK(ctx context.Context, masterTx repository.MasterTx, use
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return userData, nil
+	return model.ConvertToUserEntity(userData), nil
 }
 
 func (s *service) GetByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*entity.User, error) {
@@ -60,7 +52,7 @@ func (s *service) GetByAuthID(ctx context.Context, masterTx repository.MasterTx,
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return userData, nil
+	return model.ConvertToUserEntity(userData), nil
 }
 
 func (s *service) GetAll(ctx context.Context, masterTx repository.MasterTx) (entity.UserSlice, error) {
@@ -68,5 +60,5 @@ func (s *service) GetAll(ctx context.Context, masterTx repository.MasterTx) (ent
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return userSlice, nil
+	return model.ConvertToUserSliceEntity(userSlice), nil
 }
