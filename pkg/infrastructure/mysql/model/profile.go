@@ -21,6 +21,9 @@ type ProfileModel struct {
 }
 
 func ConvertToProfileEntity(profileData *ProfileModel) *entity.Profile {
+	if profileData == nil {
+		return nil
+	}
 	return &entity.Profile{
 		Name:      profileData.Name,
 		Thumbnail: profileData.Thumbnail,

@@ -19,6 +19,9 @@ type UserModel struct {
 type UserModelSlice []*UserModel
 
 func ConvertToUserEntity(userData *UserModel) *entity.User {
+	if userData == nil {
+		return nil
+	}
 	if userData.Profile != nil {
 		return &entity.User{
 			ID:        userData.ID,
