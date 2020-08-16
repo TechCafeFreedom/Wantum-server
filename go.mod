@@ -6,14 +6,13 @@ require (
 	cloud.google.com/go v0.56.0
 	cloud.google.com/go/firestore v1.2.0 // indirect
 	firebase.google.com/go v3.12.0+incompatible
-	github.com/gin-gonic/gin v1.6.2
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang/mock v1.4.3
 	github.com/google/wire v0.4.0
 	github.com/gorilla/mux v1.7.4
 	github.com/joho/godotenv v1.3.0
 	github.com/kr/text v0.2.0 // indirect
-	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/pkg/errors v0.8.0 // indirect
 	github.com/rs/cors v1.7.0
@@ -27,4 +26,5 @@ require (
 	google.golang.org/api v0.21.0
 	google.golang.org/genproto v0.0.0-20200407120235-9eb9bb161a06
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
+	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
