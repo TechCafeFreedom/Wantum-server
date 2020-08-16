@@ -6,10 +6,11 @@ package mock_user
 
 import (
 	context "context"
-	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 	entity "wantum/pkg/domain/entity"
 	repository "wantum/pkg/domain/repository"
+
+	gomock "github.com/golang/mock/gomock"
 )
 
 // MockService is a mock of Service interface
