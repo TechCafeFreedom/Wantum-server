@@ -20,4 +20,9 @@ var (
 		ErrorMessageJP: "リクエストされたユーザーはすでに削除されている可能性があります",
 		ErrorMessageEN: "requested user is not found",
 	}
+	BadRequest = &WantumError{
+		ErrorCode:      http.StatusBadRequest,
+		ErrorMessageJP: "リクエスト内容をもう一度見直してください",
+		ErrorMessageEN: "Please check your request",
+	}
 )

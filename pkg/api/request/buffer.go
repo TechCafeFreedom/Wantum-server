@@ -8,14 +8,14 @@ import (
 	"wantum/pkg/werrors"
 )
 
-func BodyToBuffer(w http.ResponseWriter, r *http.Request) (*bytes.Buffer, error) {
+func BodyToBuffer(r *http.Request) (*bytes.Buffer, error) {
 	body := r.Body
 	defer body.Close()
 
 	buf := new(bytes.Buffer)
 	if _, err := io.Copy(buf, body); err != nil {
 		tlog.PrintErrorLogWithCtx(r.Context(), err)
-		return nil, werrors.Wrapf(err, http.StatusBadRequest, "リクエストされたユーザ情報が空でした", "requested user data is empty")
+		return nil, werrors.FromConstant(err, werrors.BadRequest)
 	}
 	return buf, nil
 }

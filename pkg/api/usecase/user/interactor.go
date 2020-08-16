@@ -8,6 +8,7 @@ import (
 	"wantum/pkg/domain/repository"
 	profileservice "wantum/pkg/domain/service/profile"
 	userservice "wantum/pkg/domain/service/user"
+	"wantum/pkg/tlog"
 	"wantum/pkg/werrors"
 )
 
@@ -33,7 +34,9 @@ func New(masterTxManager repository.MasterTxManager, userService userservice.Ser
 
 func (i *intereractor) CreateNewUser(ctx context.Context, authID, userName, mail, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.User, error) {
 	if mail == "" {
-		return nil, werrors.Newf(errors.New("mail is empty error"), http.StatusBadRequest, "メール情報は必須項目です。", "mail is required.")
+		err := errors.New("mail is empty error")
+		tlog.PrintErrorLogWithAuthID(authID, err)
+		return nil, werrors.Newf(err, http.StatusBadRequest, "メール情報は必須項目です。", "mail is required.")
 	}
 
 	var createdUser *entity.User

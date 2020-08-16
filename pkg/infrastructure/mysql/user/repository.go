@@ -35,14 +35,12 @@ func (u *userRepositoryImpliment) InsertUser(masterTx repository.MasterTx, userM
 	`, userModel.AuthID, userModel.UserName, userModel.Mail)
 	if err != nil {
 		tlog.PrintErrorLogWithAuthID(userModel.AuthID, err)
-
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
 	createdUserID, err := result.LastInsertId()
 	if err != nil {
 		tlog.PrintErrorLogWithAuthID(userModel.AuthID, err)
-
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 	userModel.ID = int(createdUserID)

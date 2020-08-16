@@ -22,7 +22,7 @@ func New(userInteractor userinteractor.Interactor) Server {
 }
 
 func (s *Server) CreateNewUser(w http.ResponseWriter, r *http.Request) {
-	buf, err := request.BodyToBuffer(w, r)
+	buf, err := request.BodyToBuffer(r)
 	if err != nil {
 		response.Error(w, r, werrors.Stack(err))
 		return
@@ -31,15 +31,14 @@ func (s *Server) CreateNewUser(w http.ResponseWriter, r *http.Request) {
 	var reqBody reqbody.UserCreate
 	if err := json.Unmarshal(buf.Bytes(), &reqBody); err != nil {
 		tlog.PrintErrorLogWithCtx(r.Context(), err)
-		response.Error(w, r, werrors.Wrapf(err, http.StatusBadRequest, "リクエスト内容をもう一度見直してください", "Please check your request"))
+		response.Error(w, r, werrors.FromConstant(err, werrors.BadRequest))
 		return
 	}
 
 	authID, ok := r.Context().Value(constants.AuthCtxKey).(string)
 	if !ok {
-		errMessageJP := "不正なユーザからのアクセスをブロックしました。"
-		errMessageEN := "The content blocked because user is not certified."
-		response.Error(w, r, werrors.Newf(errors.New("コンテキストのUIDキャストでエラーが発生しました。"), http.StatusUnauthorized, errMessageJP, errMessageEN))
+		err := errors.New("コンテキストのUIDキャストでエラーが発生しました。")
+		response.Error(w, r, werrors.FromConstant(err, werrors.AuthFail))
 		return
 	}
 
@@ -67,9 +66,8 @@ func (s *Server) CreateNewUser(w http.ResponseWriter, r *http.Request) {
 func (s *Server) GetUserProfile(w http.ResponseWriter, r *http.Request) {
 	uid, ok := r.Context().Value(constants.AuthCtxKey).(string)
 	if !ok {
-		errMessageJP := "不正なユーザからのアクセスをブロックしました。"
-		errMessageEN := "The content blocked because user is not certified."
-		response.Error(w, r, werrors.Newf(errors.New("コンテキストのUIDキャストでエラーが発生しました。"), http.StatusUnauthorized, errMessageJP, errMessageEN))
+		err := errors.New("コンテキストのUIDキャストでエラーが発生しました。")
+		response.Error(w, r, werrors.FromConstant(err, werrors.AuthFail))
 		return
 	}
 
