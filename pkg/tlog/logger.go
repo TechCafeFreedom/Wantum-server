@@ -32,16 +32,12 @@ func GetAppLogger() *zap.Logger {
 }
 
 func PrintErrorLogWithCtx(ctx context.Context, err error) {
-	// どこで起きたエラーかを特定するための情報を取得
-	pt, file, line, _ := runtime.Caller(1)
-	funcName := runtime.FuncForPC(pt).Name()
-
-	// エラーログ出力
-	uid, ok := ctx.Value(constants.AuthCtxKey).(string)
+	// contextからAuthIDの取り出し
+	authID, ok := ctx.Value(constants.AuthCtxKey).(string)
 	if !ok {
-		GetAppLogger().Error(fmt.Sprintf("<[Unknown]Error:%+v, File: %s:%d, Function: %s>", err, file, line, funcName))
+		PrintErrorLogWithAuthID("", err)
 	} else {
-		GetAppLogger().Error(fmt.Sprintf("<[%s]Error:%+v, File: %s:%d, Function: %s>", uid, err, file, line, funcName))
+		PrintErrorLogWithAuthID(authID, err)
 	}
 }
 
