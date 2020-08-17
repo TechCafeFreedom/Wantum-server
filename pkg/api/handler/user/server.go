@@ -63,15 +63,15 @@ func (s *Server) CreateNewUser(w http.ResponseWriter, r *http.Request) {
 	response.JSON(w, r, response.ConvertToUserResponse(createdUser))
 }
 
-func (s *Server) GetUserProfile(w http.ResponseWriter, r *http.Request) {
+func (s *Server) GetAuthorizedUser(w http.ResponseWriter, r *http.Request) {
 	uid, ok := r.Context().Value(constants.AuthCtxKey).(string)
 	if !ok {
-		err := errors.New("コンテキストのUIDキャストでエラーが発生しました。")
+		err := errors.New("コンテキストのAuthIDキャストでエラーが発生しました。")
 		response.Error(w, r, werrors.FromConstant(err, werrors.AuthFail))
 		return
 	}
 
-	user, err := s.userInteractor.GetUserProfile(r.Context(), uid)
+	user, err := s.userInteractor.GetAuthorizedUser(r.Context(), uid)
 	if err != nil {
 		response.Error(w, r, werrors.Stack(err))
 		return

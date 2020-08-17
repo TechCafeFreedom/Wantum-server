@@ -56,7 +56,7 @@ func main() {
 	firebaseAuth.Use(firebaseClient.MiddlewareFunc)
 	{
 		firebaseAuth.HandleFunc("/users", userAPI.CreateNewUser).Methods("POST")
-		firebaseAuth.HandleFunc("/users/self", userAPI.GetUserProfile).Methods("GET")
+		firebaseAuth.HandleFunc("/users/self", userAPI.GetAuthorizedUser).Methods("GET")
 	}
 
 	// port: 8080

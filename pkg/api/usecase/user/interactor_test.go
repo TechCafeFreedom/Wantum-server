@@ -94,7 +94,7 @@ func TestIntereractor_GetUserProfile(t *testing.T) {
 	profileService := mock_profile.NewMockService(ctrl)
 
 	interactor := New(masterTxManager, userService, profileService)
-	userData, err := interactor.GetUserProfile(ctx, authID)
+	userData, err := interactor.GetAuthorizedUser(ctx, authID)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, userData)

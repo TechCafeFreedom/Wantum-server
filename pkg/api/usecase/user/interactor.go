@@ -14,7 +14,7 @@ import (
 
 type Interactor interface {
 	CreateNewUser(ctx context.Context, authID, userName, mail, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.User, error)
-	GetUserProfile(ctx context.Context, authID string) (*entity.User, error)
+	GetAuthorizedUser(ctx context.Context, authID string) (*entity.User, error)
 	GetAll(ctx context.Context) (entity.UserSlice, error)
 }
 
@@ -62,7 +62,7 @@ func (i *intereractor) CreateNewUser(ctx context.Context, authID, userName, mail
 	return createdUser, nil
 }
 
-func (i *intereractor) GetUserProfile(ctx context.Context, authID string) (*entity.User, error) {
+func (i *intereractor) GetAuthorizedUser(ctx context.Context, authID string) (*entity.User, error) {
 	var userData *entity.User
 	var err error
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
