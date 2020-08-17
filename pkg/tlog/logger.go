@@ -7,6 +7,7 @@ import (
 	"wantum/pkg/constants"
 
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 // アプリケーションログ用のロガー
@@ -16,8 +17,12 @@ const AppLoggerKey = "AppLogger"
 
 func init() {
 	config := zap.NewProductionConfig()
-	config.Level = zap.NewAtomicLevelAt(zap.ErrorLevel)
+	config.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
 	config.DisableStacktrace = false // スタックトレースONにしたい場合はfalseにする
+	config.Encoding = "json"
+	config.OutputPaths = []string{"stdout", "pkg/tlog/log.json"}
+	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	config.EncoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
 	logger, _ := config.Build()
 	appLogger = logger.Named(AppLoggerKey)
 }

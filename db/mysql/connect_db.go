@@ -38,7 +38,6 @@ func CreateSQLInstance() *sql.DB {
 
 // connectLocalSQL localのmysqlのコネクション作成
 func connectLocalSQL() *sql.DB {
-	tlog.GetAppLogger().Debug("connectDB: local")
 	dbuser := os.Getenv("MYSQL_USER")
 	if dbuser == "" {
 		dbuser = constants.DbDefaultUser
@@ -61,6 +60,7 @@ func connectLocalSQL() *sql.DB {
 	}
 
 	dataSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", dbuser, dbpassword, dbhost, dbport, dbname)
+	tlog.GetAppLogger().Info(fmt.Sprintf("connectLocalDB: %s", dataSource))
 
 	db, err := sql.Open("mysql", dataSource)
 	if err != nil {
@@ -71,7 +71,6 @@ func connectLocalSQL() *sql.DB {
 
 // connectCloudSQL cloudSQLのコネクション作成
 func connectCloudSQL(client *secretmanager.Client, ctx *context.Context) *sql.DB {
-	tlog.GetAppLogger().Debug("connectDB: cloudSQL")
 	projectID := "wantum-server"
 	secretID := "mysql-config"
 	// requestの作成
@@ -92,8 +91,11 @@ func connectCloudSQL(client *secretmanager.Client, ctx *context.Context) *sql.DB
 		tlog.GetAppLogger().Panic(fmt.Sprintf("failed to marshal json: %v", err))
 	}
 
+	dataSource := fmt.Sprintf("%s:%s@%s(%s)/%s", config.User, config.Password, config.Protocol, config.Instance, config.DBName)
+	tlog.GetAppLogger().Info(fmt.Sprintf("connectCloudSQL: %s", dataSource))
+
 	// connect db
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@%s(%s)/%s", config.User, config.Password, config.Protocol, config.Instance, config.DBName))
+	db, err := sql.Open("mysql", dataSource)
 	if err != nil {
 		tlog.GetAppLogger().Panic(fmt.Sprintf("failed to open sql: %v", err))
 	}
