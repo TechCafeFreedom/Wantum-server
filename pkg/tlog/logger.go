@@ -20,7 +20,6 @@ func init() {
 	config.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
 	config.DisableStacktrace = false // スタックトレースONにしたい場合はfalseにする
 	config.Encoding = "json"
-	config.OutputPaths = []string{"stdout", "pkg/tlog/log.json"}
 	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 	config.EncoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
 	logger, _ := config.Build()
