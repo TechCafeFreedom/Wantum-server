@@ -2,7 +2,6 @@ package werrors
 
 import (
 	"fmt"
-	"net/http"
 
 	"golang.org/x/xerrors"
 )
@@ -67,9 +66,7 @@ func Stack(err error) error {
 		errorMessageJP = wantumError.ErrorMessageJP
 		errorMessageEN = wantumError.ErrorMessageEN
 	} else {
-		errorCode = http.StatusInternalServerError
-		errorMessageJP = "サーバでエラーが発生しました。"
-		errorMessageEN = "Error occurred in server."
+		return ServerError
 	}
 	return &WantumError{
 		ErrorCode:      errorCode,
