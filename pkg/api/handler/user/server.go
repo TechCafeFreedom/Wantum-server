@@ -2,13 +2,12 @@ package user
 
 import (
 	"encoding/json"
-	"errors"
 	"net/http"
 	"wantum/pkg/api/request"
 	"wantum/pkg/api/request/reqbody"
 	"wantum/pkg/api/response"
 	userinteractor "wantum/pkg/api/usecase/user"
-	"wantum/pkg/constants"
+	"wantum/pkg/api/wcontext"
 	"wantum/pkg/tlog"
 	"wantum/pkg/werrors"
 )
@@ -22,6 +21,11 @@ func New(userInteractor userinteractor.Interactor) Server {
 }
 
 func (s *Server) CreateNewUser(w http.ResponseWriter, r *http.Request) {
+	authID, err := wcontext.GetAuthIDFromContext(r.Context())
+	if err != nil {
+		response.Error(w, r, werrors.FromConstant(err, werrors.AuthFail))
+	}
+
 	buf, err := request.BodyToBuffer(r)
 	if err != nil {
 		response.Error(w, r, werrors.Stack(err))
@@ -32,13 +36,6 @@ func (s *Server) CreateNewUser(w http.ResponseWriter, r *http.Request) {
 	if err := json.Unmarshal(buf.Bytes(), &reqBody); err != nil {
 		tlog.PrintErrorLogWithCtx(r.Context(), err)
 		response.Error(w, r, werrors.FromConstant(err, werrors.BadRequest))
-		return
-	}
-
-	authID, ok := r.Context().Value(constants.AuthCtxKey).(string)
-	if !ok {
-		err := errors.New("コンテキストのUIDキャストでエラーが発生しました。")
-		response.Error(w, r, werrors.FromConstant(err, werrors.AuthFail))
 		return
 	}
 
@@ -64,14 +61,12 @@ func (s *Server) CreateNewUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) GetAuthorizedUser(w http.ResponseWriter, r *http.Request) {
-	uid, ok := r.Context().Value(constants.AuthCtxKey).(string)
-	if !ok {
-		err := errors.New("コンテキストのAuthIDキャストでエラーが発生しました。")
+	authID, err := wcontext.GetAuthIDFromContext(r.Context())
+	if err != nil {
 		response.Error(w, r, werrors.FromConstant(err, werrors.AuthFail))
-		return
 	}
 
-	user, err := s.userInteractor.GetAuthorizedUser(r.Context(), uid)
+	user, err := s.userInteractor.GetAuthorizedUser(r.Context(), authID)
 	if err != nil {
 		response.Error(w, r, werrors.Stack(err))
 		return
