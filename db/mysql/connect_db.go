@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"wantum/pkg/constants"
 	"wantum/pkg/tlog"
 
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
@@ -40,23 +41,23 @@ func connectLocalSQL() *sql.DB {
 	tlog.GetAppLogger().Debug("connectDB: local")
 	dbuser := os.Getenv("MYSQL_USER")
 	if dbuser == "" {
-		dbuser = "root"
+		dbuser = constants.DbDefaultUser
 	}
 	dbpassword := os.Getenv("MYSQL_PASSWORD")
 	if dbpassword == "" {
-		dbpassword = "password"
+		dbpassword = constants.DbDefaultPassword
 	}
 	dbhost := os.Getenv("MYSQL_HOST")
 	if dbhost == "" {
-		dbhost = "localhost"
+		dbhost = constants.DbDefaultHost
 	}
 	dbport := os.Getenv("MYSQL_PORT")
 	if dbport == "" {
-		dbport = "3306"
+		dbport = constants.DbDefaultPort
 	}
 	dbname := os.Getenv("MYSQL_DATABASE")
 	if dbname == "" {
-		dbname = "wantum"
+		dbname = constants.DbDefaultName
 	}
 
 	dataSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", dbuser, dbpassword, dbhost, dbport, dbname)
