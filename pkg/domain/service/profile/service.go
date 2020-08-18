@@ -16,12 +16,12 @@ type Service interface {
 }
 
 type service struct {
-	profileReposiroty profile.Repository
+	profileRepository profile.Repository
 }
 
 func New(profileRepository profile.Repository) Service {
 	return &service{
-		profileReposiroty: profileRepository,
+		profileRepository: profileRepository,
 	}
 }
 
@@ -37,7 +37,7 @@ func (s *service) CreateNewProfile(ctx context.Context, masterTx repository.Mast
 		Birth:     birth,
 	}
 
-	createdProfile, err := s.profileReposiroty.InsertProfile(ctx, masterTx, newProfile)
+	createdProfile, err := s.profileRepository.InsertProfile(ctx, masterTx, newProfile)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
@@ -45,7 +45,7 @@ func (s *service) CreateNewProfile(ctx context.Context, masterTx repository.Mast
 }
 
 func (s *service) GetByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.Profile, error) {
-	profileData, err := s.profileReposiroty.SelectByUserID(ctx, masterTx, userID)
+	profileData, err := s.profileRepository.SelectByUserID(ctx, masterTx, userID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
@@ -53,7 +53,7 @@ func (s *service) GetByUserID(ctx context.Context, masterTx repository.MasterTx,
 }
 
 func (s *service) GetByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (entity.ProfileSlice, error) {
-	profileSlice, err := s.profileReposiroty.SelectByUserIDs(ctx, masterTx, userIDs)
+	profileSlice, err := s.profileRepository.SelectByUserIDs(ctx, masterTx, userIDs)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
