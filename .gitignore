@@ -23,6 +23,3 @@ mysql-config.json
 
 # db
 db/mysql/dump/
-
-# log
-pkg/tlog/log.json
