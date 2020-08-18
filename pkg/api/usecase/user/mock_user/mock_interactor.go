@@ -6,9 +6,10 @@ package mock_user
 
 import (
 	context "context"
-	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 	entity "wantum/pkg/domain/entity"
+
+	gomock "github.com/golang/mock/gomock"
 )
 
 // MockInteractor is a mock of Interactor interface

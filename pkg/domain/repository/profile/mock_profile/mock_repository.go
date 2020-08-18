@@ -6,10 +6,11 @@ package mock_profile
 
 import (
 	context "context"
-	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 	repository "wantum/pkg/domain/repository"
 	model "wantum/pkg/infrastructure/mysql/model"
+
+	gomock "github.com/golang/mock/gomock"
 )
 
 // MockRepository is a mock of Repository interface
