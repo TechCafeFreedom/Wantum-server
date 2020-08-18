@@ -40,23 +40,23 @@ func CreateSQLInstance() *sql.DB {
 func connectLocalSQL() *sql.DB {
 	dbuser := os.Getenv("MYSQL_USER")
 	if dbuser == "" {
-		dbuser = constants.DbDefaultUser
+		dbuser = constants.MysqlDefaultUser
 	}
 	dbpassword := os.Getenv("MYSQL_PASSWORD")
 	if dbpassword == "" {
-		dbpassword = constants.DbDefaultPassword
+		dbpassword = constants.MysqlDefaultPassword
 	}
 	dbhost := os.Getenv("MYSQL_HOST")
 	if dbhost == "" {
-		dbhost = constants.DbDefaultHost
+		dbhost = constants.MysqlDefaultHost
 	}
 	dbport := os.Getenv("MYSQL_PORT")
 	if dbport == "" {
-		dbport = constants.DbDefaultPort
+		dbport = constants.MysqlDefaultPort
 	}
 	dbname := os.Getenv("MYSQL_DATABASE")
 	if dbname == "" {
-		dbname = constants.DbDefaultName
+		dbname = constants.MysqlDefaultName
 	}
 
 	dataSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", dbuser, dbpassword, dbhost, dbport, dbname)

@@ -5,14 +5,14 @@ type key string
 const (
 	// ユーザのUIDをcontextに格納するためのKey
 	AuthCtxKey key = "AUTHED_UID"
-	// DB DEFAULT USER
-	DbDefaultUser string = "root"
-	// DB DEFAULT PASSWORD
-	DbDefaultPassword string = "password"
-	// DB DEFAULT HOST
-	DbDefaultHost string = "localhost"
-	// DB DEFAULT PORT
-	DbDefaultPort string = "3306"
-	// DB DEFAULT NAME
-	DbDefaultName string = "wantum"
+	// MYSQL DEFAULT USER
+	MysqlDefaultUser string = "root"
+	// MYSQL DEFAULT PASSWORD
+	MysqlDefaultPassword string = "password"
+	// MYSQL DEFAULT HOST
+	MysqlDefaultHost string = "localhost"
+	// MYSQL DEFAULT PORT
+	MysqlDefaultPort string = "3306"
+	// MYSQL DEFAULT NAME
+	MysqlDefaultName string = "wantum"
 )
