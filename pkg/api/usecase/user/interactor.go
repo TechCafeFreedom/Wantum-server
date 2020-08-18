@@ -66,11 +66,18 @@ func (i *intereractor) GetAuthorizedUser(ctx context.Context, authID string) (*e
 	var userData *entity.User
 	var err error
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		// ログイン済ユーザのプロフィール情報取得
+		// ログイン済ユーザ情報の取得
 		userData, err = i.userService.GetByAuthID(ctx, masterTx, authID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
+
+		// ログイン済ユーザのプロフィール情報取得
+		userProfile, err := i.profileService.GetByUserID(ctx, masterTx, userData.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		userData.Profile = userProfile
 		return nil
 	})
 	if err != nil {
@@ -88,6 +95,23 @@ func (i *intereractor) GetAll(ctx context.Context) (entity.UserSlice, error) {
 		if err != nil {
 			return werrors.Stack(err)
 		}
+
+		// 取得したユーザそれぞれに紐づくプロフィール情報を取得
+		userIDs := make([]int, 0, len(userSlice))
+		for _, userData := range userSlice {
+			userIDs = append(userIDs, userData.ID)
+		}
+		profileSlice, err := i.profileService.GetByUserIDs(ctx, masterTx, userIDs)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+
+		// 取得したプロフィール情報のスライスをユーザのスライスにアサイン
+		// TODO: 現状の設計だと、UserDataに対してProfile情報が必ず1つだけ存在しないとデータの整合性が保てない設計となっている。
+		for i, profileData := range profileSlice {
+			userSlice[i].Profile = profileData
+		}
+
 		return nil
 	})
 	if err != nil {

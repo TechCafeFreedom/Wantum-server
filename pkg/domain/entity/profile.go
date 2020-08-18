@@ -14,3 +14,5 @@ type Profile struct {
 	UpdatedAt *time.Time
 	DeletedAt *time.Time
 }
+
+type ProfileSlice []*Profile
