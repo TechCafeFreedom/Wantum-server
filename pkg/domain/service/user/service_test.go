@@ -12,17 +12,10 @@ import (
 )
 
 const (
-	userID    = 1
-	authID    = "authID"
-	userName  = "userName"
-	mail      = "test@test.com"
-	name      = "name"
-	thumbnail = "thumbnail"
-	bio       = "bio"
-	gender    = 1
-	phone     = "000-0000-0000"
-	place     = "place"
-	birth     = "1998-05-03"
+	userID   = 1
+	authID   = "authID"
+	userName = "userName"
+	mail     = "test@test.com"
 )
 
 func TestService_CreateNewUser(t *testing.T) {
@@ -58,15 +51,6 @@ func TestService_GetByPK(t *testing.T) {
 		AuthID:   authID,
 		UserName: userName,
 		Mail:     mail,
-		Profile: &model.ProfileModel{
-			Name:      name,
-			Thumbnail: thumbnail,
-			Bio:       bio,
-			Gender:    gender,
-			Phone:     phone,
-			Place:     place,
-			Birth:     birth,
-		},
 	}
 
 	userRepository := mock_user.NewMockRepository(ctrl)
@@ -92,15 +76,6 @@ func TestService_SelectAll(t *testing.T) {
 			AuthID:   authID,
 			UserName: userName,
 			Mail:     mail,
-			Profile: &model.ProfileModel{
-				Name:      name,
-				Thumbnail: thumbnail,
-				Bio:       bio,
-				Gender:    gender,
-				Phone:     phone,
-				Place:     place,
-				Birth:     birth,
-			},
 		},
 	}
 

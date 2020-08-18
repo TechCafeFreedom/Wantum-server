@@ -6,11 +6,10 @@ package mock_profile
 
 import (
 	context "context"
+	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 	entity "wantum/pkg/domain/entity"
 	repository "wantum/pkg/domain/repository"
-
-	gomock "github.com/golang/mock/gomock"
 )
 
 // MockService is a mock of Service interface
@@ -49,4 +48,34 @@ func (m *MockService) CreateNewProfile(ctx context.Context, masterTx repository.
 func (mr *MockServiceMockRecorder) CreateNewProfile(ctx, masterTx, userID, name, thumbnail, bio, phone, place, birth, gender interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewProfile", reflect.TypeOf((*MockService)(nil).CreateNewProfile), ctx, masterTx, userID, name, thumbnail, bio, phone, place, birth, gender)
+}
+
+// GetByUserID mocks base method
+func (m *MockService) GetByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.Profile, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetByUserID", ctx, masterTx, userID)
+	ret0, _ := ret[0].(*entity.Profile)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetByUserID indicates an expected call of GetByUserID
+func (mr *MockServiceMockRecorder) GetByUserID(ctx, masterTx, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByUserID", reflect.TypeOf((*MockService)(nil).GetByUserID), ctx, masterTx, userID)
+}
+
+// GetByUserIDs mocks base method
+func (m *MockService) GetByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (entity.ProfileSlice, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetByUserIDs", ctx, masterTx, userIDs)
+	ret0, _ := ret[0].(entity.ProfileSlice)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetByUserIDs indicates an expected call of GetByUserIDs
+func (mr *MockServiceMockRecorder) GetByUserIDs(ctx, masterTx, userIDs interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByUserIDs", reflect.TypeOf((*MockService)(nil).GetByUserIDs), ctx, masterTx, userIDs)
 }
