@@ -20,6 +20,8 @@ type ProfileModel struct {
 	DeletedAt *time.Time
 }
 
+type ProfileModelSlice []*ProfileModel
+
 func ConvertToProfileEntity(profileData *ProfileModel) *entity.Profile {
 	if profileData == nil {
 		return nil
@@ -36,4 +38,12 @@ func ConvertToProfileEntity(profileData *ProfileModel) *entity.Profile {
 		UpdatedAt: profileData.UpdatedAt,
 		DeletedAt: profileData.DeletedAt,
 	}
+}
+
+func ConvertToProfileSliceEntity(profileSlice ProfileModelSlice) entity.ProfileSlice {
+	res := make(entity.ProfileSlice, 0, len(profileSlice))
+	for _, profileData := range profileSlice {
+		res = append(res, ConvertToProfileEntity(profileData))
+	}
+	return res
 }

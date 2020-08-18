@@ -13,7 +13,6 @@ type UserModel struct {
 	CreatedAt *time.Time
 	UpdatedAt *time.Time
 	DeletedAt *time.Time
-	Profile   *ProfileModel
 }
 
 type UserModelSlice []*UserModel
@@ -21,18 +20,6 @@ type UserModelSlice []*UserModel
 func ConvertToUserEntity(userData *UserModel) *entity.User {
 	if userData == nil {
 		return nil
-	}
-	if userData.Profile != nil {
-		return &entity.User{
-			ID:        userData.ID,
-			AuthID:    userData.AuthID,
-			UserName:  userData.UserName,
-			Mail:      userData.Mail,
-			CreatedAt: userData.CreatedAt,
-			UpdatedAt: userData.UpdatedAt,
-			DeletedAt: userData.DeletedAt,
-			Profile:   ConvertToProfileEntity(userData.Profile),
-		}
 	}
 	return &entity.User{
 		ID:        userData.ID,
