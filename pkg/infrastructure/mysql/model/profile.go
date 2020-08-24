@@ -27,6 +27,7 @@ func ConvertToProfileEntity(profileData *ProfileModel) *entity.Profile {
 		return nil
 	}
 	return &entity.Profile{
+		UserID:    profileData.UserID,
 		Name:      profileData.Name,
 		Thumbnail: profileData.Thumbnail,
 		Bio:       profileData.Bio,
