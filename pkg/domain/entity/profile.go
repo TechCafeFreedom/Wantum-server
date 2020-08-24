@@ -3,6 +3,7 @@ package entity
 import "time"
 
 type Profile struct {
+	UserID    int
 	Name      string
 	Thumbnail string
 	Bio       string
