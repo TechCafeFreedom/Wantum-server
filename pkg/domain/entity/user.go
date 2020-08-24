@@ -14,3 +14,13 @@ type User struct {
 }
 
 type UserSlice []*User
+
+type UserMap map[int]*User
+
+func (umap *UserMap) Keys(userMap UserMap) []int {
+	keys := make([]int, 0, len(userMap))
+	for key := range userMap {
+		keys = append(keys, key)
+	}
+	return keys
+}

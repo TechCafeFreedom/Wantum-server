@@ -15,7 +15,7 @@ import (
 type Interactor interface {
 	CreateNewUser(ctx context.Context, authID, userName, mail, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.User, error)
 	GetAuthorizedUser(ctx context.Context, authID string) (*entity.User, error)
-	GetAll(ctx context.Context) (entity.UserSlice, error)
+	GetAll(ctx context.Context) (entity.UserMap, error)
 }
 
 type intereractor struct {
@@ -86,21 +86,21 @@ func (i *intereractor) GetAuthorizedUser(ctx context.Context, authID string) (*e
 	return userData, nil
 }
 
-func (i *intereractor) GetAll(ctx context.Context) (entity.UserSlice, error) {
-	var userSlice entity.UserSlice
-	var err error
-	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+func (i *intereractor) GetAll(ctx context.Context) (entity.UserMap, error) {
+	userMap := make(entity.UserMap)
+	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		// (管理者用)ユーザ全件取得
-		userSlice, err = i.userService.GetAll(ctx, masterTx)
+		userSlice, err := i.userService.GetAll(ctx, masterTx)
 		if err != nil {
 			return werrors.Stack(err)
 		}
 
-		// 取得したユーザそれぞれに紐づくプロフィール情報を取得
-		userIDs := make([]int, 0, len(userSlice))
 		for _, userData := range userSlice {
-			userIDs = append(userIDs, userData.ID)
+			userMap[userData.ID] = userData
 		}
+
+		// 取得したユーザそれぞれに紐づくプロフィール情報を取得
+		userIDs := userMap.Keys(userMap)
 		profileSlice, err := i.profileService.GetByUserIDs(ctx, masterTx, userIDs)
 		if err != nil {
 			return werrors.Stack(err)
@@ -108,8 +108,8 @@ func (i *intereractor) GetAll(ctx context.Context) (entity.UserSlice, error) {
 
 		// 取得したプロフィール情報のスライスをユーザのスライスにアサイン
 		// TODO: 現状の設計だと、UserDataに対してProfile情報が必ず1つだけ存在しないとデータの整合性が保てない設計となっている。
-		for i, profileData := range profileSlice {
-			userSlice[i].Profile = profileData
+		for _, profileData := range profileSlice {
+			userMap[profileData.UserID].Profile = profileData
 		}
 
 		return nil
@@ -117,5 +117,5 @@ func (i *intereractor) GetAll(ctx context.Context) (entity.UserSlice, error) {
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return userSlice, nil
+	return userMap, nil
 }
