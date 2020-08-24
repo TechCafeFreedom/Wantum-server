@@ -98,7 +98,7 @@ func (p *profileRepositoryImpliment) SelectByUserIDs(ctx context.Context, master
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	var userIDsStr []string
+	userIDsStr := make([]string, 0, len(userIDs))
 	for _, userID := range userIDs {
 		userIDsStr = append(userIDsStr, strconv.Itoa(userID))
 	}
