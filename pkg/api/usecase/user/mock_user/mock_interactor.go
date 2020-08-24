@@ -66,10 +66,10 @@ func (mr *MockInteractorMockRecorder) GetAuthorizedUser(ctx, authID interface{})
 }
 
 // GetAll mocks base method
-func (m *MockInteractor) GetAll(ctx context.Context) (entity.UserSlice, error) {
+func (m *MockInteractor) GetAll(ctx context.Context) (entity.UserMap, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAll", ctx)
-	ret0, _ := ret[0].(entity.UserSlice)
+	ret0, _ := ret[0].(entity.UserMap)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

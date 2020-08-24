@@ -23,15 +23,9 @@ const (
 	birth     = "1998-05-03"
 )
 
-func TestService_CreateNewProfile(t *testing.T) {
-	ctx := context.Background()
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	masterTx := repository.NewMockMasterTx()
-
-	profileRepository := mock_profile.NewMockRepository(ctrl)
-	profileModel := &model.ProfileModel{
+var (
+	dummyProfileModel = &model.ProfileModel{
+		ID:        profileID,
 		UserID:    userID,
 		Name:      name,
 		Thumbnail: thumbnail,
@@ -41,7 +35,33 @@ func TestService_CreateNewProfile(t *testing.T) {
 		Place:     place,
 		Birth:     birth,
 	}
-	profileRepository.EXPECT().InsertProfile(ctx, masterTx, profileModel).Return(profileModel, nil).Times(1)
+
+	dummyProfileModelWithoutID = &model.ProfileModel{
+		UserID:    userID,
+		Name:      name,
+		Thumbnail: thumbnail,
+		Bio:       bio,
+		Gender:    gender,
+		Phone:     phone,
+		Place:     place,
+		Birth:     birth,
+	}
+
+	dummyProfileModelSlice = model.ProfileModelSlice{
+		dummyProfileModel,
+	}
+)
+
+func TestService_CreateNewProfile(t *testing.T) {
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	masterTx := repository.NewMockMasterTx()
+
+	profileRepository := mock_profile.NewMockRepository(ctrl)
+
+	profileRepository.EXPECT().InsertProfile(ctx, masterTx, dummyProfileModelWithoutID).Return(dummyProfileModelWithoutID, nil).Times(1)
 
 	service := New(profileRepository)
 	createdProfile, err := service.CreateNewProfile(ctx, masterTx, userID, name, thumbnail, bio, phone, place, birth, gender)
@@ -55,22 +75,10 @@ func TestService_GetByProfileID(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	existedProfile := &model.ProfileModel{
-		ID:        profileID,
-		UserID:    userID,
-		Name:      name,
-		Thumbnail: thumbnail,
-		Bio:       bio,
-		Gender:    gender,
-		Phone:     phone,
-		Place:     place,
-		Birth:     birth,
-	}
-
 	masterTx := repository.NewMockMasterTx()
 
 	profileRepository := mock_profile.NewMockRepository(ctrl)
-	profileRepository.EXPECT().SelectByUserID(ctx, masterTx, userID).Return(existedProfile, nil).Times(1)
+	profileRepository.EXPECT().SelectByUserID(ctx, masterTx, userID).Return(dummyProfileModel, nil).Times(1)
 
 	service := New(profileRepository)
 	profileData, err := service.GetByUserID(ctx, masterTx, userID)
@@ -85,24 +93,11 @@ func TestService_GetByProfileIDs(t *testing.T) {
 	defer ctrl.Finish()
 
 	userIDs := []int{userID}
-	existedProfileSlice := model.ProfileModelSlice{
-		{
-			ID:        profileID,
-			UserID:    userID,
-			Name:      name,
-			Thumbnail: thumbnail,
-			Bio:       bio,
-			Gender:    gender,
-			Phone:     phone,
-			Place:     place,
-			Birth:     birth,
-		},
-	}
 
 	masterTx := repository.NewMockMasterTx()
 
 	profileRepository := mock_profile.NewMockRepository(ctrl)
-	profileRepository.EXPECT().SelectByUserIDs(ctx, masterTx, userIDs).Return(existedProfileSlice, nil).Times(1)
+	profileRepository.EXPECT().SelectByUserIDs(ctx, masterTx, userIDs).Return(dummyProfileModelSlice, nil).Times(1)
 
 	service := New(profileRepository)
 	profileSlice, err := service.GetByUserIDs(ctx, masterTx, userIDs)

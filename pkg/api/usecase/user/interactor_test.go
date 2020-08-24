@@ -26,6 +26,38 @@ const (
 	birth     = "1998-05-03"
 )
 
+var (
+	userIDs = []int{userID}
+
+	dummyUserEntity = &entity.User{
+		ID:       userID,
+		AuthID:   authID,
+		UserName: userName,
+		Mail:     mail,
+	}
+
+	dummyProfileEntity = &entity.Profile{
+		UserID:    userID,
+		Name:      name,
+		Thumbnail: thumbnail,
+		Bio:       bio,
+		Gender:    gender,
+		Phone:     phone,
+		Place:     place,
+		Birth:     birth,
+	}
+
+	dummyProfileSlice = entity.ProfileSlice{
+		dummyProfileEntity,
+	}
+
+	dummyUserSlice = entity.UserSlice{
+		dummyUserEntity,
+	}
+
+	dummyUserMap = entity.UserMap{userID: dummyUserSlice[0]}
+)
+
 func TestIntereractor_CreateNewUser(t *testing.T) {
 	ctx := context.Background()
 	ctrl := gomock.NewController(t)
@@ -34,35 +66,18 @@ func TestIntereractor_CreateNewUser(t *testing.T) {
 	masterTx := repository.NewMockMasterTx()
 	masterTxManager := repository.NewMockMasterTxManager(masterTx)
 
-	createdUser := &entity.User{
-		ID:       userID,
-		AuthID:   authID,
-		UserName: userName,
-		Mail:     mail,
-	}
-
-	createdProfile := &entity.Profile{
-		Name:      name,
-		Thumbnail: thumbnail,
-		Bio:       bio,
-		Gender:    gender,
-		Phone:     phone,
-		Place:     place,
-		Birth:     birth,
-	}
-
 	userService := mock_user.NewMockService(ctrl)
-	userService.EXPECT().CreateNewUser(masterTx, authID, userName, mail).Return(createdUser, nil).Times(1)
+	userService.EXPECT().CreateNewUser(masterTx, authID, userName, mail).Return(dummyUserEntity, nil).Times(1)
 
 	profileService := mock_profile.NewMockService(ctrl)
-	profileService.EXPECT().CreateNewProfile(ctx, masterTx, userID, name, thumbnail, bio, phone, place, birth, gender).Return(createdProfile, nil).Times(1)
+	profileService.EXPECT().CreateNewProfile(ctx, masterTx, userID, name, thumbnail, bio, phone, place, birth, gender).Return(dummyProfileEntity, nil).Times(1)
 
 	interactor := New(masterTxManager, userService, profileService)
 	userData, err := interactor.CreateNewUser(ctx, authID, userName, mail, name, thumbnail, bio, phone, place, birth, gender)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, userData)
-	assert.Equal(t, createdUser, userData)
+	assert.Equal(t, dummyUserEntity, userData)
 }
 
 func TestIntereractor_GetUserProfile(t *testing.T) {
@@ -70,39 +85,21 @@ func TestIntereractor_GetUserProfile(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	existedUserProfile := &entity.Profile{
-		Name:      name,
-		Thumbnail: thumbnail,
-		Bio:       bio,
-		Gender:    gender,
-		Phone:     phone,
-		Place:     place,
-		Birth:     birth,
-	}
-
-	existedUser := &entity.User{
-		ID:       userID,
-		AuthID:   authID,
-		UserName: userName,
-		Mail:     mail,
-		Profile:  existedUserProfile,
-	}
-
 	masterTx := repository.NewMockMasterTx()
 	masterTxManager := repository.NewMockMasterTxManager(masterTx)
 
 	userService := mock_user.NewMockService(ctrl)
-	userService.EXPECT().GetByAuthID(ctx, masterTx, authID).Return(existedUser, nil).Times(1)
+	userService.EXPECT().GetByAuthID(ctx, masterTx, authID).Return(dummyUserEntity, nil).Times(1)
 
 	profileService := mock_profile.NewMockService(ctrl)
-	profileService.EXPECT().GetByUserID(ctx, masterTx, userID).Return(existedUserProfile, nil).Times(1)
+	profileService.EXPECT().GetByUserID(ctx, masterTx, userID).Return(dummyProfileEntity, nil).Times(1)
 
 	interactor := New(masterTxManager, userService, profileService)
 	userData, err := interactor.GetAuthorizedUser(ctx, authID)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, userData)
-	assert.Equal(t, existedUser, userData)
+	assert.Equal(t, dummyUserEntity, userData)
 }
 
 func TestIntereractor_GetAll(t *testing.T) {
@@ -110,43 +107,19 @@ func TestIntereractor_GetAll(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	userIDs := []int{userID}
-
-	existedUsersProfile := entity.ProfileSlice{
-		{
-			Name:      name,
-			Thumbnail: thumbnail,
-			Bio:       bio,
-			Gender:    gender,
-			Phone:     phone,
-			Place:     place,
-			Birth:     birth,
-		},
-	}
-
-	existedUsers := entity.UserSlice{
-		{
-			ID:       userID,
-			AuthID:   authID,
-			UserName: userName,
-			Mail:     mail,
-			Profile:  existedUsersProfile[0],
-		},
-	}
-
 	masterTx := repository.NewMockMasterTx()
 	masterTxManager := repository.NewMockMasterTxManager(masterTx)
 
 	userService := mock_user.NewMockService(ctrl)
-	userService.EXPECT().GetAll(ctx, masterTx).Return(existedUsers, nil).Times(1)
+	userService.EXPECT().GetAll(ctx, masterTx).Return(dummyUserSlice, nil).Times(1)
 
 	profileService := mock_profile.NewMockService(ctrl)
-	profileService.EXPECT().GetByUserIDs(ctx, masterTx, userIDs).Return(existedUsersProfile, nil).Times(1)
+	profileService.EXPECT().GetByUserIDs(ctx, masterTx, userIDs).Return(dummyProfileSlice, nil).Times(1)
 
 	interactor := New(masterTxManager, userService, profileService)
 	users, err := interactor.GetAll(ctx)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, users)
-	assert.Equal(t, existedUsers, users)
+	assert.Equal(t, dummyUserMap, users)
 }

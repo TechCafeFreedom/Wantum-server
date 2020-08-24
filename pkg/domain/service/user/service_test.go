@@ -18,6 +18,25 @@ const (
 	mail     = "test@test.com"
 )
 
+var (
+	dummyUserModel = &model.UserModel{
+		ID:       userID,
+		AuthID:   authID,
+		UserName: userName,
+		Mail:     mail,
+	}
+
+	dummyUserModelWithoutID = &model.UserModel{
+		AuthID:   authID,
+		UserName: userName,
+		Mail:     mail,
+	}
+
+	dummyUserModelSlice = model.UserModelSlice{
+		dummyUserModel,
+	}
+)
+
 func TestService_CreateNewUser(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -30,7 +49,7 @@ func TestService_CreateNewUser(t *testing.T) {
 		UserName: userName,
 		Mail:     mail,
 	}
-	userRepository.EXPECT().InsertUser(masterTx, userModel).Return(userModel, nil).Times(1)
+	userRepository.EXPECT().InsertUser(masterTx, userModel).Return(dummyUserModelWithoutID, nil).Times(1)
 
 	service := New(userRepository)
 	createdUser, err := service.CreateNewUser(masterTx, authID, userName, mail)
@@ -46,15 +65,8 @@ func TestService_GetByPK(t *testing.T) {
 
 	masterTx := repository.NewMockMasterTx()
 
-	existedUser := &model.UserModel{
-		ID:       userID,
-		AuthID:   authID,
-		UserName: userName,
-		Mail:     mail,
-	}
-
 	userRepository := mock_user.NewMockRepository(ctrl)
-	userRepository.EXPECT().SelectByPK(ctx, masterTx, userID).Return(existedUser, nil).Times(1)
+	userRepository.EXPECT().SelectByPK(ctx, masterTx, userID).Return(dummyUserModel, nil).Times(1)
 
 	service := New(userRepository)
 	user, err := service.GetByPK(ctx, masterTx, userID)
@@ -70,17 +82,8 @@ func TestService_SelectAll(t *testing.T) {
 
 	masterTx := repository.NewMockMasterTx()
 
-	existedUsers := model.UserModelSlice{
-		{
-			ID:       userID,
-			AuthID:   authID,
-			UserName: userName,
-			Mail:     mail,
-		},
-	}
-
 	userRepository := mock_user.NewMockRepository(ctrl)
-	userRepository.EXPECT().SelectAll(ctx, masterTx).Return(existedUsers, nil).Times(1)
+	userRepository.EXPECT().SelectAll(ctx, masterTx).Return(dummyUserModelSlice, nil).Times(1)
 
 	service := New(userRepository)
 	users, err := service.GetAll(ctx, masterTx)
