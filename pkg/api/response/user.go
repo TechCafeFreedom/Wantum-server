@@ -1,6 +1,7 @@
 package response
 
 import (
+	"sort"
 	"wantum/pkg/domain/entity"
 )
 
@@ -32,11 +33,16 @@ type UserProfile struct {
 	Birth     string `json:"birth"`
 }
 
-func ConvertToUsersResponse(userSlice entity.UserSlice) UsersResponse {
-	res := make(UsersResponse, 0, len(userSlice))
-	for _, userData := range userSlice {
-		res = append(res, ConvertToUserResponse(userData))
+func ConvertToUsersResponse(userMap entity.UserMap) UsersResponse {
+	res := make(UsersResponse, 0, len(userMap))
+	userIDs := userMap.Keys(userMap)
+	for _, userID := range userIDs {
+		res = append(res, ConvertToUserResponse(userMap[userID]))
 	}
+	// NOTE: user.idの昇順でレスポンスを並び替えています。
+	sort.Slice(res, func(i, j int) bool {
+		return res[i].ID < res[j].ID
+	})
 	return res
 }
 
