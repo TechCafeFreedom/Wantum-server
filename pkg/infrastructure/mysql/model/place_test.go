@@ -13,7 +13,7 @@ func TestConvertToPlaceEntity(t *testing.T) {
 		date := time.Date(2020, 9, 1, 10, 10, 10, 0, time.UTC)
 		testData := &PlaceModel{
 			ID:        1,
-			Name:      "desney land",
+			Name:      "disney land",
 			CreatedAt: &date,
 			UpdatedAt: &date,
 			DeletedAt: &date,
@@ -35,7 +35,7 @@ func TestConvertToPlaceSliceEntity(t *testing.T) {
 		date := time.Date(2020, 9, 1, 10, 10, 10, 0, time.UTC)
 		data := &PlaceModel{
 			ID:        1,
-			Name:      "desney land",
+			Name:      "disney land",
 			CreatedAt: &date,
 			UpdatedAt: &date,
 			DeletedAt: &date,
