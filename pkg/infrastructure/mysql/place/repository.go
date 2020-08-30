@@ -23,6 +23,7 @@ func New(txManager repository.MasterTxManager) place.Repository {
 }
 
 func (repo *placeRepositoryImplement) Insert(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) (*model.PlaceModel, error) {
+	// NOTE: nilで降りてきた用対策。いらないかも
 	if place == nil {
 		return nil, werrors.Newf(
 			errors.New("required data(place) is nil"),
@@ -59,6 +60,7 @@ func (repo *placeRepositoryImplement) Insert(ctx context.Context, masterTx repos
 }
 
 func (repo *placeRepositoryImplement) Update(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error {
+	// NOTE: nilで降りてきた用対策。いらないかも
 	if place == nil {
 		return werrors.Newf(
 			errors.New("required data(place) is nil"),
@@ -74,10 +76,40 @@ func (repo *placeRepositoryImplement) Update(ctx context.Context, masterTx repos
 	}
 	_, err = tx.Exec(`
 		UPDATE places
-		SET name=?, updated_at=?, deleted_at=?
+		SET name=?, updated_at=?
 		WHERE id=?
 	`, place.Name,
 		place.UpdatedAt,
+		place.DeletedAt,
+		place.ID,
+	)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	return nil
+}
+
+func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error {
+	// NOTE: nilで降りてきた用対策。いらないかも
+	if place == nil {
+		return werrors.Newf(
+			errors.New("required data(place) is nil"),
+			werrors.ServerError.ErrorCode,
+			werrors.ServerError.ErrorMessageJP,
+			werrors.ServerError.ErrorMessageEN,
+		)
+	}
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	_, err = tx.Exec(`
+		UPDATE places
+		SET updated_at=?, deleted_at=?
+		WHERE id=?
+	`, place.UpdatedAt,
 		place.DeletedAt,
 		place.ID,
 	)
@@ -96,7 +128,7 @@ func (repo *placeRepositoryImplement) Delete(ctx context.Context, masterTx repos
 	}
 	_, err = tx.Exec(`
 		DELETE FROM places
-		WHERE id=?
+		WHERE id=? and deleted_at is not null
 	`, placeID)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
