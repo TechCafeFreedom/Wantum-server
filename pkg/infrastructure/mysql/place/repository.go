@@ -22,10 +22,10 @@ func New(txManager repository.MasterTxManager) place.Repository {
 	}
 }
 
-func (repo *placeRepositoryImplement) Insert(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) (*model.PlaceModel, error) {
+func (repo *placeRepositoryImplement) Insert(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) (int, error) {
 	// NOTE: nilで降りてきた用対策。いらないかも
 	if place == nil {
-		return nil, werrors.Newf(
+		return 0, werrors.Newf(
 			errors.New("required data(place) is nil"),
 			werrors.ServerError.ErrorCode,
 			werrors.ServerError.ErrorMessageJP,
@@ -35,7 +35,7 @@ func (repo *placeRepositoryImplement) Insert(ctx context.Context, masterTx repos
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
-		return nil, werrors.FromConstant(err, werrors.ServerError)
+		return 0, werrors.FromConstant(err, werrors.ServerError)
 	}
 	result, err := tx.Exec(`
 		INSERT INTO places(
@@ -47,16 +47,15 @@ func (repo *placeRepositoryImplement) Insert(ctx context.Context, masterTx repos
 	)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
-		return nil, werrors.FromConstant(err, werrors.ServerError)
+		return 0, werrors.FromConstant(err, werrors.ServerError)
 	}
 
 	id, err := result.LastInsertId()
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
-		return nil, werrors.FromConstant(err, werrors.ServerError)
+		return 0, werrors.FromConstant(err, werrors.ServerError)
 	}
-	place.ID = int(id)
-	return place, nil
+	return int(id), nil
 }
 
 func (repo *placeRepositoryImplement) Update(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error {
@@ -80,7 +79,6 @@ func (repo *placeRepositoryImplement) Update(ctx context.Context, masterTx repos
 		WHERE id=?
 	`, place.Name,
 		place.UpdatedAt,
-		place.DeletedAt,
 		place.ID,
 	)
 	if err != nil {
