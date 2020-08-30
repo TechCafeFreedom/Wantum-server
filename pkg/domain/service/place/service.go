@@ -41,11 +41,12 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, name
 		UpdatedAt: &createdAt,
 	}
 	result, err := s.placeRepository.Insert(ctx, masterTx, place)
+	place.ID = result
 
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToPlaceEntity(result), nil
+	return model.ConvertToPlaceEntity(place), nil
 }
 
 func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) (*entity.Place, error) {

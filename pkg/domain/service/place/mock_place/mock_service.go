@@ -36,10 +36,10 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // Insert mocks base method
-func (m *MockRepository) Insert(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) (*model.PlaceModel, error) {
+func (m *MockRepository) Insert(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) (int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Insert", ctx, masterTx, place)
-	ret0, _ := ret[0].(*model.PlaceModel)
+	ret0, _ := ret[0].(int)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

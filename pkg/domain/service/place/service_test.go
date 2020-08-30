@@ -21,7 +21,6 @@ var (
 func TestMain(m *testing.M) {
 	before()
 	code := m.Run()
-	after()
 	os.Exit(code)
 }
 
@@ -30,23 +29,13 @@ func before() {
 	masterTx = repository.NewMockMasterTx()
 }
 
-func after() {
-}
-
 func TestService_Create(t *testing.T) {
 	ctx := context.Background()
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	dummyResult := &model.PlaceModel{
-		ID:        1,
-		Name:      "tokyo",
-		CreatedAt: &dummyDate,
-		UpdatedAt: &dummyDate,
-	}
-
 	repo := mock_place.NewMockRepository(ctrl)
-	repo.EXPECT().Insert(ctx, masterTx, gomock.Any()).Return(dummyResult, nil)
+	repo.EXPECT().Insert(ctx, masterTx, gomock.Any()).Return(1, nil)
 
 	service := New(repo)
 	result, err := service.Create(ctx, masterTx, "tokyo")
