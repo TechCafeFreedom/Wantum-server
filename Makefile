@@ -26,6 +26,9 @@ protoc: ## protoファイルから自動生成
 
 	protoc -I ${PROTOS_DIR} --doc_out=html,index.html:./Wantum-ProtocolBuffer ${PROTOS_DIR}/*.proto
 
+proto-fmt: ## protoファイルのリフォーマット
+	clang-format -i ${PROTOS_DIR}/*.proto
+
 mockgen: # mockgenの実行
 	# Usege: make mockgen source=<インターフェースの定義しているファイル>
 
