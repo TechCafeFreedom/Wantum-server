@@ -1,5 +1,6 @@
 SOURCE_FILE := $(notdir $(source))
 SOURCE_DIR := $(dir $(source))
+PROTOS_DIR := ./Wantum-ProtocolBuffer
 MOCK_FILE := mock_${SOURCE_FILE}
 MOCK_DIR := ${SOURCE_DIR}mock_$(lastword $(subst /, ,${SOURCE_DIR}))/
 MOCK_TARGET := $(lastword $(subst /, ,${SOURCE_DIR}))
@@ -14,6 +15,12 @@ endef
 
 help: ## 使い方
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+
+protoc: ## protoファイルから自動生成
+	protoc \
+            -I ${PROTOS_DIR} \
+            --go_out=plugins=grpc:pkg/pb/ \
+            ${PROTOS_DIR}/*.proto \
 
 mockgen: # mockgenの実行
 	# Usege: make mockgen source=<インターフェースの定義しているファイル>
