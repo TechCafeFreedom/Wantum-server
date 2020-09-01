@@ -36,7 +36,8 @@ type GetMemoryRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"` // 思い出1件を特定するための思い出ID
+	// 思い出1件を特定するための思い出ID
+	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
 }
 
 func (x *GetMemoryRequest) Reset() {
@@ -84,8 +85,10 @@ type Memories struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MemoryCount *MemoryCountInfo `protobuf:"bytes,1,opt,name=memory_count,json=memoryCount,proto3" json:"memory_count,omitempty"` // 思い出カウント情報
-	Memories    []*MemoryInfo    `protobuf:"bytes,2,rep,name=memories,proto3" json:"memories,omitempty"`                          // 思い出一覧（配列）
+	// 思い出カウント情報
+	MemoryCount *MemoryCountInfo `protobuf:"bytes,1,opt,name=memory_count,json=memoryCount,proto3" json:"memory_count,omitempty"`
+	// 思い出一覧（配列）
+	Memories []*MemoryInfo `protobuf:"bytes,2,rep,name=memories,proto3" json:"memories,omitempty"`
 }
 
 func (x *Memories) Reset() {
@@ -140,8 +143,10 @@ type MemoryCountInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MemoriesCount  int64 `protobuf:"varint,1,opt,name=memories_count,json=memoriesCount,proto3" json:"memories_count,omitempty"`    // 過去に投稿した思い出の数
-	PublishedCount int64 `protobuf:"varint,2,opt,name=published_count,json=publishedCount,proto3" json:"published_count,omitempty"` // 公開中の思い出の数
+	// 過去に投稿した思い出の数
+	MemoriesCount int64 `protobuf:"varint,1,opt,name=memories_count,json=memoriesCount,proto3" json:"memories_count,omitempty"`
+	// 公開中の思い出の数
+	PublishedCount int64 `protobuf:"varint,2,opt,name=published_count,json=publishedCount,proto3" json:"published_count,omitempty"`
 }
 
 func (x *MemoryCountInfo) Reset() {
@@ -196,13 +201,20 @@ type MemoryInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MemoryId    int64    `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`   // 思い出ID
-	Activity    string   `protobuf:"bytes,2,opt,name=activity,proto3" json:"activity,omitempty"`                    // やったこと
-	Date        string   `protobuf:"bytes,3,opt,name=date,proto3" json:"date,omitempty"`                            // 日付
-	Description string   `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`              // 思い出の説明
-	Place       string   `protobuf:"bytes,5,opt,name=place,proto3" json:"place,omitempty"`                          // 場所
-	ImageUrls   []string `protobuf:"bytes,6,rep,name=image_urls,json=imageUrls,proto3" json:"image_urls,omitempty"` // 投稿されている画像一覧（配列）
-	Tags        []string `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags,omitempty"`                            // タグ一覧（配列）
+	// 思い出ID
+	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
+	// やったこと
+	Activity string `protobuf:"bytes,2,opt,name=activity,proto3" json:"activity,omitempty"`
+	// 日付
+	Date string `protobuf:"bytes,3,opt,name=date,proto3" json:"date,omitempty"`
+	// 思い出の説明
+	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	// 場所
+	Place string `protobuf:"bytes,5,opt,name=place,proto3" json:"place,omitempty"`
+	// 投稿されている画像一覧（配列）
+	ImageUrls []string `protobuf:"bytes,6,rep,name=image_urls,json=imageUrls,proto3" json:"image_urls,omitempty"`
+	// タグ一覧（配列）
+	Tags []string `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags,omitempty"`
 }
 
 func (x *MemoryInfo) Reset() {

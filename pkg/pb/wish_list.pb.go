@@ -36,7 +36,8 @@ type GetWishListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	WishListId int64 `protobuf:"varint,1,opt,name=wish_list_id,json=wishListId,proto3" json:"wish_list_id,omitempty"` // やりたいことリストを特定するためのID
+	// やりたいことリストを特定するためのID
+	WishListId int64 `protobuf:"varint,1,opt,name=wish_list_id,json=wishListId,proto3" json:"wish_list_id,omitempty"`
 }
 
 func (x *GetWishListRequest) Reset() {
@@ -84,7 +85,8 @@ type WishList struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	WishList []*WishListInfo `protobuf:"bytes,1,rep,name=wish_list,json=wishList,proto3" json:"wish_list,omitempty"` // やりたいことリスト一覧（配列）
+	// やりたいことリスト一覧（配列）
+	WishList []*WishListInfo `protobuf:"bytes,1,rep,name=wish_list,json=wishList,proto3" json:"wish_list,omitempty"`
 }
 
 func (x *WishList) Reset() {
@@ -132,11 +134,16 @@ type WishListInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	WishListId     int64               `protobuf:"varint,1,opt,name=wish_list_id,json=wishListId,proto3" json:"wish_list_id,omitempty"`          // やりたいことリストを特定するためのID
-	Title          string              `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`                                         // やりたいことリストタイトル
-	WishCategories []*WishCategoryInfo `protobuf:"bytes,3,rep,name=wish_categories,json=wishCategories,proto3" json:"wish_categories,omitempty"` // やりたいことカテゴリー一覧（配列）
-	Authors        []*UserInfo         `protobuf:"bytes,4,rep,name=authors,proto3" json:"authors,omitempty"`                                     // 編集権限を持っているユーザー一覧（配列）
-	InviteUrl      string              `protobuf:"bytes,5,opt,name=invite_url,json=inviteUrl,proto3" json:"invite_url,omitempty"`                // 招待リンク
+	// やりたいことリストを特定するためのID
+	WishListId int64 `protobuf:"varint,1,opt,name=wish_list_id,json=wishListId,proto3" json:"wish_list_id,omitempty"`
+	// やりたいことリストタイトル
+	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	// やりたいことカテゴリー一覧（配列）
+	WishCategories []*WishCategoryInfo `protobuf:"bytes,3,rep,name=wish_categories,json=wishCategories,proto3" json:"wish_categories,omitempty"`
+	// 編集権限を持っているユーザー一覧（配列）
+	Authors []*UserInfo `protobuf:"bytes,4,rep,name=authors,proto3" json:"authors,omitempty"`
+	// 招待リンク
+	InviteUrl string `protobuf:"bytes,5,opt,name=invite_url,json=inviteUrl,proto3" json:"invite_url,omitempty"`
 }
 
 func (x *WishListInfo) Reset() {
@@ -212,9 +219,12 @@ type WishCategoryInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	WishCategoryId int64           `protobuf:"varint,1,opt,name=wish_category_id,json=wishCategoryId,proto3" json:"wish_category_id,omitempty"` // やりたいことカテゴリーを特定するためのID
-	Title          string          `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`                                            // やりたいことカテゴリー名
-	WishCards      []*WishCardInfo `protobuf:"bytes,3,rep,name=wish_cards,json=wishCards,proto3" json:"wish_cards,omitempty"`                   // カテゴリー内のやりたいことカード一覧（配列）
+	// やりたいことカテゴリーを特定するためのID
+	WishCategoryId int64 `protobuf:"varint,1,opt,name=wish_category_id,json=wishCategoryId,proto3" json:"wish_category_id,omitempty"`
+	// やりたいことカテゴリー名
+	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	// カテゴリー内のやりたいことカード一覧（配列）
+	WishCards []*WishCardInfo `protobuf:"bytes,3,rep,name=wish_cards,json=wishCards,proto3" json:"wish_cards,omitempty"`
 }
 
 func (x *WishCategoryInfo) Reset() {
@@ -276,13 +286,20 @@ type WishCardInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	WishCardId  int64    `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"` // wish_cardを特定するためのID
-	Activity    string   `protobuf:"bytes,2,opt,name=activity,proto3" json:"activity,omitempty"`                          // 何をしたいのか
-	Description string   `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`                    // やりたいことの説明
-	Date        string   `protobuf:"bytes,4,opt,name=date,proto3" json:"date,omitempty"`                                  // いつやりたいか（日付）
-	DoneAt      string   `protobuf:"bytes,5,opt,name=done_at,json=doneAt,proto3" json:"done_at,omitempty"`                // 完了日時
-	Place       string   `protobuf:"bytes,6,opt,name=place,proto3" json:"place,omitempty"`                                // どこでそれをしたいのか
-	Tags        []string `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags,omitempty"`                                  // タグ一覧（配列）
+	// wish_cardを特定するためのID
+	WishCardId int64 `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"`
+	// 何をしたいのか
+	Activity string `protobuf:"bytes,2,opt,name=activity,proto3" json:"activity,omitempty"`
+	// やりたいことの説明
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	// いつやりたいか（日付）
+	Date string `protobuf:"bytes,4,opt,name=date,proto3" json:"date,omitempty"`
+	// 完了日時
+	DoneAt string `protobuf:"bytes,5,opt,name=done_at,json=doneAt,proto3" json:"done_at,omitempty"`
+	// どこでそれをしたいのか
+	Place string `protobuf:"bytes,6,opt,name=place,proto3" json:"place,omitempty"`
+	// タグ一覧（配列）
+	Tags []string `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags,omitempty"`
 }
 
 func (x *WishCardInfo) Reset() {

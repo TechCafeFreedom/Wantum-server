@@ -36,7 +36,8 @@ type GetAlbumRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AlbumId int64 `protobuf:"varint,1,opt,name=album_id,json=albumId,proto3" json:"album_id,omitempty"` // アルバムを特定するためのID
+	// アルバムを特定するためのID
+	AlbumId int64 `protobuf:"varint,1,opt,name=album_id,json=albumId,proto3" json:"album_id,omitempty"`
 }
 
 func (x *GetAlbumRequest) Reset() {
@@ -84,7 +85,8 @@ type Albums struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Albums []*AlbumInfo `protobuf:"bytes,1,rep,name=albums,proto3" json:"albums,omitempty"` // アルバム一覧（配列）
+	// アルバム一覧（配列）
+	Albums []*AlbumInfo `protobuf:"bytes,1,rep,name=albums,proto3" json:"albums,omitempty"`
 }
 
 func (x *Albums) Reset() {
@@ -132,9 +134,12 @@ type AlbumInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AlbumId  int64     `protobuf:"varint,1,opt,name=album_id,json=albumId,proto3" json:"album_id,omitempty"` // アルバムを特定するためのID
-	Title    string    `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`                     // アルバムのタイトル
-	Memories *Memories `protobuf:"bytes,3,opt,name=memories,proto3" json:"memories,omitempty"`               // アルバムに保存されている思い出一覧（配列）
+	// アルバムを特定するためのID
+	AlbumId int64 `protobuf:"varint,1,opt,name=album_id,json=albumId,proto3" json:"album_id,omitempty"`
+	// アルバムのタイトル
+	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	// アルバムに保存されている思い出一覧（配列）
+	Memories *Memories `protobuf:"bytes,3,opt,name=memories,proto3" json:"memories,omitempty"`
 }
 
 func (x *AlbumInfo) Reset() {

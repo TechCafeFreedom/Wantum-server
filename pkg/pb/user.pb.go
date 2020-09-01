@@ -36,14 +36,22 @@ type CreateUserRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name      string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`                         // 表示名
-	UserName  string `protobuf:"bytes,2,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"` // ユーザ名
-	Thumbnail string `protobuf:"bytes,3,opt,name=thumbnail,proto3" json:"thumbnail,omitempty"`               // アイコンのURL
-	Bio       string `protobuf:"bytes,4,opt,name=bio,proto3" json:"bio,omitempty"`                           // ひとこと
-	Gender    int32  `protobuf:"varint,5,opt,name=gender,proto3" json:"gender,omitempty"`                    // 性別（1: man, 2: woman, 3: unknown）
-	Phone     string `protobuf:"bytes,6,opt,name=phone,proto3" json:"phone,omitempty"`                       // 電話番号
-	Place     string `protobuf:"bytes,7,opt,name=place,proto3" json:"place,omitempty"`                       // 現在地的な。Twitterの真似
-	Birth     string `protobuf:"bytes,8,opt,name=birth,proto3" json:"birth,omitempty"`                       // 生年月日
+	// 表示名
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// ユーザ名
+	UserName string `protobuf:"bytes,2,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"`
+	// アイコンのURL
+	Thumbnail string `protobuf:"bytes,3,opt,name=thumbnail,proto3" json:"thumbnail,omitempty"`
+	// ひとこと
+	Bio string `protobuf:"bytes,4,opt,name=bio,proto3" json:"bio,omitempty"`
+	// 性別（1: man, 2: woman, 3: unknown）
+	Gender int32 `protobuf:"varint,5,opt,name=gender,proto3" json:"gender,omitempty"`
+	// 電話番号
+	Phone string `protobuf:"bytes,6,opt,name=phone,proto3" json:"phone,omitempty"`
+	// 現在地的な。Twitterの真似
+	Place string `protobuf:"bytes,7,opt,name=place,proto3" json:"place,omitempty"`
+	// 生年月日
+	Birth string `protobuf:"bytes,8,opt,name=birth,proto3" json:"birth,omitempty"`
 }
 
 func (x *CreateUserRequest) Reset() {
@@ -140,16 +148,26 @@ type UserInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id        int64     `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                            // ユーザーID
-	Name      string    `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                         // 表示名
-	UserName  string    `protobuf:"bytes,3,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"` // ユーザ名
-	Thumbnail string    `protobuf:"bytes,4,opt,name=thumbnail,proto3" json:"thumbnail,omitempty"`               // アイコンのURL
-	Bio       string    `protobuf:"bytes,5,opt,name=bio,proto3" json:"bio,omitempty"`                           // ひとこと
-	Gender    int32     `protobuf:"varint,6,opt,name=gender,proto3" json:"gender,omitempty"`                    // 性別（1: man, 2: woman, 3: unknown）
-	Phone     string    `protobuf:"bytes,7,opt,name=phone,proto3" json:"phone,omitempty"`                       // 電話番号
-	Place     string    `protobuf:"bytes,8,opt,name=place,proto3" json:"place,omitempty"`                       // 現在地的な。Twitterの真似
-	Birth     string    `protobuf:"bytes,9,opt,name=birth,proto3" json:"birth,omitempty"`                       // 生年月日
-	Memories  *Memories `protobuf:"bytes,10,opt,name=memories,proto3" json:"memories,omitempty"`                // ユーザーが過去に投稿した思い出一覧
+	// ユーザーID
+	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// 表示名
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// ユーザ名
+	UserName string `protobuf:"bytes,3,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"`
+	// アイコンのURL
+	Thumbnail string `protobuf:"bytes,4,opt,name=thumbnail,proto3" json:"thumbnail,omitempty"`
+	// ひとこと
+	Bio string `protobuf:"bytes,5,opt,name=bio,proto3" json:"bio,omitempty"`
+	// 性別（1: man, 2: woman, 3: unknown）
+	Gender int32 `protobuf:"varint,6,opt,name=gender,proto3" json:"gender,omitempty"`
+	// 電話番号
+	Phone string `protobuf:"bytes,7,opt,name=phone,proto3" json:"phone,omitempty"`
+	// 現在地的な。Twitterの真似
+	Place string `protobuf:"bytes,8,opt,name=place,proto3" json:"place,omitempty"`
+	// 生年月日
+	Birth string `protobuf:"bytes,9,opt,name=birth,proto3" json:"birth,omitempty"`
+	// ユーザーが過去に投稿した思い出一覧
+	Memories *Memories `protobuf:"bytes,10,opt,name=memories,proto3" json:"memories,omitempty"`
 }
 
 func (x *UserInfo) Reset() {
