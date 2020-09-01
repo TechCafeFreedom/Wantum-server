@@ -280,7 +280,7 @@ func (x *WishCategoryInfo) GetWishCards() []*WishCardInfo {
 	return nil
 }
 
-// やりたいことカード情報（wish_card）
+// やりたいことカード情報
 type WishCardInfo struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
