@@ -434,18 +434,23 @@ var file_wish_list_proto_rawDesc = []byte{
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x64, 0x6f, 0x6e, 0x65, 0x41, 0x74, 0x12, 0x14, 0x0a, 0x05,
 	0x70, 0x6c, 0x61, 0x63, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x70, 0x6c, 0x61,
 	0x63, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x61, 0x67, 0x73, 0x18, 0x07, 0x20, 0x03, 0x28, 0x09,
-	0x52, 0x04, 0x74, 0x61, 0x67, 0x73, 0x32, 0xa7, 0x01, 0x0a, 0x0f, 0x57, 0x69, 0x73, 0x68, 0x4c,
+	0x52, 0x04, 0x74, 0x61, 0x67, 0x73, 0x32, 0xf5, 0x01, 0x0a, 0x0f, 0x57, 0x69, 0x73, 0x68, 0x4c,
 	0x69, 0x73, 0x74, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x3f, 0x0a, 0x0b, 0x47, 0x65,
 	0x74, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
 	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74,
 	0x79, 0x1a, 0x18, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69,
-	0x73, 0x74, 0x2e, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x53, 0x0a, 0x0f, 0x47,
+	0x73, 0x74, 0x2e, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x55, 0x0a, 0x0f, 0x47,
 	0x65, 0x74, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x22,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e,
 	0x47, 0x65, 0x74, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65,
 	0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c,
 	0x69, 0x73, 0x74, 0x2e, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f,
-	0x42, 0x06, 0x5a, 0x04, 0x2e, 0x3b, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x30, 0x01, 0x12, 0x4a, 0x0a, 0x12, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68,
+	0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x1c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69,
+	0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x42, 0x06,
+	0x5a, 0x04, 0x2e, 0x3b, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -477,10 +482,12 @@ var file_wish_list_proto_depIdxs = []int32{
 	4, // 3: proto_wishlist.WishCategoryInfo.wish_cards:type_name -> proto_wishlist.WishCardInfo
 	6, // 4: proto_wishlist.WishListService.GetWishList:input_type -> google.protobuf.Empty
 	0, // 5: proto_wishlist.WishListService.GetWishListInfo:input_type -> proto_wishlist.GetWishListRequest
-	1, // 6: proto_wishlist.WishListService.GetWishList:output_type -> proto_wishlist.WishList
-	2, // 7: proto_wishlist.WishListService.GetWishListInfo:output_type -> proto_wishlist.WishListInfo
-	6, // [6:8] is the sub-list for method output_type
-	4, // [4:6] is the sub-list for method input_type
+	2, // 6: proto_wishlist.WishListService.UpdateWishListInfo:input_type -> proto_wishlist.WishListInfo
+	1, // 7: proto_wishlist.WishListService.GetWishList:output_type -> proto_wishlist.WishList
+	2, // 8: proto_wishlist.WishListService.GetWishListInfo:output_type -> proto_wishlist.WishListInfo
+	6, // 9: proto_wishlist.WishListService.UpdateWishListInfo:output_type -> google.protobuf.Empty
+	7, // [7:10] is the sub-list for method output_type
+	4, // [4:7] is the sub-list for method input_type
 	4, // [4:4] is the sub-list for extension type_name
 	4, // [4:4] is the sub-list for extension extendee
 	0, // [0:4] is the sub-list for field type_name
@@ -589,7 +596,9 @@ type WishListServiceClient interface {
 	// やりたいことリスト一覧取得
 	GetWishList(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*WishList, error)
 	// やりたいことリスト単体取得
-	GetWishListInfo(ctx context.Context, in *GetWishListRequest, opts ...grpc.CallOption) (*WishListInfo, error)
+	GetWishListInfo(ctx context.Context, in *GetWishListRequest, opts ...grpc.CallOption) (WishListService_GetWishListInfoClient, error)
+	// やりたいことリスト更新（カードの移動やタイトルの変更など：ユーザーアクション）
+	UpdateWishListInfo(ctx context.Context, in *WishListInfo, opts ...grpc.CallOption) (*empty.Empty, error)
 }
 
 type wishListServiceClient struct {
@@ -609,9 +618,41 @@ func (c *wishListServiceClient) GetWishList(ctx context.Context, in *empty.Empty
 	return out, nil
 }
 
-func (c *wishListServiceClient) GetWishListInfo(ctx context.Context, in *GetWishListRequest, opts ...grpc.CallOption) (*WishListInfo, error) {
-	out := new(WishListInfo)
-	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/GetWishListInfo", in, out, opts...)
+func (c *wishListServiceClient) GetWishListInfo(ctx context.Context, in *GetWishListRequest, opts ...grpc.CallOption) (WishListService_GetWishListInfoClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_WishListService_serviceDesc.Streams[0], "/proto_wishlist.WishListService/GetWishListInfo", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &wishListServiceGetWishListInfoClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type WishListService_GetWishListInfoClient interface {
+	Recv() (*WishListInfo, error)
+	grpc.ClientStream
+}
+
+type wishListServiceGetWishListInfoClient struct {
+	grpc.ClientStream
+}
+
+func (x *wishListServiceGetWishListInfoClient) Recv() (*WishListInfo, error) {
+	m := new(WishListInfo)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *wishListServiceClient) UpdateWishListInfo(ctx context.Context, in *WishListInfo, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/UpdateWishListInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -623,7 +664,9 @@ type WishListServiceServer interface {
 	// やりたいことリスト一覧取得
 	GetWishList(context.Context, *empty.Empty) (*WishList, error)
 	// やりたいことリスト単体取得
-	GetWishListInfo(context.Context, *GetWishListRequest) (*WishListInfo, error)
+	GetWishListInfo(*GetWishListRequest, WishListService_GetWishListInfoServer) error
+	// やりたいことリスト更新（カードの移動やタイトルの変更など：ユーザーアクション）
+	UpdateWishListInfo(context.Context, *WishListInfo) (*empty.Empty, error)
 }
 
 // UnimplementedWishListServiceServer can be embedded to have forward compatible implementations.
@@ -633,8 +676,11 @@ type UnimplementedWishListServiceServer struct {
 func (*UnimplementedWishListServiceServer) GetWishList(context.Context, *empty.Empty) (*WishList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWishList not implemented")
 }
-func (*UnimplementedWishListServiceServer) GetWishListInfo(context.Context, *GetWishListRequest) (*WishListInfo, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetWishListInfo not implemented")
+func (*UnimplementedWishListServiceServer) GetWishListInfo(*GetWishListRequest, WishListService_GetWishListInfoServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetWishListInfo not implemented")
+}
+func (*UnimplementedWishListServiceServer) UpdateWishListInfo(context.Context, *WishListInfo) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateWishListInfo not implemented")
 }
 
 func RegisterWishListServiceServer(s *grpc.Server, srv WishListServiceServer) {
@@ -659,20 +705,41 @@ func _WishListService_GetWishList_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _WishListService_GetWishListInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetWishListRequest)
+func _WishListService_GetWishListInfo_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetWishListRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(WishListServiceServer).GetWishListInfo(m, &wishListServiceGetWishListInfoServer{stream})
+}
+
+type WishListService_GetWishListInfoServer interface {
+	Send(*WishListInfo) error
+	grpc.ServerStream
+}
+
+type wishListServiceGetWishListInfoServer struct {
+	grpc.ServerStream
+}
+
+func (x *wishListServiceGetWishListInfoServer) Send(m *WishListInfo) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _WishListService_UpdateWishListInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WishListInfo)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(WishListServiceServer).GetWishListInfo(ctx, in)
+		return srv.(WishListServiceServer).UpdateWishListInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto_wishlist.WishListService/GetWishListInfo",
+		FullMethod: "/proto_wishlist.WishListService/UpdateWishListInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WishListServiceServer).GetWishListInfo(ctx, req.(*GetWishListRequest))
+		return srv.(WishListServiceServer).UpdateWishListInfo(ctx, req.(*WishListInfo))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -686,10 +753,16 @@ var _WishListService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _WishListService_GetWishList_Handler,
 		},
 		{
-			MethodName: "GetWishListInfo",
-			Handler:    _WishListService_GetWishListInfo_Handler,
+			MethodName: "UpdateWishListInfo",
+			Handler:    _WishListService_UpdateWishListInfo_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetWishListInfo",
+			Handler:       _WishListService_GetWishListInfo_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "wish_list.proto",
 }
