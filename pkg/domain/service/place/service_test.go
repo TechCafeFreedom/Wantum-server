@@ -88,6 +88,32 @@ func TestService_UpDeleteFlag(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
+	assert.NotNil(t, result.DeletedAt)
+}
+
+func TestService_DownDeleteFlag(t *testing.T) {
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	dummyData := &model.PlaceModel{
+		ID:        1,
+		Name:      "tokyo",
+		CreatedAt: &dummyDate,
+		UpdatedAt: &dummyDate,
+		DeletedAt: &dummyDate,
+	}
+
+	repo := mock_place.NewMockRepository(ctrl)
+	repo.EXPECT().DownDeleteFlag(ctx, masterTx, gomock.Any()).Return(nil)
+	repo.EXPECT().SelectByID(ctx, masterTx, dummyData.ID).Return(dummyData, nil)
+
+	service := New(repo)
+	result, err := service.DownDeleteFlag(ctx, masterTx, dummyData.ID)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+	assert.Nil(t, result.DeletedAt)
 }
 
 func TestService_Delete(t *testing.T) {

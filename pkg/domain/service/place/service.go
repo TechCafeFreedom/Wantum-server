@@ -18,6 +18,7 @@ type Service interface {
 
 	Delete(ctx context.Context, masterTx repository.MasterTx, placeID int) error
 	UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*entity.Place, error)
+	DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*entity.Place, error)
 
 	GetByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*entity.Place, error)
 	GetAll(ctx context.Context, masterTx repository.MasterTx) (entity.PlaceSlice, error)
@@ -75,6 +76,21 @@ func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx
 	place.UpdatedAt = &updatedAt
 	place.DeletedAt = &updatedAt
 	err = s.placeRepository.UpDeleteFlag(ctx, masterTx, place)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	return model.ConvertToPlaceEntity(place), nil
+}
+
+func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*entity.Place, error) {
+	place, err := s.placeRepository.SelectByID(ctx, masterTx, placeID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	updatedAt := time.Now()
+	place.UpdatedAt = &updatedAt
+	place.DeletedAt = nil
+	err = s.placeRepository.DownDeleteFlag(ctx, masterTx, place)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
