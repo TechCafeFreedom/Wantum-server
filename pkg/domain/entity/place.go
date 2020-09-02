@@ -10,5 +10,4 @@ type Place struct {
 	DeletedAt *time.Time
 }
 
-// TODO: 使わなさそう
 type PlaceSlice []*Place

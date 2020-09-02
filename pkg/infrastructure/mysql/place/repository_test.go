@@ -32,6 +32,7 @@ func TestMain(m *testing.M) {
 // repositoryを作ってもらう
 func before() {
 	var err error
+	// TODO: 環境変数とか使いたい気持ちもする
 	db, err = sql.Open("mysql", "root:root@tcp(localhost:3306)/wantum?parseTime=true")
 	if err != nil {
 		log.Fatal("faild to connect db: ", err)
