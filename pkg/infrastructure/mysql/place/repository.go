@@ -24,14 +24,10 @@ func New(txManager repository.MasterTxManager) place.Repository {
 
 func (repo *placeRepositoryImplement) Insert(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) (int, error) {
 	// NOTE: nilで降りてきた用対策。いらないかも
-	if place == nil {
-		return 0, werrors.Newf(
-			errors.New("required data(place) is nil"),
-			werrors.ServerError.ErrorCode,
-			werrors.ServerError.ErrorMessageJP,
-			werrors.ServerError.ErrorMessageEN,
-		)
+	if err := checkIsNil(place); err != nil {
+		return 0, err
 	}
+
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -60,14 +56,10 @@ func (repo *placeRepositoryImplement) Insert(ctx context.Context, masterTx repos
 
 func (repo *placeRepositoryImplement) Update(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error {
 	// NOTE: nilで降りてきた用対策。いらないかも
-	if place == nil {
-		return werrors.Newf(
-			errors.New("required data(place) is nil"),
-			werrors.ServerError.ErrorCode,
-			werrors.ServerError.ErrorMessageJP,
-			werrors.ServerError.ErrorMessageEN,
-		)
+	if err := checkIsNil(place); err != nil {
+		return err
 	}
+
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -90,14 +82,10 @@ func (repo *placeRepositoryImplement) Update(ctx context.Context, masterTx repos
 
 func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error {
 	// NOTE: nilで降りてきた用対策。いらないかも
-	if place == nil {
-		return werrors.Newf(
-			errors.New("required data(place) is nil"),
-			werrors.ServerError.ErrorCode,
-			werrors.ServerError.ErrorMessageJP,
-			werrors.ServerError.ErrorMessageEN,
-		)
+	if err := checkIsNil(place); err != nil {
+		return err
 	}
+
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -193,4 +181,16 @@ func (repo *placeRepositoryImplement) SelectAll(ctx context.Context, masterTx re
 		result = append(result, &place)
 	}
 	return result, nil
+}
+
+func checkIsNil(place *model.PlaceModel) error {
+	if place == nil {
+		return werrors.Newf(
+			errors.New("required data(place) is nil"),
+			werrors.ServerError.ErrorCode,
+			werrors.ServerError.ErrorMessageJP,
+			werrors.ServerError.ErrorMessageEN,
+		)
+	}
+	return nil
 }
