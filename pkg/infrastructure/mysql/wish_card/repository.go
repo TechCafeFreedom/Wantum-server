@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"strconv"
 	"strings"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/wish_card"
@@ -171,21 +170,18 @@ func (repo *wishCardRepositoryImplement) SelectByID(ctx context.Context, masterT
 	return &result, nil
 }
 
-func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []int) (model.WishCardModelSlice, error) {
+func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []string) (model.WishCardModelSlice, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	wishCardStrIDs := make([]string, 0, len(wishCardIDs))
-	for _, id := range wishCardIDs {
-		wishCardStrIDs = append(wishCardStrIDs, strconv.Itoa(id))
-	}
+
 	rows, err := tx.Query(`
 		SELECT id, user_id, activity, description, date, done_at, created_at, updated_at, deleted_at, category_id, place_id
 		FROM wish_cards
 		WHERE id
-		IN (` + strings.Join(wishCardStrIDs, ",") + `)
+		IN (` + strings.Join(wishCardIDs, ",") + `)
 	`)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
