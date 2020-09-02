@@ -14,6 +14,6 @@ type Repository interface {
 	UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCard *model.WishCardModel) error
 	Delete(ctx context.Context, masterTx repository.MasterTx, wishCardID int) error
 	SelectByID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (*model.WishCardModel, error)
-	SelectByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []int) (model.WishCardModelSlice, error)
+	SelectByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []string) (model.WishCardModelSlice, error)
 	SelectByCategoryID(ctx context.Context, masterTx repository.MasterTx, categryID int) (model.WishCardModelSlice, error)
 }

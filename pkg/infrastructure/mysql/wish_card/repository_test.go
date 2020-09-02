@@ -253,7 +253,7 @@ func TestSelectByIDs(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
-		ids := []int{1, 2, 3}
+		ids := []string{"1", "2", "3"}
 
 		var result model.WishCardModelSlice
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
