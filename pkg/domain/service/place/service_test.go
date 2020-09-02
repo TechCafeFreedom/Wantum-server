@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 	"wantum/pkg/domain/repository"
-	"wantum/pkg/domain/service/place/mock_place"
 	"wantum/pkg/infrastructure/mysql/model"
+	"wantum/pkg/infrastructure/mysql/place/mock_place"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
