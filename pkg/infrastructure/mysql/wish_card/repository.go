@@ -101,6 +101,14 @@ func (repo *wishCardRepositoryImplement) UpDeleteFlag(ctx context.Context, maste
 	if err := checkIsNil(wishCard); err != nil {
 		return err
 	}
+	if wishCard.DeletedAt == nil {
+		return werrors.Newf(
+			errors.New("deletedAt is nil"),
+			werrors.ServerError.ErrorCode,
+			werrors.ServerError.ErrorMessageJP,
+			werrors.ServerError.ErrorMessageEN,
+		)
+	}
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -112,6 +120,30 @@ func (repo *wishCardRepositoryImplement) UpDeleteFlag(ctx context.Context, maste
 		WHERE id=?
 	`, wishCard.UpdatedAt,
 		wishCard.DeletedAt,
+		wishCard.ID,
+	)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	return nil
+}
+
+func (repo *wishCardRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCard *model.WishCardModel) error {
+	if err := checkIsNil(wishCard); err != nil {
+		return err
+	}
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	_, err = tx.Exec(`
+		UPDATE wish_cards
+		SET updated_at=?, deleted_at=?
+		WHERE id=?
+	`, wishCard.UpdatedAt,
+		nil,
 		wishCard.ID,
 	)
 	if err != nil {
