@@ -160,6 +160,59 @@ func TestUpDeleteFlag(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, result.DeletedAt)
 	})
+
+	t.Run("failure to up deleteFlag. deletedAt is nil", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+		date := time.Date(2020, 9, 1, 12, 0, 0, 0, time.Local)
+		place := &model.PlaceModel{
+			Name:      "sample place",
+			CreatedAt: &date,
+			UpdatedAt: &date,
+		}
+
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			newPlaceID, _ := repo.Insert(ctx, masterTx, place)
+
+			place.ID = newPlaceID
+			err = repo.UpDeleteFlag(ctx, masterTx, place)
+			return err
+		})
+
+		assert.Error(t, err)
+	})
+}
+
+func TestDownDeleteFlag(t *testing.T) {
+	t.Run("success to down deleteFlag", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+		date := time.Date(2020, 9, 1, 12, 0, 0, 0, time.Local)
+		place := &model.PlaceModel{
+			Name:      "sample place",
+			CreatedAt: &date,
+			UpdatedAt: &date,
+			DeletedAt: &date,
+		}
+
+		var result *model.PlaceModel
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			newPlaceID, _ := repo.Insert(ctx, masterTx, place)
+
+			place.ID = newPlaceID
+			place.DeletedAt = nil
+			err = repo.DownDeleteFlag(ctx, masterTx, place)
+			if err != nil {
+				return err
+			}
+
+			result, _ = repo.SelectByID(ctx, masterTx, place.ID)
+			return nil
+		})
+
+		assert.NoError(t, err)
+		assert.Nil(t, result.DeletedAt)
+	})
 }
 
 func TestDelete(t *testing.T) {
@@ -220,19 +273,6 @@ func TestSelectByID(t *testing.T) {
 		assert.NotNil(t, result)
 	})
 
-	t.Run("failure to select by id. id is not exist", func(t *testing.T) {
-		var err error
-		ctx := context.Background()
-
-		var result *model.PlaceModel
-		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			result, err = repo.SelectByID(ctx, masterTx, -1)
-			return err
-		})
-
-		assert.Error(t, err)
-		assert.Nil(t, result)
-	})
 }
 
 func TestSelectAll(t *testing.T) {

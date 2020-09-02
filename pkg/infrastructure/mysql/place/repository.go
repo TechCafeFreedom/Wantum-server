@@ -85,6 +85,14 @@ func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx
 	if err := checkIsNil(place); err != nil {
 		return err
 	}
+	if place.DeletedAt == nil {
+		return werrors.Newf(
+			errors.New("deletedAt is nil"),
+			werrors.ServerError.ErrorCode,
+			werrors.ServerError.ErrorMessageJP,
+			werrors.ServerError.ErrorMessageEN,
+		)
+	}
 
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
@@ -97,6 +105,31 @@ func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx
 		WHERE id=?
 	`, place.UpdatedAt,
 		place.DeletedAt,
+		place.ID,
+	)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	return nil
+}
+
+func (repo *placeRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error {
+	if err := checkIsNil(place); err != nil {
+		return err
+	}
+
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	_, err = tx.Exec(`
+		UPDATE places
+		SET updated_at=?, deleted_at=?
+		WHERE id=?
+	`, place.UpdatedAt,
+		nil,
 		place.ID,
 	)
 	if err != nil {
