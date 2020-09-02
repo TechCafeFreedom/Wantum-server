@@ -92,6 +92,36 @@ func TestUpdate(t *testing.T) {
 			Activity:    "なんかしたい",
 			Description: "何かがしたい",
 			Date:        &dummyDate,
+			DoneAt:      &dummyDate,
+			CreatedAt:   &dummyDate,
+			UpdatedAt:   &dummyDate,
+			CategoryID:  1,
+			PlaceID:     1,
+		}
+		var result *model.WishCardModel
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			err = repo.Update(ctx, masterTx, wishCard)
+			if err != nil {
+				return err
+			}
+
+			result, _ = repo.SelectByID(ctx, masterTx, 1)
+			return nil
+		})
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, "なんかしたい", result.Activity)
+	})
+
+	t.Run("success to update data. done at is null", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+		wishCard := &model.WishCardModel{
+			ID:          1,
+			UserID:      1,
+			Activity:    "なんかしたい",
+			Description: "何かがしたい",
+			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
 			CategoryID:  1,
@@ -156,6 +186,74 @@ func TestUpDeleteFlag(t *testing.T) {
 		})
 		assert.NoError(t, err)
 		assert.NotNil(t, result.DeletedAt)
+	})
+
+	t.Run("failure to up delete flag. flag is nil", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+		wishCard := &model.WishCardModel{
+			UserID:      1,
+			Activity:    "なんかしたい",
+			Description: "何かがしたい",
+			Date:        &dummyDate,
+			CreatedAt:   &dummyDate,
+			UpdatedAt:   &dummyDate,
+			CategoryID:  1,
+			PlaceID:     1,
+		}
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			newID, _ := repo.Insert(ctx, masterTx, wishCard)
+
+			wishCard.ID = newID
+			err = repo.UpDeleteFlag(ctx, masterTx, wishCard)
+			return err
+		})
+		assert.Error(t, err)
+	})
+
+	t.Run("failure to up delete flag. data is nil", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+
+		var result *model.WishCardModel
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			err = repo.UpDeleteFlag(ctx, masterTx, nil)
+			return err
+		})
+		assert.Error(t, err)
+		assert.Nil(t, result)
+	})
+}
+
+func TestDownDeleteFlag(t *testing.T) {
+	t.Run("success to down delete flag", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+		wishCard := &model.WishCardModel{
+			UserID:      1,
+			Activity:    "なんかしたい",
+			Description: "何かがしたい",
+			Date:        &dummyDate,
+			CreatedAt:   &dummyDate,
+			UpdatedAt:   &dummyDate,
+			DeletedAt:   &dummyDate,
+			CategoryID:  1,
+			PlaceID:     1,
+		}
+		var result *model.WishCardModel
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			newID, _ := repo.Insert(ctx, masterTx, wishCard)
+
+			wishCard.ID = newID
+			err = repo.DownDeleteFlag(ctx, masterTx, wishCard)
+			if err != nil {
+				return err
+			}
+			result, _ = repo.SelectByID(ctx, masterTx, wishCard.ID)
+			return nil
+		})
+		assert.NoError(t, err)
+		assert.Nil(t, result.DeletedAt)
 	})
 
 	t.Run("failure to up delete flag. data is nil", func(t *testing.T) {
@@ -290,6 +388,9 @@ func TestCategoryID(t *testing.T) {
 		})
 		assert.NoError(t, err)
 		assert.NotNil(t, result)
+		for _, row := range result {
+			assert.Equal(t, 1, row.CategoryID)
+		}
 	})
 
 	t.Run("success to select data. category is not exist", func(t *testing.T) {
