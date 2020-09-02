@@ -14,6 +14,7 @@ type Repository interface {
 
 	Delete(ctx context.Context, masterTx repository.MasterTx, placeID int) error
 	UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error
+	DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error
 
 	SelectByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*model.PlaceModel, error)
 	SelectAll(ctx context.Context, masterTx repository.MasterTx) (model.PlaceModelSlice, error)

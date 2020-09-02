@@ -92,6 +92,20 @@ func (mr *MockRepositoryMockRecorder) UpDeleteFlag(ctx, masterTx, place interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpDeleteFlag", reflect.TypeOf((*MockRepository)(nil).UpDeleteFlag), ctx, masterTx, place)
 }
 
+// DownDeleteFlag mocks base method
+func (m *MockRepository) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DownDeleteFlag", ctx, masterTx, place)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DownDeleteFlag indicates an expected call of DownDeleteFlag
+func (mr *MockRepositoryMockRecorder) DownDeleteFlag(ctx, masterTx, place interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DownDeleteFlag", reflect.TypeOf((*MockRepository)(nil).DownDeleteFlag), ctx, masterTx, place)
+}
+
 // SelectByID mocks base method
 func (m *MockRepository) SelectByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*model.PlaceModel, error) {
 	m.ctrl.T.Helper()
