@@ -12,8 +12,8 @@ type WishCard struct {
 	CreatedAt   *time.Time
 	UpdatedAt   *time.Time
 	DeletedAt   *time.Time
-	Category    interface{} // TODO: 未実装
 	Place       *Place
+	Tags        TagSlice
 }
 
 type WishCardSlice []*WishCard
