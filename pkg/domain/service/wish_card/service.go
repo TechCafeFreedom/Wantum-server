@@ -57,7 +57,7 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, acti
 }
 
 // NOTE: 空値があった時、元データが消滅する。
-// NOTE: リクエストは、全フィールド埋める or 差分だけ
+// QUESTION: リクエストは、全フィールド埋める or 差分だけ
 func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, wishCardID int, activity, description string, date, doneAt *time.Time, userID, categoryID, placeID int) (*entity.WishCard, error) {
 	wishCard, err := s.wishCardRepository.SelectByID(ctx, masterTx, wishCardID)
 	if err != nil {
