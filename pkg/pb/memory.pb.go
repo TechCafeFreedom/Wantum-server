@@ -9,6 +9,7 @@ package pb
 import (
 	context "context"
 	proto "github.com/golang/protobuf/proto"
+	empty "github.com/golang/protobuf/ptypes/empty"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -78,6 +79,466 @@ func (x *GetMemoryRequest) GetMemoryId() int64 {
 	return 0
 }
 
+// 思い出新規作成リクエスト
+type CreateMemoryInfoRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// やったこと
+	Activity string `protobuf:"bytes,1,opt,name=activity,proto3" json:"activity,omitempty"`
+	// 日付(UNIX)
+	Date int64 `protobuf:"varint,2,opt,name=date,proto3" json:"date,omitempty"`
+	// 思い出の説明
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	// 場所
+	Place string `protobuf:"bytes,4,opt,name=place,proto3" json:"place,omitempty"`
+	// 投稿されている画像一覧（配列）
+	Photos []*PhotoInfo `protobuf:"bytes,5,rep,name=photos,proto3" json:"photos,omitempty"`
+	// タグ一覧（配列）
+	Tags []*TagInfo `protobuf:"bytes,6,rep,name=tags,proto3" json:"tags,omitempty"`
+}
+
+func (x *CreateMemoryInfoRequest) Reset() {
+	*x = CreateMemoryInfoRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_memory_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateMemoryInfoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateMemoryInfoRequest) ProtoMessage() {}
+
+func (x *CreateMemoryInfoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_memory_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateMemoryInfoRequest.ProtoReflect.Descriptor instead.
+func (*CreateMemoryInfoRequest) Descriptor() ([]byte, []int) {
+	return file_memory_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *CreateMemoryInfoRequest) GetActivity() string {
+	if x != nil {
+		return x.Activity
+	}
+	return ""
+}
+
+func (x *CreateMemoryInfoRequest) GetDate() int64 {
+	if x != nil {
+		return x.Date
+	}
+	return 0
+}
+
+func (x *CreateMemoryInfoRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *CreateMemoryInfoRequest) GetPlace() string {
+	if x != nil {
+		return x.Place
+	}
+	return ""
+}
+
+func (x *CreateMemoryInfoRequest) GetPhotos() []*PhotoInfo {
+	if x != nil {
+		return x.Photos
+	}
+	return nil
+}
+
+func (x *CreateMemoryInfoRequest) GetTags() []*TagInfo {
+	if x != nil {
+		return x.Tags
+	}
+	return nil
+}
+
+// 思い出削除リクエスト
+type DeleteMemoryInfoRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// 削除する思い出のID
+	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
+}
+
+func (x *DeleteMemoryInfoRequest) Reset() {
+	*x = DeleteMemoryInfoRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_memory_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteMemoryInfoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteMemoryInfoRequest) ProtoMessage() {}
+
+func (x *DeleteMemoryInfoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_memory_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteMemoryInfoRequest.ProtoReflect.Descriptor instead.
+func (*DeleteMemoryInfoRequest) Descriptor() ([]byte, []int) {
+	return file_memory_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *DeleteMemoryInfoRequest) GetMemoryId() int64 {
+	if x != nil {
+		return x.MemoryId
+	}
+	return 0
+}
+
+// 思い出の基本情報更新用リクエスト
+type UpdateMemoryBasicInfoRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// 更新する思い出のID
+	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
+	// やったこと
+	Activity string `protobuf:"bytes,2,opt,name=activity,proto3" json:"activity,omitempty"`
+	// 日付(UNIX)
+	Date int64 `protobuf:"varint,3,opt,name=date,proto3" json:"date,omitempty"`
+	// 思い出の説明
+	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	// 場所
+	Place string `protobuf:"bytes,5,opt,name=place,proto3" json:"place,omitempty"`
+}
+
+func (x *UpdateMemoryBasicInfoRequest) Reset() {
+	*x = UpdateMemoryBasicInfoRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_memory_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateMemoryBasicInfoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateMemoryBasicInfoRequest) ProtoMessage() {}
+
+func (x *UpdateMemoryBasicInfoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_memory_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateMemoryBasicInfoRequest.ProtoReflect.Descriptor instead.
+func (*UpdateMemoryBasicInfoRequest) Descriptor() ([]byte, []int) {
+	return file_memory_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *UpdateMemoryBasicInfoRequest) GetMemoryId() int64 {
+	if x != nil {
+		return x.MemoryId
+	}
+	return 0
+}
+
+func (x *UpdateMemoryBasicInfoRequest) GetActivity() string {
+	if x != nil {
+		return x.Activity
+	}
+	return ""
+}
+
+func (x *UpdateMemoryBasicInfoRequest) GetDate() int64 {
+	if x != nil {
+		return x.Date
+	}
+	return 0
+}
+
+func (x *UpdateMemoryBasicInfoRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *UpdateMemoryBasicInfoRequest) GetPlace() string {
+	if x != nil {
+		return x.Place
+	}
+	return ""
+}
+
+// 思い出に新規画像を追加するためのリクエスト
+type CreateMemoryPhotosRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// 画像を追加する思い出のID
+	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
+	// アップロードしたい画像ファイル
+	PhotoFile []byte `protobuf:"bytes,2,opt,name=photo_file,json=photoFile,proto3" json:"photo_file,omitempty"`
+}
+
+func (x *CreateMemoryPhotosRequest) Reset() {
+	*x = CreateMemoryPhotosRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_memory_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateMemoryPhotosRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateMemoryPhotosRequest) ProtoMessage() {}
+
+func (x *CreateMemoryPhotosRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_memory_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateMemoryPhotosRequest.ProtoReflect.Descriptor instead.
+func (*CreateMemoryPhotosRequest) Descriptor() ([]byte, []int) {
+	return file_memory_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *CreateMemoryPhotosRequest) GetMemoryId() int64 {
+	if x != nil {
+		return x.MemoryId
+	}
+	return 0
+}
+
+func (x *CreateMemoryPhotosRequest) GetPhotoFile() []byte {
+	if x != nil {
+		return x.PhotoFile
+	}
+	return nil
+}
+
+// 思い出に紐づく画像のうちから指定したものを削除するためのリクエスト
+type DeleteMemoryPhotosRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// 画像を削除する思い出のID
+	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
+	// 削除したい画像のID一覧（配列）
+	PhotoIds []int64 `protobuf:"varint,2,rep,packed,name=photo_ids,json=photoIds,proto3" json:"photo_ids,omitempty"`
+}
+
+func (x *DeleteMemoryPhotosRequest) Reset() {
+	*x = DeleteMemoryPhotosRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_memory_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteMemoryPhotosRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteMemoryPhotosRequest) ProtoMessage() {}
+
+func (x *DeleteMemoryPhotosRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_memory_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteMemoryPhotosRequest.ProtoReflect.Descriptor instead.
+func (*DeleteMemoryPhotosRequest) Descriptor() ([]byte, []int) {
+	return file_memory_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DeleteMemoryPhotosRequest) GetMemoryId() int64 {
+	if x != nil {
+		return x.MemoryId
+	}
+	return 0
+}
+
+func (x *DeleteMemoryPhotosRequest) GetPhotoIds() []int64 {
+	if x != nil {
+		return x.PhotoIds
+	}
+	return nil
+}
+
+// 思い出にタグを追加するためのリクエスト
+type AddMemoryTagsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// タグを追加する思い出のID
+	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
+	// 追加したいタグの名前一覧（配列）
+	TagNames []string `protobuf:"bytes,2,rep,name=tag_names,json=tagNames,proto3" json:"tag_names,omitempty"`
+}
+
+func (x *AddMemoryTagsRequest) Reset() {
+	*x = AddMemoryTagsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_memory_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AddMemoryTagsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddMemoryTagsRequest) ProtoMessage() {}
+
+func (x *AddMemoryTagsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_memory_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddMemoryTagsRequest.ProtoReflect.Descriptor instead.
+func (*AddMemoryTagsRequest) Descriptor() ([]byte, []int) {
+	return file_memory_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *AddMemoryTagsRequest) GetMemoryId() int64 {
+	if x != nil {
+		return x.MemoryId
+	}
+	return 0
+}
+
+func (x *AddMemoryTagsRequest) GetTagNames() []string {
+	if x != nil {
+		return x.TagNames
+	}
+	return nil
+}
+
+// 思い出のタグを削除するためのリクエスト
+type DeleteMemoryTagsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// タグを削除する思い出のID
+	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
+	// 削除したいタグのID一覧（配列）
+	TagIds []int64 `protobuf:"varint,2,rep,packed,name=tag_ids,json=tagIds,proto3" json:"tag_ids,omitempty"`
+}
+
+func (x *DeleteMemoryTagsRequest) Reset() {
+	*x = DeleteMemoryTagsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_memory_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteMemoryTagsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteMemoryTagsRequest) ProtoMessage() {}
+
+func (x *DeleteMemoryTagsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_memory_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteMemoryTagsRequest.ProtoReflect.Descriptor instead.
+func (*DeleteMemoryTagsRequest) Descriptor() ([]byte, []int) {
+	return file_memory_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *DeleteMemoryTagsRequest) GetMemoryId() int64 {
+	if x != nil {
+		return x.MemoryId
+	}
+	return 0
+}
+
+func (x *DeleteMemoryTagsRequest) GetTagIds() []int64 {
+	if x != nil {
+		return x.TagIds
+	}
+	return nil
+}
+
 // 思い出一覧情報
 type Memories struct {
 	state         protoimpl.MessageState
@@ -93,7 +554,7 @@ type Memories struct {
 func (x *Memories) Reset() {
 	*x = Memories{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_memory_proto_msgTypes[1]
+		mi := &file_memory_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -106,7 +567,7 @@ func (x *Memories) String() string {
 func (*Memories) ProtoMessage() {}
 
 func (x *Memories) ProtoReflect() protoreflect.Message {
-	mi := &file_memory_proto_msgTypes[1]
+	mi := &file_memory_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -119,7 +580,7 @@ func (x *Memories) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Memories.ProtoReflect.Descriptor instead.
 func (*Memories) Descriptor() ([]byte, []int) {
-	return file_memory_proto_rawDescGZIP(), []int{1}
+	return file_memory_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *Memories) GetMemoryCount() *MemoryCountInfo {
@@ -151,7 +612,7 @@ type MemoryCountInfo struct {
 func (x *MemoryCountInfo) Reset() {
 	*x = MemoryCountInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_memory_proto_msgTypes[2]
+		mi := &file_memory_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -164,7 +625,7 @@ func (x *MemoryCountInfo) String() string {
 func (*MemoryCountInfo) ProtoMessage() {}
 
 func (x *MemoryCountInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_memory_proto_msgTypes[2]
+	mi := &file_memory_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -177,7 +638,7 @@ func (x *MemoryCountInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MemoryCountInfo.ProtoReflect.Descriptor instead.
 func (*MemoryCountInfo) Descriptor() ([]byte, []int) {
-	return file_memory_proto_rawDescGZIP(), []int{2}
+	return file_memory_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *MemoryCountInfo) GetMemoriesCount() int64 {
@@ -211,15 +672,15 @@ type MemoryInfo struct {
 	// 場所
 	Place string `protobuf:"bytes,5,opt,name=place,proto3" json:"place,omitempty"`
 	// 投稿されている画像一覧（配列）
-	ImageUrls []string `protobuf:"bytes,6,rep,name=image_urls,json=imageUrls,proto3" json:"image_urls,omitempty"`
+	Photos []*PhotoInfo `protobuf:"bytes,6,rep,name=photos,proto3" json:"photos,omitempty"`
 	// タグ一覧（配列）
-	Tags []string `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags,omitempty"`
+	Tags []*TagInfo `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags,omitempty"`
 }
 
 func (x *MemoryInfo) Reset() {
 	*x = MemoryInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_memory_proto_msgTypes[3]
+		mi := &file_memory_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -232,7 +693,7 @@ func (x *MemoryInfo) String() string {
 func (*MemoryInfo) ProtoMessage() {}
 
 func (x *MemoryInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_memory_proto_msgTypes[3]
+	mi := &file_memory_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -245,7 +706,7 @@ func (x *MemoryInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MemoryInfo.ProtoReflect.Descriptor instead.
 func (*MemoryInfo) Descriptor() ([]byte, []int) {
-	return file_memory_proto_rawDescGZIP(), []int{3}
+	return file_memory_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *MemoryInfo) GetMemoryId() int64 {
@@ -283,14 +744,14 @@ func (x *MemoryInfo) GetPlace() string {
 	return ""
 }
 
-func (x *MemoryInfo) GetImageUrls() []string {
+func (x *MemoryInfo) GetPhotos() []*PhotoInfo {
 	if x != nil {
-		return x.ImageUrls
+		return x.Photos
 	}
 	return nil
 }
 
-func (x *MemoryInfo) GetTags() []string {
+func (x *MemoryInfo) GetTags() []*TagInfo {
 	if x != nil {
 		return x.Tags
 	}
@@ -301,44 +762,137 @@ var File_memory_proto protoreflect.FileDescriptor
 
 var file_memory_proto_rawDesc = []byte{
 	0x0a, 0x0c, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0c,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x22, 0x2f, 0x0a, 0x10,
-	0x47, 0x65, 0x74, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x12, 0x1b, 0x0a, 0x09, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x03, 0x52, 0x08, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x49, 0x64, 0x22, 0x82, 0x01,
-	0x0a, 0x08, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x69, 0x65, 0x73, 0x12, 0x40, 0x0a, 0x0c, 0x6d, 0x65,
-	0x6d, 0x6f, 0x72, 0x79, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x1d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e,
-	0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52,
-	0x0b, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x34, 0x0a, 0x08,
-	0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x69, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x18,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x4d, 0x65,
-	0x6d, 0x6f, 0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x08, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x69,
-	0x65, 0x73, 0x22, 0x61, 0x0a, 0x0f, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x43, 0x6f, 0x75, 0x6e,
-	0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x25, 0x0a, 0x0e, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x69, 0x65,
-	0x73, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0d, 0x6d,
-	0x65, 0x6d, 0x6f, 0x72, 0x69, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x27, 0x0a, 0x0f,
-	0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x65, 0x64, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0e, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x65, 0x64,
-	0x43, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0xc4, 0x01, 0x0a, 0x0a, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79,
-	0x49, 0x6e, 0x66, 0x6f, 0x12, 0x1b, 0x0a, 0x09, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x5f, 0x69,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x1a, 0x09, 0x74, 0x61,
+	0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x0b, 0x70, 0x68, 0x6f, 0x74, 0x6f, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1b, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x65, 0x6d, 0x70, 0x74, 0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x22, 0x2f, 0x0a, 0x10, 0x47, 0x65, 0x74, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x5f,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79,
+	0x49, 0x64, 0x22, 0xd9, 0x01, 0x0a, 0x17, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4d, 0x65, 0x6d,
+	0x6f, 0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1a,
+	0x0a, 0x08, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x08, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61,
+	0x74, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x64, 0x61, 0x74, 0x65, 0x12, 0x20,
+	0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e,
+	0x12, 0x14, 0x0a, 0x05, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x05, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x12, 0x2e, 0x0a, 0x06, 0x70, 0x68, 0x6f, 0x74, 0x6f, 0x73,
+	0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x70,
+	0x68, 0x6f, 0x74, 0x6f, 0x2e, 0x50, 0x68, 0x6f, 0x74, 0x6f, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x06,
+	0x70, 0x68, 0x6f, 0x74, 0x6f, 0x73, 0x12, 0x26, 0x0a, 0x04, 0x74, 0x61, 0x67, 0x73, 0x18, 0x06,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x74, 0x61, 0x67,
+	0x2e, 0x54, 0x61, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x04, 0x74, 0x61, 0x67, 0x73, 0x22, 0x36,
+	0x0a, 0x17, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x49, 0x6e,
+	0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x6d, 0x65, 0x6d,
+	0x6f, 0x72, 0x79, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x6d, 0x65,
+	0x6d, 0x6f, 0x72, 0x79, 0x49, 0x64, 0x22, 0xa3, 0x01, 0x0a, 0x1c, 0x55, 0x70, 0x64, 0x61, 0x74,
+	0x65, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x42, 0x61, 0x73, 0x69, 0x63, 0x49, 0x6e, 0x66, 0x6f,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x6d, 0x65, 0x6d, 0x6f, 0x72,
+	0x79, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x6d, 0x65, 0x6d, 0x6f,
+	0x72, 0x79, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79,
+	0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04,
+	0x64, 0x61, 0x74, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74,
+	0x69, 0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72,
+	0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x18,
+	0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x22, 0x57, 0x0a, 0x19,
+	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x50, 0x68, 0x6f, 0x74,
+	0x6f, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x6d, 0x65, 0x6d,
+	0x6f, 0x72, 0x79, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x6d, 0x65,
+	0x6d, 0x6f, 0x72, 0x79, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x70, 0x68, 0x6f, 0x74, 0x6f, 0x5f,
+	0x66, 0x69, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x70, 0x68, 0x6f, 0x74,
+	0x6f, 0x46, 0x69, 0x6c, 0x65, 0x22, 0x55, 0x0a, 0x19, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x4d,
+	0x65, 0x6d, 0x6f, 0x72, 0x79, 0x50, 0x68, 0x6f, 0x74, 0x6f, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x5f, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x49, 0x64, 0x12,
+	0x1b, 0x0a, 0x09, 0x70, 0x68, 0x6f, 0x74, 0x6f, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03,
+	0x28, 0x03, 0x52, 0x08, 0x70, 0x68, 0x6f, 0x74, 0x6f, 0x49, 0x64, 0x73, 0x22, 0x50, 0x0a, 0x14,
+	0x41, 0x64, 0x64, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x54, 0x61, 0x67, 0x73, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x5f, 0x69,
 	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x49,
-	0x64, 0x12, 0x1a, 0x0a, 0x08, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x08, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x12, 0x12, 0x0a,
-	0x04, 0x64, 0x61, 0x74, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x64, 0x61, 0x74,
-	0x65, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e,
-	0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74,
-	0x69, 0x6f, 0x6e, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x18, 0x05, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x05, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x69, 0x6d, 0x61,
-	0x67, 0x65, 0x5f, 0x75, 0x72, 0x6c, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x09, 0x52, 0x09, 0x69,
-	0x6d, 0x61, 0x67, 0x65, 0x55, 0x72, 0x6c, 0x73, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x61, 0x67, 0x73,
-	0x18, 0x07, 0x20, 0x03, 0x28, 0x09, 0x52, 0x04, 0x74, 0x61, 0x67, 0x73, 0x32, 0x58, 0x0a, 0x0d,
-	0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x47, 0x0a,
-	0x09, 0x47, 0x65, 0x74, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x12, 0x1e, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x4d, 0x65, 0x6d,
-	0x6f, 0x72, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79,
-	0x49, 0x6e, 0x66, 0x6f, 0x22, 0x00, 0x42, 0x06, 0x5a, 0x04, 0x2e, 0x3b, 0x70, 0x62, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x64, 0x12, 0x1b, 0x0a, 0x09, 0x74, 0x61, 0x67, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x73, 0x18, 0x02,
+	0x20, 0x03, 0x28, 0x09, 0x52, 0x08, 0x74, 0x61, 0x67, 0x4e, 0x61, 0x6d, 0x65, 0x73, 0x22, 0x4f,
+	0x0a, 0x17, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x54, 0x61,
+	0x67, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x6d, 0x65, 0x6d,
+	0x6f, 0x72, 0x79, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x6d, 0x65,
+	0x6d, 0x6f, 0x72, 0x79, 0x49, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x74, 0x61, 0x67, 0x5f, 0x69, 0x64,
+	0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x03, 0x52, 0x06, 0x74, 0x61, 0x67, 0x49, 0x64, 0x73, 0x22,
+	0x82, 0x01, 0x0a, 0x08, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x69, 0x65, 0x73, 0x12, 0x40, 0x0a, 0x0c,
+	0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72,
+	0x79, 0x2e, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x66,
+	0x6f, 0x52, 0x0b, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x34,
+	0x0a, 0x08, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x69, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x18, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e,
+	0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x08, 0x6d, 0x65, 0x6d, 0x6f,
+	0x72, 0x69, 0x65, 0x73, 0x22, 0x61, 0x0a, 0x0f, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x43, 0x6f,
+	0x75, 0x6e, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x25, 0x0a, 0x0e, 0x6d, 0x65, 0x6d, 0x6f, 0x72,
+	0x69, 0x65, 0x73, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52,
+	0x0d, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x69, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x27,
+	0x0a, 0x0f, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x65, 0x64, 0x5f, 0x63, 0x6f, 0x75, 0x6e,
+	0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0e, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68,
+	0x65, 0x64, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0xe9, 0x01, 0x0a, 0x0a, 0x4d, 0x65, 0x6d, 0x6f,
+	0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x1b, 0x0a, 0x09, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x6d, 0x65, 0x6d, 0x6f, 0x72,
+	0x79, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x12,
+	0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x64,
+	0x61, 0x74, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69,
+	0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x18, 0x05,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x12, 0x2e, 0x0a, 0x06, 0x70,
+	0x68, 0x6f, 0x74, 0x6f, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x5f, 0x70, 0x68, 0x6f, 0x74, 0x6f, 0x2e, 0x50, 0x68, 0x6f, 0x74, 0x6f, 0x49,
+	0x6e, 0x66, 0x6f, 0x52, 0x06, 0x70, 0x68, 0x6f, 0x74, 0x6f, 0x73, 0x12, 0x26, 0x0a, 0x04, 0x74,
+	0x61, 0x67, 0x73, 0x18, 0x07, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x5f, 0x74, 0x61, 0x67, 0x2e, 0x54, 0x61, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x04, 0x74,
+	0x61, 0x67, 0x73, 0x32, 0xc2, 0x05, 0x0a, 0x0d, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x53, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x4b, 0x0a, 0x0d, 0x47, 0x65, 0x74, 0x4d, 0x65, 0x6d, 0x6f,
+	0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x1e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d,
+	0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d,
+	0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f,
+	0x22, 0x00, 0x12, 0x55, 0x0a, 0x10, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4d, 0x65, 0x6d, 0x6f,
+	0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x25, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d,
+	0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4d, 0x65, 0x6d, 0x6f,
+	0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x4d, 0x65, 0x6d,
+	0x6f, 0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x22, 0x00, 0x12, 0x53, 0x0a, 0x10, 0x44, 0x65, 0x6c,
+	0x65, 0x74, 0x65, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x25, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x44, 0x65, 0x6c,
+	0x65, 0x74, 0x65, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x5a,
+	0x0a, 0x10, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x49, 0x6e,
+	0x66, 0x6f, 0x12, 0x2a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72,
+	0x79, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x42, 0x61,
+	0x73, 0x69, 0x63, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x4d, 0x65,
+	0x6d, 0x6f, 0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x22, 0x00, 0x12, 0x59, 0x0a, 0x12, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x50, 0x68, 0x6f, 0x74, 0x6f, 0x73,
+	0x12, 0x27, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e,
+	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x50, 0x68, 0x6f, 0x74,
+	0x6f, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x49,
+	0x6e, 0x66, 0x6f, 0x22, 0x00, 0x12, 0x59, 0x0a, 0x12, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x4d,
+	0x65, 0x6d, 0x6f, 0x72, 0x79, 0x50, 0x68, 0x6f, 0x74, 0x6f, 0x73, 0x12, 0x27, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74,
+	0x65, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x50, 0x68, 0x6f, 0x74, 0x6f, 0x73, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d,
+	0x6f, 0x72, 0x79, 0x2e, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x22, 0x00,
+	0x12, 0x4f, 0x0a, 0x0d, 0x41, 0x64, 0x64, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x54, 0x61, 0x67,
+	0x73, 0x12, 0x22, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79,
+	0x2e, 0x41, 0x64, 0x64, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x54, 0x61, 0x67, 0x73, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65,
+	0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x4d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x22,
+	0x00, 0x12, 0x55, 0x0a, 0x10, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x4d, 0x65, 0x6d, 0x6f, 0x72,
+	0x79, 0x54, 0x61, 0x67, 0x73, 0x12, 0x25, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65,
+	0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x4d, 0x65, 0x6d, 0x6f, 0x72,
+	0x79, 0x54, 0x61, 0x67, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x2e, 0x4d, 0x65, 0x6d, 0x6f,
+	0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x22, 0x00, 0x42, 0x06, 0x5a, 0x04, 0x2e, 0x3b, 0x70, 0x62,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -353,23 +907,51 @@ func file_memory_proto_rawDescGZIP() []byte {
 	return file_memory_proto_rawDescData
 }
 
-var file_memory_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_memory_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_memory_proto_goTypes = []interface{}{
-	(*GetMemoryRequest)(nil), // 0: proto_memory.GetMemoryRequest
-	(*Memories)(nil),         // 1: proto_memory.Memories
-	(*MemoryCountInfo)(nil),  // 2: proto_memory.MemoryCountInfo
-	(*MemoryInfo)(nil),       // 3: proto_memory.MemoryInfo
+	(*GetMemoryRequest)(nil),             // 0: proto_memory.GetMemoryRequest
+	(*CreateMemoryInfoRequest)(nil),      // 1: proto_memory.CreateMemoryInfoRequest
+	(*DeleteMemoryInfoRequest)(nil),      // 2: proto_memory.DeleteMemoryInfoRequest
+	(*UpdateMemoryBasicInfoRequest)(nil), // 3: proto_memory.UpdateMemoryBasicInfoRequest
+	(*CreateMemoryPhotosRequest)(nil),    // 4: proto_memory.CreateMemoryPhotosRequest
+	(*DeleteMemoryPhotosRequest)(nil),    // 5: proto_memory.DeleteMemoryPhotosRequest
+	(*AddMemoryTagsRequest)(nil),         // 6: proto_memory.AddMemoryTagsRequest
+	(*DeleteMemoryTagsRequest)(nil),      // 7: proto_memory.DeleteMemoryTagsRequest
+	(*Memories)(nil),                     // 8: proto_memory.Memories
+	(*MemoryCountInfo)(nil),              // 9: proto_memory.MemoryCountInfo
+	(*MemoryInfo)(nil),                   // 10: proto_memory.MemoryInfo
+	(*PhotoInfo)(nil),                    // 11: proto_photo.PhotoInfo
+	(*TagInfo)(nil),                      // 12: proto_tag.TagInfo
+	(*empty.Empty)(nil),                  // 13: google.protobuf.Empty
 }
 var file_memory_proto_depIdxs = []int32{
-	2, // 0: proto_memory.Memories.memory_count:type_name -> proto_memory.MemoryCountInfo
-	3, // 1: proto_memory.Memories.memories:type_name -> proto_memory.MemoryInfo
-	0, // 2: proto_memory.MemoryService.GetMemory:input_type -> proto_memory.GetMemoryRequest
-	3, // 3: proto_memory.MemoryService.GetMemory:output_type -> proto_memory.MemoryInfo
-	3, // [3:4] is the sub-list for method output_type
-	2, // [2:3] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	11, // 0: proto_memory.CreateMemoryInfoRequest.photos:type_name -> proto_photo.PhotoInfo
+	12, // 1: proto_memory.CreateMemoryInfoRequest.tags:type_name -> proto_tag.TagInfo
+	9,  // 2: proto_memory.Memories.memory_count:type_name -> proto_memory.MemoryCountInfo
+	10, // 3: proto_memory.Memories.memories:type_name -> proto_memory.MemoryInfo
+	11, // 4: proto_memory.MemoryInfo.photos:type_name -> proto_photo.PhotoInfo
+	12, // 5: proto_memory.MemoryInfo.tags:type_name -> proto_tag.TagInfo
+	0,  // 6: proto_memory.MemoryService.GetMemoryInfo:input_type -> proto_memory.GetMemoryRequest
+	1,  // 7: proto_memory.MemoryService.CreateMemoryInfo:input_type -> proto_memory.CreateMemoryInfoRequest
+	2,  // 8: proto_memory.MemoryService.DeleteMemoryInfo:input_type -> proto_memory.DeleteMemoryInfoRequest
+	3,  // 9: proto_memory.MemoryService.UpdateMemoryInfo:input_type -> proto_memory.UpdateMemoryBasicInfoRequest
+	4,  // 10: proto_memory.MemoryService.CreateMemoryPhotos:input_type -> proto_memory.CreateMemoryPhotosRequest
+	5,  // 11: proto_memory.MemoryService.DeleteMemoryPhotos:input_type -> proto_memory.DeleteMemoryPhotosRequest
+	6,  // 12: proto_memory.MemoryService.AddMemoryTags:input_type -> proto_memory.AddMemoryTagsRequest
+	7,  // 13: proto_memory.MemoryService.DeleteMemoryTags:input_type -> proto_memory.DeleteMemoryTagsRequest
+	10, // 14: proto_memory.MemoryService.GetMemoryInfo:output_type -> proto_memory.MemoryInfo
+	10, // 15: proto_memory.MemoryService.CreateMemoryInfo:output_type -> proto_memory.MemoryInfo
+	13, // 16: proto_memory.MemoryService.DeleteMemoryInfo:output_type -> google.protobuf.Empty
+	10, // 17: proto_memory.MemoryService.UpdateMemoryInfo:output_type -> proto_memory.MemoryInfo
+	10, // 18: proto_memory.MemoryService.CreateMemoryPhotos:output_type -> proto_memory.MemoryInfo
+	10, // 19: proto_memory.MemoryService.DeleteMemoryPhotos:output_type -> proto_memory.MemoryInfo
+	10, // 20: proto_memory.MemoryService.AddMemoryTags:output_type -> proto_memory.MemoryInfo
+	10, // 21: proto_memory.MemoryService.DeleteMemoryTags:output_type -> proto_memory.MemoryInfo
+	14, // [14:22] is the sub-list for method output_type
+	6,  // [6:14] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_memory_proto_init() }
@@ -377,6 +959,8 @@ func file_memory_proto_init() {
 	if File_memory_proto != nil {
 		return
 	}
+	file_tag_proto_init()
+	file_photo_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_memory_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetMemoryRequest); i {
@@ -391,7 +975,7 @@ func file_memory_proto_init() {
 			}
 		}
 		file_memory_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Memories); i {
+			switch v := v.(*CreateMemoryInfoRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -403,7 +987,7 @@ func file_memory_proto_init() {
 			}
 		}
 		file_memory_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MemoryCountInfo); i {
+			switch v := v.(*DeleteMemoryInfoRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -415,6 +999,90 @@ func file_memory_proto_init() {
 			}
 		}
 		file_memory_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateMemoryBasicInfoRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_memory_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateMemoryPhotosRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_memory_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteMemoryPhotosRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_memory_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AddMemoryTagsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_memory_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteMemoryTagsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_memory_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Memories); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_memory_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MemoryCountInfo); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_memory_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MemoryInfo); i {
 			case 0:
 				return &v.state
@@ -433,7 +1101,7 @@ func file_memory_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_memory_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -460,7 +1128,21 @@ const _ = grpc.SupportPackageIsVersion6
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MemoryServiceClient interface {
 	// IDをもとに思い出1件を取得
-	GetMemory(ctx context.Context, in *GetMemoryRequest, opts ...grpc.CallOption) (*MemoryInfo, error)
+	GetMemoryInfo(ctx context.Context, in *GetMemoryRequest, opts ...grpc.CallOption) (*MemoryInfo, error)
+	// 思い出の新規作成
+	CreateMemoryInfo(ctx context.Context, in *CreateMemoryInfoRequest, opts ...grpc.CallOption) (*MemoryInfo, error)
+	// 思い出自体の削除
+	DeleteMemoryInfo(ctx context.Context, in *DeleteMemoryInfoRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	// 思い出の基本情報を更新
+	UpdateMemoryInfo(ctx context.Context, in *UpdateMemoryBasicInfoRequest, opts ...grpc.CallOption) (*MemoryInfo, error)
+	// 思い出に新規写真をアップロードする
+	CreateMemoryPhotos(ctx context.Context, in *CreateMemoryPhotosRequest, opts ...grpc.CallOption) (*MemoryInfo, error)
+	// 思い出の写真情報から指定した画像一覧を削除
+	DeleteMemoryPhotos(ctx context.Context, in *DeleteMemoryPhotosRequest, opts ...grpc.CallOption) (*MemoryInfo, error)
+	// 思い出のタグを新規追加
+	AddMemoryTags(ctx context.Context, in *AddMemoryTagsRequest, opts ...grpc.CallOption) (*MemoryInfo, error)
+	// 思い出のタグを削除
+	DeleteMemoryTags(ctx context.Context, in *DeleteMemoryTagsRequest, opts ...grpc.CallOption) (*MemoryInfo, error)
 }
 
 type memoryServiceClient struct {
@@ -471,9 +1153,72 @@ func NewMemoryServiceClient(cc grpc.ClientConnInterface) MemoryServiceClient {
 	return &memoryServiceClient{cc}
 }
 
-func (c *memoryServiceClient) GetMemory(ctx context.Context, in *GetMemoryRequest, opts ...grpc.CallOption) (*MemoryInfo, error) {
+func (c *memoryServiceClient) GetMemoryInfo(ctx context.Context, in *GetMemoryRequest, opts ...grpc.CallOption) (*MemoryInfo, error) {
 	out := new(MemoryInfo)
-	err := c.cc.Invoke(ctx, "/proto_memory.MemoryService/GetMemory", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto_memory.MemoryService/GetMemoryInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *memoryServiceClient) CreateMemoryInfo(ctx context.Context, in *CreateMemoryInfoRequest, opts ...grpc.CallOption) (*MemoryInfo, error) {
+	out := new(MemoryInfo)
+	err := c.cc.Invoke(ctx, "/proto_memory.MemoryService/CreateMemoryInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *memoryServiceClient) DeleteMemoryInfo(ctx context.Context, in *DeleteMemoryInfoRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/proto_memory.MemoryService/DeleteMemoryInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *memoryServiceClient) UpdateMemoryInfo(ctx context.Context, in *UpdateMemoryBasicInfoRequest, opts ...grpc.CallOption) (*MemoryInfo, error) {
+	out := new(MemoryInfo)
+	err := c.cc.Invoke(ctx, "/proto_memory.MemoryService/UpdateMemoryInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *memoryServiceClient) CreateMemoryPhotos(ctx context.Context, in *CreateMemoryPhotosRequest, opts ...grpc.CallOption) (*MemoryInfo, error) {
+	out := new(MemoryInfo)
+	err := c.cc.Invoke(ctx, "/proto_memory.MemoryService/CreateMemoryPhotos", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *memoryServiceClient) DeleteMemoryPhotos(ctx context.Context, in *DeleteMemoryPhotosRequest, opts ...grpc.CallOption) (*MemoryInfo, error) {
+	out := new(MemoryInfo)
+	err := c.cc.Invoke(ctx, "/proto_memory.MemoryService/DeleteMemoryPhotos", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *memoryServiceClient) AddMemoryTags(ctx context.Context, in *AddMemoryTagsRequest, opts ...grpc.CallOption) (*MemoryInfo, error) {
+	out := new(MemoryInfo)
+	err := c.cc.Invoke(ctx, "/proto_memory.MemoryService/AddMemoryTags", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *memoryServiceClient) DeleteMemoryTags(ctx context.Context, in *DeleteMemoryTagsRequest, opts ...grpc.CallOption) (*MemoryInfo, error) {
+	out := new(MemoryInfo)
+	err := c.cc.Invoke(ctx, "/proto_memory.MemoryService/DeleteMemoryTags", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -483,35 +1228,196 @@ func (c *memoryServiceClient) GetMemory(ctx context.Context, in *GetMemoryReques
 // MemoryServiceServer is the server API for MemoryService service.
 type MemoryServiceServer interface {
 	// IDをもとに思い出1件を取得
-	GetMemory(context.Context, *GetMemoryRequest) (*MemoryInfo, error)
+	GetMemoryInfo(context.Context, *GetMemoryRequest) (*MemoryInfo, error)
+	// 思い出の新規作成
+	CreateMemoryInfo(context.Context, *CreateMemoryInfoRequest) (*MemoryInfo, error)
+	// 思い出自体の削除
+	DeleteMemoryInfo(context.Context, *DeleteMemoryInfoRequest) (*empty.Empty, error)
+	// 思い出の基本情報を更新
+	UpdateMemoryInfo(context.Context, *UpdateMemoryBasicInfoRequest) (*MemoryInfo, error)
+	// 思い出に新規写真をアップロードする
+	CreateMemoryPhotos(context.Context, *CreateMemoryPhotosRequest) (*MemoryInfo, error)
+	// 思い出の写真情報から指定した画像一覧を削除
+	DeleteMemoryPhotos(context.Context, *DeleteMemoryPhotosRequest) (*MemoryInfo, error)
+	// 思い出のタグを新規追加
+	AddMemoryTags(context.Context, *AddMemoryTagsRequest) (*MemoryInfo, error)
+	// 思い出のタグを削除
+	DeleteMemoryTags(context.Context, *DeleteMemoryTagsRequest) (*MemoryInfo, error)
 }
 
 // UnimplementedMemoryServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedMemoryServiceServer struct {
 }
 
-func (*UnimplementedMemoryServiceServer) GetMemory(context.Context, *GetMemoryRequest) (*MemoryInfo, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetMemory not implemented")
+func (*UnimplementedMemoryServiceServer) GetMemoryInfo(context.Context, *GetMemoryRequest) (*MemoryInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMemoryInfo not implemented")
+}
+func (*UnimplementedMemoryServiceServer) CreateMemoryInfo(context.Context, *CreateMemoryInfoRequest) (*MemoryInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateMemoryInfo not implemented")
+}
+func (*UnimplementedMemoryServiceServer) DeleteMemoryInfo(context.Context, *DeleteMemoryInfoRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteMemoryInfo not implemented")
+}
+func (*UnimplementedMemoryServiceServer) UpdateMemoryInfo(context.Context, *UpdateMemoryBasicInfoRequest) (*MemoryInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateMemoryInfo not implemented")
+}
+func (*UnimplementedMemoryServiceServer) CreateMemoryPhotos(context.Context, *CreateMemoryPhotosRequest) (*MemoryInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateMemoryPhotos not implemented")
+}
+func (*UnimplementedMemoryServiceServer) DeleteMemoryPhotos(context.Context, *DeleteMemoryPhotosRequest) (*MemoryInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteMemoryPhotos not implemented")
+}
+func (*UnimplementedMemoryServiceServer) AddMemoryTags(context.Context, *AddMemoryTagsRequest) (*MemoryInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddMemoryTags not implemented")
+}
+func (*UnimplementedMemoryServiceServer) DeleteMemoryTags(context.Context, *DeleteMemoryTagsRequest) (*MemoryInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteMemoryTags not implemented")
 }
 
 func RegisterMemoryServiceServer(s *grpc.Server, srv MemoryServiceServer) {
 	s.RegisterService(&_MemoryService_serviceDesc, srv)
 }
 
-func _MemoryService_GetMemory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _MemoryService_GetMemoryInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetMemoryRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MemoryServiceServer).GetMemory(ctx, in)
+		return srv.(MemoryServiceServer).GetMemoryInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto_memory.MemoryService/GetMemory",
+		FullMethod: "/proto_memory.MemoryService/GetMemoryInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MemoryServiceServer).GetMemory(ctx, req.(*GetMemoryRequest))
+		return srv.(MemoryServiceServer).GetMemoryInfo(ctx, req.(*GetMemoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MemoryService_CreateMemoryInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateMemoryInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MemoryServiceServer).CreateMemoryInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_memory.MemoryService/CreateMemoryInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MemoryServiceServer).CreateMemoryInfo(ctx, req.(*CreateMemoryInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MemoryService_DeleteMemoryInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteMemoryInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MemoryServiceServer).DeleteMemoryInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_memory.MemoryService/DeleteMemoryInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MemoryServiceServer).DeleteMemoryInfo(ctx, req.(*DeleteMemoryInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MemoryService_UpdateMemoryInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateMemoryBasicInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MemoryServiceServer).UpdateMemoryInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_memory.MemoryService/UpdateMemoryInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MemoryServiceServer).UpdateMemoryInfo(ctx, req.(*UpdateMemoryBasicInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MemoryService_CreateMemoryPhotos_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateMemoryPhotosRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MemoryServiceServer).CreateMemoryPhotos(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_memory.MemoryService/CreateMemoryPhotos",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MemoryServiceServer).CreateMemoryPhotos(ctx, req.(*CreateMemoryPhotosRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MemoryService_DeleteMemoryPhotos_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteMemoryPhotosRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MemoryServiceServer).DeleteMemoryPhotos(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_memory.MemoryService/DeleteMemoryPhotos",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MemoryServiceServer).DeleteMemoryPhotos(ctx, req.(*DeleteMemoryPhotosRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MemoryService_AddMemoryTags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddMemoryTagsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MemoryServiceServer).AddMemoryTags(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_memory.MemoryService/AddMemoryTags",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MemoryServiceServer).AddMemoryTags(ctx, req.(*AddMemoryTagsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MemoryService_DeleteMemoryTags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteMemoryTagsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MemoryServiceServer).DeleteMemoryTags(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_memory.MemoryService/DeleteMemoryTags",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MemoryServiceServer).DeleteMemoryTags(ctx, req.(*DeleteMemoryTagsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -521,8 +1427,36 @@ var _MemoryService_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*MemoryServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetMemory",
-			Handler:    _MemoryService_GetMemory_Handler,
+			MethodName: "GetMemoryInfo",
+			Handler:    _MemoryService_GetMemoryInfo_Handler,
+		},
+		{
+			MethodName: "CreateMemoryInfo",
+			Handler:    _MemoryService_CreateMemoryInfo_Handler,
+		},
+		{
+			MethodName: "DeleteMemoryInfo",
+			Handler:    _MemoryService_DeleteMemoryInfo_Handler,
+		},
+		{
+			MethodName: "UpdateMemoryInfo",
+			Handler:    _MemoryService_UpdateMemoryInfo_Handler,
+		},
+		{
+			MethodName: "CreateMemoryPhotos",
+			Handler:    _MemoryService_CreateMemoryPhotos_Handler,
+		},
+		{
+			MethodName: "DeleteMemoryPhotos",
+			Handler:    _MemoryService_DeleteMemoryPhotos_Handler,
+		},
+		{
+			MethodName: "AddMemoryTags",
+			Handler:    _MemoryService_AddMemoryTags_Handler,
+		},
+		{
+			MethodName: "DeleteMemoryTags",
+			Handler:    _MemoryService_DeleteMemoryTags_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
