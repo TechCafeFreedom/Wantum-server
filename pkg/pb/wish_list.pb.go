@@ -79,6 +79,149 @@ func (x *CreateWishListInfoRequest) GetTitle() string {
 	return ""
 }
 
+// やりたいことカテゴリー新規作成リクエスト
+type CreateWishCategoryInfoRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// やりたいことリストID
+	WishListId int64 `protobuf:"varint,1,opt,name=wish_list_id,json=wishListId,proto3" json:"wish_list_id,omitempty"`
+	// やりたいことカテゴリー名
+	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+}
+
+func (x *CreateWishCategoryInfoRequest) Reset() {
+	*x = CreateWishCategoryInfoRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_wish_list_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateWishCategoryInfoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateWishCategoryInfoRequest) ProtoMessage() {}
+
+func (x *CreateWishCategoryInfoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_wish_list_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateWishCategoryInfoRequest.ProtoReflect.Descriptor instead.
+func (*CreateWishCategoryInfoRequest) Descriptor() ([]byte, []int) {
+	return file_wish_list_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *CreateWishCategoryInfoRequest) GetWishListId() int64 {
+	if x != nil {
+		return x.WishListId
+	}
+	return 0
+}
+
+func (x *CreateWishCategoryInfoRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+// やりたいことカード新規作成リクエスト
+type CreateWishCardInfoRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// やりたいことカテゴリーID
+	WishCategoryId int64 `protobuf:"varint,1,opt,name=wish_category_id,json=wishCategoryId,proto3" json:"wish_category_id,omitempty"`
+	// 何をしたいのか
+	Activity string `protobuf:"bytes,2,opt,name=activity,proto3" json:"activity,omitempty"`
+	// やりたいことの説明
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	// いつやりたいか（UNIX）
+	Date int64 `protobuf:"varint,4,opt,name=date,proto3" json:"date,omitempty"`
+	// どこでそれをしたいのか
+	Place string `protobuf:"bytes,5,opt,name=place,proto3" json:"place,omitempty"`
+}
+
+func (x *CreateWishCardInfoRequest) Reset() {
+	*x = CreateWishCardInfoRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_wish_list_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateWishCardInfoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateWishCardInfoRequest) ProtoMessage() {}
+
+func (x *CreateWishCardInfoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_wish_list_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateWishCardInfoRequest.ProtoReflect.Descriptor instead.
+func (*CreateWishCardInfoRequest) Descriptor() ([]byte, []int) {
+	return file_wish_list_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *CreateWishCardInfoRequest) GetWishCategoryId() int64 {
+	if x != nil {
+		return x.WishCategoryId
+	}
+	return 0
+}
+
+func (x *CreateWishCardInfoRequest) GetActivity() string {
+	if x != nil {
+		return x.Activity
+	}
+	return ""
+}
+
+func (x *CreateWishCardInfoRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *CreateWishCardInfoRequest) GetDate() int64 {
+	if x != nil {
+		return x.Date
+	}
+	return 0
+}
+
+func (x *CreateWishCardInfoRequest) GetPlace() string {
+	if x != nil {
+		return x.Place
+	}
+	return ""
+}
+
 // やりたいことリスト（ID, titleのみ）の配列を取得するためのリクエスト
 type GetWishListRequest struct {
 	state         protoimpl.MessageState
@@ -94,7 +237,7 @@ type GetWishListRequest struct {
 func (x *GetWishListRequest) Reset() {
 	*x = GetWishListRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_wish_list_proto_msgTypes[1]
+		mi := &file_wish_list_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -107,7 +250,7 @@ func (x *GetWishListRequest) String() string {
 func (*GetWishListRequest) ProtoMessage() {}
 
 func (x *GetWishListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_wish_list_proto_msgTypes[1]
+	mi := &file_wish_list_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -120,7 +263,7 @@ func (x *GetWishListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetWishListRequest.ProtoReflect.Descriptor instead.
 func (*GetWishListRequest) Descriptor() ([]byte, []int) {
-	return file_wish_list_proto_rawDescGZIP(), []int{1}
+	return file_wish_list_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetWishListRequest) GetWishListId() int64 {
@@ -150,7 +293,7 @@ type GetWishListInfoRequest struct {
 func (x *GetWishListInfoRequest) Reset() {
 	*x = GetWishListInfoRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_wish_list_proto_msgTypes[2]
+		mi := &file_wish_list_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -163,7 +306,7 @@ func (x *GetWishListInfoRequest) String() string {
 func (*GetWishListInfoRequest) ProtoMessage() {}
 
 func (x *GetWishListInfoRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_wish_list_proto_msgTypes[2]
+	mi := &file_wish_list_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -176,7 +319,7 @@ func (x *GetWishListInfoRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetWishListInfoRequest.ProtoReflect.Descriptor instead.
 func (*GetWishListInfoRequest) Descriptor() ([]byte, []int) {
-	return file_wish_list_proto_rawDescGZIP(), []int{2}
+	return file_wish_list_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetWishListInfoRequest) GetWishListId() int64 {
@@ -184,6 +327,644 @@ func (x *GetWishListInfoRequest) GetWishListId() int64 {
 		return x.WishListId
 	}
 	return 0
+}
+
+// やりたいことリスト名変更リクエスト
+type UpdateWishListNameRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// やりたいことリストID
+	WishListId int64 `protobuf:"varint,1,opt,name=wish_list_id,json=wishListId,proto3" json:"wish_list_id,omitempty"`
+	// 新しいやりたいことリスト名
+	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+}
+
+func (x *UpdateWishListNameRequest) Reset() {
+	*x = UpdateWishListNameRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_wish_list_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateWishListNameRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateWishListNameRequest) ProtoMessage() {}
+
+func (x *UpdateWishListNameRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_wish_list_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateWishListNameRequest.ProtoReflect.Descriptor instead.
+func (*UpdateWishListNameRequest) Descriptor() ([]byte, []int) {
+	return file_wish_list_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *UpdateWishListNameRequest) GetWishListId() int64 {
+	if x != nil {
+		return x.WishListId
+	}
+	return 0
+}
+
+func (x *UpdateWishListNameRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+// やりたいことリスト背景画像変更リクエスト
+type UpdateWishListBackGroundImageRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// やりたいことリストID
+	WishListId int64 `protobuf:"varint,1,opt,name=wish_list_id,json=wishListId,proto3" json:"wish_list_id,omitempty"`
+	// 新しい背景画像ファイル
+	BackgroundImage []byte `protobuf:"bytes,2,opt,name=background_image,json=backgroundImage,proto3" json:"background_image,omitempty"`
+}
+
+func (x *UpdateWishListBackGroundImageRequest) Reset() {
+	*x = UpdateWishListBackGroundImageRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_wish_list_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateWishListBackGroundImageRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateWishListBackGroundImageRequest) ProtoMessage() {}
+
+func (x *UpdateWishListBackGroundImageRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_wish_list_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateWishListBackGroundImageRequest.ProtoReflect.Descriptor instead.
+func (*UpdateWishListBackGroundImageRequest) Descriptor() ([]byte, []int) {
+	return file_wish_list_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *UpdateWishListBackGroundImageRequest) GetWishListId() int64 {
+	if x != nil {
+		return x.WishListId
+	}
+	return 0
+}
+
+func (x *UpdateWishListBackGroundImageRequest) GetBackgroundImage() []byte {
+	if x != nil {
+		return x.BackgroundImage
+	}
+	return nil
+}
+
+// やりたいことカテゴリーの並び替えリクエスト
+type UpdateWishCategoryAndCardPositionRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// やりたいことリストID
+	WishListId int64 `protobuf:"varint,1,opt,name=wish_list_id,json=wishListId,proto3" json:"wish_list_id,omitempty"`
+	// やりたいことカテゴリーの並び順（IDの配列）
+	Position []*WishCategoryAndCardPosition `protobuf:"bytes,2,rep,name=position,proto3" json:"position,omitempty"`
+}
+
+func (x *UpdateWishCategoryAndCardPositionRequest) Reset() {
+	*x = UpdateWishCategoryAndCardPositionRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_wish_list_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateWishCategoryAndCardPositionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateWishCategoryAndCardPositionRequest) ProtoMessage() {}
+
+func (x *UpdateWishCategoryAndCardPositionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_wish_list_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateWishCategoryAndCardPositionRequest.ProtoReflect.Descriptor instead.
+func (*UpdateWishCategoryAndCardPositionRequest) Descriptor() ([]byte, []int) {
+	return file_wish_list_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *UpdateWishCategoryAndCardPositionRequest) GetWishListId() int64 {
+	if x != nil {
+		return x.WishListId
+	}
+	return 0
+}
+
+func (x *UpdateWishCategoryAndCardPositionRequest) GetPosition() []*WishCategoryAndCardPosition {
+	if x != nil {
+		return x.Position
+	}
+	return nil
+}
+
+// やりたいことカテゴリーとカードのポジションを表したもの
+type WishCategoryAndCardPosition struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// やりたいことカテゴリーID
+	WishCategoryId int64 `protobuf:"varint,1,opt,name=wish_category_id,json=wishCategoryId,proto3" json:"wish_category_id,omitempty"`
+	// やりたいことカテゴリーに所属するカードのID一覧（並び順を表す配列）
+	WishCardIds []int64 `protobuf:"varint,2,rep,packed,name=wish_card_ids,json=wishCardIds,proto3" json:"wish_card_ids,omitempty"`
+}
+
+func (x *WishCategoryAndCardPosition) Reset() {
+	*x = WishCategoryAndCardPosition{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_wish_list_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WishCategoryAndCardPosition) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WishCategoryAndCardPosition) ProtoMessage() {}
+
+func (x *WishCategoryAndCardPosition) ProtoReflect() protoreflect.Message {
+	mi := &file_wish_list_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WishCategoryAndCardPosition.ProtoReflect.Descriptor instead.
+func (*WishCategoryAndCardPosition) Descriptor() ([]byte, []int) {
+	return file_wish_list_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *WishCategoryAndCardPosition) GetWishCategoryId() int64 {
+	if x != nil {
+		return x.WishCategoryId
+	}
+	return 0
+}
+
+func (x *WishCategoryAndCardPosition) GetWishCardIds() []int64 {
+	if x != nil {
+		return x.WishCardIds
+	}
+	return nil
+}
+
+// やりたいことカテゴリー名更新リクエスト
+type UpdateWishCategoryNameRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// やりたいことカテゴリーID
+	WishCategoryId int64 `protobuf:"varint,1,opt,name=wish_category_id,json=wishCategoryId,proto3" json:"wish_category_id,omitempty"`
+	// 新規やりたいことカテゴリー名
+	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+}
+
+func (x *UpdateWishCategoryNameRequest) Reset() {
+	*x = UpdateWishCategoryNameRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_wish_list_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateWishCategoryNameRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateWishCategoryNameRequest) ProtoMessage() {}
+
+func (x *UpdateWishCategoryNameRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_wish_list_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateWishCategoryNameRequest.ProtoReflect.Descriptor instead.
+func (*UpdateWishCategoryNameRequest) Descriptor() ([]byte, []int) {
+	return file_wish_list_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *UpdateWishCategoryNameRequest) GetWishCategoryId() int64 {
+	if x != nil {
+		return x.WishCategoryId
+	}
+	return 0
+}
+
+func (x *UpdateWishCategoryNameRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+// やりたいことカードのアクティビティ更新リクエスト
+type UpdateWishCardActivityRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// カードのID
+	WishCardId int64 `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"`
+	// アクティビティ名
+	Activity string `protobuf:"bytes,2,opt,name=activity,proto3" json:"activity,omitempty"`
+}
+
+func (x *UpdateWishCardActivityRequest) Reset() {
+	*x = UpdateWishCardActivityRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_wish_list_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateWishCardActivityRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateWishCardActivityRequest) ProtoMessage() {}
+
+func (x *UpdateWishCardActivityRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_wish_list_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateWishCardActivityRequest.ProtoReflect.Descriptor instead.
+func (*UpdateWishCardActivityRequest) Descriptor() ([]byte, []int) {
+	return file_wish_list_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *UpdateWishCardActivityRequest) GetWishCardId() int64 {
+	if x != nil {
+		return x.WishCardId
+	}
+	return 0
+}
+
+func (x *UpdateWishCardActivityRequest) GetActivity() string {
+	if x != nil {
+		return x.Activity
+	}
+	return ""
+}
+
+// やりたいことカードの説明更新リクエスト
+type UpdateWishCardDescriptionRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// カードのID
+	WishCardId int64 `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"`
+	// 説明
+	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+}
+
+func (x *UpdateWishCardDescriptionRequest) Reset() {
+	*x = UpdateWishCardDescriptionRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_wish_list_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateWishCardDescriptionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateWishCardDescriptionRequest) ProtoMessage() {}
+
+func (x *UpdateWishCardDescriptionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_wish_list_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateWishCardDescriptionRequest.ProtoReflect.Descriptor instead.
+func (*UpdateWishCardDescriptionRequest) Descriptor() ([]byte, []int) {
+	return file_wish_list_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *UpdateWishCardDescriptionRequest) GetWishCardId() int64 {
+	if x != nil {
+		return x.WishCardId
+	}
+	return 0
+}
+
+func (x *UpdateWishCardDescriptionRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+// やりたいことカードの日付変更リクエスト
+type UpdateWishCardDateRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// カードのID
+	WishCardId int64 `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"`
+	// 日付
+	Date string `protobuf:"bytes,2,opt,name=date,proto3" json:"date,omitempty"`
+}
+
+func (x *UpdateWishCardDateRequest) Reset() {
+	*x = UpdateWishCardDateRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_wish_list_proto_msgTypes[12]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateWishCardDateRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateWishCardDateRequest) ProtoMessage() {}
+
+func (x *UpdateWishCardDateRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_wish_list_proto_msgTypes[12]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateWishCardDateRequest.ProtoReflect.Descriptor instead.
+func (*UpdateWishCardDateRequest) Descriptor() ([]byte, []int) {
+	return file_wish_list_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *UpdateWishCardDateRequest) GetWishCardId() int64 {
+	if x != nil {
+		return x.WishCardId
+	}
+	return 0
+}
+
+func (x *UpdateWishCardDateRequest) GetDate() string {
+	if x != nil {
+		return x.Date
+	}
+	return ""
+}
+
+// やりたいことカードの場所変更リクエスト
+type UpdateWishCardPlaceRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// カードのID
+	WishCardId int64 `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"`
+	// 場所
+	Place string `protobuf:"bytes,2,opt,name=place,proto3" json:"place,omitempty"`
+}
+
+func (x *UpdateWishCardPlaceRequest) Reset() {
+	*x = UpdateWishCardPlaceRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_wish_list_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateWishCardPlaceRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateWishCardPlaceRequest) ProtoMessage() {}
+
+func (x *UpdateWishCardPlaceRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_wish_list_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateWishCardPlaceRequest.ProtoReflect.Descriptor instead.
+func (*UpdateWishCardPlaceRequest) Descriptor() ([]byte, []int) {
+	return file_wish_list_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *UpdateWishCardPlaceRequest) GetWishCardId() int64 {
+	if x != nil {
+		return x.WishCardId
+	}
+	return 0
+}
+
+func (x *UpdateWishCardPlaceRequest) GetPlace() string {
+	if x != nil {
+		return x.Place
+	}
+	return ""
+}
+
+// やりたいことカードに新規タグの追加リクエスト
+type AddWishCardTagsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// タグを追加するやりたいことカードのID
+	WishCardId int64 `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"`
+	// 追加したいタグの名前一覧（配列）
+	TagNames []string `protobuf:"bytes,2,rep,name=tag_names,json=tagNames,proto3" json:"tag_names,omitempty"`
+}
+
+func (x *AddWishCardTagsRequest) Reset() {
+	*x = AddWishCardTagsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_wish_list_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AddWishCardTagsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddWishCardTagsRequest) ProtoMessage() {}
+
+func (x *AddWishCardTagsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_wish_list_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddWishCardTagsRequest.ProtoReflect.Descriptor instead.
+func (*AddWishCardTagsRequest) Descriptor() ([]byte, []int) {
+	return file_wish_list_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *AddWishCardTagsRequest) GetWishCardId() int64 {
+	if x != nil {
+		return x.WishCardId
+	}
+	return 0
+}
+
+func (x *AddWishCardTagsRequest) GetTagNames() []string {
+	if x != nil {
+		return x.TagNames
+	}
+	return nil
+}
+
+// やりたいことカードからタグを削除
+type DeleteWishCardTagsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// タグを削除するやりたいことカードのID
+	WishCardId int64 `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"`
+	// 削除したいタグのID一覧（配列）
+	TagIds []int64 `protobuf:"varint,2,rep,packed,name=tag_ids,json=tagIds,proto3" json:"tag_ids,omitempty"`
+}
+
+func (x *DeleteWishCardTagsRequest) Reset() {
+	*x = DeleteWishCardTagsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_wish_list_proto_msgTypes[15]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteWishCardTagsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteWishCardTagsRequest) ProtoMessage() {}
+
+func (x *DeleteWishCardTagsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_wish_list_proto_msgTypes[15]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteWishCardTagsRequest.ProtoReflect.Descriptor instead.
+func (*DeleteWishCardTagsRequest) Descriptor() ([]byte, []int) {
+	return file_wish_list_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *DeleteWishCardTagsRequest) GetWishCardId() int64 {
+	if x != nil {
+		return x.WishCardId
+	}
+	return 0
+}
+
+func (x *DeleteWishCardTagsRequest) GetTagIds() []int64 {
+	if x != nil {
+		return x.TagIds
+	}
+	return nil
 }
 
 // やりたいことリスト削除用リクエスト
@@ -199,7 +980,7 @@ type DeleteWishListInfoRequest struct {
 func (x *DeleteWishListInfoRequest) Reset() {
 	*x = DeleteWishListInfoRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_wish_list_proto_msgTypes[3]
+		mi := &file_wish_list_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -212,7 +993,7 @@ func (x *DeleteWishListInfoRequest) String() string {
 func (*DeleteWishListInfoRequest) ProtoMessage() {}
 
 func (x *DeleteWishListInfoRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_wish_list_proto_msgTypes[3]
+	mi := &file_wish_list_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -225,7 +1006,7 @@ func (x *DeleteWishListInfoRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteWishListInfoRequest.ProtoReflect.Descriptor instead.
 func (*DeleteWishListInfoRequest) Descriptor() ([]byte, []int) {
-	return file_wish_list_proto_rawDescGZIP(), []int{3}
+	return file_wish_list_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *DeleteWishListInfoRequest) GetWishListId() int64 {
@@ -248,7 +1029,7 @@ type WishList struct {
 func (x *WishList) Reset() {
 	*x = WishList{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_wish_list_proto_msgTypes[4]
+		mi := &file_wish_list_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -261,7 +1042,7 @@ func (x *WishList) String() string {
 func (*WishList) ProtoMessage() {}
 
 func (x *WishList) ProtoReflect() protoreflect.Message {
-	mi := &file_wish_list_proto_msgTypes[4]
+	mi := &file_wish_list_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -274,7 +1055,7 @@ func (x *WishList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WishList.ProtoReflect.Descriptor instead.
 func (*WishList) Descriptor() ([]byte, []int) {
-	return file_wish_list_proto_rawDescGZIP(), []int{4}
+	return file_wish_list_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *WishList) GetWishList() []*WishListInfo {
@@ -300,12 +1081,14 @@ type WishListInfo struct {
 	Authors []*UserInfo `protobuf:"bytes,4,rep,name=authors,proto3" json:"authors,omitempty"`
 	// 招待リンク
 	InviteUrl string `protobuf:"bytes,5,opt,name=invite_url,json=inviteUrl,proto3" json:"invite_url,omitempty"`
+	// 背景画像URL
+	BackgroundImageUrl string `protobuf:"bytes,6,opt,name=background_image_url,json=backgroundImageUrl,proto3" json:"background_image_url,omitempty"`
 }
 
 func (x *WishListInfo) Reset() {
 	*x = WishListInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_wish_list_proto_msgTypes[5]
+		mi := &file_wish_list_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -318,7 +1101,7 @@ func (x *WishListInfo) String() string {
 func (*WishListInfo) ProtoMessage() {}
 
 func (x *WishListInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_wish_list_proto_msgTypes[5]
+	mi := &file_wish_list_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -331,7 +1114,7 @@ func (x *WishListInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WishListInfo.ProtoReflect.Descriptor instead.
 func (*WishListInfo) Descriptor() ([]byte, []int) {
-	return file_wish_list_proto_rawDescGZIP(), []int{5}
+	return file_wish_list_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *WishListInfo) GetWishListId() int64 {
@@ -369,6 +1152,13 @@ func (x *WishListInfo) GetInviteUrl() string {
 	return ""
 }
 
+func (x *WishListInfo) GetBackgroundImageUrl() string {
+	if x != nil {
+		return x.BackgroundImageUrl
+	}
+	return ""
+}
+
 // やりたいことカテゴリー情報
 type WishCategoryInfo struct {
 	state         protoimpl.MessageState
@@ -386,7 +1176,7 @@ type WishCategoryInfo struct {
 func (x *WishCategoryInfo) Reset() {
 	*x = WishCategoryInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_wish_list_proto_msgTypes[6]
+		mi := &file_wish_list_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -399,7 +1189,7 @@ func (x *WishCategoryInfo) String() string {
 func (*WishCategoryInfo) ProtoMessage() {}
 
 func (x *WishCategoryInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_wish_list_proto_msgTypes[6]
+	mi := &file_wish_list_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -412,7 +1202,7 @@ func (x *WishCategoryInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WishCategoryInfo.ProtoReflect.Descriptor instead.
 func (*WishCategoryInfo) Descriptor() ([]byte, []int) {
-	return file_wish_list_proto_rawDescGZIP(), []int{6}
+	return file_wish_list_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *WishCategoryInfo) GetWishCategoryId() int64 {
@@ -455,13 +1245,13 @@ type WishCardInfo struct {
 	// どこでそれをしたいのか
 	Place string `protobuf:"bytes,6,opt,name=place,proto3" json:"place,omitempty"`
 	// タグ一覧（配列）
-	Tags []string `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags,omitempty"`
+	Tags []*TagInfo `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags,omitempty"`
 }
 
 func (x *WishCardInfo) Reset() {
 	*x = WishCardInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_wish_list_proto_msgTypes[7]
+		mi := &file_wish_list_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -474,7 +1264,7 @@ func (x *WishCardInfo) String() string {
 func (*WishCardInfo) ProtoMessage() {}
 
 func (x *WishCardInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_wish_list_proto_msgTypes[7]
+	mi := &file_wish_list_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -487,7 +1277,7 @@ func (x *WishCardInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WishCardInfo.ProtoReflect.Descriptor instead.
 func (*WishCardInfo) Descriptor() ([]byte, []int) {
-	return file_wish_list_proto_rawDescGZIP(), []int{7}
+	return file_wish_list_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *WishCardInfo) GetWishCardId() int64 {
@@ -532,7 +1322,7 @@ func (x *WishCardInfo) GetPlace() string {
 	return ""
 }
 
-func (x *WishCardInfo) GetTags() []string {
+func (x *WishCardInfo) GetTags() []*TagInfo {
 	if x != nil {
 		return x.Tags
 	}
@@ -544,86 +1334,245 @@ var File_wish_list_proto protoreflect.FileDescriptor
 var file_wish_list_proto_rawDesc = []byte{
 	0x0a, 0x0f, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x12, 0x0e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73,
-	0x74, 0x1a, 0x0a, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1b, 0x67,
-	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x65,
-	0x6d, 0x70, 0x74, 0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x31, 0x0a, 0x19, 0x43, 0x72,
-	0x65, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x22, 0x4c, 0x0a,
-	0x12, 0x47, 0x65, 0x74, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x6c, 0x69, 0x73, 0x74,
-	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x77, 0x69, 0x73, 0x68, 0x4c,
-	0x69, 0x73, 0x74, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x22, 0x3a, 0x0a, 0x16, 0x47,
-	0x65, 0x74, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x6c, 0x69,
-	0x73, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x77, 0x69, 0x73,
-	0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x64, 0x22, 0x3d, 0x0a, 0x19, 0x44, 0x65, 0x6c, 0x65, 0x74,
-	0x65, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x6c, 0x69, 0x73,
-	0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x77, 0x69, 0x73, 0x68,
-	0x4c, 0x69, 0x73, 0x74, 0x49, 0x64, 0x22, 0x45, 0x0a, 0x08, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69,
-	0x73, 0x74, 0x12, 0x39, 0x0a, 0x09, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x6c, 0x69, 0x73, 0x74, 0x18,
-	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69,
-	0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49,
-	0x6e, 0x66, 0x6f, 0x52, 0x08, 0x77, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x22, 0xe0, 0x01,
-	0x0a, 0x0c, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x20,
-	0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x6c, 0x69, 0x73, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x77, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x64,
-	0x12, 0x14, 0x0a, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x12, 0x49, 0x0a, 0x0f, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x63,
-	0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x69, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32,
-	0x20, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74,
-	0x2e, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x49, 0x6e, 0x66,
-	0x6f, 0x52, 0x0e, 0x77, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x69, 0x65,
-	0x73, 0x12, 0x2e, 0x0a, 0x07, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x73, 0x18, 0x04, 0x20, 0x03,
-	0x28, 0x0b, 0x32, 0x14, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x2e,
-	0x55, 0x73, 0x65, 0x72, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x07, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72,
-	0x73, 0x12, 0x1d, 0x0a, 0x0a, 0x69, 0x6e, 0x76, 0x69, 0x74, 0x65, 0x5f, 0x75, 0x72, 0x6c, 0x18,
-	0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x69, 0x6e, 0x76, 0x69, 0x74, 0x65, 0x55, 0x72, 0x6c,
-	0x22, 0x8f, 0x01, 0x0a, 0x10, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72,
-	0x79, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x28, 0x0a, 0x10, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x63, 0x61,
-	0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52,
-	0x0e, 0x77, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x49, 0x64, 0x12,
-	0x14, 0x0a, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05,
-	0x74, 0x69, 0x74, 0x6c, 0x65, 0x12, 0x3b, 0x0a, 0x0a, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x63, 0x61,
-	0x72, 0x64, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x57, 0x69, 0x73, 0x68, 0x43,
-	0x61, 0x72, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x09, 0x77, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72,
-	0x64, 0x73, 0x22, 0xc5, 0x01, 0x0a, 0x0c, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x49,
-	0x6e, 0x66, 0x6f, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x63, 0x61, 0x72, 0x64,
+	0x74, 0x1a, 0x0a, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x09, 0x74,
+	0x61, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1b, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
+	0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x65, 0x6d, 0x70, 0x74, 0x79, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x31, 0x0a, 0x19, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x57,
+	0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x22, 0x57, 0x0a, 0x1d, 0x43, 0x72, 0x65, 0x61,
+	0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x49, 0x6e,
+	0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73,
+	0x68, 0x5f, 0x6c, 0x69, 0x73, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52,
+	0x0a, 0x77, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x74,
+	0x69, 0x74, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x69, 0x74, 0x6c,
+	0x65, 0x22, 0xad, 0x01, 0x0a, 0x19, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68,
+	0x43, 0x61, 0x72, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x28, 0x0a, 0x10, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x63, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0e, 0x77, 0x69, 0x73, 0x68, 0x43,
+	0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x61, 0x63, 0x74,
+	0x69, 0x76, 0x69, 0x74, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x61, 0x63, 0x74,
+	0x69, 0x76, 0x69, 0x74, 0x79, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70,
+	0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63,
+	0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x65, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x64, 0x61, 0x74, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x70,
+	0x6c, 0x61, 0x63, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x70, 0x6c, 0x61, 0x63,
+	0x65, 0x22, 0x4c, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68, 0x5f,
+	0x6c, 0x69, 0x73, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x77,
+	0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x6c, 0x69, 0x6d,
+	0x69, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x22,
+	0x3a, 0x0a, 0x16, 0x47, 0x65, 0x74, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e,
+	0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73,
+	0x68, 0x5f, 0x6c, 0x69, 0x73, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52,
+	0x0a, 0x77, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x64, 0x22, 0x53, 0x0a, 0x19, 0x55,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x4e, 0x61, 0x6d,
+	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68,
+	0x5f, 0x6c, 0x69, 0x73, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a,
+	0x77, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x69,
+	0x74, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65,
+	0x22, 0x73, 0x0a, 0x24, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69,
+	0x73, 0x74, 0x42, 0x61, 0x63, 0x6b, 0x47, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x49, 0x6d, 0x61, 0x67,
+	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68,
+	0x5f, 0x6c, 0x69, 0x73, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a,
+	0x77, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x64, 0x12, 0x29, 0x0a, 0x10, 0x62, 0x61,
+	0x63, 0x6b, 0x67, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x5f, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0c, 0x52, 0x0f, 0x62, 0x61, 0x63, 0x6b, 0x67, 0x72, 0x6f, 0x75, 0x6e, 0x64,
+	0x49, 0x6d, 0x61, 0x67, 0x65, 0x22, 0x95, 0x01, 0x0a, 0x28, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x41, 0x6e, 0x64, 0x43,
+	0x61, 0x72, 0x64, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x6c, 0x69, 0x73, 0x74, 0x5f,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x77, 0x69, 0x73, 0x68, 0x4c, 0x69,
+	0x73, 0x74, 0x49, 0x64, 0x12, 0x47, 0x0a, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e,
+	0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77,
+	0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65,
+	0x67, 0x6f, 0x72, 0x79, 0x41, 0x6e, 0x64, 0x43, 0x61, 0x72, 0x64, 0x50, 0x6f, 0x73, 0x69, 0x74,
+	0x69, 0x6f, 0x6e, 0x52, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x6b, 0x0a,
+	0x1b, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x41, 0x6e, 0x64,
+	0x43, 0x61, 0x72, 0x64, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x28, 0x0a, 0x10,
+	0x77, 0x69, 0x73, 0x68, 0x5f, 0x63, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x5f, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0e, 0x77, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65,
+	0x67, 0x6f, 0x72, 0x79, 0x49, 0x64, 0x12, 0x22, 0x0a, 0x0d, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x63,
+	0x61, 0x72, 0x64, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x03, 0x52, 0x0b, 0x77,
+	0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x49, 0x64, 0x73, 0x22, 0x5f, 0x0a, 0x1d, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79,
+	0x4e, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x28, 0x0a, 0x10, 0x77,
+	0x69, 0x73, 0x68, 0x5f, 0x63, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x5f, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0e, 0x77, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65, 0x67,
+	0x6f, 0x72, 0x79, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x22, 0x5d, 0x0a, 0x1d, 0x55,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x41, 0x63, 0x74,
+	0x69, 0x76, 0x69, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0c,
+	0x77, 0x69, 0x73, 0x68, 0x5f, 0x63, 0x61, 0x72, 0x64, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x03, 0x52, 0x0a, 0x77, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x49, 0x64, 0x12, 0x1a,
+	0x0a, 0x08, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x08, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x22, 0x66, 0x0a, 0x20, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x44, 0x65, 0x73, 0x63,
+	0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20,
+	0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x63, 0x61, 0x72, 0x64, 0x5f, 0x69, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x77, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x49, 0x64,
+	0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x22, 0x51, 0x0a, 0x19, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68,
+	0x43, 0x61, 0x72, 0x64, 0x44, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x63, 0x61, 0x72, 0x64, 0x5f, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x77, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x49,
+	0x64, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x04, 0x64, 0x61, 0x74, 0x65, 0x22, 0x54, 0x0a, 0x1a, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57,
+	0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x50, 0x6c, 0x61, 0x63, 0x65, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x63, 0x61, 0x72, 0x64,
 	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x77, 0x69, 0x73, 0x68, 0x43,
-	0x61, 0x72, 0x64, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74,
-	0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74,
-	0x79, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e,
-	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74,
-	0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28,
-	0x03, 0x52, 0x04, 0x64, 0x61, 0x74, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x64, 0x6f, 0x6e, 0x65, 0x5f,
-	0x61, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x64, 0x6f, 0x6e, 0x65, 0x41, 0x74,
-	0x12, 0x14, 0x0a, 0x05, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x05, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x61, 0x67, 0x73, 0x18, 0x07,
-	0x20, 0x03, 0x28, 0x09, 0x52, 0x04, 0x74, 0x61, 0x67, 0x73, 0x32, 0xc3, 0x03, 0x0a, 0x0f, 0x57,
-	0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x5b,
-	0x0a, 0x12, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74,
-	0x49, 0x6e, 0x66, 0x6f, 0x12, 0x29, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73,
-	0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68,
-	0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x18, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74,
-	0x2e, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x22, 0x00, 0x12, 0x4d, 0x0a, 0x0b, 0x47,
-	0x65, 0x74, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x22, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x47, 0x65, 0x74, 0x57,
-	0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18,
+	0x61, 0x72, 0x64, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x22, 0x57, 0x0a, 0x16, 0x41,
+	0x64, 0x64, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x54, 0x61, 0x67, 0x73, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x63, 0x61,
+	0x72, 0x64, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x77, 0x69, 0x73,
+	0x68, 0x43, 0x61, 0x72, 0x64, 0x49, 0x64, 0x12, 0x1b, 0x0a, 0x09, 0x74, 0x61, 0x67, 0x5f, 0x6e,
+	0x61, 0x6d, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x08, 0x74, 0x61, 0x67, 0x4e,
+	0x61, 0x6d, 0x65, 0x73, 0x22, 0x56, 0x0a, 0x19, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x57, 0x69,
+	0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x54, 0x61, 0x67, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x63, 0x61, 0x72, 0x64, 0x5f, 0x69,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x77, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72,
+	0x64, 0x49, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x74, 0x61, 0x67, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x02,
+	0x20, 0x03, 0x28, 0x03, 0x52, 0x06, 0x74, 0x61, 0x67, 0x49, 0x64, 0x73, 0x22, 0x3d, 0x0a, 0x19,
+	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e,
+	0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73,
+	0x68, 0x5f, 0x6c, 0x69, 0x73, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52,
+	0x0a, 0x77, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x64, 0x22, 0x45, 0x0a, 0x08, 0x57,
+	0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x39, 0x0a, 0x09, 0x77, 0x69, 0x73, 0x68, 0x5f,
+	0x6c, 0x69, 0x73, 0x74, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x57, 0x69, 0x73, 0x68,
+	0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x08, 0x77, 0x69, 0x73, 0x68, 0x4c, 0x69,
+	0x73, 0x74, 0x22, 0x92, 0x02, 0x0a, 0x0c, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49,
+	0x6e, 0x66, 0x6f, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69, 0x73, 0x68, 0x5f, 0x6c, 0x69, 0x73, 0x74,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x77, 0x69, 0x73, 0x68, 0x4c,
+	0x69, 0x73, 0x74, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x12, 0x49, 0x0a, 0x0f, 0x77,
+	0x69, 0x73, 0x68, 0x5f, 0x63, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x69, 0x65, 0x73, 0x18, 0x03,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73,
+	0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f,
+	0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x0e, 0x77, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65,
+	0x67, 0x6f, 0x72, 0x69, 0x65, 0x73, 0x12, 0x2e, 0x0a, 0x07, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72,
+	0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f,
+	0x75, 0x73, 0x65, 0x72, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x07, 0x61,
+	0x75, 0x74, 0x68, 0x6f, 0x72, 0x73, 0x12, 0x1d, 0x0a, 0x0a, 0x69, 0x6e, 0x76, 0x69, 0x74, 0x65,
+	0x5f, 0x75, 0x72, 0x6c, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x69, 0x6e, 0x76, 0x69,
+	0x74, 0x65, 0x55, 0x72, 0x6c, 0x12, 0x30, 0x0a, 0x14, 0x62, 0x61, 0x63, 0x6b, 0x67, 0x72, 0x6f,
+	0x75, 0x6e, 0x64, 0x5f, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x06, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x12, 0x62, 0x61, 0x63, 0x6b, 0x67, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x49,
+	0x6d, 0x61, 0x67, 0x65, 0x55, 0x72, 0x6c, 0x22, 0x8f, 0x01, 0x0a, 0x10, 0x57, 0x69, 0x73, 0x68,
+	0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x28, 0x0a, 0x10,
+	0x77, 0x69, 0x73, 0x68, 0x5f, 0x63, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x5f, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0e, 0x77, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65,
+	0x67, 0x6f, 0x72, 0x79, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x12, 0x3b, 0x0a, 0x0a,
+	0x77, 0x69, 0x73, 0x68, 0x5f, 0x63, 0x61, 0x72, 0x64, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x1c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73,
+	0x74, 0x2e, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x09,
+	0x77, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x73, 0x22, 0xd9, 0x01, 0x0a, 0x0c, 0x57, 0x69,
+	0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x20, 0x0a, 0x0c, 0x77, 0x69,
+	0x73, 0x68, 0x5f, 0x63, 0x61, 0x72, 0x64, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03,
+	0x52, 0x0a, 0x77, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08,
+	0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
+	0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63,
+	0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64,
+	0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61,
+	0x74, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x64, 0x61, 0x74, 0x65, 0x12, 0x17,
+	0x0a, 0x07, 0x64, 0x6f, 0x6e, 0x65, 0x5f, 0x61, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x06, 0x64, 0x6f, 0x6e, 0x65, 0x41, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x6c, 0x61, 0x63, 0x65,
+	0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x12, 0x26, 0x0a,
+	0x04, 0x74, 0x61, 0x67, 0x73, 0x18, 0x07, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x5f, 0x74, 0x61, 0x67, 0x2e, 0x54, 0x61, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x52,
+	0x04, 0x74, 0x61, 0x67, 0x73, 0x32, 0x88, 0x0c, 0x0a, 0x0f, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69,
+	0x73, 0x74, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x5b, 0x0a, 0x12, 0x43, 0x72, 0x65,
+	0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12,
+	0x29, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74,
+	0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49,
+	0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x57, 0x69, 0x73, 0x68,
+	0x4c, 0x69, 0x73, 0x74, 0x22, 0x00, 0x12, 0x61, 0x0a, 0x16, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
+	0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f,
+	0x12, 0x2d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73,
+	0x74, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65,
+	0x67, 0x6f, 0x72, 0x79, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
+	0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x59, 0x0a, 0x12, 0x43, 0x72, 0x65,
+	0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x12,
+	0x29, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74,
+	0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x49,
+	0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70,
+	0x74, 0x79, 0x22, 0x00, 0x12, 0x4d, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x57, 0x69, 0x73, 0x68, 0x4c,
+	0x69, 0x73, 0x74, 0x12, 0x22, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68,
+	0x6c, 0x69, 0x73, 0x74, 0x2e, 0x47, 0x65, 0x74, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f,
+	0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73,
+	0x74, 0x22, 0x00, 0x12, 0x5b, 0x0a, 0x0f, 0x47, 0x65, 0x74, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69,
+	0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x26, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77,
+	0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x47, 0x65, 0x74, 0x57, 0x69, 0x73, 0x68, 0x4c,
+	0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e,
-	0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x22, 0x00, 0x12, 0x5b, 0x0a, 0x0f, 0x47, 0x65,
-	0x74, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x26, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x47,
-	0x65, 0x74, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69,
-	0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49,
-	0x6e, 0x66, 0x6f, 0x22, 0x00, 0x30, 0x01, 0x12, 0x4c, 0x0a, 0x12, 0x55, 0x70, 0x64, 0x61, 0x74,
-	0x65, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x1c, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x57,
-	0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x1a, 0x16, 0x2e, 0x67, 0x6f,
+	0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x22, 0x00, 0x30, 0x01,
+	0x12, 0x59, 0x0a, 0x12, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69,
+	0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x29, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77,
+	0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69,
+	0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x6f, 0x0a, 0x1d, 0x55,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x42, 0x61, 0x63,
+	0x6b, 0x47, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x12, 0x34, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x42, 0x61, 0x63, 0x6b,
+	0x47, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x70, 0x0a, 0x1a,
+	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f,
+	0x72, 0x79, 0x50, 0x72, 0x69, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x38, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x41, 0x6e,
+	0x64, 0x43, 0x61, 0x72, 0x64, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x61,
+	0x0a, 0x16, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65,
+	0x67, 0x6f, 0x72, 0x79, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x2d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x4e, 0x61, 0x6d, 0x65,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22,
+	0x00, 0x12, 0x61, 0x0a, 0x16, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43,
+	0x61, 0x72, 0x64, 0x41, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x12, 0x2d, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x41, 0x63, 0x74, 0x69, 0x76,
+	0x69, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70,
+	0x74, 0x79, 0x22, 0x00, 0x12, 0x67, 0x0a, 0x19, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69,
+	0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x44, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x30, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69,
+	0x73, 0x74, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72,
+	0x64, 0x44, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x59, 0x0a,
+	0x12, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x44,
+	0x61, 0x74, 0x65, 0x12, 0x29, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68,
+	0x6c, 0x69, 0x73, 0x74, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43,
+	0x61, 0x72, 0x64, 0x44, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16,
+	0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
+	0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x5b, 0x0a, 0x13, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x50, 0x6c, 0x61, 0x63, 0x65, 0x12,
+	0x2a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74,
+	0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x50,
+	0x6c, 0x61, 0x63, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x67, 0x6f,
+	0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d,
+	0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x53, 0x0a, 0x0f, 0x41, 0x64, 0x64, 0x57, 0x69, 0x73, 0x68,
+	0x43, 0x61, 0x72, 0x64, 0x54, 0x61, 0x67, 0x73, 0x12, 0x26, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73, 0x74, 0x2e, 0x41, 0x64, 0x64, 0x57, 0x69, 0x73,
+	0x68, 0x43, 0x61, 0x72, 0x64, 0x54, 0x61, 0x67, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
+	0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x59, 0x0a, 0x12, 0x44, 0x65,
+	0x6c, 0x65, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64, 0x54, 0x61, 0x67, 0x73,
+	0x12, 0x29, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x77, 0x69, 0x73, 0x68, 0x6c, 0x69, 0x73,
+	0x74, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x57, 0x69, 0x73, 0x68, 0x43, 0x61, 0x72, 0x64,
+	0x54, 0x61, 0x67, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x67, 0x6f,
 	0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d,
 	0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x59, 0x0a, 0x12, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x57,
 	0x69, 0x73, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x29, 0x2e, 0x70, 0x72,
@@ -646,39 +1595,77 @@ func file_wish_list_proto_rawDescGZIP() []byte {
 	return file_wish_list_proto_rawDescData
 }
 
-var file_wish_list_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_wish_list_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_wish_list_proto_goTypes = []interface{}{
-	(*CreateWishListInfoRequest)(nil), // 0: proto_wishlist.CreateWishListInfoRequest
-	(*GetWishListRequest)(nil),        // 1: proto_wishlist.GetWishListRequest
-	(*GetWishListInfoRequest)(nil),    // 2: proto_wishlist.GetWishListInfoRequest
-	(*DeleteWishListInfoRequest)(nil), // 3: proto_wishlist.DeleteWishListInfoRequest
-	(*WishList)(nil),                  // 4: proto_wishlist.WishList
-	(*WishListInfo)(nil),              // 5: proto_wishlist.WishListInfo
-	(*WishCategoryInfo)(nil),          // 6: proto_wishlist.WishCategoryInfo
-	(*WishCardInfo)(nil),              // 7: proto_wishlist.WishCardInfo
-	(*UserInfo)(nil),                  // 8: proto_user.UserInfo
-	(*empty.Empty)(nil),               // 9: google.protobuf.Empty
+	(*CreateWishListInfoRequest)(nil),                // 0: proto_wishlist.CreateWishListInfoRequest
+	(*CreateWishCategoryInfoRequest)(nil),            // 1: proto_wishlist.CreateWishCategoryInfoRequest
+	(*CreateWishCardInfoRequest)(nil),                // 2: proto_wishlist.CreateWishCardInfoRequest
+	(*GetWishListRequest)(nil),                       // 3: proto_wishlist.GetWishListRequest
+	(*GetWishListInfoRequest)(nil),                   // 4: proto_wishlist.GetWishListInfoRequest
+	(*UpdateWishListNameRequest)(nil),                // 5: proto_wishlist.UpdateWishListNameRequest
+	(*UpdateWishListBackGroundImageRequest)(nil),     // 6: proto_wishlist.UpdateWishListBackGroundImageRequest
+	(*UpdateWishCategoryAndCardPositionRequest)(nil), // 7: proto_wishlist.UpdateWishCategoryAndCardPositionRequest
+	(*WishCategoryAndCardPosition)(nil),              // 8: proto_wishlist.WishCategoryAndCardPosition
+	(*UpdateWishCategoryNameRequest)(nil),            // 9: proto_wishlist.UpdateWishCategoryNameRequest
+	(*UpdateWishCardActivityRequest)(nil),            // 10: proto_wishlist.UpdateWishCardActivityRequest
+	(*UpdateWishCardDescriptionRequest)(nil),         // 11: proto_wishlist.UpdateWishCardDescriptionRequest
+	(*UpdateWishCardDateRequest)(nil),                // 12: proto_wishlist.UpdateWishCardDateRequest
+	(*UpdateWishCardPlaceRequest)(nil),               // 13: proto_wishlist.UpdateWishCardPlaceRequest
+	(*AddWishCardTagsRequest)(nil),                   // 14: proto_wishlist.AddWishCardTagsRequest
+	(*DeleteWishCardTagsRequest)(nil),                // 15: proto_wishlist.DeleteWishCardTagsRequest
+	(*DeleteWishListInfoRequest)(nil),                // 16: proto_wishlist.DeleteWishListInfoRequest
+	(*WishList)(nil),                                 // 17: proto_wishlist.WishList
+	(*WishListInfo)(nil),                             // 18: proto_wishlist.WishListInfo
+	(*WishCategoryInfo)(nil),                         // 19: proto_wishlist.WishCategoryInfo
+	(*WishCardInfo)(nil),                             // 20: proto_wishlist.WishCardInfo
+	(*UserInfo)(nil),                                 // 21: proto_user.UserInfo
+	(*TagInfo)(nil),                                  // 22: proto_tag.TagInfo
+	(*empty.Empty)(nil),                              // 23: google.protobuf.Empty
 }
 var file_wish_list_proto_depIdxs = []int32{
-	5, // 0: proto_wishlist.WishList.wish_list:type_name -> proto_wishlist.WishListInfo
-	6, // 1: proto_wishlist.WishListInfo.wish_categories:type_name -> proto_wishlist.WishCategoryInfo
-	8, // 2: proto_wishlist.WishListInfo.authors:type_name -> proto_user.UserInfo
-	7, // 3: proto_wishlist.WishCategoryInfo.wish_cards:type_name -> proto_wishlist.WishCardInfo
-	0, // 4: proto_wishlist.WishListService.CreateWishListInfo:input_type -> proto_wishlist.CreateWishListInfoRequest
-	1, // 5: proto_wishlist.WishListService.GetWishList:input_type -> proto_wishlist.GetWishListRequest
-	2, // 6: proto_wishlist.WishListService.GetWishListInfo:input_type -> proto_wishlist.GetWishListInfoRequest
-	5, // 7: proto_wishlist.WishListService.UpdateWishListInfo:input_type -> proto_wishlist.WishListInfo
-	3, // 8: proto_wishlist.WishListService.DeleteWishListInfo:input_type -> proto_wishlist.DeleteWishListInfoRequest
-	4, // 9: proto_wishlist.WishListService.CreateWishListInfo:output_type -> proto_wishlist.WishList
-	4, // 10: proto_wishlist.WishListService.GetWishList:output_type -> proto_wishlist.WishList
-	5, // 11: proto_wishlist.WishListService.GetWishListInfo:output_type -> proto_wishlist.WishListInfo
-	9, // 12: proto_wishlist.WishListService.UpdateWishListInfo:output_type -> google.protobuf.Empty
-	9, // 13: proto_wishlist.WishListService.DeleteWishListInfo:output_type -> google.protobuf.Empty
-	9, // [9:14] is the sub-list for method output_type
-	4, // [4:9] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	8,  // 0: proto_wishlist.UpdateWishCategoryAndCardPositionRequest.position:type_name -> proto_wishlist.WishCategoryAndCardPosition
+	18, // 1: proto_wishlist.WishList.wish_list:type_name -> proto_wishlist.WishListInfo
+	19, // 2: proto_wishlist.WishListInfo.wish_categories:type_name -> proto_wishlist.WishCategoryInfo
+	21, // 3: proto_wishlist.WishListInfo.authors:type_name -> proto_user.UserInfo
+	20, // 4: proto_wishlist.WishCategoryInfo.wish_cards:type_name -> proto_wishlist.WishCardInfo
+	22, // 5: proto_wishlist.WishCardInfo.tags:type_name -> proto_tag.TagInfo
+	0,  // 6: proto_wishlist.WishListService.CreateWishListInfo:input_type -> proto_wishlist.CreateWishListInfoRequest
+	1,  // 7: proto_wishlist.WishListService.CreateWishCategoryInfo:input_type -> proto_wishlist.CreateWishCategoryInfoRequest
+	2,  // 8: proto_wishlist.WishListService.CreateWishCardInfo:input_type -> proto_wishlist.CreateWishCardInfoRequest
+	3,  // 9: proto_wishlist.WishListService.GetWishList:input_type -> proto_wishlist.GetWishListRequest
+	4,  // 10: proto_wishlist.WishListService.GetWishListInfo:input_type -> proto_wishlist.GetWishListInfoRequest
+	5,  // 11: proto_wishlist.WishListService.UpdateWishListName:input_type -> proto_wishlist.UpdateWishListNameRequest
+	6,  // 12: proto_wishlist.WishListService.UpdateWishListBackGroundImage:input_type -> proto_wishlist.UpdateWishListBackGroundImageRequest
+	7,  // 13: proto_wishlist.WishListService.UpdateWishCategoryPriority:input_type -> proto_wishlist.UpdateWishCategoryAndCardPositionRequest
+	9,  // 14: proto_wishlist.WishListService.UpdateWishCategoryName:input_type -> proto_wishlist.UpdateWishCategoryNameRequest
+	10, // 15: proto_wishlist.WishListService.UpdateWishCardActivity:input_type -> proto_wishlist.UpdateWishCardActivityRequest
+	11, // 16: proto_wishlist.WishListService.UpdateWishCardDescription:input_type -> proto_wishlist.UpdateWishCardDescriptionRequest
+	12, // 17: proto_wishlist.WishListService.UpdateWishCardDate:input_type -> proto_wishlist.UpdateWishCardDateRequest
+	13, // 18: proto_wishlist.WishListService.UpdateWishCardPlace:input_type -> proto_wishlist.UpdateWishCardPlaceRequest
+	14, // 19: proto_wishlist.WishListService.AddWishCardTags:input_type -> proto_wishlist.AddWishCardTagsRequest
+	15, // 20: proto_wishlist.WishListService.DeleteWishCardTags:input_type -> proto_wishlist.DeleteWishCardTagsRequest
+	16, // 21: proto_wishlist.WishListService.DeleteWishListInfo:input_type -> proto_wishlist.DeleteWishListInfoRequest
+	17, // 22: proto_wishlist.WishListService.CreateWishListInfo:output_type -> proto_wishlist.WishList
+	23, // 23: proto_wishlist.WishListService.CreateWishCategoryInfo:output_type -> google.protobuf.Empty
+	23, // 24: proto_wishlist.WishListService.CreateWishCardInfo:output_type -> google.protobuf.Empty
+	17, // 25: proto_wishlist.WishListService.GetWishList:output_type -> proto_wishlist.WishList
+	18, // 26: proto_wishlist.WishListService.GetWishListInfo:output_type -> proto_wishlist.WishListInfo
+	23, // 27: proto_wishlist.WishListService.UpdateWishListName:output_type -> google.protobuf.Empty
+	23, // 28: proto_wishlist.WishListService.UpdateWishListBackGroundImage:output_type -> google.protobuf.Empty
+	23, // 29: proto_wishlist.WishListService.UpdateWishCategoryPriority:output_type -> google.protobuf.Empty
+	23, // 30: proto_wishlist.WishListService.UpdateWishCategoryName:output_type -> google.protobuf.Empty
+	23, // 31: proto_wishlist.WishListService.UpdateWishCardActivity:output_type -> google.protobuf.Empty
+	23, // 32: proto_wishlist.WishListService.UpdateWishCardDescription:output_type -> google.protobuf.Empty
+	23, // 33: proto_wishlist.WishListService.UpdateWishCardDate:output_type -> google.protobuf.Empty
+	23, // 34: proto_wishlist.WishListService.UpdateWishCardPlace:output_type -> google.protobuf.Empty
+	23, // 35: proto_wishlist.WishListService.AddWishCardTags:output_type -> google.protobuf.Empty
+	23, // 36: proto_wishlist.WishListService.DeleteWishCardTags:output_type -> google.protobuf.Empty
+	23, // 37: proto_wishlist.WishListService.DeleteWishListInfo:output_type -> google.protobuf.Empty
+	22, // [22:38] is the sub-list for method output_type
+	6,  // [6:22] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_wish_list_proto_init() }
@@ -687,6 +1674,7 @@ func file_wish_list_proto_init() {
 		return
 	}
 	file_user_proto_init()
+	file_tag_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_wish_list_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CreateWishListInfoRequest); i {
@@ -701,7 +1689,7 @@ func file_wish_list_proto_init() {
 			}
 		}
 		file_wish_list_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetWishListRequest); i {
+			switch v := v.(*CreateWishCategoryInfoRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -713,7 +1701,7 @@ func file_wish_list_proto_init() {
 			}
 		}
 		file_wish_list_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetWishListInfoRequest); i {
+			switch v := v.(*CreateWishCardInfoRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -725,7 +1713,7 @@ func file_wish_list_proto_init() {
 			}
 		}
 		file_wish_list_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteWishListInfoRequest); i {
+			switch v := v.(*GetWishListRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -737,7 +1725,7 @@ func file_wish_list_proto_init() {
 			}
 		}
 		file_wish_list_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*WishList); i {
+			switch v := v.(*GetWishListInfoRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -749,7 +1737,7 @@ func file_wish_list_proto_init() {
 			}
 		}
 		file_wish_list_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*WishListInfo); i {
+			switch v := v.(*UpdateWishListNameRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -761,7 +1749,7 @@ func file_wish_list_proto_init() {
 			}
 		}
 		file_wish_list_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*WishCategoryInfo); i {
+			switch v := v.(*UpdateWishListBackGroundImageRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -773,6 +1761,162 @@ func file_wish_list_proto_init() {
 			}
 		}
 		file_wish_list_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateWishCategoryAndCardPositionRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_wish_list_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WishCategoryAndCardPosition); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_wish_list_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateWishCategoryNameRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_wish_list_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateWishCardActivityRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_wish_list_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateWishCardDescriptionRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_wish_list_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateWishCardDateRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_wish_list_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateWishCardPlaceRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_wish_list_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AddWishCardTagsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_wish_list_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteWishCardTagsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_wish_list_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteWishListInfoRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_wish_list_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WishList); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_wish_list_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WishListInfo); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_wish_list_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WishCategoryInfo); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_wish_list_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*WishCardInfo); i {
 			case 0:
 				return &v.state
@@ -791,7 +1935,7 @@ func file_wish_list_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_wish_list_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -819,12 +1963,34 @@ const _ = grpc.SupportPackageIsVersion6
 type WishListServiceClient interface {
 	// やりたいことリストの新規作成
 	CreateWishListInfo(ctx context.Context, in *CreateWishListInfoRequest, opts ...grpc.CallOption) (*WishList, error)
+	// やりたいことカテゴリーの新規作成
+	CreateWishCategoryInfo(ctx context.Context, in *CreateWishCategoryInfoRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	// やりたいことカードの新規作成
+	CreateWishCardInfo(ctx context.Context, in *CreateWishCardInfoRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	// やりたいことリスト一覧取得
 	GetWishList(ctx context.Context, in *GetWishListRequest, opts ...grpc.CallOption) (*WishList, error)
 	// やりたいことリスト単体取得
 	GetWishListInfo(ctx context.Context, in *GetWishListInfoRequest, opts ...grpc.CallOption) (WishListService_GetWishListInfoClient, error)
-	// やりたいことリスト更新（カードの移動やタイトルの変更など：ユーザーアクション）
-	UpdateWishListInfo(ctx context.Context, in *WishListInfo, opts ...grpc.CallOption) (*empty.Empty, error)
+	// やりたいことリスト名更新
+	UpdateWishListName(ctx context.Context, in *UpdateWishListNameRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	// やりたいことリストの背景画像更新
+	UpdateWishListBackGroundImage(ctx context.Context, in *UpdateWishListBackGroundImageRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	// やりたいことカテゴリー、カードの並び順更新
+	UpdateWishCategoryPriority(ctx context.Context, in *UpdateWishCategoryAndCardPositionRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	// やりたいことカテゴリー名更新
+	UpdateWishCategoryName(ctx context.Context, in *UpdateWishCategoryNameRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	// やりたいことカード(アクティビティ)の更新
+	UpdateWishCardActivity(ctx context.Context, in *UpdateWishCardActivityRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	// やりたいことカード(ディスクリプション)の更新
+	UpdateWishCardDescription(ctx context.Context, in *UpdateWishCardDescriptionRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	// やりたいことカード(日付)の更新
+	UpdateWishCardDate(ctx context.Context, in *UpdateWishCardDateRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	// やりたいことカード(場所)の更新
+	UpdateWishCardPlace(ctx context.Context, in *UpdateWishCardPlaceRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	// やりたいことカードのタグを新規追加
+	AddWishCardTags(ctx context.Context, in *AddWishCardTagsRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	// やりたいことカードのタグを削除
+	DeleteWishCardTags(ctx context.Context, in *DeleteWishCardTagsRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	// やりたいことリスト自体の削除
 	DeleteWishListInfo(ctx context.Context, in *DeleteWishListInfoRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 }
@@ -840,6 +2006,24 @@ func NewWishListServiceClient(cc grpc.ClientConnInterface) WishListServiceClient
 func (c *wishListServiceClient) CreateWishListInfo(ctx context.Context, in *CreateWishListInfoRequest, opts ...grpc.CallOption) (*WishList, error) {
 	out := new(WishList)
 	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/CreateWishListInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *wishListServiceClient) CreateWishCategoryInfo(ctx context.Context, in *CreateWishCategoryInfoRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/CreateWishCategoryInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *wishListServiceClient) CreateWishCardInfo(ctx context.Context, in *CreateWishCardInfoRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/CreateWishCardInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -887,9 +2071,90 @@ func (x *wishListServiceGetWishListInfoClient) Recv() (*WishListInfo, error) {
 	return m, nil
 }
 
-func (c *wishListServiceClient) UpdateWishListInfo(ctx context.Context, in *WishListInfo, opts ...grpc.CallOption) (*empty.Empty, error) {
+func (c *wishListServiceClient) UpdateWishListName(ctx context.Context, in *UpdateWishListNameRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/UpdateWishListInfo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/UpdateWishListName", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *wishListServiceClient) UpdateWishListBackGroundImage(ctx context.Context, in *UpdateWishListBackGroundImageRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/UpdateWishListBackGroundImage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *wishListServiceClient) UpdateWishCategoryPriority(ctx context.Context, in *UpdateWishCategoryAndCardPositionRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/UpdateWishCategoryPriority", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *wishListServiceClient) UpdateWishCategoryName(ctx context.Context, in *UpdateWishCategoryNameRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/UpdateWishCategoryName", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *wishListServiceClient) UpdateWishCardActivity(ctx context.Context, in *UpdateWishCardActivityRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/UpdateWishCardActivity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *wishListServiceClient) UpdateWishCardDescription(ctx context.Context, in *UpdateWishCardDescriptionRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/UpdateWishCardDescription", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *wishListServiceClient) UpdateWishCardDate(ctx context.Context, in *UpdateWishCardDateRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/UpdateWishCardDate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *wishListServiceClient) UpdateWishCardPlace(ctx context.Context, in *UpdateWishCardPlaceRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/UpdateWishCardPlace", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *wishListServiceClient) AddWishCardTags(ctx context.Context, in *AddWishCardTagsRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/AddWishCardTags", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *wishListServiceClient) DeleteWishCardTags(ctx context.Context, in *DeleteWishCardTagsRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/proto_wishlist.WishListService/DeleteWishCardTags", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -909,12 +2174,34 @@ func (c *wishListServiceClient) DeleteWishListInfo(ctx context.Context, in *Dele
 type WishListServiceServer interface {
 	// やりたいことリストの新規作成
 	CreateWishListInfo(context.Context, *CreateWishListInfoRequest) (*WishList, error)
+	// やりたいことカテゴリーの新規作成
+	CreateWishCategoryInfo(context.Context, *CreateWishCategoryInfoRequest) (*empty.Empty, error)
+	// やりたいことカードの新規作成
+	CreateWishCardInfo(context.Context, *CreateWishCardInfoRequest) (*empty.Empty, error)
 	// やりたいことリスト一覧取得
 	GetWishList(context.Context, *GetWishListRequest) (*WishList, error)
 	// やりたいことリスト単体取得
 	GetWishListInfo(*GetWishListInfoRequest, WishListService_GetWishListInfoServer) error
-	// やりたいことリスト更新（カードの移動やタイトルの変更など：ユーザーアクション）
-	UpdateWishListInfo(context.Context, *WishListInfo) (*empty.Empty, error)
+	// やりたいことリスト名更新
+	UpdateWishListName(context.Context, *UpdateWishListNameRequest) (*empty.Empty, error)
+	// やりたいことリストの背景画像更新
+	UpdateWishListBackGroundImage(context.Context, *UpdateWishListBackGroundImageRequest) (*empty.Empty, error)
+	// やりたいことカテゴリー、カードの並び順更新
+	UpdateWishCategoryPriority(context.Context, *UpdateWishCategoryAndCardPositionRequest) (*empty.Empty, error)
+	// やりたいことカテゴリー名更新
+	UpdateWishCategoryName(context.Context, *UpdateWishCategoryNameRequest) (*empty.Empty, error)
+	// やりたいことカード(アクティビティ)の更新
+	UpdateWishCardActivity(context.Context, *UpdateWishCardActivityRequest) (*empty.Empty, error)
+	// やりたいことカード(ディスクリプション)の更新
+	UpdateWishCardDescription(context.Context, *UpdateWishCardDescriptionRequest) (*empty.Empty, error)
+	// やりたいことカード(日付)の更新
+	UpdateWishCardDate(context.Context, *UpdateWishCardDateRequest) (*empty.Empty, error)
+	// やりたいことカード(場所)の更新
+	UpdateWishCardPlace(context.Context, *UpdateWishCardPlaceRequest) (*empty.Empty, error)
+	// やりたいことカードのタグを新規追加
+	AddWishCardTags(context.Context, *AddWishCardTagsRequest) (*empty.Empty, error)
+	// やりたいことカードのタグを削除
+	DeleteWishCardTags(context.Context, *DeleteWishCardTagsRequest) (*empty.Empty, error)
 	// やりたいことリスト自体の削除
 	DeleteWishListInfo(context.Context, *DeleteWishListInfoRequest) (*empty.Empty, error)
 }
@@ -926,14 +2213,47 @@ type UnimplementedWishListServiceServer struct {
 func (*UnimplementedWishListServiceServer) CreateWishListInfo(context.Context, *CreateWishListInfoRequest) (*WishList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateWishListInfo not implemented")
 }
+func (*UnimplementedWishListServiceServer) CreateWishCategoryInfo(context.Context, *CreateWishCategoryInfoRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateWishCategoryInfo not implemented")
+}
+func (*UnimplementedWishListServiceServer) CreateWishCardInfo(context.Context, *CreateWishCardInfoRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateWishCardInfo not implemented")
+}
 func (*UnimplementedWishListServiceServer) GetWishList(context.Context, *GetWishListRequest) (*WishList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWishList not implemented")
 }
 func (*UnimplementedWishListServiceServer) GetWishListInfo(*GetWishListInfoRequest, WishListService_GetWishListInfoServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetWishListInfo not implemented")
 }
-func (*UnimplementedWishListServiceServer) UpdateWishListInfo(context.Context, *WishListInfo) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateWishListInfo not implemented")
+func (*UnimplementedWishListServiceServer) UpdateWishListName(context.Context, *UpdateWishListNameRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateWishListName not implemented")
+}
+func (*UnimplementedWishListServiceServer) UpdateWishListBackGroundImage(context.Context, *UpdateWishListBackGroundImageRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateWishListBackGroundImage not implemented")
+}
+func (*UnimplementedWishListServiceServer) UpdateWishCategoryPriority(context.Context, *UpdateWishCategoryAndCardPositionRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateWishCategoryPriority not implemented")
+}
+func (*UnimplementedWishListServiceServer) UpdateWishCategoryName(context.Context, *UpdateWishCategoryNameRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateWishCategoryName not implemented")
+}
+func (*UnimplementedWishListServiceServer) UpdateWishCardActivity(context.Context, *UpdateWishCardActivityRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateWishCardActivity not implemented")
+}
+func (*UnimplementedWishListServiceServer) UpdateWishCardDescription(context.Context, *UpdateWishCardDescriptionRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateWishCardDescription not implemented")
+}
+func (*UnimplementedWishListServiceServer) UpdateWishCardDate(context.Context, *UpdateWishCardDateRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateWishCardDate not implemented")
+}
+func (*UnimplementedWishListServiceServer) UpdateWishCardPlace(context.Context, *UpdateWishCardPlaceRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateWishCardPlace not implemented")
+}
+func (*UnimplementedWishListServiceServer) AddWishCardTags(context.Context, *AddWishCardTagsRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddWishCardTags not implemented")
+}
+func (*UnimplementedWishListServiceServer) DeleteWishCardTags(context.Context, *DeleteWishCardTagsRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteWishCardTags not implemented")
 }
 func (*UnimplementedWishListServiceServer) DeleteWishListInfo(context.Context, *DeleteWishListInfoRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteWishListInfo not implemented")
@@ -957,6 +2277,42 @@ func _WishListService_CreateWishListInfo_Handler(srv interface{}, ctx context.Co
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(WishListServiceServer).CreateWishListInfo(ctx, req.(*CreateWishListInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WishListService_CreateWishCategoryInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateWishCategoryInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WishListServiceServer).CreateWishCategoryInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_wishlist.WishListService/CreateWishCategoryInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WishListServiceServer).CreateWishCategoryInfo(ctx, req.(*CreateWishCategoryInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WishListService_CreateWishCardInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateWishCardInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WishListServiceServer).CreateWishCardInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_wishlist.WishListService/CreateWishCardInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WishListServiceServer).CreateWishCardInfo(ctx, req.(*CreateWishCardInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1000,20 +2356,182 @@ func (x *wishListServiceGetWishListInfoServer) Send(m *WishListInfo) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func _WishListService_UpdateWishListInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(WishListInfo)
+func _WishListService_UpdateWishListName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateWishListNameRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(WishListServiceServer).UpdateWishListInfo(ctx, in)
+		return srv.(WishListServiceServer).UpdateWishListName(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto_wishlist.WishListService/UpdateWishListInfo",
+		FullMethod: "/proto_wishlist.WishListService/UpdateWishListName",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WishListServiceServer).UpdateWishListInfo(ctx, req.(*WishListInfo))
+		return srv.(WishListServiceServer).UpdateWishListName(ctx, req.(*UpdateWishListNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WishListService_UpdateWishListBackGroundImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateWishListBackGroundImageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WishListServiceServer).UpdateWishListBackGroundImage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_wishlist.WishListService/UpdateWishListBackGroundImage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WishListServiceServer).UpdateWishListBackGroundImage(ctx, req.(*UpdateWishListBackGroundImageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WishListService_UpdateWishCategoryPriority_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateWishCategoryAndCardPositionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WishListServiceServer).UpdateWishCategoryPriority(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_wishlist.WishListService/UpdateWishCategoryPriority",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WishListServiceServer).UpdateWishCategoryPriority(ctx, req.(*UpdateWishCategoryAndCardPositionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WishListService_UpdateWishCategoryName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateWishCategoryNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WishListServiceServer).UpdateWishCategoryName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_wishlist.WishListService/UpdateWishCategoryName",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WishListServiceServer).UpdateWishCategoryName(ctx, req.(*UpdateWishCategoryNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WishListService_UpdateWishCardActivity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateWishCardActivityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WishListServiceServer).UpdateWishCardActivity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_wishlist.WishListService/UpdateWishCardActivity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WishListServiceServer).UpdateWishCardActivity(ctx, req.(*UpdateWishCardActivityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WishListService_UpdateWishCardDescription_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateWishCardDescriptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WishListServiceServer).UpdateWishCardDescription(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_wishlist.WishListService/UpdateWishCardDescription",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WishListServiceServer).UpdateWishCardDescription(ctx, req.(*UpdateWishCardDescriptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WishListService_UpdateWishCardDate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateWishCardDateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WishListServiceServer).UpdateWishCardDate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_wishlist.WishListService/UpdateWishCardDate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WishListServiceServer).UpdateWishCardDate(ctx, req.(*UpdateWishCardDateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WishListService_UpdateWishCardPlace_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateWishCardPlaceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WishListServiceServer).UpdateWishCardPlace(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_wishlist.WishListService/UpdateWishCardPlace",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WishListServiceServer).UpdateWishCardPlace(ctx, req.(*UpdateWishCardPlaceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WishListService_AddWishCardTags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddWishCardTagsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WishListServiceServer).AddWishCardTags(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_wishlist.WishListService/AddWishCardTags",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WishListServiceServer).AddWishCardTags(ctx, req.(*AddWishCardTagsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WishListService_DeleteWishCardTags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteWishCardTagsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WishListServiceServer).DeleteWishCardTags(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto_wishlist.WishListService/DeleteWishCardTags",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WishListServiceServer).DeleteWishCardTags(ctx, req.(*DeleteWishCardTagsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1045,12 +2563,56 @@ var _WishListService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _WishListService_CreateWishListInfo_Handler,
 		},
 		{
+			MethodName: "CreateWishCategoryInfo",
+			Handler:    _WishListService_CreateWishCategoryInfo_Handler,
+		},
+		{
+			MethodName: "CreateWishCardInfo",
+			Handler:    _WishListService_CreateWishCardInfo_Handler,
+		},
+		{
 			MethodName: "GetWishList",
 			Handler:    _WishListService_GetWishList_Handler,
 		},
 		{
-			MethodName: "UpdateWishListInfo",
-			Handler:    _WishListService_UpdateWishListInfo_Handler,
+			MethodName: "UpdateWishListName",
+			Handler:    _WishListService_UpdateWishListName_Handler,
+		},
+		{
+			MethodName: "UpdateWishListBackGroundImage",
+			Handler:    _WishListService_UpdateWishListBackGroundImage_Handler,
+		},
+		{
+			MethodName: "UpdateWishCategoryPriority",
+			Handler:    _WishListService_UpdateWishCategoryPriority_Handler,
+		},
+		{
+			MethodName: "UpdateWishCategoryName",
+			Handler:    _WishListService_UpdateWishCategoryName_Handler,
+		},
+		{
+			MethodName: "UpdateWishCardActivity",
+			Handler:    _WishListService_UpdateWishCardActivity_Handler,
+		},
+		{
+			MethodName: "UpdateWishCardDescription",
+			Handler:    _WishListService_UpdateWishCardDescription_Handler,
+		},
+		{
+			MethodName: "UpdateWishCardDate",
+			Handler:    _WishListService_UpdateWishCardDate_Handler,
+		},
+		{
+			MethodName: "UpdateWishCardPlace",
+			Handler:    _WishListService_UpdateWishCardPlace_Handler,
+		},
+		{
+			MethodName: "AddWishCardTags",
+			Handler:    _WishListService_AddWishCardTags_Handler,
+		},
+		{
+			MethodName: "DeleteWishCardTags",
+			Handler:    _WishListService_DeleteWishCardTags_Handler,
 		},
 		{
 			MethodName: "DeleteWishListInfo",
