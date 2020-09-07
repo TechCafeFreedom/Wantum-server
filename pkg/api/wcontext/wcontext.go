@@ -13,3 +13,11 @@ func GetAuthIDFromContext(ctx context.Context) (string, error) {
 	}
 	return authID, nil
 }
+
+func GetEmailFromContext(ctx context.Context) (string, error) {
+	email, ok := ctx.Value(constants.EmailCtxKey).(string)
+	if !ok {
+		return "", errors.New("コンテキストのEmailキャストでエラーが発生しました。")
+	}
+	return email, nil
+}
