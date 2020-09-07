@@ -3,12 +3,13 @@
 //go:generate wire
 //+build !wireinject
 
-package main
+package rest
 
 import (
-	"wantum/pkg/api/handler/user"
+	"wantum/pkg/api/handler/rest/user"
 	user4 "wantum/pkg/api/usecase/user"
 	"wantum/pkg/domain/repository"
+	"wantum/pkg/domain/service/file"
 	profile2 "wantum/pkg/domain/service/profile"
 	user3 "wantum/pkg/domain/service/user"
 	"wantum/pkg/infrastructure/mysql/profile"
@@ -22,7 +23,8 @@ func InitUserAPI(masterTxManager repository.MasterTxManager) user.Server {
 	service := user3.New(userRepository)
 	profileRepository := profile.New(masterTxManager)
 	profileService := profile2.New(profileRepository)
-	interactor := user4.New(masterTxManager, service, profileService)
+	fileService := file.New()
+	interactor := user4.New(masterTxManager, service, profileService, fileService)
 	server := user.New(interactor)
 	return server
 }
