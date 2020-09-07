@@ -41,12 +41,29 @@ mockgen: ## mockgenの実行
 	# mockgenの実行
 	mockgen -source ${SOURCE_DIR}${SOURCE_FILE} -destination ${MOCK_DIR}${MOCK_FILE}
 
-wiregen: ## wire_gen.goの生成
+wiregen: ## REST,gRPC両方のwire_gen.goを生成
+	# google/wireのインストール
+	GO111MODULE=off go get -u github.com/google/wire
+
+	# REST wire genの実行
+	wire gen cmd/rest/wire.go
+
+	# gRPC wire genの実行
+	wire gen cmd/grpc/wire.go
+
+wirerest: ## REST wire_gen.goの生成
 	# google/wireのインストール
 	GO111MODULE=off go get -u github.com/google/wire
 
 	# wire genの実行
-	wire gen cmd/wire.go
+	wire gen cmd/rest/wire.go
+
+wiregrpc: ## gRPC wire_gen.goの生成
+	# google/wireのインストール
+	GO111MODULE=off go get -u github.com/google/wire
+
+	# wire genの実行
+	wire gen cmd/grpc/wire.go
 
 test: ## testの実行
 	go test -v ./...
