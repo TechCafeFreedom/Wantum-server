@@ -3,6 +3,7 @@ package profile
 import (
 	"context"
 	"testing"
+	"time"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/profile/mock_profile"
 	"wantum/pkg/infrastructure/mysql/model"
@@ -20,10 +21,10 @@ const (
 	gender    = 1
 	phone     = "000-0000-0000"
 	place     = "place"
-	birth     = "1998-05-03"
 )
 
 var (
+	birth             = time.Now()
 	dummyProfileModel = &model.ProfileModel{
 		ID:        profileID,
 		UserID:    userID,
@@ -33,7 +34,7 @@ var (
 		Gender:    gender,
 		Phone:     phone,
 		Place:     place,
-		Birth:     birth,
+		Birth:     &birth,
 	}
 
 	dummyProfileModelWithoutID = &model.ProfileModel{
@@ -44,7 +45,7 @@ var (
 		Gender:    gender,
 		Phone:     phone,
 		Place:     place,
-		Birth:     birth,
+		Birth:     &birth,
 	}
 
 	dummyProfileModelSlice = model.ProfileModelSlice{
@@ -64,7 +65,7 @@ func TestService_CreateNewProfile(t *testing.T) {
 	profileRepository.EXPECT().InsertProfile(ctx, masterTx, dummyProfileModelWithoutID).Return(dummyProfileModelWithoutID, nil).Times(1)
 
 	service := New(profileRepository)
-	createdProfile, err := service.CreateNewProfile(ctx, masterTx, userID, name, thumbnail, bio, phone, place, birth, gender)
+	createdProfile, err := service.CreateNewProfile(ctx, masterTx, userID, name, thumbnail, bio, phone, place, &birth, gender)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, createdProfile)

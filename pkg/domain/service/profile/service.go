@@ -2,6 +2,7 @@ package profile
 
 import (
 	"context"
+	"time"
 	"wantum/pkg/domain/entity"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/profile"
@@ -10,7 +11,7 @@ import (
 )
 
 type Service interface {
-	CreateNewProfile(ctx context.Context, masterTx repository.MasterTx, userID int, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.Profile, error)
+	CreateNewProfile(ctx context.Context, masterTx repository.MasterTx, userID int, name, thumbnail, bio, phone, place string, birth *time.Time, gender int) (*entity.Profile, error)
 	GetByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.Profile, error)
 	GetByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (entity.ProfileSlice, error)
 }
@@ -25,7 +26,7 @@ func New(profileRepository profile.Repository) Service {
 	}
 }
 
-func (s *service) CreateNewProfile(ctx context.Context, masterTx repository.MasterTx, userID int, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.Profile, error) {
+func (s *service) CreateNewProfile(ctx context.Context, masterTx repository.MasterTx, userID int, name, thumbnail, bio, phone, place string, birth *time.Time, gender int) (*entity.Profile, error) {
 	newProfile := &model.ProfileModel{
 		UserID:    userID,
 		Name:      name,

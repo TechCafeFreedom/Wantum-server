@@ -7,6 +7,7 @@ package mock_profile
 import (
 	context "context"
 	reflect "reflect"
+	time "time"
 	entity "wantum/pkg/domain/entity"
 	repository "wantum/pkg/domain/repository"
 
@@ -37,7 +38,7 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 }
 
 // CreateNewProfile mocks base method
-func (m *MockService) CreateNewProfile(ctx context.Context, masterTx repository.MasterTx, userID int, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.Profile, error) {
+func (m *MockService) CreateNewProfile(ctx context.Context, masterTx repository.MasterTx, userID int, name, thumbnail, bio, phone, place string, birth *time.Time, gender int) (*entity.Profile, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateNewProfile", ctx, masterTx, userID, name, thumbnail, bio, phone, place, birth, gender)
 	ret0, _ := ret[0].(*entity.Profile)
