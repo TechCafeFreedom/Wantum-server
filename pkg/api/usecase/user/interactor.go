@@ -36,7 +36,7 @@ func (i *intereractor) CreateNewUser(ctx context.Context, authID, userName, mail
 	if mail == "" {
 		err := errors.New("mail is empty error")
 		tlog.PrintErrorLogWithAuthID(authID, err)
-		return nil, werrors.Newf(err, http.StatusBadRequest, "メール情報は必須項目です。", "mail is required.")
+		return nil, werrors.Newf(err, codes.InvalidArgument, http.StatusBadRequest, "メール情報は必須項目です。", "mail is required.")
 	}
 
 	var createdUser *entity.User
