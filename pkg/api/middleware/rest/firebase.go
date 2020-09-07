@@ -1,4 +1,4 @@
-package middleware
+package rest
 
 import (
 	"context"
@@ -45,6 +45,7 @@ func (fa *firebaseAuth) MiddlewareFunc(next http.Handler) http.Handler {
 			response.Error(w, r, werrors.FromConstant(err, werrors.AuthFail))
 			return
 		}
+
 		// contextにuidを格納
 		r = r.WithContext(context.WithValue(r.Context(), constants.AuthCtxKey, authedUserToken.UID))
 		next.ServeHTTP(w, r)
