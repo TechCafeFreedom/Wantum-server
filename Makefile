@@ -32,7 +32,7 @@ proto-fmt: ## protoファイルのリフォーマット
 proto-doc: ## protoから生成するProtoドキュメントの生成
 	protoc -I ${PROTOS_DIR} --doc_out=html,index.html:./Wantum-ProtocolBuffer ${PROTOS_DIR}/*.proto
 
-mockgen: # mockgenの実行
+mockgen: ## mockgenの実行
 	# Usege: make mockgen source=<インターフェースの定義しているファイル>
 
 	# mockgenのインストール
