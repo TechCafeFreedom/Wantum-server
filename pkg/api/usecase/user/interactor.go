@@ -4,16 +4,20 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"time"
 	"wantum/pkg/domain/entity"
 	"wantum/pkg/domain/repository"
+	fileservice "wantum/pkg/domain/service/file"
 	profileservice "wantum/pkg/domain/service/profile"
 	userservice "wantum/pkg/domain/service/user"
 	"wantum/pkg/tlog"
 	"wantum/pkg/werrors"
+
+	"google.golang.org/grpc/codes"
 )
 
 type Interactor interface {
-	CreateNewUser(ctx context.Context, authID, userName, mail, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.User, error)
+	CreateNewUser(ctx context.Context, authID, userName, mail, name, bio, phone, place string, thumbnail []byte, birth int, gender int) (*entity.User, error)
 	GetAuthorizedUser(ctx context.Context, authID string) (*entity.User, error)
 	GetAll(ctx context.Context) (entity.UserMap, error)
 }
@@ -22,26 +26,35 @@ type intereractor struct {
 	masterTxManager repository.MasterTxManager
 	userService     userservice.Service
 	profileService  profileservice.Service
+	fileService     fileservice.Service
 }
 
-func New(masterTxManager repository.MasterTxManager, userService userservice.Service, profileService profileservice.Service) Interactor {
+func New(masterTxManager repository.MasterTxManager, userService userservice.Service, profileService profileservice.Service, fileService fileservice.Service) Interactor {
 	return &intereractor{
 		masterTxManager: masterTxManager,
 		userService:     userService,
 		profileService:  profileService,
+		fileService:     fileService,
 	}
 }
 
-func (i *intereractor) CreateNewUser(ctx context.Context, authID, userName, mail, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.User, error) {
+func (i *intereractor) CreateNewUser(ctx context.Context, authID, userName, mail, name, bio, phone, place string, thumbnail []byte, birth int, gender int) (*entity.User, error) {
 	if mail == "" {
 		err := errors.New("mail is empty error")
 		tlog.PrintErrorLogWithAuthID(authID, err)
 		return nil, werrors.Newf(err, codes.InvalidArgument, http.StatusBadRequest, "メール情報は必須項目です。", "mail is required.")
 	}
 
+	birthDate := time.Unix(int64(birth), 0)
+
 	var createdUser *entity.User
-	var err error
-	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+		// サムネイル画像のアップロード
+		thumbnailURL, err := i.fileService.UploadImageToLocalFolder(thumbnail)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+
 		// 新規ユーザ作成
 		createdUser, err = i.userService.CreateNewUser(masterTx, authID, userName, mail)
 		if err != nil {
@@ -49,7 +62,7 @@ func (i *intereractor) CreateNewUser(ctx context.Context, authID, userName, mail
 		}
 
 		// 作成したユーザのプロフィール登録
-		createdUser.Profile, err = i.profileService.CreateNewProfile(ctx, masterTx, createdUser.ID, name, thumbnail, bio, phone, place, birth, gender)
+		createdUser.Profile, err = i.profileService.CreateNewProfile(ctx, masterTx, createdUser.ID, name, thumbnailURL, bio, phone, place, &birthDate, gender)
 		if err != nil {
 			return werrors.Stack(err)
 		}
