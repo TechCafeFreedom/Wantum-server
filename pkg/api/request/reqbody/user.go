@@ -10,5 +10,5 @@ type UserCreate struct {
 	Gender    int    `json:"gender"`
 	Phone     string `json:"phone"`
 	Place     string `json:"place"`
-	Birth     string `json:"birth"`
+	Birth     int    `json:"birth"`
 }

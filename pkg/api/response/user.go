@@ -18,7 +18,7 @@ type UserResponse struct {
 	Gender    int    `json:"gender"`
 	Phone     string `json:"phone"`
 	Place     string `json:"place"`
-	Birth     string `json:"birth"`
+	Birth     int64  `json:"birth"`
 }
 
 type UsersResponse []*UserResponse
@@ -71,6 +71,6 @@ func ConvertToUserResponse(userData *entity.User) *UserResponse {
 		Gender:    userData.Profile.Gender,
 		Phone:     userData.Profile.Phone,
 		Place:     userData.Profile.Place,
-		Birth:     userData.Profile.Birth,
+		Birth:     userData.Profile.Birth.Unix(),
 	}
 }
