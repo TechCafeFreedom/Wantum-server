@@ -45,10 +45,10 @@ func (s *Server) CreateNewUser(w http.ResponseWriter, r *http.Request) {
 		reqBody.UserName,
 		reqBody.Mail,
 		reqBody.Name,
-		reqBody.Thumbnail,
 		reqBody.Bio,
 		reqBody.Phone,
 		reqBody.Place,
+		nil,
 		reqBody.Birth,
 		reqBody.Gender,
 	)
