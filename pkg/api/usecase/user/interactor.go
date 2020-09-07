@@ -17,7 +17,7 @@ import (
 )
 
 type Interactor interface {
-	CreateNewUser(ctx context.Context, authID, userName, mail, name, bio, phone, place string, thumbnail []byte, birth int, gender int) (*entity.User, error)
+	CreateNewUser(ctx context.Context, authID, userName, mail, name, bio, phone, place string, thumbnail []byte, birth, gender int) (*entity.User, error)
 	GetAuthorizedUser(ctx context.Context, authID string) (*entity.User, error)
 	GetAll(ctx context.Context) (entity.UserMap, error)
 }
@@ -38,7 +38,7 @@ func New(masterTxManager repository.MasterTxManager, userService userservice.Ser
 	}
 }
 
-func (i *intereractor) CreateNewUser(ctx context.Context, authID, userName, mail, name, bio, phone, place string, thumbnail []byte, birth int, gender int) (*entity.User, error) {
+func (i *intereractor) CreateNewUser(ctx context.Context, authID, userName, mail, name, bio, phone, place string, thumbnail []byte, birth, gender int) (*entity.User, error) {
 	if mail == "" {
 		err := errors.New("mail is empty error")
 		tlog.PrintErrorLogWithAuthID(authID, err)
