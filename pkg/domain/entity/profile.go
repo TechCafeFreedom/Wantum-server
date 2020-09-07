@@ -10,7 +10,7 @@ type Profile struct {
 	Gender    int
 	Phone     string
 	Place     string
-	Birth     string
+	Birth     *time.Time
 	CreatedAt *time.Time
 	UpdatedAt *time.Time
 	DeletedAt *time.Time
