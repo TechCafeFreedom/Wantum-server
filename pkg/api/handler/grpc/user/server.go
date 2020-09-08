@@ -51,7 +51,7 @@ func (s *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb
 		UserName:  createdUser.UserName,
 		Thumbnail: createdUser.Profile.Thumbnail,
 		Bio:       createdUser.Profile.Bio,
-		Gender:    int32(createdUser.Profile.Gender),
+		Gender:    pb.GenderType(createdUser.Profile.Gender),
 		Place:     createdUser.Profile.Place,
 		Birth:     createdUser.Profile.Birth.Unix(),
 	}, nil
@@ -74,7 +74,7 @@ func (s *Server) GetMyProfile(ctx context.Context, req *empty.Empty) (*pb.UserIn
 		UserName:  userData.UserName,
 		Thumbnail: userData.Profile.Thumbnail,
 		Bio:       userData.Profile.Bio,
-		Gender:    int32(userData.Profile.Gender),
+		Gender:    pb.GenderType(userData.Profile.Gender),
 		Place:     userData.Profile.Place,
 		Birth:     userData.Profile.Birth.Unix(),
 	}, nil
