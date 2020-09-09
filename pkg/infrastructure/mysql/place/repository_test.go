@@ -21,6 +21,9 @@ import (
 var db *sql.DB
 var txManager repository.MasterTxManager
 var repo place.Repository
+var dummyDate time.Time
+
+var dummyPlace = "samplePlace"
 
 func TestMain(m *testing.M) {
 	before()
@@ -39,6 +42,7 @@ func before() {
 	}
 	txManager = tx.NewDBMasterTxManager(db)
 	repo = New(txManager)
+	dummyDate = time.Date(2020, 9, 1, 12, 0, 0, 0, time.Local)
 }
 
 // dbのコネクションを閉じる
@@ -47,14 +51,13 @@ func after() {
 }
 
 func TestInsert(t *testing.T) {
-	t.Run("success to insert data", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		date := time.Date(2020, 9, 1, 12, 0, 0, 0, time.Local)
 		place := &model.PlaceModel{
-			Name:      "sample place",
-			CreatedAt: &date,
-			UpdatedAt: &date,
+			Name:      dummyPlace,
+			CreatedAt: &dummyDate,
+			UpdatedAt: &dummyDate,
 		}
 
 		var result int
@@ -67,7 +70,7 @@ func TestInsert(t *testing.T) {
 		assert.NotNil(t, result)
 	})
 
-	t.Run("failed to insert data. data is nil", func(t *testing.T) {
+	t.Run("failure_データがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
@@ -83,15 +86,14 @@ func TestInsert(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
-	t.Run("success to update data", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		date := time.Date(2020, 9, 1, 12, 0, 0, 0, time.Local)
 		place := &model.PlaceModel{
 			ID:        1,
-			Name:      "sample place",
-			CreatedAt: &date,
-			UpdatedAt: &date,
+			Name:      dummyPlace,
+			CreatedAt: &dummyDate,
+			UpdatedAt: &dummyDate,
 		}
 
 		var result *model.PlaceModel
@@ -107,10 +109,10 @@ func TestUpdate(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.NotNil(t, result)
-		// assert.Equal(t, "sample place", result.Name)
+		assert.Equal(t, dummyPlace, result.Name)
 	})
 
-	t.Run("failure to update data. data is nil", func(t *testing.T) {
+	t.Run("failure_データがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
@@ -132,14 +134,13 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestUpDeleteFlag(t *testing.T) {
-	t.Run("success to up deleteFlag", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		date := time.Date(2020, 9, 1, 12, 0, 0, 0, time.Local)
 		place := &model.PlaceModel{
-			Name:      "sample place",
-			CreatedAt: &date,
-			UpdatedAt: &date,
+			Name:      dummyPlace,
+			CreatedAt: &dummyDate,
+			UpdatedAt: &dummyDate,
 		}
 
 		var result *model.PlaceModel
@@ -147,7 +148,7 @@ func TestUpDeleteFlag(t *testing.T) {
 			newPlaceID, _ := repo.Insert(ctx, masterTx, place)
 
 			place.ID = newPlaceID
-			place.DeletedAt = &date
+			place.DeletedAt = &dummyDate
 			err = repo.UpDeleteFlag(ctx, masterTx, place)
 			if err != nil {
 				return err
@@ -161,14 +162,13 @@ func TestUpDeleteFlag(t *testing.T) {
 		assert.NotNil(t, result.DeletedAt)
 	})
 
-	t.Run("failure to up deleteFlag. deletedAt is nil", func(t *testing.T) {
+	t.Run("failure_deletedAtがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		date := time.Date(2020, 9, 1, 12, 0, 0, 0, time.Local)
 		place := &model.PlaceModel{
-			Name:      "sample place",
-			CreatedAt: &date,
-			UpdatedAt: &date,
+			Name:      dummyPlace,
+			CreatedAt: &dummyDate,
+			UpdatedAt: &dummyDate,
 		}
 
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
@@ -184,15 +184,14 @@ func TestUpDeleteFlag(t *testing.T) {
 }
 
 func TestDownDeleteFlag(t *testing.T) {
-	t.Run("success to down deleteFlag", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		date := time.Date(2020, 9, 1, 12, 0, 0, 0, time.Local)
 		place := &model.PlaceModel{
-			Name:      "sample place",
-			CreatedAt: &date,
-			UpdatedAt: &date,
-			DeletedAt: &date,
+			Name:      dummyPlace,
+			CreatedAt: &dummyDate,
+			UpdatedAt: &dummyDate,
+			DeletedAt: &dummyDate,
 		}
 
 		var result *model.PlaceModel
@@ -216,21 +215,20 @@ func TestDownDeleteFlag(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	t.Run("success to delete", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		date := time.Date(2020, 9, 1, 12, 0, 0, 0, time.Local)
 		place := &model.PlaceModel{
-			Name:      "sample place",
-			CreatedAt: &date,
-			UpdatedAt: &date,
+			Name:      dummyPlace,
+			CreatedAt: &dummyDate,
+			UpdatedAt: &dummyDate,
 		}
 
 		var result *model.PlaceModel
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			newPlaceID, _ := repo.Insert(ctx, masterTx, place)
 			place.ID = newPlaceID
-			place.DeletedAt = &date
+			place.DeletedAt = &dummyDate
 			repo.UpDeleteFlag(ctx, masterTx, place)
 
 			err = repo.Delete(ctx, masterTx, place.ID)
@@ -251,14 +249,13 @@ func TestDelete(t *testing.T) {
 }
 
 func TestSelectByID(t *testing.T) {
-	t.Run("success to select by id", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		date := time.Date(2020, 9, 1, 12, 0, 0, 0, time.Local)
 		place := &model.PlaceModel{
-			Name:      "sample place",
-			CreatedAt: &date,
-			UpdatedAt: &date,
+			Name:      dummyPlace,
+			CreatedAt: &dummyDate,
+			UpdatedAt: &dummyDate,
 		}
 
 		var result *model.PlaceModel
@@ -276,7 +273,7 @@ func TestSelectByID(t *testing.T) {
 }
 
 func TestSelectAll(t *testing.T) {
-	t.Run("success to select all", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
