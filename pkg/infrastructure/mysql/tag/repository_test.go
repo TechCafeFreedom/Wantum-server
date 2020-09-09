@@ -51,7 +51,7 @@ func after() {
 }
 
 func TestInsert(t *testing.T) {
-	t.Run("success to insert data", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
@@ -71,7 +71,7 @@ func TestInsert(t *testing.T) {
 		assert.NotNil(t, result)
 	})
 
-	t.Run("failed to insert data. data is nil", func(t *testing.T) {
+	t.Run("failure_データがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
@@ -87,7 +87,7 @@ func TestInsert(t *testing.T) {
 }
 
 func TestUpDeleteFlag(t *testing.T) {
-	t.Run("success to up deleteFlag", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
@@ -116,7 +116,7 @@ func TestUpDeleteFlag(t *testing.T) {
 		assert.NotNil(t, result.DeletedAt)
 	})
 
-	t.Run("failure to up deleteFlag. deletedAt is nil", func(t *testing.T) {
+	t.Run("failure_deletedAtがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
@@ -137,7 +137,7 @@ func TestUpDeleteFlag(t *testing.T) {
 }
 
 func TestDownDeleteFlag(t *testing.T) {
-	t.Run("success to down deleteFlag", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
@@ -168,7 +168,7 @@ func TestDownDeleteFlag(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	t.Run("success to delete", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
@@ -203,7 +203,7 @@ func TestDelete(t *testing.T) {
 }
 
 func TestSelectByID(t *testing.T) {
-	t.Run("success to select by id", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
@@ -227,7 +227,7 @@ func TestSelectByID(t *testing.T) {
 }
 
 func TestSelectByName(t *testing.T) {
-	t.Run("success to select by name", func(t *testing.T) {
+	t.Run("successe", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
@@ -249,7 +249,7 @@ func TestSelectByName(t *testing.T) {
 		assert.NotNil(t, result)
 	})
 
-	t.Run("failure to select by name. data not exists", func(t *testing.T) {
+	t.Run("failure_存在しないデータ", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
@@ -267,7 +267,7 @@ func TestSelectByName(t *testing.T) {
 }
 
 func TestSelectByWishCardID(t *testing.T) {
-	t.Run("success to select by wishCardID", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
@@ -284,7 +284,7 @@ func TestSelectByWishCardID(t *testing.T) {
 }
 
 func TestSelectByMemoryID(t *testing.T) {
-	t.Run("success to select by wishCardID", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
