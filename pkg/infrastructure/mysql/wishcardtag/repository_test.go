@@ -44,7 +44,7 @@ func after() {
 }
 
 func TestInsert(t *testing.T) {
-	t.Run("success to insert data", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
@@ -57,7 +57,7 @@ func TestInsert(t *testing.T) {
 }
 
 func TestBulkInsert(t *testing.T) {
-	t.Run("success to bulk insert data", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
@@ -70,7 +70,7 @@ func TestBulkInsert(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	t.Run("success to delete data", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
@@ -83,7 +83,7 @@ func TestDelete(t *testing.T) {
 }
 
 func TestDeleteByWishCardID(t *testing.T) {
-	t.Run("success to delete data", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
