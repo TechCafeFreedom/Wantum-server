@@ -9,7 +9,7 @@ import (
 )
 
 func TestConvertToWishCardEntity(t *testing.T) {
-	t.Run("ver success", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		date := time.Date(2020, 9, 1, 10, 10, 10, 0, time.UTC)
 		testData := &WishCardModel{
 			ID:          1,
@@ -29,13 +29,13 @@ func TestConvertToWishCardEntity(t *testing.T) {
 		assert.IsType(t, &entity.WishCard{}, result)
 	})
 
-	t.Run("ver nil", func(t *testing.T) {
+	t.Run("failure_nil", func(t *testing.T) {
 		result := ConvertToWishCardEntiry(nil)
 		assert.Nil(t, result)
 	})
 }
 func TestConvertToWishCardSliceEntity(t *testing.T) {
-	t.Run("ver success", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		date := time.Date(2020, 9, 1, 10, 10, 10, 0, time.UTC)
 		data := &WishCardModel{
 			ID:          1,
@@ -56,7 +56,7 @@ func TestConvertToWishCardSliceEntity(t *testing.T) {
 		assert.IsType(t, entity.WishCardSlice{}, result)
 	})
 
-	t.Run("ver nil", func(t *testing.T) {
+	t.Run("failure_nil", func(t *testing.T) {
 		result := ConvertToWishCardSliceEntity(nil)
 		assert.Nil(t, result)
 	})
