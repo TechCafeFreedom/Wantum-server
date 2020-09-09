@@ -1,4 +1,4 @@
-package wish_card
+package wishcard
 
 import (
 	"context"
@@ -9,8 +9,8 @@ import (
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/service/place/mock_place"
 	"wantum/pkg/domain/service/tag/mock_tag"
-	"wantum/pkg/domain/service/wish_card/mock_wish_card"
-	"wantum/pkg/domain/service/wish_card_tag/mock_wish_card_tag"
+	"wantum/pkg/domain/service/wishcard/mock_wish_card"
+	"wantum/pkg/domain/service/wishcardtag/mock_wish_card_tag"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"

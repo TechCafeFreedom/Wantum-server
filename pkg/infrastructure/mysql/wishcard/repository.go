@@ -1,4 +1,4 @@
-package wish_card
+package wishcard
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"errors"
 	"strings"
 	"wantum/pkg/domain/repository"
-	"wantum/pkg/domain/repository/wish_card"
+	"wantum/pkg/domain/repository/wishcard"
 	"wantum/pkg/infrastructure/mysql"
 	"wantum/pkg/infrastructure/mysql/model"
 	"wantum/pkg/tlog"
@@ -17,7 +17,7 @@ type wishCardRepositoryImplement struct {
 	masterTxManager repository.MasterTxManager
 }
 
-func New(txManager repository.MasterTxManager) wish_card.Repository {
+func New(txManager repository.MasterTxManager) wishcard.Repository {
 	return &wishCardRepositoryImplement{
 		masterTxManager: txManager,
 	}

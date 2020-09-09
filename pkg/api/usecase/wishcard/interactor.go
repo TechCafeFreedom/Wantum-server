@@ -1,4 +1,4 @@
-package wish_card
+package wishcard
 
 import (
 	"context"
@@ -7,8 +7,8 @@ import (
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/service/place"
 	"wantum/pkg/domain/service/tag"
-	"wantum/pkg/domain/service/wish_card"
-	"wantum/pkg/domain/service/wish_card_tag"
+	"wantum/pkg/domain/service/wishcard"
+	"wantum/pkg/domain/service/wishcardtag"
 	"wantum/pkg/werrors"
 )
 
@@ -22,13 +22,13 @@ type Interactor interface {
 
 type interactor struct {
 	masterTxManager      repository.MasterTxManager
-	wishCardService      wish_card.Service
+	wishCardService      wishcard.Service
 	tagService           tag.Service
 	placeService         place.Service
-	wishCardsTagsService wish_card_tag.Service
+	wishCardsTagsService wishcardtag.Service
 }
 
-func New(masterTxManager repository.MasterTxManager, wishCardService wish_card.Service, tagService tag.Service, placeService place.Service, wishCardsTagsService wish_card_tag.Service) Interactor {
+func New(masterTxManager repository.MasterTxManager, wishCardService wishcard.Service, tagService tag.Service, placeService place.Service, wishCardsTagsService wishcardtag.Service) Interactor {
 	return &interactor{
 		masterTxManager:      masterTxManager,
 		wishCardService:      wishCardService,

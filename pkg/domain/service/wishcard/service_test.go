@@ -1,4 +1,4 @@
-package wish_card
+package wishcard
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 	"wantum/pkg/domain/repository"
-	"wantum/pkg/domain/repository/wish_card/mock_wish_card"
+	"wantum/pkg/domain/repository/wishcard/mock_wish_card"
 	"wantum/pkg/infrastructure/mysql/model"
 
 	"github.com/golang/mock/gomock"

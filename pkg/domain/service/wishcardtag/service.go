@@ -1,9 +1,9 @@
-package wish_card_tag
+package wishcardtag
 
 import (
 	"context"
 	"wantum/pkg/domain/repository"
-	"wantum/pkg/domain/repository/wish_card_tag"
+	"wantum/pkg/domain/repository/wishcardtag"
 	"wantum/pkg/werrors"
 )
 
@@ -15,10 +15,10 @@ type Service interface {
 }
 
 type service struct {
-	repository wish_card_tag.Repository
+	repository wishcardtag.Repository
 }
 
-func New(repo wish_card_tag.Repository) Service {
+func New(repo wishcardtag.Repository) Service {
 	return &service{
 		repository: repo,
 	}
