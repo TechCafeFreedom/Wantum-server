@@ -8,7 +8,7 @@ require (
 	firebase.google.com/go v3.12.0+incompatible
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-sql-driver/mysql v1.5.0
-	github.com/golang/mock v1.4.3
+	github.com/golang/mock v1.4.4
 	github.com/google/wire v0.4.0
 	github.com/gorilla/mux v1.7.4
 	github.com/joho/godotenv v1.3.0
