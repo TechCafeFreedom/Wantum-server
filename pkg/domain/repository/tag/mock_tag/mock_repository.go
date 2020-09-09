@@ -107,6 +107,21 @@ func (mr *MockRepositoryMockRecorder) SelectByID(ctx, masterTx, tagID interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectByID", reflect.TypeOf((*MockRepository)(nil).SelectByID), ctx, masterTx, tagID)
 }
 
+// SelectByName mocks base method
+func (m *MockRepository) SelectByName(ctx context.Context, masterTx repository.MasterTx, name string) (*model.TagModel, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SelectByName", ctx, masterTx, name)
+	ret0, _ := ret[0].(*model.TagModel)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SelectByName indicates an expected call of SelectByName
+func (mr *MockRepositoryMockRecorder) SelectByName(ctx, masterTx, name interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectByName", reflect.TypeOf((*MockRepository)(nil).SelectByName), ctx, masterTx, name)
+}
+
 // SelectByWishCardID mocks base method
 func (m *MockRepository) SelectByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (model.TagModelSlice, error) {
 	m.ctrl.T.Helper()

@@ -20,6 +20,7 @@ type Service interface {
 	Delete(ctx context.Context, masterTx repository.MasterTx, tagID int) error
 
 	GetByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*entity.Tag, error)
+	GetByName(ctx context.Context, masterTx repository.MasterTx, name string) (*entity.Tag, error)
 	GetByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (entity.TagSlice, error)
 	GetByMemoryID(ctx context.Context, masterTx repository.MasterTx, memoryID int) (entity.TagSlice, error)
 }
@@ -101,6 +102,14 @@ func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, tagI
 
 func (s *service) GetByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*entity.Tag, error) {
 	tag, err := s.tagRepository.SelectByID(ctx, masterTx, tagID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	return model.ConvertToTagEntity(tag), nil
+}
+
+func (s *service) GetByName(ctx context.Context, masterTx repository.MasterTx, name string) (*entity.Tag, error) {
+	tag, err := s.tagRepository.SelectByName(ctx, masterTx, name)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}

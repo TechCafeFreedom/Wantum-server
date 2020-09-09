@@ -152,6 +152,32 @@ func (repo *tagRepositoryImplement) SelectByID(ctx context.Context, masterTx rep
 	return &result, nil
 }
 
+func (repo *tagRepositoryImplement) SelectByName(ctx context.Context, masterTx repository.MasterTx, name string) (*model.TagModel, error) {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
+	}
+	row := tx.QueryRow(`
+		SELECT id, name, created_at, updated_at, deleted_at
+		FROM tags
+		WHERE name=?
+	`, name)
+	var result model.TagModel
+	err = row.Scan(
+		&result.ID,
+		&result.Name,
+		&result.CreatedAt,
+		&result.UpdatedAt,
+		&result.DeletedAt,
+	)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
+	}
+	return &result, nil
+}
+
 func (repo *tagRepositoryImplement) SelectByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (model.TagModelSlice, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {

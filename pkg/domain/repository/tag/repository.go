@@ -14,6 +14,7 @@ type Repository interface {
 	Delete(ctx context.Context, masterTx repository.MasterTx, tagID int) error
 
 	SelectByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*model.TagModel, error)
+	SelectByName(ctx context.Context, masterTx repository.MasterTx, name string) (*model.TagModel, error)
 	SelectByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (model.TagModelSlice, error)
 	SelectByMemoryID(ctx context.Context, masterTx repository.MasterTx, memoryID int) (model.TagModelSlice, error)
 }
