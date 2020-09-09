@@ -9,7 +9,7 @@ import (
 )
 
 func TestConvertToPlaceEntity(t *testing.T) {
-	t.Run("ver success", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		date := time.Date(2020, 9, 1, 10, 10, 10, 0, time.UTC)
 		testData := &PlaceModel{
 			ID:        1,
@@ -25,13 +25,13 @@ func TestConvertToPlaceEntity(t *testing.T) {
 		assert.IsType(t, &entity.Place{}, result)
 	})
 
-	t.Run("ver nil", func(t *testing.T) {
+	t.Run("failure_nil", func(t *testing.T) {
 		result := ConvertToPlaceEntity(nil)
 		assert.Nil(t, result)
 	})
 }
 func TestConvertToPlaceSliceEntity(t *testing.T) {
-	t.Run("ver success", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		date := time.Date(2020, 9, 1, 10, 10, 10, 0, time.UTC)
 		data := &PlaceModel{
 			ID:        1,
@@ -48,7 +48,7 @@ func TestConvertToPlaceSliceEntity(t *testing.T) {
 		assert.IsType(t, entity.PlaceSlice{}, result)
 	})
 
-	t.Run("ver nil", func(t *testing.T) {
+	t.Run("failure_nil", func(t *testing.T) {
 		result := ConvertToPlaceSliceEntity(nil)
 		assert.Nil(t, result)
 	})
