@@ -18,6 +18,28 @@ var (
 	dummyDate time.Time
 )
 
+var dummyTagSlice = model.TagModelSlice{
+	&model.TagModel{
+		ID:        1,
+		Name:      "sampleTag1",
+		CreatedAt: &dummyDate,
+		UpdatedAt: &dummyDate,
+	},
+	&model.TagModel{
+		ID:        2,
+		Name:      "sampleTag2",
+		CreatedAt: &dummyDate,
+		UpdatedAt: &dummyDate,
+	},
+}
+
+var dummyTag = &model.TagModel{
+	ID:        1,
+	Name:      "sampleTag",
+	CreatedAt: &dummyDate,
+	UpdatedAt: &dummyDate,
+}
+
 func TestMain(m *testing.M) {
 	before()
 	code := m.Run()
@@ -38,7 +60,7 @@ func TestService_Create(t *testing.T) {
 	repo.EXPECT().Insert(ctx, masterTx, gomock.Any()).Return(1, nil)
 
 	service := New(repo)
-	result, err := service.Create(ctx, masterTx, "sample tag")
+	result, err := service.Create(ctx, masterTx, "sampleTag")
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
@@ -49,19 +71,12 @@ func TestService_UpDeleteFlag(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	dummyData := &model.TagModel{
-		ID:        1,
-		Name:      "sample tag",
-		CreatedAt: &dummyDate,
-		UpdatedAt: &dummyDate,
-	}
-
 	repo := mock_tag.NewMockRepository(ctrl)
 	repo.EXPECT().UpDeleteFlag(ctx, masterTx, gomock.Any()).Return(nil)
-	repo.EXPECT().SelectByID(ctx, masterTx, dummyData.ID).Return(dummyData, nil)
+	repo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyTag, nil)
 
 	service := New(repo)
-	result, err := service.UpDeleteFlag(ctx, masterTx, dummyData.ID)
+	result, err := service.UpDeleteFlag(ctx, masterTx, dummyTag.ID)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
@@ -73,20 +88,12 @@ func TestService_DownDeleteFlag(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	dummyData := &model.TagModel{
-		ID:        1,
-		Name:      "samleTag",
-		CreatedAt: &dummyDate,
-		UpdatedAt: &dummyDate,
-		DeletedAt: &dummyDate,
-	}
-
 	repo := mock_tag.NewMockRepository(ctrl)
 	repo.EXPECT().DownDeleteFlag(ctx, masterTx, gomock.Any()).Return(nil)
-	repo.EXPECT().SelectByID(ctx, masterTx, dummyData.ID).Return(dummyData, nil)
+	repo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyTag, nil)
 
 	service := New(repo)
-	result, err := service.DownDeleteFlag(ctx, masterTx, dummyData.ID)
+	result, err := service.DownDeleteFlag(ctx, masterTx, dummyTag.ID)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
@@ -94,11 +101,12 @@ func TestService_DownDeleteFlag(t *testing.T) {
 }
 
 func TestService_Delete(t *testing.T) {
-	t.Run("success to delete", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		ctx := context.Background()
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
-		dummyData := &model.TagModel{
+
+		dummy := &model.TagModel{
 			ID:        1,
 			Name:      "sampleTag",
 			CreatedAt: &dummyDate,
@@ -107,8 +115,8 @@ func TestService_Delete(t *testing.T) {
 		}
 
 		repo := mock_tag.NewMockRepository(ctrl)
-		repo.EXPECT().Delete(ctx, masterTx, 1).Return(nil)
-		repo.EXPECT().SelectByID(ctx, masterTx, 1).Return(dummyData, nil)
+		repo.EXPECT().Delete(ctx, masterTx, gomock.Any()).Return(nil)
+		repo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummy, nil)
 
 		service := New(repo)
 		err := service.Delete(ctx, masterTx, 1)
@@ -116,19 +124,13 @@ func TestService_Delete(t *testing.T) {
 		assert.NoError(t, err)
 	})
 
-	t.Run("failure to delete. doesn't up delete flag", func(t *testing.T) {
+	t.Run("failure_deleteフラグがたってない", func(t *testing.T) {
 		ctx := context.Background()
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
-		dummyData := &model.TagModel{
-			ID:        1,
-			Name:      "sampleTag",
-			CreatedAt: &dummyDate,
-			UpdatedAt: &dummyDate,
-		}
 
 		repo := mock_tag.NewMockRepository(ctrl)
-		repo.EXPECT().SelectByID(ctx, masterTx, 1).Return(dummyData, nil)
+		repo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyTag, nil)
 
 		service := New(repo)
 		err := service.Delete(ctx, masterTx, 1)
@@ -142,18 +144,11 @@ func TestService_GetByID(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	dummyData := &model.TagModel{
-		ID:        1,
-		Name:      "sampleTag",
-		CreatedAt: &dummyDate,
-		UpdatedAt: &dummyDate,
-	}
-
 	repo := mock_tag.NewMockRepository(ctrl)
-	repo.EXPECT().SelectByID(ctx, masterTx, dummyData.ID).Return(dummyData, nil)
+	repo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyTag, nil)
 
 	service := New(repo)
-	result, err := service.GetByID(ctx, masterTx, dummyData.ID)
+	result, err := service.GetByID(ctx, masterTx, dummyTag.ID)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
@@ -164,22 +159,8 @@ func TestService_GetByWishCardID(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	dummyData := model.TagModelSlice{
-		&model.TagModel{
-			ID:        1,
-			Name:      "sampleTag",
-			CreatedAt: &dummyDate,
-			UpdatedAt: &dummyDate,
-		},
-		&model.TagModel{
-			ID:        2,
-			Name:      "sampleTag2",
-			CreatedAt: &dummyDate,
-			UpdatedAt: &dummyDate,
-		},
-	}
 	repo := mock_tag.NewMockRepository(ctrl)
-	repo.EXPECT().SelectByWishCardID(ctx, masterTx, 1).Return(dummyData, nil)
+	repo.EXPECT().SelectByWishCardID(ctx, masterTx, 1).Return(dummyTagSlice, nil)
 
 	service := New(repo)
 	result, err := service.GetByWishCardID(ctx, masterTx, 1)
@@ -193,22 +174,8 @@ func TestService_GetByMemoryID(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	dummyData := model.TagModelSlice{
-		&model.TagModel{
-			ID:        1,
-			Name:      "sampleTag",
-			CreatedAt: &dummyDate,
-			UpdatedAt: &dummyDate,
-		},
-		&model.TagModel{
-			ID:        2,
-			Name:      "sampleTag2",
-			CreatedAt: &dummyDate,
-			UpdatedAt: &dummyDate,
-		},
-	}
 	repo := mock_tag.NewMockRepository(ctrl)
-	repo.EXPECT().SelectByMemoryID(ctx, masterTx, 1).Return(dummyData, nil)
+	repo.EXPECT().SelectByMemoryID(ctx, masterTx, 1).Return(dummyTagSlice, nil)
 
 	service := New(repo)
 	result, err := service.GetByMemoryID(ctx, masterTx, 1)
