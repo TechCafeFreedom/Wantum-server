@@ -117,7 +117,7 @@ func TestService_DownDeleteFlag(t *testing.T) {
 }
 
 func TestService_Delete(t *testing.T) {
-	t.Run("success to delete", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		ctx := context.Background()
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
@@ -139,7 +139,7 @@ func TestService_Delete(t *testing.T) {
 		assert.NoError(t, err)
 	})
 
-	t.Run("failure to delete. doesn't up delete flag", func(t *testing.T) {
+	t.Run("failure_deleteフラグが上がってない", func(t *testing.T) {
 		ctx := context.Background()
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
