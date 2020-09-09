@@ -22,6 +22,9 @@ var txManager repository.MasterTxManager
 var repo wcrepo.Repository
 var dummyDate time.Time
 
+var dummyActivity = "sampleActivity"
+var dummyDescription = "sampleDescription"
+
 func TestMain(m *testing.M) {
 	before()
 	code := m.Run()
@@ -46,13 +49,13 @@ func after() {
 }
 
 func TestInsert(t *testing.T) {
-	t.Run("success to insert data", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &model.WishCardModel{
 			UserID:      1,
-			Activity:    "なんかしたい",
-			Description: "何かがしたい",
+			Activity:    dummyActivity,
+			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
@@ -68,7 +71,7 @@ func TestInsert(t *testing.T) {
 		assert.NotEqual(t, 0, result)
 	})
 
-	t.Run("failure to insert data. data is nil", func(t *testing.T) {
+	t.Run("failure_データがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
@@ -83,14 +86,14 @@ func TestInsert(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
-	t.Run("success to update data", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &model.WishCardModel{
 			ID:          1,
 			UserID:      1,
-			Activity:    "なんかしたい",
-			Description: "何かがしたい",
+			Activity:    dummyActivity,
+			Description: dummyDescription,
 			Date:        &dummyDate,
 			DoneAt:      &dummyDate,
 			CreatedAt:   &dummyDate,
@@ -110,17 +113,17 @@ func TestUpdate(t *testing.T) {
 		})
 		assert.NoError(t, err)
 		assert.NotNil(t, result)
-		assert.Equal(t, "なんかしたい", result.Activity)
+		assert.Equal(t, dummyActivity, result.Activity)
 	})
 
-	t.Run("success to update data. done at is null", func(t *testing.T) {
+	t.Run("success_doneAtがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &model.WishCardModel{
 			ID:          1,
 			UserID:      1,
-			Activity:    "なんかしたい",
-			Description: "何かがしたい",
+			Activity:    dummyActivity,
+			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
@@ -139,10 +142,10 @@ func TestUpdate(t *testing.T) {
 		})
 		assert.NoError(t, err)
 		assert.NotNil(t, result)
-		assert.Equal(t, "なんかしたい", result.Activity)
+		assert.Equal(t, dummyActivity, result.Activity)
 	})
 
-	t.Run("failure to update data. data is nil", func(t *testing.T) {
+	t.Run("failure_データがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
@@ -158,13 +161,13 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestUpDeleteFlag(t *testing.T) {
-	t.Run("success to up delete flag", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &model.WishCardModel{
 			UserID:      1,
-			Activity:    "なんかしたい",
-			Description: "何かがしたい",
+			Activity:    dummyActivity,
+			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
@@ -188,13 +191,13 @@ func TestUpDeleteFlag(t *testing.T) {
 		assert.NotNil(t, result.DeletedAt)
 	})
 
-	t.Run("failure to up delete flag. flag is nil", func(t *testing.T) {
+	t.Run("failure_deletedAtがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &model.WishCardModel{
 			UserID:      1,
-			Activity:    "なんかしたい",
-			Description: "何かがしたい",
+			Activity:    dummyActivity,
+			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
@@ -211,7 +214,7 @@ func TestUpDeleteFlag(t *testing.T) {
 		assert.Error(t, err)
 	})
 
-	t.Run("failure to up delete flag. data is nil", func(t *testing.T) {
+	t.Run("failure_データがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
@@ -226,13 +229,13 @@ func TestUpDeleteFlag(t *testing.T) {
 }
 
 func TestDownDeleteFlag(t *testing.T) {
-	t.Run("success to down delete flag", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &model.WishCardModel{
 			UserID:      1,
-			Activity:    "なんかしたい",
-			Description: "何かがしたい",
+			Activity:    dummyActivity,
+			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
@@ -256,7 +259,7 @@ func TestDownDeleteFlag(t *testing.T) {
 		assert.Nil(t, result.DeletedAt)
 	})
 
-	t.Run("failure to up delete flag. data is nil", func(t *testing.T) {
+	t.Run("failure_データがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
@@ -271,13 +274,13 @@ func TestDownDeleteFlag(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	t.Run("success to up delete flag", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &model.WishCardModel{
 			UserID:      1,
-			Activity:    "なんかしたい",
-			Description: "何かがしたい",
+			Activity:    dummyActivity,
+			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
@@ -308,13 +311,13 @@ func TestDelete(t *testing.T) {
 }
 
 func TestSelectByID(t *testing.T) {
-	t.Run("success to select data", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &model.WishCardModel{
 			UserID:      1,
-			Activity:    "なんかしたい",
-			Description: "何かがしたい",
+			Activity:    dummyActivity,
+			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
@@ -332,7 +335,7 @@ func TestSelectByID(t *testing.T) {
 		assert.NotNil(t, result)
 	})
 
-	t.Run("failure to select data. data is not exist", func(t *testing.T) {
+	t.Run("failure_存在しないデータ", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
@@ -347,7 +350,7 @@ func TestSelectByID(t *testing.T) {
 }
 
 func TestSelectByIDs(t *testing.T) {
-	t.Run("success to select data", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
@@ -366,13 +369,13 @@ func TestSelectByIDs(t *testing.T) {
 }
 
 func TestCategoryID(t *testing.T) {
-	t.Run("success to select data", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &model.WishCardModel{
 			UserID:      1,
-			Activity:    "なんかしたい",
-			Description: "何かがしたい",
+			Activity:    dummyActivity,
+			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
@@ -393,7 +396,7 @@ func TestCategoryID(t *testing.T) {
 		}
 	})
 
-	t.Run("success to select data. category is not exist", func(t *testing.T) {
+	t.Run("success_存在しないカテゴリ", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
