@@ -1,4 +1,4 @@
-package wish_card
+package wishcard
 
 import (
 	"context"

@@ -1,4 +1,4 @@
-package wish_card
+package wishcard
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"time"
 	"wantum/pkg/domain/entity"
 	"wantum/pkg/domain/repository"
-	"wantum/pkg/domain/repository/wish_card"
+	"wantum/pkg/domain/repository/wishcard"
 	"wantum/pkg/infrastructure/mysql/model"
 	"wantum/pkg/werrors"
 )
@@ -27,10 +27,10 @@ type Service interface {
 }
 
 type service struct {
-	wishCardRepository wish_card.Repository
+	wishCardRepository wishcard.Repository
 }
 
-func New(repo wish_card.Repository) Service {
+func New(repo wishcard.Repository) Service {
 	return &service{
 		wishCardRepository: repo,
 	}

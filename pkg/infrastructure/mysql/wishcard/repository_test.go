@@ -1,4 +1,4 @@
-package wish_card
+package wishcard
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 	"wantum/pkg/domain/repository"
-	wcrepo "wantum/pkg/domain/repository/wish_card"
+	wcrepo "wantum/pkg/domain/repository/wishcard"
 	tx "wantum/pkg/infrastructure/mysql"
 	"wantum/pkg/infrastructure/mysql/model"
 

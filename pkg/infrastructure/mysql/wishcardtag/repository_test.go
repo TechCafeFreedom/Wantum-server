@@ -1,4 +1,4 @@
-package wish_card_tag
+package wishcardtag
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 	"wantum/pkg/domain/repository"
-	"wantum/pkg/domain/repository/wish_card_tag"
+	"wantum/pkg/domain/repository/wishcardtag"
 	tx "wantum/pkg/infrastructure/mysql"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -17,7 +17,7 @@ import (
 
 var db *sql.DB
 var txManager repository.MasterTxManager
-var repo wish_card_tag.Repository
+var repo wishcardtag.Repository
 var dummyDate time.Time
 
 func TestMain(m *testing.M) {
