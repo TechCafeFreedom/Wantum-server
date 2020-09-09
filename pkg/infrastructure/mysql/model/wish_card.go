@@ -35,6 +35,9 @@ func ConvertToWishCardEntiry(wishCard *WishCardModel) *entity.WishCard {
 		CreatedAt:   wishCard.CreatedAt,
 		UpdatedAt:   wishCard.UpdatedAt,
 		DeletedAt:   wishCard.DeletedAt,
+		Place: &entity.Place{
+			ID: wishCard.PlaceID,
+		},
 	}
 }
 

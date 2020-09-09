@@ -226,6 +226,46 @@ func TestSelectByID(t *testing.T) {
 	})
 }
 
+func TestSelectByName(t *testing.T) {
+	t.Run("success to select by name", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+		name, _ := makeRandomStr(10)
+		tag := &model.TagModel{
+			Name:      name,
+			CreatedAt: &dummyDate,
+			UpdatedAt: &dummyDate,
+		}
+
+		var result *model.TagModel
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			repo.Insert(ctx, masterTx, tag)
+
+			result, err = repo.SelectByName(ctx, masterTx, name)
+			return err
+		})
+
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+	})
+
+	t.Run("failure to select by name. data not exists", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+		name, _ := makeRandomStr(10)
+
+		var result *model.TagModel
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+
+			result, err = repo.SelectByName(ctx, masterTx, name)
+			return err
+		})
+
+		assert.Error(t, err)
+		assert.Nil(t, result)
+	})
+}
+
 func TestSelectByWishCardID(t *testing.T) {
 	t.Run("success to select by wishCardID", func(t *testing.T) {
 		var err error
