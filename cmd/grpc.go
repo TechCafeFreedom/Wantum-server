@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"time"
 	grpcWire "wantum/cmd/grpc"
@@ -10,6 +9,7 @@ import (
 	middleware "wantum/pkg/api/middleware/grpc"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/pb"
+	"wantum/pkg/tlog"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
@@ -26,9 +26,9 @@ func StartGrpcServer(firebaseClient grpcMiddleware.FirebaseAuth, masterTxManager
 	port := 8011
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		tlog.GetAppLogger().Fatal(fmt.Sprintf("failed to listen: %v", err))
 	}
-	log.Printf("Run server port: %d", port)
+	tlog.GetAppLogger().Info(fmt.Sprintf("Run server port: %d", port))
 
 	// gRPC Server Option Set
 	ops := make([]grpc.ServerOption, 0)
@@ -60,6 +60,6 @@ func StartGrpcServer(firebaseClient grpcMiddleware.FirebaseAuth, masterTxManager
 	// Serve
 	reflection.Register(grpcServer)
 	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		tlog.GetAppLogger().Fatal(fmt.Sprintf("failed to serve: %v", err))
 	}
 }
