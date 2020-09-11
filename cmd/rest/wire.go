@@ -9,8 +9,8 @@ import (
 	fileSvc "wantum/pkg/domain/service/file"
 	profileSvc "wantum/pkg/domain/service/profile"
 	userSvc "wantum/pkg/domain/service/user"
-	profileRepo "wantum/pkg/infrastructure/mysql/profile"
 	userRepo "wantum/pkg/infrastructure/mysql/user"
+	profileRepo "wantum/pkg/infrastructure/mysql/userprofile"
 
 	"github.com/google/wire"
 )
