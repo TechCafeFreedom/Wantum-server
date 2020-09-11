@@ -3,9 +3,9 @@ package user
 import (
 	"context"
 	"testing"
+	userentity "wantum/pkg/domain/entity/user"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/user/mock_user"
-	"wantum/pkg/infrastructure/mysql/model"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -19,21 +19,21 @@ const (
 )
 
 var (
-	dummyUserModel = &model.UserModel{
+	dummyUserEntity = &userentity.Entity{
 		ID:       userID,
 		AuthID:   authID,
 		UserName: userName,
 		Mail:     mail,
 	}
 
-	dummyUserModelWithoutID = &model.UserModel{
+	dummyUserEntityWithoutID = &userentity.Entity{
 		AuthID:   authID,
 		UserName: userName,
 		Mail:     mail,
 	}
 
-	dummyUserModelSlice = model.UserModelSlice{
-		dummyUserModel,
+	dummyUserEntitySlice = userentity.EntitySlice{
+		dummyUserEntity,
 	}
 )
 
@@ -44,12 +44,12 @@ func TestService_CreateNewUser(t *testing.T) {
 	masterTx := repository.NewMockMasterTx()
 
 	userRepository := mock_user.NewMockRepository(ctrl)
-	userModel := &model.UserModel{
+	userEntity := &userentity.Entity{
 		AuthID:   authID,
 		UserName: userName,
 		Mail:     mail,
 	}
-	userRepository.EXPECT().InsertUser(masterTx, userModel).Return(dummyUserModelWithoutID, nil).Times(1)
+	userRepository.EXPECT().InsertUser(masterTx, userEntity).Return(dummyUserEntityWithoutID, nil).Times(1)
 
 	service := New(userRepository)
 	createdUser, err := service.CreateNewUser(masterTx, authID, userName, mail)
@@ -66,7 +66,7 @@ func TestService_GetByPK(t *testing.T) {
 	masterTx := repository.NewMockMasterTx()
 
 	userRepository := mock_user.NewMockRepository(ctrl)
-	userRepository.EXPECT().SelectByPK(ctx, masterTx, userID).Return(dummyUserModel, nil).Times(1)
+	userRepository.EXPECT().SelectByPK(ctx, masterTx, userID).Return(dummyUserEntity, nil).Times(1)
 
 	service := New(userRepository)
 	user, err := service.GetByPK(ctx, masterTx, userID)
@@ -83,7 +83,7 @@ func TestService_SelectAll(t *testing.T) {
 	masterTx := repository.NewMockMasterTx()
 
 	userRepository := mock_user.NewMockRepository(ctrl)
-	userRepository.EXPECT().SelectAll(ctx, masterTx).Return(dummyUserModelSlice, nil).Times(1)
+	userRepository.EXPECT().SelectAll(ctx, masterTx).Return(dummyUserEntitySlice, nil).Times(1)
 
 	service := New(userRepository)
 	users, err := service.GetAll(ctx, masterTx)

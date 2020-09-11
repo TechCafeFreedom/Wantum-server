@@ -3,17 +3,16 @@ package profile
 import (
 	"context"
 	"time"
-	"wantum/pkg/domain/entity"
+	"wantum/pkg/domain/entity/userprofile"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/profile"
-	"wantum/pkg/infrastructure/mysql/model"
 	"wantum/pkg/werrors"
 )
 
 type Service interface {
-	CreateNewProfile(ctx context.Context, masterTx repository.MasterTx, userID int, name, thumbnail, bio, phone, place string, birth *time.Time, gender int) (*entity.Profile, error)
-	GetByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.Profile, error)
-	GetByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (entity.ProfileSlice, error)
+	CreateNewProfile(ctx context.Context, masterTx repository.MasterTx, userID int, name, thumbnail, bio, phone, place string, birth *time.Time, gender int) (*userprofile.Entity, error)
+	GetByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*userprofile.Entity, error)
+	GetByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (userprofile.EntitySlice, error)
 }
 
 type service struct {
@@ -26,8 +25,8 @@ func New(profileRepository profile.Repository) Service {
 	}
 }
 
-func (s *service) CreateNewProfile(ctx context.Context, masterTx repository.MasterTx, userID int, name, thumbnail, bio, phone, place string, birth *time.Time, gender int) (*entity.Profile, error) {
-	newProfile := &model.ProfileModel{
+func (s *service) CreateNewProfile(ctx context.Context, masterTx repository.MasterTx, userID int, name, thumbnail, bio, phone, place string, birth *time.Time, gender int) (*userprofile.Entity, error) {
+	newProfile := &userprofile.Entity{
 		UserID:    userID,
 		Name:      name,
 		Thumbnail: thumbnail,
@@ -42,21 +41,21 @@ func (s *service) CreateNewProfile(ctx context.Context, masterTx repository.Mast
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToProfileEntity(createdProfile), nil
+	return createdProfile, nil
 }
 
-func (s *service) GetByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.Profile, error) {
+func (s *service) GetByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*userprofile.Entity, error) {
 	profileData, err := s.profileRepository.SelectByUserID(ctx, masterTx, userID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToProfileEntity(profileData), nil
+	return profileData, nil
 }
 
-func (s *service) GetByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (entity.ProfileSlice, error) {
+func (s *service) GetByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (userprofile.EntitySlice, error) {
 	profileSlice, err := s.profileRepository.SelectByUserIDs(ctx, masterTx, userIDs)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToProfileSliceEntity(profileSlice), nil
+	return profileSlice, nil
 }
