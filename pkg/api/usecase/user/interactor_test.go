@@ -4,7 +4,8 @@ import (
 	"context"
 	"testing"
 	"time"
-	"wantum/pkg/domain/entity"
+	"wantum/pkg/domain/entity/user"
+	"wantum/pkg/domain/entity/userprofile"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/service/file/mock_file"
 	"wantum/pkg/domain/service/profile/mock_profile"
@@ -36,14 +37,14 @@ var (
 	birthUnix     = birth.Unix()
 	thumbnailFile = []byte{1, 2, 3, 4}
 
-	dummyUserEntity = &entity.User{
+	dummyUserEntity = &user.Entity{
 		ID:       userID,
 		AuthID:   authID,
 		UserName: userName,
 		Mail:     mail,
 	}
 
-	dummyProfileEntity = &entity.Profile{
+	dummyProfileEntity = &userprofile.Entity{
 		UserID:    userID,
 		Name:      name,
 		Thumbnail: thumbnail,
@@ -54,15 +55,15 @@ var (
 		Birth:     &birth,
 	}
 
-	dummyProfileSlice = entity.ProfileSlice{
+	dummyProfileSlice = userprofile.EntitySlice{
 		dummyProfileEntity,
 	}
 
-	dummyUserSlice = entity.UserSlice{
+	dummyUserSlice = user.EntitySlice{
 		dummyUserEntity,
 	}
 
-	dummyUserMap = entity.UserMap{userID: dummyUserSlice[0]}
+	dummyUserMap = user.EntityMap{userID: dummyUserSlice[0]}
 )
 
 func TestIntereractor_CreateNewUser(t *testing.T) {

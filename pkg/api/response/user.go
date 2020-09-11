@@ -33,7 +33,7 @@ type UserProfile struct {
 	Birth     string `json:"birth"`
 }
 
-func ConvertToUsersResponse(userMap user.UserMap) UsersResponse {
+func ConvertToUsersResponse(userMap user.EntityMap) UsersResponse {
 	res := make(UsersResponse, 0, len(userMap))
 	userIDs := userMap.Keys(userMap)
 	for _, userID := range userIDs {
@@ -46,7 +46,7 @@ func ConvertToUsersResponse(userMap user.UserMap) UsersResponse {
 	return res
 }
 
-func ConvertToUserResponse(userData *user.User) *UserResponse {
+func ConvertToUserResponse(userData *user.Entity) *UserResponse {
 	// nilチェック
 	if userData == nil {
 		return nil

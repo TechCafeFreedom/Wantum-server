@@ -5,7 +5,7 @@ import (
 	"wantum/pkg/domain/entity/userprofile"
 )
 
-type User struct {
+type Entity struct {
 	ID        int
 	AuthID    string
 	UserName  string
@@ -13,14 +13,14 @@ type User struct {
 	CreatedAt *time.Time
 	UpdatedAt *time.Time
 	DeletedAt *time.Time
-	Profile   *userprofile.Profile
+	Profile   *userprofile.Entity
 }
 
-type UserSlice []*User
+type EntitySlice []*Entity
 
-type UserMap map[int]*User
+type EntityMap map[int]*Entity
 
-func (umap *UserMap) Keys(userMap UserMap) []int {
+func (umap *EntityMap) Keys(userMap EntityMap) []int {
 	keys := make([]int, 0, len(userMap))
 	for key := range userMap {
 		keys = append(keys, key)

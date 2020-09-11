@@ -24,7 +24,7 @@ func New(masterTxManager repository.MasterTxManager) profile.Repository {
 	}
 }
 
-func (p *profileRepositoryImpliment) InsertProfile(ctx context.Context, masterTx repository.MasterTx, userProfileEntity *userprofile.Profile) (*userprofile.Profile, error) {
+func (p *profileRepositoryImpliment) InsertProfile(ctx context.Context, masterTx repository.MasterTx, userProfileEntity *userprofile.Entity) (*userprofile.Entity, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -51,7 +51,7 @@ func (p *profileRepositoryImpliment) InsertProfile(ctx context.Context, masterTx
 	return userProfileEntity, nil
 }
 
-func (p *profileRepositoryImpliment) SelectByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*userprofile.Profile, error) {
+func (p *profileRepositoryImpliment) SelectByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*userprofile.Entity, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -72,7 +72,7 @@ func (p *profileRepositoryImpliment) SelectByUserID(ctx context.Context, masterT
 	return userProfileEntity, nil
 }
 
-func (p *profileRepositoryImpliment) SelectByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (userprofile.ProfileSlice, error) {
+func (p *profileRepositoryImpliment) SelectByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (userprofile.EntitySlice, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -107,7 +107,7 @@ func (p *profileRepositoryImpliment) SelectByUserIDs(ctx context.Context, master
 	return userProfileEntitySlice, nil
 }
 
-func convertToUserProfileEntity(row *sql.Row) (*userprofile.Profile, error) {
+func convertToUserProfileEntity(row *sql.Row) (*userprofile.Entity, error) {
 	var userID int
 	var name string
 	var thumbnail string
@@ -122,7 +122,7 @@ func convertToUserProfileEntity(row *sql.Row) (*userprofile.Profile, error) {
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	return &userprofile.Profile{
+	return &userprofile.Entity{
 		UserID:    userID,
 		Name:      name,
 		Thumbnail: thumbnail,
@@ -137,8 +137,8 @@ func convertToUserProfileEntity(row *sql.Row) (*userprofile.Profile, error) {
 	}, nil
 }
 
-func convertToUserProfileSliceEntity(rows *sql.Rows) (userprofile.ProfileSlice, error) {
-	var userProfileEntitySlice userprofile.ProfileSlice
+func convertToUserProfileSliceEntity(rows *sql.Rows) (userprofile.EntitySlice, error) {
+	var userProfileEntitySlice userprofile.EntitySlice
 	for rows.Next() {
 		var userID int
 		var name string
@@ -154,7 +154,7 @@ func convertToUserProfileSliceEntity(rows *sql.Rows) (userprofile.ProfileSlice, 
 			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}
 
-		userProfileData := userprofile.Profile{
+		userProfileData := userprofile.Entity{
 			UserID:    userID,
 			Name:      name,
 			Thumbnail: thumbnail,

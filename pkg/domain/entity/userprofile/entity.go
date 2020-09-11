@@ -2,7 +2,7 @@ package userprofile
 
 import "time"
 
-type Profile struct {
+type Entity struct {
 	UserID    int
 	Name      string
 	Thumbnail string
@@ -16,4 +16,4 @@ type Profile struct {
 	DeletedAt *time.Time
 }
 
-type ProfileSlice []*Profile
+type EntitySlice []*Entity

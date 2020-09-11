@@ -7,7 +7,7 @@ import (
 )
 
 type Repository interface {
-	InsertProfile(ctx context.Context, masterTx repository.MasterTx, userProfileEntity *userprofile.Profile) (*userprofile.Profile, error)
-	SelectByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*userprofile.Profile, error)
-	SelectByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (userprofile.ProfileSlice, error)
+	InsertProfile(ctx context.Context, masterTx repository.MasterTx, userProfileEntity *userprofile.Entity) (*userprofile.Entity, error)
+	SelectByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*userprofile.Entity, error)
+	SelectByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (userprofile.EntitySlice, error)
 }
