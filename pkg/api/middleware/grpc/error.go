@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"context"
-	"wantum/pkg/tlog"
 	"wantum/pkg/werrors"
 
 	"golang.org/x/xerrors"
@@ -21,9 +20,6 @@ func UnaryErrorHandling() grpc.UnaryServerInterceptor {
 		resp, err = handler(ctx, req)
 
 		if err != nil {
-			// エラーログ出力
-			tlog.PrintErrorLogWithCtx(ctx, err)
-
 			// エラーレスポンスの送信
 			var wantumError *werrors.WantumError
 			if ok := xerrors.As(err, &wantumError); ok {
@@ -50,12 +46,8 @@ func UnaryErrorHandling() grpc.UnaryServerInterceptor {
 func StreamErrorHandling() grpc.StreamServerInterceptor {
 	return func(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 		err := handler(srv, ss)
-		ctx := ss.Context()
 
 		if err != nil {
-			// エラーログ出力
-			tlog.PrintErrorLogWithCtx(ctx, err)
-
 			// エラーレスポンスの送信
 			var wantumError *werrors.WantumError
 			if ok := xerrors.As(err, &wantumError); ok {
