@@ -1,6 +1,9 @@
-package entity
+package user
 
-import "time"
+import (
+	"time"
+	"wantum/pkg/domain/entity/userprofile"
+)
 
 type User struct {
 	ID        int
@@ -10,7 +13,7 @@ type User struct {
 	CreatedAt *time.Time
 	UpdatedAt *time.Time
 	DeletedAt *time.Time
-	Profile   *Profile
+	Profile   *userprofile.Profile
 }
 
 type UserSlice []*User
