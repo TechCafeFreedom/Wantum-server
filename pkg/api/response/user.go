@@ -2,7 +2,7 @@ package response
 
 import (
 	"sort"
-	"wantum/pkg/domain/entity"
+	"wantum/pkg/domain/entity/user"
 )
 
 type UserResponse struct {
@@ -33,7 +33,7 @@ type UserProfile struct {
 	Birth     string `json:"birth"`
 }
 
-func ConvertToUsersResponse(userMap entity.UserMap) UsersResponse {
+func ConvertToUsersResponse(userMap user.UserMap) UsersResponse {
 	res := make(UsersResponse, 0, len(userMap))
 	userIDs := userMap.Keys(userMap)
 	for _, userID := range userIDs {
@@ -46,7 +46,7 @@ func ConvertToUsersResponse(userMap entity.UserMap) UsersResponse {
 	return res
 }
 
-func ConvertToUserResponse(userData *entity.User) *UserResponse {
+func ConvertToUserResponse(userData *user.User) *UserResponse {
 	// nilチェック
 	if userData == nil {
 		return nil
