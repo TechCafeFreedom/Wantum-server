@@ -4,10 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	tagEntity "wantum/pkg/domain/entity/tag"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/tag"
 	"wantum/pkg/infrastructure/mysql"
-	"wantum/pkg/infrastructure/mysql/model"
 	"wantum/pkg/tlog"
 	"wantum/pkg/werrors"
 )
@@ -22,7 +22,7 @@ func New(txManager repository.MasterTxManager) tag.Repository {
 	}
 }
 
-func (repo *tagRepositoryImplement) Insert(ctx context.Context, masterTx repository.MasterTx, tag *model.TagModel) (int, error) {
+func (repo *tagRepositoryImplement) Insert(ctx context.Context, masterTx repository.MasterTx, tag *tagEntity.Entity) (int, error) {
 	if err := checkIsNil(tag); err != nil {
 		return 0, err
 	}
@@ -50,7 +50,7 @@ func (repo *tagRepositoryImplement) Insert(ctx context.Context, masterTx reposit
 	return int(id), nil
 }
 
-func (repo *tagRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tag *model.TagModel) error {
+func (repo *tagRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tag *tagEntity.Entity) error {
 	// NOTE: nilで降りてきた用対策。いらないかも
 	if err := checkIsNil(tag); err != nil {
 		return err
@@ -84,7 +84,7 @@ func (repo *tagRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx r
 	return nil
 }
 
-func (repo *tagRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tag *model.TagModel) error {
+func (repo *tagRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tag *tagEntity.Entity) error {
 	if err := checkIsNil(tag); err != nil {
 		return err
 	}
@@ -126,7 +126,7 @@ func (repo *tagRepositoryImplement) Delete(ctx context.Context, masterTx reposit
 	return nil
 }
 
-func (repo *tagRepositoryImplement) SelectByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*model.TagModel, error) {
+func (repo *tagRepositoryImplement) SelectByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -137,7 +137,7 @@ func (repo *tagRepositoryImplement) SelectByID(ctx context.Context, masterTx rep
 		FROM tags
 		WHERE id=?
 	`, tagID)
-	var result model.TagModel
+	var result tagEntity.Entity
 	err = row.Scan(
 		&result.ID,
 		&result.Name,
@@ -152,7 +152,7 @@ func (repo *tagRepositoryImplement) SelectByID(ctx context.Context, masterTx rep
 	return &result, nil
 }
 
-func (repo *tagRepositoryImplement) SelectByName(ctx context.Context, masterTx repository.MasterTx, name string) (*model.TagModel, error) {
+func (repo *tagRepositoryImplement) SelectByName(ctx context.Context, masterTx repository.MasterTx, name string) (*tagEntity.Entity, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -163,7 +163,7 @@ func (repo *tagRepositoryImplement) SelectByName(ctx context.Context, masterTx r
 		FROM tags
 		WHERE name=?
 	`, name)
-	var result model.TagModel
+	var result tagEntity.Entity
 	err = row.Scan(
 		&result.ID,
 		&result.Name,
@@ -178,7 +178,7 @@ func (repo *tagRepositoryImplement) SelectByName(ctx context.Context, masterTx r
 	return &result, nil
 }
 
-func (repo *tagRepositoryImplement) SelectByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (model.TagModelSlice, error) {
+func (repo *tagRepositoryImplement) SelectByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (tagEntity.EntitySlice, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -197,9 +197,9 @@ func (repo *tagRepositoryImplement) SelectByWishCardID(ctx context.Context, mast
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	var result model.TagModelSlice
+	var result tagEntity.EntitySlice
 	for rows.Next() {
-		var record model.TagModel
+		var record tagEntity.Entity
 		err = rows.Scan(
 			&record.ID,
 			&record.Name,
@@ -216,7 +216,7 @@ func (repo *tagRepositoryImplement) SelectByWishCardID(ctx context.Context, mast
 	return result, nil
 }
 
-func (repo *tagRepositoryImplement) SelectByMemoryID(ctx context.Context, masterTx repository.MasterTx, memoryID int) (model.TagModelSlice, error) {
+func (repo *tagRepositoryImplement) SelectByMemoryID(ctx context.Context, masterTx repository.MasterTx, memoryID int) (tagEntity.EntitySlice, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -235,9 +235,9 @@ func (repo *tagRepositoryImplement) SelectByMemoryID(ctx context.Context, master
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	var result model.TagModelSlice
+	var result tagEntity.EntitySlice
 	for rows.Next() {
-		var record model.TagModel
+		var record tagEntity.Entity
 		err = rows.Scan(
 			&record.ID,
 			&record.Name,
@@ -254,7 +254,7 @@ func (repo *tagRepositoryImplement) SelectByMemoryID(ctx context.Context, master
 	return result, nil
 }
 
-func checkIsNil(tag *model.TagModel) error {
+func checkIsNil(tag *tagEntity.Entity) error {
 	if tag == nil {
 		return werrors.Newf(
 			errors.New("required data(tag) is nil"),

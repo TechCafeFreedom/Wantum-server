@@ -4,10 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	placeEntity "wantum/pkg/domain/entity/place"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/place"
 	"wantum/pkg/infrastructure/mysql"
-	"wantum/pkg/infrastructure/mysql/model"
 	"wantum/pkg/tlog"
 	"wantum/pkg/werrors"
 )
@@ -22,7 +22,7 @@ func New(txManager repository.MasterTxManager) place.Repository {
 	}
 }
 
-func (repo *placeRepositoryImplement) Insert(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) (int, error) {
+func (repo *placeRepositoryImplement) Insert(ctx context.Context, masterTx repository.MasterTx, place *placeEntity.Entity) (int, error) {
 	// NOTE: nilで降りてきた用対策。いらないかも
 	if err := checkIsNil(place); err != nil {
 		return 0, err
@@ -54,7 +54,7 @@ func (repo *placeRepositoryImplement) Insert(ctx context.Context, masterTx repos
 	return int(id), nil
 }
 
-func (repo *placeRepositoryImplement) Update(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error {
+func (repo *placeRepositoryImplement) Update(ctx context.Context, masterTx repository.MasterTx, place *placeEntity.Entity) error {
 	// NOTE: nilで降りてきた用対策。いらないかも
 	if err := checkIsNil(place); err != nil {
 		return err
@@ -80,7 +80,7 @@ func (repo *placeRepositoryImplement) Update(ctx context.Context, masterTx repos
 	return nil
 }
 
-func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error {
+func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *placeEntity.Entity) error {
 	// NOTE: nilで降りてきた用対策。いらないかも
 	if err := checkIsNil(place); err != nil {
 		return err
@@ -114,7 +114,7 @@ func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx
 	return nil
 }
 
-func (repo *placeRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error {
+func (repo *placeRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *placeEntity.Entity) error {
 	if err := checkIsNil(place); err != nil {
 		return err
 	}
@@ -156,7 +156,7 @@ func (repo *placeRepositoryImplement) Delete(ctx context.Context, masterTx repos
 	return nil
 }
 
-func (repo *placeRepositoryImplement) SelectByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*model.PlaceModel, error) {
+func (repo *placeRepositoryImplement) SelectByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -167,7 +167,7 @@ func (repo *placeRepositoryImplement) SelectByID(ctx context.Context, masterTx r
 		FROM places
 		WHERE id=?
 	`, placeID)
-	var result model.PlaceModel
+	var result placeEntity.Entity
 	err = row.Scan(
 		&result.ID,
 		&result.Name,
@@ -182,7 +182,7 @@ func (repo *placeRepositoryImplement) SelectByID(ctx context.Context, masterTx r
 	return &result, nil
 }
 
-func (repo *placeRepositoryImplement) SelectAll(ctx context.Context, masterTx repository.MasterTx) (model.PlaceModelSlice, error) {
+func (repo *placeRepositoryImplement) SelectAll(ctx context.Context, masterTx repository.MasterTx) (placeEntity.EntitySlice, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -199,9 +199,9 @@ func (repo *placeRepositoryImplement) SelectAll(ctx context.Context, masterTx re
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	var result model.PlaceModelSlice
+	var result placeEntity.EntitySlice
 	for rows.Next() {
-		var place model.PlaceModel
+		var place placeEntity.Entity
 		err = rows.Scan(
 			&place.ID,
 			&place.Name,
@@ -217,7 +217,7 @@ func (repo *placeRepositoryImplement) SelectAll(ctx context.Context, masterTx re
 	return result, nil
 }
 
-func checkIsNil(place *model.PlaceModel) error {
+func checkIsNil(place *placeEntity.Entity) error {
 	if place == nil {
 		return werrors.Newf(
 			errors.New("required data(place) is nil"),

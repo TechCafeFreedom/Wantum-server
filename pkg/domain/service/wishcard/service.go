@@ -8,6 +8,8 @@ import (
 	"time"
 	"wantum/pkg/domain/entity"
 	"wantum/pkg/domain/repository"
+	"wantum/pkg/domain/repository/place"
+	"wantum/pkg/domain/repository/tag"
 	"wantum/pkg/domain/repository/wishcard"
 	"wantum/pkg/infrastructure/mysql/model"
 	"wantum/pkg/werrors"
@@ -28,6 +30,8 @@ type Service interface {
 
 type service struct {
 	wishCardRepository wishcard.Repository
+	placeRepository    place.Repository
+	tagsRepository     tag.Repository
 }
 
 func New(repo wishcard.Repository) Service {

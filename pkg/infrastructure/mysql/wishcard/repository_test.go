@@ -8,10 +8,11 @@ import (
 	"os"
 	"testing"
 	"time"
+	placeEntity "wantum/pkg/domain/entity/place"
+	wishCardEntity "wantum/pkg/domain/entity/wishcard"
 	"wantum/pkg/domain/repository"
 	wcrepo "wantum/pkg/domain/repository/wishcard"
 	tx "wantum/pkg/infrastructure/mysql"
-	"wantum/pkg/infrastructure/mysql/model"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/stretchr/testify/assert"
@@ -52,19 +53,20 @@ func TestInsert(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		wishCard := &model.WishCardModel{
+		wishCard := &wishCardEntity.Entity{
 			UserID:      1,
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
-			CategoryID:  1,
-			PlaceID:     1,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
 		var result int
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			result, err = repo.Insert(ctx, masterTx, wishCard)
+			result, err = repo.Insert(ctx, masterTx, wishCard, 1)
 			return err
 		})
 		assert.NoError(t, err)
@@ -77,7 +79,7 @@ func TestInsert(t *testing.T) {
 
 		var result int
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			result, err = repo.Insert(ctx, masterTx, nil)
+			result, err = repo.Insert(ctx, masterTx, nil, 1)
 			return err
 		})
 		assert.Error(t, err)
@@ -89,7 +91,7 @@ func TestUpdate(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		wishCard := &model.WishCardModel{
+		wishCard := &wishCardEntity.Entity{
 			ID:          1,
 			UserID:      1,
 			Activity:    dummyActivity,
@@ -98,12 +100,13 @@ func TestUpdate(t *testing.T) {
 			DoneAt:      &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
-			CategoryID:  1,
-			PlaceID:     1,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
-		var result *model.WishCardModel
+		var result *wishCardEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			err = repo.Update(ctx, masterTx, wishCard)
+			err = repo.Update(ctx, masterTx, wishCard, 1)
 			if err != nil {
 				return err
 			}
@@ -119,7 +122,7 @@ func TestUpdate(t *testing.T) {
 	t.Run("success_doneAtがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		wishCard := &model.WishCardModel{
+		wishCard := &wishCardEntity.Entity{
 			ID:          1,
 			UserID:      1,
 			Activity:    dummyActivity,
@@ -127,12 +130,13 @@ func TestUpdate(t *testing.T) {
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
-			CategoryID:  1,
-			PlaceID:     1,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
-		var result *model.WishCardModel
+		var result *wishCardEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			err = repo.Update(ctx, masterTx, wishCard)
+			err = repo.Update(ctx, masterTx, wishCard, 1)
 			if err != nil {
 				return err
 			}
@@ -149,9 +153,9 @@ func TestUpdate(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
-		var result *model.WishCardModel
+		var result *wishCardEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			err = repo.Update(ctx, masterTx, nil)
+			err = repo.Update(ctx, masterTx, nil, 1)
 			return err
 		})
 		assert.Error(t, err)
@@ -164,19 +168,20 @@ func TestUpDeleteFlag(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		wishCard := &model.WishCardModel{
+		wishCard := &wishCardEntity.Entity{
 			UserID:      1,
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
-			CategoryID:  1,
-			PlaceID:     1,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
-		var result *model.WishCardModel
+		var result *wishCardEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			newID, _ := repo.Insert(ctx, masterTx, wishCard)
+			newID, _ := repo.Insert(ctx, masterTx, wishCard, 1)
 
 			wishCard.ID = newID
 			wishCard.DeletedAt = &dummyDate
@@ -194,18 +199,19 @@ func TestUpDeleteFlag(t *testing.T) {
 	t.Run("failure_deletedAtがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		wishCard := &model.WishCardModel{
+		wishCard := &wishCardEntity.Entity{
 			UserID:      1,
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
-			CategoryID:  1,
-			PlaceID:     1,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			newID, _ := repo.Insert(ctx, masterTx, wishCard)
+			newID, _ := repo.Insert(ctx, masterTx, wishCard, 1)
 
 			wishCard.ID = newID
 			err = repo.UpDeleteFlag(ctx, masterTx, wishCard)
@@ -218,7 +224,7 @@ func TestUpDeleteFlag(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
-		var result *model.WishCardModel
+		var result *wishCardEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			err = repo.UpDeleteFlag(ctx, masterTx, nil)
 			return err
@@ -232,7 +238,7 @@ func TestDownDeleteFlag(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		wishCard := &model.WishCardModel{
+		wishCard := &wishCardEntity.Entity{
 			UserID:      1,
 			Activity:    dummyActivity,
 			Description: dummyDescription,
@@ -240,12 +246,13 @@ func TestDownDeleteFlag(t *testing.T) {
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
 			DeletedAt:   &dummyDate,
-			CategoryID:  1,
-			PlaceID:     1,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
-		var result *model.WishCardModel
+		var result *wishCardEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			newID, _ := repo.Insert(ctx, masterTx, wishCard)
+			newID, _ := repo.Insert(ctx, masterTx, wishCard, 1)
 
 			wishCard.ID = newID
 			err = repo.DownDeleteFlag(ctx, masterTx, wishCard)
@@ -263,7 +270,7 @@ func TestDownDeleteFlag(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
-		var result *model.WishCardModel
+		var result *wishCardEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			err = repo.UpDeleteFlag(ctx, masterTx, nil)
 			return err
@@ -277,19 +284,20 @@ func TestDelete(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		wishCard := &model.WishCardModel{
+		wishCard := &wishCardEntity.Entity{
 			UserID:      1,
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
-			CategoryID:  1,
-			PlaceID:     1,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
-		var result *model.WishCardModel
+		var result *wishCardEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			newID, _ := repo.Insert(ctx, masterTx, wishCard)
+			newID, _ := repo.Insert(ctx, masterTx, wishCard, 1)
 			wishCard.ID = newID
 			wishCard.DeletedAt = &dummyDate
 			repo.UpDeleteFlag(ctx, masterTx, wishCard)
@@ -314,19 +322,20 @@ func TestSelectByID(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		wishCard := &model.WishCardModel{
+		wishCard := &wishCardEntity.Entity{
 			UserID:      1,
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
-			CategoryID:  1,
-			PlaceID:     1,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
-		var result *model.WishCardModel
+		var result *wishCardEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			newID, _ := repo.Insert(ctx, masterTx, wishCard)
+			newID, _ := repo.Insert(ctx, masterTx, wishCard, 1)
 
 			result, err = repo.SelectByID(ctx, masterTx, newID)
 			return err
@@ -339,7 +348,7 @@ func TestSelectByID(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
-		var result *model.WishCardModel
+		var result *wishCardEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			result, err = repo.SelectByID(ctx, masterTx, -1)
 			return err
@@ -356,7 +365,7 @@ func TestSelectByIDs(t *testing.T) {
 
 		ids := []string{"1", "2", "3"}
 
-		var result model.WishCardModelSlice
+		var result wishCardEntity.EntitySlice
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 
 			result, err = repo.SelectByIDs(ctx, masterTx, ids)
@@ -372,28 +381,26 @@ func TestCategoryID(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		wishCard := &model.WishCardModel{
+		wishCard := &wishCardEntity.Entity{
 			UserID:      1,
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
-			CategoryID:  1,
-			PlaceID:     1,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
-		var result model.WishCardModelSlice
+		var result wishCardEntity.EntitySlice
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			repo.Insert(ctx, masterTx, wishCard)
+			repo.Insert(ctx, masterTx, wishCard, 1)
 
 			result, err = repo.SelectByCategoryID(ctx, masterTx, 1)
 			return err
 		})
 		assert.NoError(t, err)
 		assert.NotNil(t, result)
-		for _, row := range result {
-			assert.Equal(t, 1, row.CategoryID)
-		}
 	})
 
 	t.Run("success_存在しないカテゴリ", func(t *testing.T) {
