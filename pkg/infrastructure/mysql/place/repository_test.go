@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 	"time"
+	placeEntity "wantum/pkg/domain/entity/place"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/place"
 	tx "wantum/pkg/infrastructure/mysql"
-	"wantum/pkg/infrastructure/mysql/model"
 
 	"github.com/stretchr/testify/assert"
 
@@ -54,7 +54,7 @@ func TestInsert(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		place := &model.PlaceModel{
+		place := &placeEntity.Entity{
 			Name:      dummyPlace,
 			CreatedAt: &dummyDate,
 			UpdatedAt: &dummyDate,
@@ -89,14 +89,14 @@ func TestUpdate(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		place := &model.PlaceModel{
+		place := &placeEntity.Entity{
 			ID:        1,
 			Name:      dummyPlace,
 			CreatedAt: &dummyDate,
 			UpdatedAt: &dummyDate,
 		}
 
-		var result *model.PlaceModel
+		var result *placeEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			err = repo.Update(ctx, masterTx, place)
 			if err != nil {
@@ -116,7 +116,7 @@ func TestUpdate(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
-		var result *model.PlaceModel
+		var result *placeEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			err = repo.Update(ctx, masterTx, nil)
 			if err != nil {
@@ -137,13 +137,13 @@ func TestUpDeleteFlag(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		place := &model.PlaceModel{
+		place := &placeEntity.Entity{
 			Name:      dummyPlace,
 			CreatedAt: &dummyDate,
 			UpdatedAt: &dummyDate,
 		}
 
-		var result *model.PlaceModel
+		var result *placeEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			newPlaceID, _ := repo.Insert(ctx, masterTx, place)
 
@@ -165,7 +165,7 @@ func TestUpDeleteFlag(t *testing.T) {
 	t.Run("failure_deletedAtがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		place := &model.PlaceModel{
+		place := &placeEntity.Entity{
 			Name:      dummyPlace,
 			CreatedAt: &dummyDate,
 			UpdatedAt: &dummyDate,
@@ -187,14 +187,14 @@ func TestDownDeleteFlag(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		place := &model.PlaceModel{
+		place := &placeEntity.Entity{
 			Name:      dummyPlace,
 			CreatedAt: &dummyDate,
 			UpdatedAt: &dummyDate,
 			DeletedAt: &dummyDate,
 		}
 
-		var result *model.PlaceModel
+		var result *placeEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			newPlaceID, _ := repo.Insert(ctx, masterTx, place)
 
@@ -218,13 +218,13 @@ func TestDelete(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		place := &model.PlaceModel{
+		place := &placeEntity.Entity{
 			Name:      dummyPlace,
 			CreatedAt: &dummyDate,
 			UpdatedAt: &dummyDate,
 		}
 
-		var result *model.PlaceModel
+		var result *placeEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			newPlaceID, _ := repo.Insert(ctx, masterTx, place)
 			place.ID = newPlaceID
@@ -252,13 +252,13 @@ func TestSelectByID(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		place := &model.PlaceModel{
+		place := &placeEntity.Entity{
 			Name:      dummyPlace,
 			CreatedAt: &dummyDate,
 			UpdatedAt: &dummyDate,
 		}
 
-		var result *model.PlaceModel
+		var result *placeEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			newPlaceID, _ := repo.Insert(ctx, masterTx, place)
 
@@ -277,7 +277,7 @@ func TestSelectAll(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
-		var result model.PlaceModelSlice
+		var result placeEntity.EntitySlice
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			result, err = repo.SelectAll(ctx, masterTx)
 			return err

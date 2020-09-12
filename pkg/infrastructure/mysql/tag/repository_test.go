@@ -9,10 +9,10 @@ import (
 	"os"
 	"testing"
 	"time"
+	tagEntity "wantum/pkg/domain/entity/tag"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/tag"
 	tx "wantum/pkg/infrastructure/mysql"
-	"wantum/pkg/infrastructure/mysql/model"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/stretchr/testify/assert"
@@ -55,7 +55,7 @@ func TestInsert(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
-		tag := &model.TagModel{
+		tag := &tagEntity.Entity{
 			Name:      name,
 			CreatedAt: &dummyDate,
 			UpdatedAt: &dummyDate,
@@ -91,13 +91,13 @@ func TestUpDeleteFlag(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
-		tag := &model.TagModel{
+		tag := &tagEntity.Entity{
 			Name:      name,
 			CreatedAt: &dummyDate,
 			UpdatedAt: &dummyDate,
 		}
 
-		var result *model.TagModel
+		var result *tagEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			newTagID, _ := repo.Insert(ctx, masterTx, tag)
 
@@ -120,7 +120,7 @@ func TestUpDeleteFlag(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
-		tag := &model.TagModel{
+		tag := &tagEntity.Entity{
 			ID:        1,
 			Name:      name,
 			CreatedAt: &dummyDate,
@@ -141,7 +141,7 @@ func TestDownDeleteFlag(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
-		tag := &model.TagModel{
+		tag := &tagEntity.Entity{
 			ID:        1,
 			Name:      name,
 			CreatedAt: &dummyDate,
@@ -149,7 +149,7 @@ func TestDownDeleteFlag(t *testing.T) {
 			DeletedAt: &dummyDate,
 		}
 
-		var result *model.TagModel
+		var result *tagEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 
 			tag.DeletedAt = nil
@@ -172,13 +172,13 @@ func TestDelete(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
-		tag := &model.TagModel{
+		tag := &tagEntity.Entity{
 			Name:      name,
 			CreatedAt: &dummyDate,
 			UpdatedAt: &dummyDate,
 		}
 
-		var result *model.TagModel
+		var result *tagEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			newTagID, _ := repo.Insert(ctx, masterTx, tag)
 			tag.ID = newTagID
@@ -207,13 +207,13 @@ func TestSelectByID(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
-		tag := &model.TagModel{
+		tag := &tagEntity.Entity{
 			Name:      name,
 			CreatedAt: &dummyDate,
 			UpdatedAt: &dummyDate,
 		}
 
-		var result *model.TagModel
+		var result *tagEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			newTagID, _ := repo.Insert(ctx, masterTx, tag)
 
@@ -231,13 +231,13 @@ func TestSelectByName(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
-		tag := &model.TagModel{
+		tag := &tagEntity.Entity{
 			Name:      name,
 			CreatedAt: &dummyDate,
 			UpdatedAt: &dummyDate,
 		}
 
-		var result *model.TagModel
+		var result *tagEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			repo.Insert(ctx, masterTx, tag)
 
@@ -254,7 +254,7 @@ func TestSelectByName(t *testing.T) {
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
 
-		var result *model.TagModel
+		var result *tagEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 
 			result, err = repo.SelectByName(ctx, masterTx, name)
@@ -271,7 +271,7 @@ func TestSelectByWishCardID(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
-		var result model.TagModelSlice
+		var result tagEntity.EntitySlice
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 
 			result, err = repo.SelectByWishCardID(ctx, masterTx, 4)
@@ -288,7 +288,7 @@ func TestSelectByMemoryID(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
-		var result model.TagModelSlice
+		var result tagEntity.EntitySlice
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 
 			result, err = repo.SelectByMemoryID(ctx, masterTx, 4)

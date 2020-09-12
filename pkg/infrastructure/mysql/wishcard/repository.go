@@ -4,11 +4,13 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"log"
 	"strings"
+	placeEntity "wantum/pkg/domain/entity/place"
+	wishCardEntity "wantum/pkg/domain/entity/wishcard"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/wishcard"
 	"wantum/pkg/infrastructure/mysql"
-	"wantum/pkg/infrastructure/mysql/model"
 	"wantum/pkg/tlog"
 	"wantum/pkg/werrors"
 )
@@ -23,7 +25,7 @@ func New(txManager repository.MasterTxManager) wishcard.Repository {
 	}
 }
 
-func (repo *wishCardRepositoryImplement) Insert(ctx context.Context, masterTx repository.MasterTx, wishCard *model.WishCardModel) (int, error) {
+func (repo *wishCardRepositoryImplement) Insert(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity, categoryID int) (int, error) {
 	if err := checkIsNil(wishCard); err != nil {
 		return 0, err
 	}
@@ -43,8 +45,8 @@ func (repo *wishCardRepositoryImplement) Insert(ctx context.Context, masterTx re
 		wishCard.Date,
 		wishCard.CreatedAt,
 		wishCard.UpdatedAt,
-		wishCard.CategoryID,
-		wishCard.PlaceID,
+		categoryID,
+		wishCard.Place.ID,
 	)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -58,7 +60,7 @@ func (repo *wishCardRepositoryImplement) Insert(ctx context.Context, masterTx re
 	return int(id), nil
 }
 
-func (repo *wishCardRepositoryImplement) Update(ctx context.Context, masterTx repository.MasterTx, wishCard *model.WishCardModel) error {
+func (repo *wishCardRepositoryImplement) Update(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity, categoryID int) error {
 	if err := checkIsNil(wishCard); err != nil {
 		return err
 	}
@@ -86,8 +88,8 @@ func (repo *wishCardRepositoryImplement) Update(ctx context.Context, masterTx re
 		wishCard.Date,
 		wishCard.DoneAt,
 		wishCard.UpdatedAt,
-		wishCard.CategoryID,
-		wishCard.PlaceID,
+		categoryID,
+		wishCard.Place.ID,
 		wishCard.ID,
 	)
 	if err != nil {
@@ -97,7 +99,7 @@ func (repo *wishCardRepositoryImplement) Update(ctx context.Context, masterTx re
 	return nil
 }
 
-func (repo *wishCardRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCard *model.WishCardModel) error {
+func (repo *wishCardRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity) error {
 	if err := checkIsNil(wishCard); err != nil {
 		return err
 	}
@@ -129,7 +131,7 @@ func (repo *wishCardRepositoryImplement) UpDeleteFlag(ctx context.Context, maste
 	return nil
 }
 
-func (repo *wishCardRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCard *model.WishCardModel) error {
+func (repo *wishCardRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity) error {
 	if err := checkIsNil(wishCard); err != nil {
 		return err
 	}
@@ -170,18 +172,19 @@ func (repo *wishCardRepositoryImplement) Delete(ctx context.Context, masterTx re
 	return nil
 }
 
-func (repo *wishCardRepositoryImplement) SelectByID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (*model.WishCardModel, error) {
+func (repo *wishCardRepositoryImplement) SelectByID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (*wishCardEntity.Entity, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 	row := tx.QueryRow(`
-		SELECT id, user_id, activity, description, date, done_at, created_at, updated_at, deleted_at, category_id, place_id
+		SELECT id, user_id, activity, description, date, done_at, created_at, updated_at, deleted_at, place_id
 		FROM wish_cards
 		WHERE id=?
 	`, wishCardID)
-	var result model.WishCardModel
+	var result wishCardEntity.Entity
+	var place placeEntity.Entity
 	err = row.Scan(
 		&result.ID,
 		&result.UserID,
@@ -192,17 +195,18 @@ func (repo *wishCardRepositoryImplement) SelectByID(ctx context.Context, masterT
 		&result.CreatedAt,
 		&result.UpdatedAt,
 		&result.DeletedAt,
-		&result.CategoryID,
-		&result.PlaceID)
+		&place.ID)
 	if err != nil {
 		// TODO: これってno rowsでもえらーでおっけえなの？
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
+	result.Place = &place
+	log.Println(result.Place)
 	return &result, nil
 }
 
-func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []string) (model.WishCardModelSlice, error) {
+func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []string) (wishCardEntity.EntitySlice, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -210,7 +214,7 @@ func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, master
 	}
 
 	rows, err := tx.Query(`
-		SELECT id, user_id, activity, description, date, done_at, created_at, updated_at, deleted_at, category_id, place_id
+		SELECT id, user_id, activity, description, date, done_at, created_at, updated_at, deleted_at, place_id
 		FROM wish_cards
 		WHERE id
 		IN (` + strings.Join(wishCardIDs, ",") + `)
@@ -219,9 +223,10 @@ func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, master
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	var result model.WishCardModelSlice
+	var result wishCardEntity.EntitySlice
 	for rows.Next() {
-		var record model.WishCardModel
+		var record wishCardEntity.Entity
+		var place placeEntity.Entity
 		err = rows.Scan(
 			&record.ID,
 			&record.UserID,
@@ -232,8 +237,7 @@ func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, master
 			&record.CreatedAt,
 			&record.UpdatedAt,
 			&record.DeletedAt,
-			&record.CategoryID,
-			&record.PlaceID,
+			&place.ID,
 		)
 		if err != nil {
 			if err != sql.ErrNoRows {
@@ -242,19 +246,20 @@ func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, master
 			tlog.PrintErrorLogWithCtx(ctx, err)
 			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}
+		record.Place = &place
 		result = append(result, &record)
 	}
 	return result, nil
 }
 
-func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context, masterTx repository.MasterTx, categryID int) (model.WishCardModelSlice, error) {
+func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context, masterTx repository.MasterTx, categryID int) (wishCardEntity.EntitySlice, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 	rows, err := tx.Query(`
-		SELECT id, user_id, activity, description, date, done_at, created_at, updated_at, deleted_at, category_id, place_id
+		SELECT id, user_id, activity, description, date, done_at, created_at, updated_at, deleted_at, place_id
 		FROM wish_cards
 		WHERE category_id=?
 	`, categryID)
@@ -262,9 +267,10 @@ func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context,
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	var result model.WishCardModelSlice
+	var result wishCardEntity.EntitySlice
 	for rows.Next() {
-		var record model.WishCardModel
+		var record wishCardEntity.Entity
+		var place placeEntity.Entity
 		err = rows.Scan(
 			&record.ID,
 			&record.UserID,
@@ -275,8 +281,7 @@ func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context,
 			&record.CreatedAt,
 			&record.UpdatedAt,
 			&record.DeletedAt,
-			&record.CategoryID,
-			&record.PlaceID,
+			&place.ID,
 		)
 		if err != nil {
 			if err != sql.ErrNoRows {
@@ -285,12 +290,13 @@ func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context,
 			tlog.PrintErrorLogWithCtx(ctx, err)
 			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}
+		record.Place = &place
 		result = append(result, &record)
 	}
 	return result, nil
 }
 
-func checkIsNil(wishCard *model.WishCardModel) error {
+func checkIsNil(wishCard *wishCardEntity.Entity) error {
 	if wishCard == nil {
 		return werrors.Newf(
 			errors.New("required data(wishCard) is nil"),
