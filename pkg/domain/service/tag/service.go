@@ -5,24 +5,23 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-	"wantum/pkg/domain/entity"
+	tagEntity "wantum/pkg/domain/entity/tag"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/tag"
-	"wantum/pkg/infrastructure/mysql/model"
 	"wantum/pkg/werrors"
 )
 
 type Service interface {
-	Create(ctx context.Context, masterTx repository.MasterTx, name string) (*entity.Tag, error)
+	Create(ctx context.Context, masterTx repository.MasterTx, name string) (*tagEntity.Entity, error)
 
-	UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*entity.Tag, error)
-	DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*entity.Tag, error)
+	UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error)
+	DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error)
 	Delete(ctx context.Context, masterTx repository.MasterTx, tagID int) error
 
-	GetByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*entity.Tag, error)
-	GetByName(ctx context.Context, masterTx repository.MasterTx, name string) (*entity.Tag, error)
-	GetByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (entity.TagSlice, error)
-	GetByMemoryID(ctx context.Context, masterTx repository.MasterTx, memoryID int) (entity.TagSlice, error)
+	GetByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error)
+	GetByName(ctx context.Context, masterTx repository.MasterTx, name string) (*tagEntity.Entity, error)
+	GetByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (tagEntity.EntitySlice, error)
+	GetByMemoryID(ctx context.Context, masterTx repository.MasterTx, memoryID int) (tagEntity.EntitySlice, error)
 }
 
 type service struct {
@@ -35,9 +34,9 @@ func New(repo tag.Repository) Service {
 	}
 }
 
-func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, name string) (*entity.Tag, error) {
+func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, name string) (*tagEntity.Entity, error) {
 	createdAt := time.Now()
-	tag := &model.TagModel{
+	tag := &tagEntity.Entity{
 		Name:      name,
 		CreatedAt: &createdAt,
 		UpdatedAt: &createdAt,
@@ -47,10 +46,10 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, name
 		return nil, werrors.Stack(err)
 	}
 	tag.ID = result
-	return model.ConvertToTagEntity(tag), nil
+	return tag, nil
 }
 
-func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*entity.Tag, error) {
+func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error) {
 	tag, err := s.tagRepository.SelectByID(ctx, masterTx, tagID)
 	if err != nil {
 		return nil, werrors.Stack(err)
@@ -62,10 +61,10 @@ func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToTagEntity(tag), nil
+	return tag, nil
 }
 
-func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*entity.Tag, error) {
+func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error) {
 	tag, err := s.tagRepository.SelectByID(ctx, masterTx, tagID)
 	if err != nil {
 		return nil, werrors.Stack(err)
@@ -77,7 +76,7 @@ func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.Master
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToTagEntity(tag), nil
+	return tag, nil
 }
 
 func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, tagID int) error {
@@ -100,34 +99,34 @@ func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, tagI
 	return nil
 }
 
-func (s *service) GetByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*entity.Tag, error) {
+func (s *service) GetByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error) {
 	tag, err := s.tagRepository.SelectByID(ctx, masterTx, tagID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToTagEntity(tag), nil
+	return tag, nil
 }
 
-func (s *service) GetByName(ctx context.Context, masterTx repository.MasterTx, name string) (*entity.Tag, error) {
+func (s *service) GetByName(ctx context.Context, masterTx repository.MasterTx, name string) (*tagEntity.Entity, error) {
 	tag, err := s.tagRepository.SelectByName(ctx, masterTx, name)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToTagEntity(tag), nil
+	return tag, nil
 }
 
-func (s *service) GetByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (entity.TagSlice, error) {
+func (s *service) GetByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (tagEntity.EntitySlice, error) {
 	tags, err := s.tagRepository.SelectByWishCardID(ctx, masterTx, wishCardID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToTagSliceEntity(tags), nil
+	return tags, nil
 }
 
-func (s *service) GetByMemoryID(ctx context.Context, masterTx repository.MasterTx, memoryID int) (entity.TagSlice, error) {
+func (s *service) GetByMemoryID(ctx context.Context, masterTx repository.MasterTx, memoryID int) (tagEntity.EntitySlice, error) {
 	tags, err := s.tagRepository.SelectByMemoryID(ctx, masterTx, memoryID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToTagSliceEntity(tags), nil
+	return tags, nil
 }
