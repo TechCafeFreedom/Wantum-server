@@ -7,7 +7,8 @@ package mock_profile
 import (
 	context "context"
 	reflect "reflect"
-	entity "wantum/pkg/domain/entity"
+	time "time"
+	userprofile "wantum/pkg/domain/entity/userprofile"
 	repository "wantum/pkg/domain/repository"
 
 	gomock "github.com/golang/mock/gomock"
@@ -37,10 +38,10 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 }
 
 // CreateNewProfile mocks base method
-func (m *MockService) CreateNewProfile(ctx context.Context, masterTx repository.MasterTx, userID int, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.Profile, error) {
+func (m *MockService) CreateNewProfile(ctx context.Context, masterTx repository.MasterTx, userID int, name, thumbnail, bio, phone, place string, birth *time.Time, gender int) (*userprofile.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateNewProfile", ctx, masterTx, userID, name, thumbnail, bio, phone, place, birth, gender)
-	ret0, _ := ret[0].(*entity.Profile)
+	ret0, _ := ret[0].(*userprofile.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -52,10 +53,10 @@ func (mr *MockServiceMockRecorder) CreateNewProfile(ctx, masterTx, userID, name,
 }
 
 // GetByUserID mocks base method
-func (m *MockService) GetByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.Profile, error) {
+func (m *MockService) GetByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*userprofile.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByUserID", ctx, masterTx, userID)
-	ret0, _ := ret[0].(*entity.Profile)
+	ret0, _ := ret[0].(*userprofile.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -67,10 +68,10 @@ func (mr *MockServiceMockRecorder) GetByUserID(ctx, masterTx, userID interface{}
 }
 
 // GetByUserIDs mocks base method
-func (m *MockService) GetByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (entity.ProfileSlice, error) {
+func (m *MockService) GetByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (userprofile.EntitySlice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByUserIDs", ctx, masterTx, userIDs)
-	ret0, _ := ret[0].(entity.ProfileSlice)
+	ret0, _ := ret[0].(userprofile.EntitySlice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

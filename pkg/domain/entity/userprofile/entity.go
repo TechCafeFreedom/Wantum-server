@@ -1,8 +1,8 @@
-package entity
+package userprofile
 
 import "time"
 
-type Profile struct {
+type Entity struct {
 	UserID    int
 	Name      string
 	Thumbnail string
@@ -10,10 +10,10 @@ type Profile struct {
 	Gender    int
 	Phone     string
 	Place     string
-	Birth     string
+	Birth     *time.Time
 	CreatedAt *time.Time
 	UpdatedAt *time.Time
 	DeletedAt *time.Time
 }
 
-type ProfileSlice []*Profile
+type EntitySlice []*Entity

@@ -2,18 +2,17 @@ package user
 
 import (
 	"context"
-	"wantum/pkg/domain/entity"
+	userentity "wantum/pkg/domain/entity/user"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/user"
-	"wantum/pkg/infrastructure/mysql/model"
 	"wantum/pkg/werrors"
 )
 
 type Service interface {
-	CreateNewUser(masterTx repository.MasterTx, authID, userName, mail string) (*entity.User, error)
-	GetByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.User, error)
-	GetByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*entity.User, error)
-	GetAll(ctx context.Context, masterTx repository.MasterTx) (entity.UserSlice, error)
+	CreateNewUser(masterTx repository.MasterTx, authID, userName, mail string) (*userentity.Entity, error)
+	GetByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*userentity.Entity, error)
+	GetByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*userentity.Entity, error)
+	GetAll(ctx context.Context, masterTx repository.MasterTx) (userentity.EntitySlice, error)
 }
 
 type service struct {
@@ -26,8 +25,8 @@ func New(userRepository user.Repository) Service {
 	}
 }
 
-func (s *service) CreateNewUser(masterTx repository.MasterTx, authID, userName, mail string) (*entity.User, error) {
-	newUser := &model.UserModel{
+func (s *service) CreateNewUser(masterTx repository.MasterTx, authID, userName, mail string) (*userentity.Entity, error) {
+	newUser := &userentity.Entity{
 		AuthID:   authID,
 		UserName: userName,
 		Mail:     mail,
@@ -36,29 +35,29 @@ func (s *service) CreateNewUser(masterTx repository.MasterTx, authID, userName, 
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToUserEntity(createdUser), nil
+	return createdUser, nil
 }
 
-func (s *service) GetByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.User, error) {
-	userData, err := s.userRepository.SelectByPK(ctx, masterTx, userID)
+func (s *service) GetByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*userentity.Entity, error) {
+	userEntity, err := s.userRepository.SelectByPK(ctx, masterTx, userID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToUserEntity(userData), nil
+	return userEntity, nil
 }
 
-func (s *service) GetByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*entity.User, error) {
-	userData, err := s.userRepository.SelectByAuthID(ctx, masterTx, authID)
+func (s *service) GetByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*userentity.Entity, error) {
+	userEntity, err := s.userRepository.SelectByAuthID(ctx, masterTx, authID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToUserEntity(userData), nil
+	return userEntity, nil
 }
 
-func (s *service) GetAll(ctx context.Context, masterTx repository.MasterTx) (entity.UserSlice, error) {
+func (s *service) GetAll(ctx context.Context, masterTx repository.MasterTx) (userentity.EntitySlice, error) {
 	userSlice, err := s.userRepository.SelectAll(ctx, masterTx)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToUserSliceEntity(userSlice), nil
+	return userSlice, nil
 }

@@ -7,8 +7,8 @@ package mock_profile
 import (
 	context "context"
 	reflect "reflect"
+	userprofile "wantum/pkg/domain/entity/userprofile"
 	repository "wantum/pkg/domain/repository"
-	model "wantum/pkg/infrastructure/mysql/model"
 
 	gomock "github.com/golang/mock/gomock"
 )
@@ -37,25 +37,25 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // InsertProfile mocks base method
-func (m *MockRepository) InsertProfile(ctx context.Context, masterTx repository.MasterTx, profileEntity *model.ProfileModel) (*model.ProfileModel, error) {
+func (m *MockRepository) InsertProfile(ctx context.Context, masterTx repository.MasterTx, userProfileEntity *userprofile.Entity) (*userprofile.Entity, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "InsertProfile", ctx, masterTx, profileEntity)
-	ret0, _ := ret[0].(*model.ProfileModel)
+	ret := m.ctrl.Call(m, "InsertProfile", ctx, masterTx, userProfileEntity)
+	ret0, _ := ret[0].(*userprofile.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // InsertProfile indicates an expected call of InsertProfile
-func (mr *MockRepositoryMockRecorder) InsertProfile(ctx, masterTx, profileEntity interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) InsertProfile(ctx, masterTx, userProfileEntity interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertProfile", reflect.TypeOf((*MockRepository)(nil).InsertProfile), ctx, masterTx, profileEntity)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertProfile", reflect.TypeOf((*MockRepository)(nil).InsertProfile), ctx, masterTx, userProfileEntity)
 }
 
 // SelectByUserID mocks base method
-func (m *MockRepository) SelectByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*model.ProfileModel, error) {
+func (m *MockRepository) SelectByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*userprofile.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SelectByUserID", ctx, masterTx, userID)
-	ret0, _ := ret[0].(*model.ProfileModel)
+	ret0, _ := ret[0].(*userprofile.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -67,10 +67,10 @@ func (mr *MockRepositoryMockRecorder) SelectByUserID(ctx, masterTx, userID inter
 }
 
 // SelectByUserIDs mocks base method
-func (m *MockRepository) SelectByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (model.ProfileModelSlice, error) {
+func (m *MockRepository) SelectByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (userprofile.EntitySlice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SelectByUserIDs", ctx, masterTx, userIDs)
-	ret0, _ := ret[0].(model.ProfileModelSlice)
+	ret0, _ := ret[0].(userprofile.EntitySlice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

@@ -7,7 +7,7 @@ package mock_user
 import (
 	context "context"
 	reflect "reflect"
-	entity "wantum/pkg/domain/entity"
+	user "wantum/pkg/domain/entity/user"
 
 	gomock "github.com/golang/mock/gomock"
 )
@@ -36,25 +36,25 @@ func (m *MockInteractor) EXPECT() *MockInteractorMockRecorder {
 }
 
 // CreateNewUser mocks base method
-func (m *MockInteractor) CreateNewUser(ctx context.Context, authID, userName, mail, name, thumbnail, bio, phone, place, birth string, gender int) (*entity.User, error) {
+func (m *MockInteractor) CreateNewUser(ctx context.Context, authID, userName, mail, name, bio, phone, place string, thumbnail []byte, birth, gender int) (*user.Entity, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateNewUser", ctx, authID, userName, mail, name, thumbnail, bio, phone, place, birth, gender)
-	ret0, _ := ret[0].(*entity.User)
+	ret := m.ctrl.Call(m, "CreateNewUser", ctx, authID, userName, mail, name, bio, phone, place, thumbnail, birth, gender)
+	ret0, _ := ret[0].(*user.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CreateNewUser indicates an expected call of CreateNewUser
-func (mr *MockInteractorMockRecorder) CreateNewUser(ctx, authID, userName, mail, name, thumbnail, bio, phone, place, birth, gender interface{}) *gomock.Call {
+func (mr *MockInteractorMockRecorder) CreateNewUser(ctx, authID, userName, mail, name, bio, phone, place, thumbnail, birth, gender interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewUser", reflect.TypeOf((*MockInteractor)(nil).CreateNewUser), ctx, authID, userName, mail, name, thumbnail, bio, phone, place, birth, gender)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewUser", reflect.TypeOf((*MockInteractor)(nil).CreateNewUser), ctx, authID, userName, mail, name, bio, phone, place, thumbnail, birth, gender)
 }
 
 // GetAuthorizedUser mocks base method
-func (m *MockInteractor) GetAuthorizedUser(ctx context.Context, authID string) (*entity.User, error) {
+func (m *MockInteractor) GetAuthorizedUser(ctx context.Context, authID string) (*user.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAuthorizedUser", ctx, authID)
-	ret0, _ := ret[0].(*entity.User)
+	ret0, _ := ret[0].(*user.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -66,10 +66,10 @@ func (mr *MockInteractorMockRecorder) GetAuthorizedUser(ctx, authID interface{})
 }
 
 // GetAll mocks base method
-func (m *MockInteractor) GetAll(ctx context.Context) (entity.UserMap, error) {
+func (m *MockInteractor) GetAll(ctx context.Context) (user.EntityMap, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAll", ctx)
-	ret0, _ := ret[0].(entity.UserMap)
+	ret0, _ := ret[0].(user.EntityMap)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

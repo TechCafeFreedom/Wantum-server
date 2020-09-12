@@ -2,12 +2,12 @@ package profile
 
 import (
 	"context"
+	"wantum/pkg/domain/entity/userprofile"
 	"wantum/pkg/domain/repository"
-	"wantum/pkg/infrastructure/mysql/model"
 )
 
 type Repository interface {
-	InsertProfile(ctx context.Context, masterTx repository.MasterTx, profileEntity *model.ProfileModel) (*model.ProfileModel, error)
-	SelectByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*model.ProfileModel, error)
-	SelectByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (model.ProfileModelSlice, error)
+	InsertProfile(ctx context.Context, masterTx repository.MasterTx, userProfileEntity *userprofile.Entity) (*userprofile.Entity, error)
+	SelectByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (*userprofile.Entity, error)
+	SelectByUserIDs(ctx context.Context, masterTx repository.MasterTx, userIDs []int) (userprofile.EntitySlice, error)
 }

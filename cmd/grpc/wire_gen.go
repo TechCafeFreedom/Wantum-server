@@ -3,16 +3,17 @@
 //go:generate wire
 //+build !wireinject
 
-package main
+package rest
 
 import (
-	"wantum/pkg/api/handler/user"
+	"wantum/pkg/api/handler/grpc/user"
 	user4 "wantum/pkg/api/usecase/user"
 	"wantum/pkg/domain/repository"
+	"wantum/pkg/domain/service/file"
 	profile2 "wantum/pkg/domain/service/profile"
 	user3 "wantum/pkg/domain/service/user"
-	"wantum/pkg/infrastructure/mysql/profile"
 	user2 "wantum/pkg/infrastructure/mysql/user"
+	"wantum/pkg/infrastructure/mysql/userprofile"
 )
 
 // Injectors from wire.go:
@@ -20,9 +21,10 @@ import (
 func InitUserAPI(masterTxManager repository.MasterTxManager) user.Server {
 	userRepository := user2.New(masterTxManager)
 	service := user3.New(userRepository)
-	profileRepository := profile.New(masterTxManager)
+	profileRepository := userprofile.New(masterTxManager)
 	profileService := profile2.New(profileRepository)
-	interactor := user4.New(masterTxManager, service, profileService)
+	fileService := file.New()
+	interactor := user4.New(masterTxManager, service, profileService, fileService)
 	server := user.New(interactor)
 	return server
 }

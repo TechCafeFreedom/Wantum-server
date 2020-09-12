@@ -1,5 +1,6 @@
 SOURCE_FILE := $(notdir $(source))
 SOURCE_DIR := $(dir $(source))
+PROTOS_DIR := ./Wantum-ProtocolBuffer
 MOCK_FILE := mock_${SOURCE_FILE}
 MOCK_DIR := ${SOURCE_DIR}mock_$(lastword $(subst /, ,${SOURCE_DIR}))/
 MOCK_TARGET := $(lastword $(subst /, ,${SOURCE_DIR}))
@@ -15,7 +16,23 @@ endef
 help: ## 使い方
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-mockgen: # mockgenの実行
+protoc: ## protoファイルから自動生成
+	clang-format -i ${PROTOS_DIR}/*.proto
+
+	protoc \
+            -I ${PROTOS_DIR} \
+            --go_out=plugins=grpc:pkg/pb/ \
+            ${PROTOS_DIR}/*.proto \
+
+	protoc -I ${PROTOS_DIR} --doc_out=html,index.html:./Wantum-ProtocolBuffer ${PROTOS_DIR}/*.proto
+
+proto-fmt: ## protoファイルのリフォーマット
+	clang-format -i ${PROTOS_DIR}/*.proto
+
+proto-doc: ## protoから生成するProtoドキュメントの生成
+	protoc -I ${PROTOS_DIR} --doc_out=html,index.html:./Wantum-ProtocolBuffer ${PROTOS_DIR}/*.proto
+
+mockgen: ## mockgenの実行
 	# Usege: make mockgen source=<インターフェースの定義しているファイル>
 
 	# mockgenのインストール
@@ -24,12 +41,29 @@ mockgen: # mockgenの実行
 	# mockgenの実行
 	mockgen -source ${SOURCE_DIR}${SOURCE_FILE} -destination ${MOCK_DIR}${MOCK_FILE}
 
-wiregen: ## wire_gen.goの生成
+wiregen: ## REST,gRPC両方のwire_gen.goを生成
+	# google/wireのインストール
+	GO111MODULE=off go get -u github.com/google/wire
+
+	# REST wire genの実行
+	wire gen cmd/rest/wire.go
+
+	# gRPC wire genの実行
+	wire gen cmd/grpc/wire.go
+
+wirerest: ## REST wire_gen.goの生成
 	# google/wireのインストール
 	GO111MODULE=off go get -u github.com/google/wire
 
 	# wire genの実行
-	wire gen cmd/wire.go
+	wire gen cmd/rest/wire.go
+
+wiregrpc: ## gRPC wire_gen.goの生成
+	# google/wireのインストール
+	GO111MODULE=off go get -u github.com/google/wire
+
+	# wire genの実行
+	wire gen cmd/grpc/wire.go
 
 test: ## testの実行
 	go test -v ./...

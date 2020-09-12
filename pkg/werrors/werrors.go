@@ -4,11 +4,19 @@ import (
 	"fmt"
 
 	"golang.org/x/xerrors"
+	"google.golang.org/grpc/codes"
 )
+
+/**
+gRPCのエラーコードとHTTPのエラーコードの対比表は、
+https://www.notion.so/gRPC-5621cb76a3684491a7a6df37da71cd14#ca4c1e1a4fe5489ab5bb705254571d54 をチェック
+*/
 
 // WantumError サーバ-クライアント間エラーハンドリング用エラー
 type WantumError struct {
-	// エラーコード
+	// gRPC用エラーコード
+	GrpcErrorCode codes.Code
+	// REST用エラーコード
 	ErrorCode int
 	// システムエラーメッセージ(日本語)
 	ErrorMessageJP string
@@ -21,32 +29,33 @@ type WantumError struct {
 }
 
 // New WantumErrorを生成する
-func New(cause error, errorCode int) error {
-	return newError(cause, errorCode, "", "")
+func New(cause error, grpcErrCode codes.Code, errorCode int) error {
+	return newError(cause, grpcErrCode, errorCode, "", "")
 }
 
 // Newf WantumErrorをエラーメッセージ付きで生成する
-func Newf(cause error, errorCode int, messageJP, messageEN string) error {
-	return newError(cause, errorCode, messageJP, messageEN)
+func Newf(cause error, grpcErrCode codes.Code, errorCode int, messageJP, messageEN string) error {
+	return newError(cause, grpcErrCode, errorCode, messageJP, messageEN)
 }
 
 // Wrap エラーをWantumエラーでラップする
-func Wrap(cause error, errorCode int) error {
-	return newError(cause, errorCode, "", "")
+func Wrap(cause error, grpcErrCode codes.Code, errorCode int) error {
+	return newError(cause, grpcErrCode, errorCode, "", "")
 }
 
 // Wrapf エラーをWantumエラーで、エラーメッセージ付きでラップする
-func Wrapf(cause error, errorCode int, messageJP, messageEN string) error {
-	return newError(cause, errorCode, messageJP, messageEN)
+func Wrapf(cause error, grpcErrCode codes.Code, errorCode int, messageJP, messageEN string) error {
+	return newError(cause, grpcErrCode, errorCode, messageJP, messageEN)
 }
 
 // FromConstant AuthFailなどのように予め定数として用意してあるWantumエラーから生成する
 func FromConstant(cause error, wantumError *WantumError) error {
-	return newError(cause, wantumError.ErrorCode, wantumError.ErrorMessageJP, wantumError.ErrorMessageEN)
+	return newError(cause, wantumError.GrpcErrorCode, wantumError.ErrorCode, wantumError.ErrorMessageJP, wantumError.ErrorMessageEN)
 }
 
-func newError(cause error, errorCode int, errorMessageJP, errorMessageEN string) error {
+func newError(cause error, grpcErrCode codes.Code, errorCode int, errorMessageJP, errorMessageEN string) error {
 	return &WantumError{
+		GrpcErrorCode:  grpcErrCode,
 		ErrorCode:      errorCode,
 		ErrorMessageJP: errorMessageJP,
 		ErrorMessageEN: errorMessageEN,
@@ -58,10 +67,12 @@ func newError(cause error, errorCode int, errorMessageJP, errorMessageEN string)
 // Stack エラーをStackする
 // スタックフレームを明示的に積んでいく必要があるためエラー出力に記録したいエラーハンドリング箇所ではStackを行う
 func Stack(err error) error {
+	var grpcErrCode codes.Code
 	var errorCode int
 	var errorMessageJP, errorMessageEN string
 	var wantumError *WantumError
 	if ok := xerrors.As(err, &wantumError); ok {
+		grpcErrCode = wantumError.GrpcErrorCode
 		errorCode = wantumError.ErrorCode
 		errorMessageJP = wantumError.ErrorMessageJP
 		errorMessageEN = wantumError.ErrorMessageEN
@@ -69,6 +80,7 @@ func Stack(err error) error {
 		return ServerError
 	}
 	return &WantumError{
+		GrpcErrorCode:  grpcErrCode,
 		ErrorCode:      errorCode,
 		ErrorMessageJP: errorMessageJP,
 		ErrorMessageEN: errorMessageEN,

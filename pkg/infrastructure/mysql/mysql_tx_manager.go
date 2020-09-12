@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/werrors"
+
+	"google.golang.org/grpc/codes"
 )
 
 type dbMasterTxManager struct {
@@ -27,7 +29,7 @@ func (m *dbMasterTxManager) Transaction(ctx context.Context, f func(ctx context.
 		if p := recover(); p != nil {
 			e := tx.Rollback()
 			if e != nil {
-				err = werrors.Wrapf(e, http.StatusInternalServerError, "Mysqlのトランザクションロールバックに失敗しました。", "failed to MySQL Rollback")
+				err = werrors.Wrapf(e, codes.Internal, http.StatusInternalServerError, "Mysqlのトランザクションロールバックに失敗しました。", "failed to MySQL Rollback")
 			}
 			panic(p) // re-throw panic after Rollback
 		}
@@ -35,13 +37,13 @@ func (m *dbMasterTxManager) Transaction(ctx context.Context, f func(ctx context.
 		if err != nil {
 			e := tx.Rollback()
 			if e != nil {
-				err = werrors.Wrapf(e, http.StatusInternalServerError, "Mysqlのトランザクションロールバックに失敗しました。", "failed to MySQL Rollback")
+				err = werrors.Wrapf(e, codes.Internal, http.StatusInternalServerError, "Mysqlのトランザクションロールバックに失敗しました。", "failed to MySQL Rollback")
 			}
 		}
 		// 正常
 		e := tx.Commit()
 		if e != nil {
-			err = werrors.Wrapf(e, http.StatusInternalServerError, "Mysqlのトランザクションコミットに失敗しました。", "failed to MySQL Commit")
+			err = werrors.Wrapf(e, codes.Internal, http.StatusInternalServerError, "Mysqlのトランザクションコミットに失敗しました。", "failed to MySQL Commit")
 		}
 	}()
 	err = f(ctx, &dbMasterTx{tx})
@@ -69,6 +71,7 @@ func ExtractTx(masterTx repository.MasterTx) (*sql.Tx, error) {
 	if !ok {
 		return nil, werrors.Newf(
 			errors.New("masterTxのキャストに失敗しました。"),
+			codes.Internal,
 			http.StatusInternalServerError,
 			"DB操作時になんらかのエラーが起きました。",
 			"Error occurred when DB operation.",

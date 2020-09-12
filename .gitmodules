@@ -1,0 +1,3 @@
+[submodule "Wantum-ProtocolBuffer"]
+	path = Wantum-ProtocolBuffer
+	url = git@github.com:TechCafeFreedom/Wantum-ProtocolBuffer.git

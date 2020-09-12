@@ -7,7 +7,7 @@ package mock_user
 import (
 	context "context"
 	reflect "reflect"
-	entity "wantum/pkg/domain/entity"
+	user "wantum/pkg/domain/entity/user"
 	repository "wantum/pkg/domain/repository"
 
 	gomock "github.com/golang/mock/gomock"
@@ -37,10 +37,10 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 }
 
 // CreateNewUser mocks base method
-func (m *MockService) CreateNewUser(masterTx repository.MasterTx, authID, userName, mail string) (*entity.User, error) {
+func (m *MockService) CreateNewUser(masterTx repository.MasterTx, authID, userName, mail string) (*user.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateNewUser", masterTx, authID, userName, mail)
-	ret0, _ := ret[0].(*entity.User)
+	ret0, _ := ret[0].(*user.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -52,10 +52,10 @@ func (mr *MockServiceMockRecorder) CreateNewUser(masterTx, authID, userName, mai
 }
 
 // GetByPK mocks base method
-func (m *MockService) GetByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*entity.User, error) {
+func (m *MockService) GetByPK(ctx context.Context, masterTx repository.MasterTx, userID int) (*user.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByPK", ctx, masterTx, userID)
-	ret0, _ := ret[0].(*entity.User)
+	ret0, _ := ret[0].(*user.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -67,10 +67,10 @@ func (mr *MockServiceMockRecorder) GetByPK(ctx, masterTx, userID interface{}) *g
 }
 
 // GetByAuthID mocks base method
-func (m *MockService) GetByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*entity.User, error) {
+func (m *MockService) GetByAuthID(ctx context.Context, masterTx repository.MasterTx, authID string) (*user.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByAuthID", ctx, masterTx, authID)
-	ret0, _ := ret[0].(*entity.User)
+	ret0, _ := ret[0].(*user.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -82,10 +82,10 @@ func (mr *MockServiceMockRecorder) GetByAuthID(ctx, masterTx, authID interface{}
 }
 
 // GetAll mocks base method
-func (m *MockService) GetAll(ctx context.Context, masterTx repository.MasterTx) (entity.UserSlice, error) {
+func (m *MockService) GetAll(ctx context.Context, masterTx repository.MasterTx) (user.EntitySlice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAll", ctx, masterTx)
-	ret0, _ := ret[0].(entity.UserSlice)
+	ret0, _ := ret[0].(user.EntitySlice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

@@ -5,6 +5,8 @@ type key string
 const (
 	// ユーザのUIDをcontextに格納するためのKey
 	AuthCtxKey key = "AUTHED_UID"
+	// ユーザのEmailをcontextに格納するためのKey
+	EmailCtxKey key = "AUTHED_EMAIL"
 	// MYSQL DEFAULT USER
 	MysqlDefaultUser string = "root"
 	// MYSQL DEFAULT PASSWORD

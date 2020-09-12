@@ -6,6 +6,9 @@
 # idea
 *.idea
 
+# vscode
+.vscode
+
 # sqlboiler
 sqlboiler.toml
 
@@ -23,3 +26,6 @@ mysql-config.json
 
 # db
 db/mysql/dump/
+
+# file
+files
