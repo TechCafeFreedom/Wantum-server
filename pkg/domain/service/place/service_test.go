@@ -5,9 +5,9 @@ import (
 	"os"
 	"testing"
 	"time"
+	placeEntity "wantum/pkg/domain/entity/place"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/place/mock_place"
-	"wantum/pkg/infrastructure/mysql/model"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -49,7 +49,7 @@ func TestService_Update(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	dummyData := &model.PlaceModel{
+	dummyData := &placeEntity.Entity{
 		ID:        1,
 		Name:      "tokyo",
 		CreatedAt: &dummyDate,
@@ -72,7 +72,7 @@ func TestService_UpDeleteFlag(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	dummyData := &model.PlaceModel{
+	dummyData := &placeEntity.Entity{
 		ID:        1,
 		Name:      "tokyo",
 		CreatedAt: &dummyDate,
@@ -96,7 +96,7 @@ func TestService_DownDeleteFlag(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	dummyData := &model.PlaceModel{
+	dummyData := &placeEntity.Entity{
 		ID:        1,
 		Name:      "tokyo",
 		CreatedAt: &dummyDate,
@@ -121,7 +121,7 @@ func TestService_Delete(t *testing.T) {
 		ctx := context.Background()
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
-		dummyData := &model.PlaceModel{
+		dummyData := &placeEntity.Entity{
 			ID:        1,
 			Name:      "tokyo",
 			CreatedAt: &dummyDate,
@@ -143,7 +143,7 @@ func TestService_Delete(t *testing.T) {
 		ctx := context.Background()
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
-		dummyData := &model.PlaceModel{
+		dummyData := &placeEntity.Entity{
 			ID:        1,
 			Name:      "tokyo",
 			CreatedAt: &dummyDate,
@@ -166,7 +166,7 @@ func TestService_GetByID(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	dummyData := &model.PlaceModel{
+	dummyData := &placeEntity.Entity{
 		ID:        1,
 		Name:      "tokyo",
 		CreatedAt: &dummyDate,
@@ -188,14 +188,14 @@ func TestService_GetAll(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	dummyData := model.PlaceModelSlice{
-		&model.PlaceModel{
+	dummyData := placeEntity.EntitySlice{
+		&placeEntity.Entity{
 			ID:        1,
 			Name:      "tokyo",
 			CreatedAt: &dummyDate,
 			UpdatedAt: &dummyDate,
 		},
-		&model.PlaceModel{
+		&placeEntity.Entity{
 			ID:        2,
 			Name:      "shibuya",
 			CreatedAt: &dummyDate,

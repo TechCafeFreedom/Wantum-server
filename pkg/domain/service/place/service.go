@@ -5,23 +5,22 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-	"wantum/pkg/domain/entity"
+	placeEntity "wantum/pkg/domain/entity/place"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/place"
-	"wantum/pkg/infrastructure/mysql/model"
 	"wantum/pkg/werrors"
 )
 
 type Service interface {
-	Create(ctx context.Context, masterTx repository.MasterTx, name string) (*entity.Place, error)
-	Update(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) (*entity.Place, error)
+	Create(ctx context.Context, masterTx repository.MasterTx, name string) (*placeEntity.Entity, error)
+	Update(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) (*placeEntity.Entity, error)
 
 	Delete(ctx context.Context, masterTx repository.MasterTx, placeID int) error
-	UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*entity.Place, error)
-	DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*entity.Place, error)
+	UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error)
+	DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error)
 
-	GetByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*entity.Place, error)
-	GetAll(ctx context.Context, masterTx repository.MasterTx) (entity.PlaceSlice, error)
+	GetByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error)
+	GetAll(ctx context.Context, masterTx repository.MasterTx) (placeEntity.EntitySlice, error)
 }
 
 type service struct {
@@ -34,9 +33,9 @@ func New(repo place.Repository) Service {
 	}
 }
 
-func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, name string) (*entity.Place, error) {
+func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, name string) (*placeEntity.Entity, error) {
 	createdAt := time.Now()
-	place := &model.PlaceModel{
+	place := &placeEntity.Entity{
 		Name:      name,
 		CreatedAt: &createdAt,
 		UpdatedAt: &createdAt,
@@ -46,12 +45,12 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, name
 		return nil, werrors.Stack(err)
 	}
 	place.ID = result
-	return model.ConvertToPlaceEntity(place), nil
+	return place, nil
 }
 
 // NOTE: 空値があった時、元データが消滅する。
 // QUESTION: リクエストは、全フィールド埋める or 差分だけ
-func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) (*entity.Place, error) {
+func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) (*placeEntity.Entity, error) {
 	place, err := s.placeRepository.SelectByID(ctx, masterTx, placeID)
 	if err != nil {
 		return nil, werrors.Stack(err)
@@ -64,10 +63,10 @@ func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, plac
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToPlaceEntity(place), nil
+	return place, nil
 }
 
-func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*entity.Place, error) {
+func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error) {
 	place, err := s.placeRepository.SelectByID(ctx, masterTx, placeID)
 	if err != nil {
 		return nil, werrors.Stack(err)
@@ -79,10 +78,10 @@ func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToPlaceEntity(place), nil
+	return place, nil
 }
 
-func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*entity.Place, error) {
+func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error) {
 	place, err := s.placeRepository.SelectByID(ctx, masterTx, placeID)
 	if err != nil {
 		return nil, werrors.Stack(err)
@@ -94,7 +93,7 @@ func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.Master
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToPlaceEntity(place), nil
+	return place, nil
 }
 
 func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, placeID int) error {
@@ -117,18 +116,18 @@ func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, plac
 	return nil
 }
 
-func (s *service) GetByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*entity.Place, error) {
+func (s *service) GetByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error) {
 	place, err := s.placeRepository.SelectByID(ctx, masterTx, placeID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToPlaceEntity(place), nil
+	return place, nil
 }
 
-func (s *service) GetAll(ctx context.Context, masterTx repository.MasterTx) (entity.PlaceSlice, error) {
+func (s *service) GetAll(ctx context.Context, masterTx repository.MasterTx) (placeEntity.EntitySlice, error) {
 	places, err := s.placeRepository.SelectAll(ctx, masterTx)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return model.ConvertToPlaceSliceEntity(places), nil
+	return places, nil
 }

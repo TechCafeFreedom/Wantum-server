@@ -5,9 +5,9 @@ import (
 	"os"
 	"testing"
 	"time"
+	tagEntity "wantum/pkg/domain/entity/tag"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/tag/mock_tag"
-	"wantum/pkg/infrastructure/mysql/model"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -18,14 +18,14 @@ var (
 	dummyDate time.Time
 )
 
-var dummyTagSlice = model.TagModelSlice{
-	&model.TagModel{
+var dummyTagSlice = tagEntity.EntitySlice{
+	&tagEntity.Entity{
 		ID:        1,
 		Name:      "sampleTag1",
 		CreatedAt: &dummyDate,
 		UpdatedAt: &dummyDate,
 	},
-	&model.TagModel{
+	&tagEntity.Entity{
 		ID:        2,
 		Name:      "sampleTag2",
 		CreatedAt: &dummyDate,
@@ -33,7 +33,7 @@ var dummyTagSlice = model.TagModelSlice{
 	},
 }
 
-var dummyTag = &model.TagModel{
+var dummyTag = &tagEntity.Entity{
 	ID:        1,
 	Name:      "sampleTag",
 	CreatedAt: &dummyDate,
@@ -106,7 +106,7 @@ func TestService_Delete(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
-		dummy := &model.TagModel{
+		dummy := &tagEntity.Entity{
 			ID:        1,
 			Name:      "sampleTag",
 			CreatedAt: &dummyDate,

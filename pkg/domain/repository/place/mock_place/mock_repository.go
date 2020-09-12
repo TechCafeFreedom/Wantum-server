@@ -8,8 +8,8 @@ import (
 	context "context"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
+	place "wantum/pkg/domain/entity/place"
 	repository "wantum/pkg/domain/repository"
-	model "wantum/pkg/infrastructure/mysql/model"
 )
 
 // MockRepository is a mock of Repository interface
@@ -36,7 +36,7 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // Insert mocks base method
-func (m *MockRepository) Insert(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) (int, error) {
+func (m *MockRepository) Insert(ctx context.Context, masterTx repository.MasterTx, place *place.Entity) (int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Insert", ctx, masterTx, place)
 	ret0, _ := ret[0].(int)
@@ -51,7 +51,7 @@ func (mr *MockRepositoryMockRecorder) Insert(ctx, masterTx, place interface{}) *
 }
 
 // Update mocks base method
-func (m *MockRepository) Update(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error {
+func (m *MockRepository) Update(ctx context.Context, masterTx repository.MasterTx, place *place.Entity) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", ctx, masterTx, place)
 	ret0, _ := ret[0].(error)
@@ -79,7 +79,7 @@ func (mr *MockRepositoryMockRecorder) Delete(ctx, masterTx, placeID interface{})
 }
 
 // UpDeleteFlag mocks base method
-func (m *MockRepository) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error {
+func (m *MockRepository) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *place.Entity) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpDeleteFlag", ctx, masterTx, place)
 	ret0, _ := ret[0].(error)
@@ -93,7 +93,7 @@ func (mr *MockRepositoryMockRecorder) UpDeleteFlag(ctx, masterTx, place interfac
 }
 
 // DownDeleteFlag mocks base method
-func (m *MockRepository) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *model.PlaceModel) error {
+func (m *MockRepository) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *place.Entity) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DownDeleteFlag", ctx, masterTx, place)
 	ret0, _ := ret[0].(error)
@@ -107,10 +107,10 @@ func (mr *MockRepositoryMockRecorder) DownDeleteFlag(ctx, masterTx, place interf
 }
 
 // SelectByID mocks base method
-func (m *MockRepository) SelectByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*model.PlaceModel, error) {
+func (m *MockRepository) SelectByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*place.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SelectByID", ctx, masterTx, placeID)
-	ret0, _ := ret[0].(*model.PlaceModel)
+	ret0, _ := ret[0].(*place.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -122,10 +122,10 @@ func (mr *MockRepositoryMockRecorder) SelectByID(ctx, masterTx, placeID interfac
 }
 
 // SelectAll mocks base method
-func (m *MockRepository) SelectAll(ctx context.Context, masterTx repository.MasterTx) (model.PlaceModelSlice, error) {
+func (m *MockRepository) SelectAll(ctx context.Context, masterTx repository.MasterTx) (place.EntitySlice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SelectAll", ctx, masterTx)
-	ret0, _ := ret[0].(model.PlaceModelSlice)
+	ret0, _ := ret[0].(place.EntitySlice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

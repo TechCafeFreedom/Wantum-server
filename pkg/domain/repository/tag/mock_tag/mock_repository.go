@@ -8,8 +8,8 @@ import (
 	context "context"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
+	tag "wantum/pkg/domain/entity/tag"
 	repository "wantum/pkg/domain/repository"
-	model "wantum/pkg/infrastructure/mysql/model"
 )
 
 // MockRepository is a mock of Repository interface
@@ -36,7 +36,7 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // Insert mocks base method
-func (m *MockRepository) Insert(ctx context.Context, masterTx repository.MasterTx, tag *model.TagModel) (int, error) {
+func (m *MockRepository) Insert(ctx context.Context, masterTx repository.MasterTx, tag *tag.Entity) (int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Insert", ctx, masterTx, tag)
 	ret0, _ := ret[0].(int)
@@ -51,7 +51,7 @@ func (mr *MockRepositoryMockRecorder) Insert(ctx, masterTx, tag interface{}) *go
 }
 
 // UpDeleteFlag mocks base method
-func (m *MockRepository) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tag *model.TagModel) error {
+func (m *MockRepository) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tag *tag.Entity) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpDeleteFlag", ctx, masterTx, tag)
 	ret0, _ := ret[0].(error)
@@ -65,7 +65,7 @@ func (mr *MockRepositoryMockRecorder) UpDeleteFlag(ctx, masterTx, tag interface{
 }
 
 // DownDeleteFlag mocks base method
-func (m *MockRepository) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tag *model.TagModel) error {
+func (m *MockRepository) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tag *tag.Entity) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DownDeleteFlag", ctx, masterTx, tag)
 	ret0, _ := ret[0].(error)
@@ -93,10 +93,10 @@ func (mr *MockRepositoryMockRecorder) Delete(ctx, masterTx, tagID interface{}) *
 }
 
 // SelectByID mocks base method
-func (m *MockRepository) SelectByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*model.TagModel, error) {
+func (m *MockRepository) SelectByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tag.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SelectByID", ctx, masterTx, tagID)
-	ret0, _ := ret[0].(*model.TagModel)
+	ret0, _ := ret[0].(*tag.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -108,10 +108,10 @@ func (mr *MockRepositoryMockRecorder) SelectByID(ctx, masterTx, tagID interface{
 }
 
 // SelectByName mocks base method
-func (m *MockRepository) SelectByName(ctx context.Context, masterTx repository.MasterTx, name string) (*model.TagModel, error) {
+func (m *MockRepository) SelectByName(ctx context.Context, masterTx repository.MasterTx, name string) (*tag.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SelectByName", ctx, masterTx, name)
-	ret0, _ := ret[0].(*model.TagModel)
+	ret0, _ := ret[0].(*tag.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -123,10 +123,10 @@ func (mr *MockRepositoryMockRecorder) SelectByName(ctx, masterTx, name interface
 }
 
 // SelectByWishCardID mocks base method
-func (m *MockRepository) SelectByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (model.TagModelSlice, error) {
+func (m *MockRepository) SelectByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (tag.EntitySlice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SelectByWishCardID", ctx, masterTx, wishCardID)
-	ret0, _ := ret[0].(model.TagModelSlice)
+	ret0, _ := ret[0].(tag.EntitySlice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -138,10 +138,10 @@ func (mr *MockRepositoryMockRecorder) SelectByWishCardID(ctx, masterTx, wishCard
 }
 
 // SelectByMemoryID mocks base method
-func (m *MockRepository) SelectByMemoryID(ctx context.Context, masterTx repository.MasterTx, memoryID int) (model.TagModelSlice, error) {
+func (m *MockRepository) SelectByMemoryID(ctx context.Context, masterTx repository.MasterTx, memoryID int) (tag.EntitySlice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SelectByMemoryID", ctx, masterTx, memoryID)
-	ret0, _ := ret[0].(model.TagModelSlice)
+	ret0, _ := ret[0].(tag.EntitySlice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
