@@ -7,9 +7,13 @@ require (
 	cloud.google.com/go/firestore v1.2.0 // indirect
 	firebase.google.com/go v3.12.0+incompatible
 	github.com/go-sql-driver/mysql v1.5.0
+<<<<<<< HEAD
 	github.com/golang/mock v1.4.3
 	github.com/golang/protobuf v1.4.1
 	github.com/google/uuid v1.1.2
+=======
+	github.com/golang/mock v1.4.4
+>>>>>>> 88d96104943fdd7887b83bc500fce78f09d72c55
 	github.com/google/wire v0.4.0
 	github.com/gorilla/mux v1.7.4
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.1
