@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 	placeEntity "wantum/pkg/domain/entity/place"
+	userEntity "wantum/pkg/domain/entity/user"
 	wishCardEntity "wantum/pkg/domain/entity/wishcard"
 	"wantum/pkg/domain/repository"
 	wcrepo "wantum/pkg/domain/repository/wishcard"
@@ -54,7 +55,9 @@ func TestInsert(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &wishCardEntity.Entity{
-			UserID:      1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -92,8 +95,10 @@ func TestUpdate(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &wishCardEntity.Entity{
-			ID:          1,
-			UserID:      1,
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -123,8 +128,10 @@ func TestUpdate(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &wishCardEntity.Entity{
-			ID:          1,
-			UserID:      1,
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -169,7 +176,9 @@ func TestUpDeleteFlag(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &wishCardEntity.Entity{
-			UserID:      1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -200,7 +209,9 @@ func TestUpDeleteFlag(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &wishCardEntity.Entity{
-			UserID:      1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -239,7 +250,9 @@ func TestDownDeleteFlag(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &wishCardEntity.Entity{
-			UserID:      1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -285,7 +298,9 @@ func TestDelete(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &wishCardEntity.Entity{
-			UserID:      1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -323,7 +338,9 @@ func TestSelectByID(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &wishCardEntity.Entity{
-			UserID:      1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -382,7 +399,9 @@ func TestCategoryID(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		wishCard := &wishCardEntity.Entity{
-			UserID:      1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,

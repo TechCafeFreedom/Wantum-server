@@ -9,7 +9,7 @@ import (
 
 type Service interface {
 	Create(ctx context.Context, masterTx repository.MasterTx, wishCardID, tagID int) error
-	CreateMultipleTags(ctx context.Context, masterTx repository.MasterTx, wishCardID int, tagIDs []int) error
+	CreateMultipleRelation(ctx context.Context, masterTx repository.MasterTx, wishCardID int, tagIDs []int) error
 	Delete(ctx context.Context, masterTx repository.MasterTx, wishCardID, tagID int) error
 	DeleteByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) error
 }
@@ -32,7 +32,7 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, wish
 	return nil
 }
 
-func (s *service) CreateMultipleTags(ctx context.Context, masterTx repository.MasterTx, wishCardID int, tagIDs []int) error {
+func (s *service) CreateMultipleRelation(ctx context.Context, masterTx repository.MasterTx, wishCardID int, tagIDs []int) error {
 	err := s.repository.BulkInsert(ctx, masterTx, wishCardID, tagIDs)
 	if err != nil {
 		return werrors.Stack(err)

@@ -107,6 +107,21 @@ func (mr *MockRepositoryMockRecorder) SelectByID(ctx, masterTx, tagID interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectByID", reflect.TypeOf((*MockRepository)(nil).SelectByID), ctx, masterTx, tagID)
 }
 
+// SelectByIDs mocks base method
+func (m *MockRepository) SelectByIDs(ctx context.Context, masterTx repository.MasterTx, tagIDs []int) (tag.EntitySlice, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SelectByIDs", ctx, masterTx, tagIDs)
+	ret0, _ := ret[0].(tag.EntitySlice)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SelectByIDs indicates an expected call of SelectByIDs
+func (mr *MockRepositoryMockRecorder) SelectByIDs(ctx, masterTx, tagIDs interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectByIDs", reflect.TypeOf((*MockRepository)(nil).SelectByIDs), ctx, masterTx, tagIDs)
+}
+
 // SelectByName mocks base method
 func (m *MockRepository) SelectByName(ctx context.Context, masterTx repository.MasterTx, name string) (*tag.Entity, error) {
 	m.ctrl.T.Helper()

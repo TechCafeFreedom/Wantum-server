@@ -7,12 +7,15 @@ import (
 	"log"
 	"strings"
 	placeEntity "wantum/pkg/domain/entity/place"
+	userEntity "wantum/pkg/domain/entity/user"
 	wishCardEntity "wantum/pkg/domain/entity/wishcard"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/wishcard"
 	"wantum/pkg/infrastructure/mysql"
 	"wantum/pkg/tlog"
 	"wantum/pkg/werrors"
+
+	"google.golang.org/grpc/codes"
 )
 
 type wishCardRepositoryImplement struct {
@@ -39,7 +42,7 @@ func (repo *wishCardRepositoryImplement) Insert(ctx context.Context, masterTx re
 		INSERT INTO wish_cards(
 			user_id, activity, description, date, created_at, updated_at, category_id, place_id
 		) VALUES (?,?,?,?,?,?,?,?)
-	`, wishCard.UserID,
+	`, wishCard.Author.ID,
 		wishCard.Activity,
 		wishCard.Description,
 		wishCard.Date,
@@ -82,7 +85,7 @@ func (repo *wishCardRepositoryImplement) Update(ctx context.Context, masterTx re
 			category_id=?,
 			place_id=?
 		WHERE id=?
-	`, wishCard.UserID,
+	`, wishCard.Author.ID,
 		wishCard.Activity,
 		wishCard.Description,
 		wishCard.Date,
@@ -106,6 +109,7 @@ func (repo *wishCardRepositoryImplement) UpDeleteFlag(ctx context.Context, maste
 	if wishCard.DeletedAt == nil {
 		return werrors.Newf(
 			errors.New("deletedAt is nil"),
+			codes.Internal,
 			werrors.ServerError.ErrorCode,
 			werrors.ServerError.ErrorMessageJP,
 			werrors.ServerError.ErrorMessageEN,
@@ -185,9 +189,10 @@ func (repo *wishCardRepositoryImplement) SelectByID(ctx context.Context, masterT
 	`, wishCardID)
 	var result wishCardEntity.Entity
 	var place placeEntity.Entity
+	var user userEntity.Entity
 	err = row.Scan(
 		&result.ID,
-		&result.UserID,
+		&user.ID,
 		&result.Activity,
 		&result.Description,
 		&result.Date,
@@ -201,6 +206,7 @@ func (repo *wishCardRepositoryImplement) SelectByID(ctx context.Context, masterT
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
+	result.Author = &user
 	result.Place = &place
 	log.Println(result.Place)
 	return &result, nil
@@ -227,9 +233,10 @@ func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, master
 	for rows.Next() {
 		var record wishCardEntity.Entity
 		var place placeEntity.Entity
+		var user userEntity.Entity
 		err = rows.Scan(
 			&record.ID,
-			&record.UserID,
+			&user.ID,
 			&record.Activity,
 			&record.Description,
 			&record.Date,
@@ -246,6 +253,7 @@ func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, master
 			tlog.PrintErrorLogWithCtx(ctx, err)
 			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}
+		record.Author = &user
 		record.Place = &place
 		result = append(result, &record)
 	}
@@ -271,9 +279,10 @@ func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context,
 	for rows.Next() {
 		var record wishCardEntity.Entity
 		var place placeEntity.Entity
+		var user userEntity.Entity
 		err = rows.Scan(
 			&record.ID,
-			&record.UserID,
+			&user.ID,
 			&record.Activity,
 			&record.Description,
 			&record.Date,
@@ -290,6 +299,7 @@ func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context,
 			tlog.PrintErrorLogWithCtx(ctx, err)
 			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}
+		record.Author = &user
 		record.Place = &place
 		result = append(result, &record)
 	}
@@ -300,6 +310,7 @@ func checkIsNil(wishCard *wishCardEntity.Entity) error {
 	if wishCard == nil {
 		return werrors.Newf(
 			errors.New("required data(wishCard) is nil"),
+			codes.Internal,
 			werrors.ServerError.ErrorCode,
 			werrors.ServerError.ErrorMessageJP,
 			werrors.ServerError.ErrorMessageEN,

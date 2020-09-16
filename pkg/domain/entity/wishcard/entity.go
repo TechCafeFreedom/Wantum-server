@@ -4,11 +4,12 @@ import (
 	"time"
 	"wantum/pkg/domain/entity/place"
 	"wantum/pkg/domain/entity/tag"
+	"wantum/pkg/domain/entity/user"
 )
 
 type Entity struct {
 	ID          int
-	UserID      int // TODO: entityの差し返して
+	Author      *user.Entity
 	Activity    string
 	Description string
 	Date        *time.Time

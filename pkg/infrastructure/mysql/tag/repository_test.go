@@ -226,6 +226,24 @@ func TestSelectByID(t *testing.T) {
 	})
 }
 
+func TestSelectByIDs(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+
+		var result tagEntity.EntitySlice
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+
+			result, err = repo.SelectByIDs(ctx, masterTx, []int{1, 2, 3})
+			return err
+		})
+
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, 3, len(result))
+	})
+}
+
 func TestSelectByName(t *testing.T) {
 	t.Run("successe", func(t *testing.T) {
 		var err error

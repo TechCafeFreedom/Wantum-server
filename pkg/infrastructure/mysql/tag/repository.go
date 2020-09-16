@@ -4,12 +4,16 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"strconv"
+	"strings"
 	tagEntity "wantum/pkg/domain/entity/tag"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/tag"
 	"wantum/pkg/infrastructure/mysql"
 	"wantum/pkg/tlog"
 	"wantum/pkg/werrors"
+
+	"google.golang.org/grpc/codes"
 )
 
 type tagRepositoryImplement struct {
@@ -58,6 +62,7 @@ func (repo *tagRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx r
 	if tag.DeletedAt == nil {
 		return werrors.Newf(
 			errors.New("deletedAt is nil"),
+			codes.Internal,
 			werrors.ServerError.ErrorCode,
 			werrors.ServerError.ErrorMessageJP,
 			werrors.ServerError.ErrorMessageEN,
@@ -150,6 +155,50 @@ func (repo *tagRepositoryImplement) SelectByID(ctx context.Context, masterTx rep
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 	return &result, nil
+}
+
+func (repo *tagRepositoryImplement) SelectByIDs(ctx context.Context, masterTx repository.MasterTx, tagIDs []int) (tagEntity.EntitySlice, error) {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
+	}
+
+	tagIDsStr := make([]string, 0, len(tagIDs))
+	for _, id := range tagIDs {
+		tagIDsStr = append(tagIDsStr, strconv.Itoa(id))
+	}
+
+	rows, err := tx.Query(`
+		SELECT id, name, created_at, updated_at, deleted_at
+		FROM tags
+		WHERE id
+		IN (` + strings.Join(tagIDsStr, ",") + `)
+	`)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
+	}
+	var result tagEntity.EntitySlice
+	for rows.Next() {
+		var record tagEntity.Entity
+		err = rows.Scan(
+			&record.ID,
+			&record.Name,
+			&record.CreatedAt,
+			&record.UpdatedAt,
+			&record.DeletedAt,
+		)
+		if err != nil {
+			if err != sql.ErrNoRows {
+				return nil, nil
+			}
+			tlog.PrintErrorLogWithCtx(ctx, err)
+			return nil, werrors.FromConstant(err, werrors.ServerError)
+		}
+		result = append(result, &record)
+	}
+	return result, nil
 }
 
 func (repo *tagRepositoryImplement) SelectByName(ctx context.Context, masterTx repository.MasterTx, name string) (*tagEntity.Entity, error) {
@@ -258,6 +307,7 @@ func checkIsNil(tag *tagEntity.Entity) error {
 	if tag == nil {
 		return werrors.Newf(
 			errors.New("required data(tag) is nil"),
+			codes.Internal,
 			werrors.ServerError.ErrorCode,
 			werrors.ServerError.ErrorMessageJP,
 			werrors.ServerError.ErrorMessageEN,
