@@ -9,6 +9,8 @@ import (
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/place"
 	"wantum/pkg/werrors"
+
+	"google.golang.org/grpc/codes"
 )
 
 type Service interface {
@@ -104,6 +106,7 @@ func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, plac
 	if place.DeletedAt == nil {
 		return werrors.Newf(
 			fmt.Errorf("can't delete this data. this data did not up a delete flag. placeID=%v", placeID),
+			codes.Internal, // TODO: 適切か？
 			http.StatusBadRequest,
 			"このデータは削除できません",
 			"could not delete this place",

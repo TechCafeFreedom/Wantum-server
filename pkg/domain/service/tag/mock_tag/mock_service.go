@@ -8,7 +8,7 @@ import (
 	context "context"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
-	entity "wantum/pkg/domain/entity"
+	tag "wantum/pkg/domain/entity/tag"
 	repository "wantum/pkg/domain/repository"
 )
 
@@ -36,10 +36,10 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 }
 
 // Create mocks base method
-func (m *MockService) Create(ctx context.Context, masterTx repository.MasterTx, name string) (*entity.Tag, error) {
+func (m *MockService) Create(ctx context.Context, masterTx repository.MasterTx, name string) (*tag.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", ctx, masterTx, name)
-	ret0, _ := ret[0].(*entity.Tag)
+	ret0, _ := ret[0].(*tag.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -51,10 +51,10 @@ func (mr *MockServiceMockRecorder) Create(ctx, masterTx, name interface{}) *gomo
 }
 
 // UpDeleteFlag mocks base method
-func (m *MockService) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*entity.Tag, error) {
+func (m *MockService) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tag.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpDeleteFlag", ctx, masterTx, tagID)
-	ret0, _ := ret[0].(*entity.Tag)
+	ret0, _ := ret[0].(*tag.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -66,10 +66,10 @@ func (mr *MockServiceMockRecorder) UpDeleteFlag(ctx, masterTx, tagID interface{}
 }
 
 // DownDeleteFlag mocks base method
-func (m *MockService) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*entity.Tag, error) {
+func (m *MockService) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tag.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DownDeleteFlag", ctx, masterTx, tagID)
-	ret0, _ := ret[0].(*entity.Tag)
+	ret0, _ := ret[0].(*tag.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -95,10 +95,10 @@ func (mr *MockServiceMockRecorder) Delete(ctx, masterTx, tagID interface{}) *gom
 }
 
 // GetByID mocks base method
-func (m *MockService) GetByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*entity.Tag, error) {
+func (m *MockService) GetByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tag.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByID", ctx, masterTx, tagID)
-	ret0, _ := ret[0].(*entity.Tag)
+	ret0, _ := ret[0].(*tag.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -110,10 +110,10 @@ func (mr *MockServiceMockRecorder) GetByID(ctx, masterTx, tagID interface{}) *go
 }
 
 // GetByName mocks base method
-func (m *MockService) GetByName(ctx context.Context, masterTx repository.MasterTx, name string) (*entity.Tag, error) {
+func (m *MockService) GetByName(ctx context.Context, masterTx repository.MasterTx, name string) (*tag.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByName", ctx, masterTx, name)
-	ret0, _ := ret[0].(*entity.Tag)
+	ret0, _ := ret[0].(*tag.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -125,10 +125,10 @@ func (mr *MockServiceMockRecorder) GetByName(ctx, masterTx, name interface{}) *g
 }
 
 // GetByWishCardID mocks base method
-func (m *MockService) GetByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (entity.TagSlice, error) {
+func (m *MockService) GetByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (tag.EntitySlice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByWishCardID", ctx, masterTx, wishCardID)
-	ret0, _ := ret[0].(entity.TagSlice)
+	ret0, _ := ret[0].(tag.EntitySlice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -140,10 +140,10 @@ func (mr *MockServiceMockRecorder) GetByWishCardID(ctx, masterTx, wishCardID int
 }
 
 // GetByMemoryID mocks base method
-func (m *MockService) GetByMemoryID(ctx context.Context, masterTx repository.MasterTx, memoryID int) (entity.TagSlice, error) {
+func (m *MockService) GetByMemoryID(ctx context.Context, masterTx repository.MasterTx, memoryID int) (tag.EntitySlice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByMemoryID", ctx, masterTx, memoryID)
-	ret0, _ := ret[0].(entity.TagSlice)
+	ret0, _ := ret[0].(tag.EntitySlice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

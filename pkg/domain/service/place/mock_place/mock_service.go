@@ -8,7 +8,7 @@ import (
 	context "context"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
-	entity "wantum/pkg/domain/entity"
+	place "wantum/pkg/domain/entity/place"
 	repository "wantum/pkg/domain/repository"
 )
 
@@ -36,10 +36,10 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 }
 
 // Create mocks base method
-func (m *MockService) Create(ctx context.Context, masterTx repository.MasterTx, name string) (*entity.Place, error) {
+func (m *MockService) Create(ctx context.Context, masterTx repository.MasterTx, name string) (*place.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", ctx, masterTx, name)
-	ret0, _ := ret[0].(*entity.Place)
+	ret0, _ := ret[0].(*place.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -51,10 +51,10 @@ func (mr *MockServiceMockRecorder) Create(ctx, masterTx, name interface{}) *gomo
 }
 
 // Update mocks base method
-func (m *MockService) Update(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) (*entity.Place, error) {
+func (m *MockService) Update(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) (*place.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", ctx, masterTx, placeID, name)
-	ret0, _ := ret[0].(*entity.Place)
+	ret0, _ := ret[0].(*place.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -80,10 +80,10 @@ func (mr *MockServiceMockRecorder) Delete(ctx, masterTx, placeID interface{}) *g
 }
 
 // UpDeleteFlag mocks base method
-func (m *MockService) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*entity.Place, error) {
+func (m *MockService) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*place.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpDeleteFlag", ctx, masterTx, placeID)
-	ret0, _ := ret[0].(*entity.Place)
+	ret0, _ := ret[0].(*place.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -95,10 +95,10 @@ func (mr *MockServiceMockRecorder) UpDeleteFlag(ctx, masterTx, placeID interface
 }
 
 // DownDeleteFlag mocks base method
-func (m *MockService) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*entity.Place, error) {
+func (m *MockService) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*place.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DownDeleteFlag", ctx, masterTx, placeID)
-	ret0, _ := ret[0].(*entity.Place)
+	ret0, _ := ret[0].(*place.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -110,10 +110,10 @@ func (mr *MockServiceMockRecorder) DownDeleteFlag(ctx, masterTx, placeID interfa
 }
 
 // GetByID mocks base method
-func (m *MockService) GetByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*entity.Place, error) {
+func (m *MockService) GetByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*place.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByID", ctx, masterTx, placeID)
-	ret0, _ := ret[0].(*entity.Place)
+	ret0, _ := ret[0].(*place.Entity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -125,10 +125,10 @@ func (mr *MockServiceMockRecorder) GetByID(ctx, masterTx, placeID interface{}) *
 }
 
 // GetAll mocks base method
-func (m *MockService) GetAll(ctx context.Context, masterTx repository.MasterTx) (entity.PlaceSlice, error) {
+func (m *MockService) GetAll(ctx context.Context, masterTx repository.MasterTx) (place.EntitySlice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAll", ctx, masterTx)
-	ret0, _ := ret[0].(entity.PlaceSlice)
+	ret0, _ := ret[0].(place.EntitySlice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
