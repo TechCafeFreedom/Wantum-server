@@ -92,13 +92,11 @@ jobs:
             # Run test
             -   name: Test
                 run: |
-                    # export MYSQL_USER=root
-                    # export MYSQL_PASSWORD=root
-                    # export MYSQL_HOST=localhost
-                    # export MYSQL_PORT=3306
-                    # export MYSQL_DATABASE=wantum
-                    export MYSQL_AA=hello
-                    echo $MYSQL_AA
+                    export MYSQL_USER=root
+                    export MYSQL_PASSWORD=root
+                    export MYSQL_HOST=localhost
+                    export MYSQL_PORT=3306
+                    export MYSQL_DATABASE=wantum
                     go test -v ./...
 
     # slackの通知
