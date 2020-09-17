@@ -26,7 +26,7 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-type TagInfo struct {
+type Tag struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -37,8 +37,8 @@ type TagInfo struct {
 	TagName string `protobuf:"bytes,2,opt,name=tag_name,json=tagName,proto3" json:"tag_name,omitempty"`
 }
 
-func (x *TagInfo) Reset() {
-	*x = TagInfo{}
+func (x *Tag) Reset() {
+	*x = Tag{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_tag_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -46,13 +46,13 @@ func (x *TagInfo) Reset() {
 	}
 }
 
-func (x *TagInfo) String() string {
+func (x *Tag) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*TagInfo) ProtoMessage() {}
+func (*Tag) ProtoMessage() {}
 
-func (x *TagInfo) ProtoReflect() protoreflect.Message {
+func (x *Tag) ProtoReflect() protoreflect.Message {
 	mi := &file_tag_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -64,19 +64,19 @@ func (x *TagInfo) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use TagInfo.ProtoReflect.Descriptor instead.
-func (*TagInfo) Descriptor() ([]byte, []int) {
+// Deprecated: Use Tag.ProtoReflect.Descriptor instead.
+func (*Tag) Descriptor() ([]byte, []int) {
 	return file_tag_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *TagInfo) GetTagId() int64 {
+func (x *Tag) GetTagId() int64 {
 	if x != nil {
 		return x.TagId
 	}
 	return 0
 }
 
-func (x *TagInfo) GetTagName() string {
+func (x *Tag) GetTagName() string {
 	if x != nil {
 		return x.TagName
 	}
@@ -87,12 +87,11 @@ var File_tag_proto protoreflect.FileDescriptor
 
 var file_tag_proto_rawDesc = []byte{
 	0x0a, 0x09, 0x74, 0x61, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x09, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x5f, 0x74, 0x61, 0x67, 0x22, 0x3b, 0x0a, 0x07, 0x54, 0x61, 0x67, 0x49, 0x6e, 0x66,
-	0x6f, 0x12, 0x15, 0x0a, 0x06, 0x74, 0x61, 0x67, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x03, 0x52, 0x05, 0x74, 0x61, 0x67, 0x49, 0x64, 0x12, 0x19, 0x0a, 0x08, 0x74, 0x61, 0x67, 0x5f,
-	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x74, 0x61, 0x67, 0x4e,
-	0x61, 0x6d, 0x65, 0x42, 0x06, 0x5a, 0x04, 0x2e, 0x3b, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x74, 0x6f, 0x5f, 0x74, 0x61, 0x67, 0x22, 0x37, 0x0a, 0x03, 0x54, 0x61, 0x67, 0x12, 0x15, 0x0a,
+	0x06, 0x74, 0x61, 0x67, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x74,
+	0x61, 0x67, 0x49, 0x64, 0x12, 0x19, 0x0a, 0x08, 0x74, 0x61, 0x67, 0x5f, 0x6e, 0x61, 0x6d, 0x65,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x74, 0x61, 0x67, 0x4e, 0x61, 0x6d, 0x65, 0x42,
+	0x06, 0x5a, 0x04, 0x2e, 0x3b, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -109,7 +108,7 @@ func file_tag_proto_rawDescGZIP() []byte {
 
 var file_tag_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_tag_proto_goTypes = []interface{}{
-	(*TagInfo)(nil), // 0: proto_tag.TagInfo
+	(*Tag)(nil), // 0: proto_tag.Tag
 }
 var file_tag_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -126,7 +125,7 @@ func file_tag_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_tag_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*TagInfo); i {
+			switch v := v.(*Tag); i {
 			case 0:
 				return &v.state
 			case 1:
