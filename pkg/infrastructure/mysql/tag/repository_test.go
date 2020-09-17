@@ -13,6 +13,7 @@ import (
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/tag"
 	tx "wantum/pkg/infrastructure/mysql"
+	"wantum/pkg/testutil"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/stretchr/testify/assert"
@@ -35,8 +36,7 @@ func TestMain(m *testing.M) {
 // repositoryを作ってもらう
 func before() {
 	var err error
-	// TODO: 環境変数とか使いたい気持ちもする
-	db, err = sql.Open("mysql", "root:root@tcp(localhost:3306)/wantum?parseTime=true")
+	db, err = testutil.ConnectLocalDB()
 	if err != nil {
 		log.Fatal("faild to connect db: ", err)
 	}

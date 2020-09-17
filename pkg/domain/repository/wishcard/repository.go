@@ -18,5 +18,4 @@ type Repository interface {
 	SelectByID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (*wishcard.Entity, error)
 	SelectByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []string) (wishcard.EntitySlice, error)
 	SelectByCategoryID(ctx context.Context, masterTx repository.MasterTx, categryID int) (wishcard.EntitySlice, error)
-	// TODO: SelectByCategoryIDsあっても良いかもと思ったが？
 }

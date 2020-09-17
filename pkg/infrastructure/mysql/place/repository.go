@@ -178,7 +178,7 @@ func (repo *placeRepositoryImplement) SelectByID(ctx context.Context, masterTx r
 		&result.UpdatedAt,
 		&result.DeletedAt)
 	if err != nil {
-		// TODO: no rows無くて大丈夫？
+		// QUESTION: no rows無くて大丈夫？no rowsをエラーにするかしないか迷うのでどうしよう
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
