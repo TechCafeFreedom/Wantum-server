@@ -61,7 +61,7 @@ func (repo *tagRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx r
 	}
 	if tag.DeletedAt == nil {
 		return werrors.Newf(
-			errors.New("deletedAt is nil"),
+			errors.New("can't up delete flag. deletedAt is nil"),
 			codes.Internal,
 			werrors.ServerError.ErrorCode,
 			werrors.ServerError.ErrorMessageJP,
@@ -307,7 +307,7 @@ func checkIsNil(tag *tagEntity.Entity) error {
 	if tag == nil {
 		return werrors.Newf(
 			errors.New("required data(tag) is nil"),
-			codes.Internal,
+			codes.Unknown,
 			werrors.ServerError.ErrorCode,
 			werrors.ServerError.ErrorMessageJP,
 			werrors.ServerError.ErrorMessageEN,

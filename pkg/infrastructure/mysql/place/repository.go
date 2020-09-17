@@ -10,6 +10,8 @@ import (
 	"wantum/pkg/infrastructure/mysql"
 	"wantum/pkg/tlog"
 	"wantum/pkg/werrors"
+
+	"google.golang.org/grpc/codes"
 )
 
 type placeRepositoryImplement struct {
@@ -87,7 +89,8 @@ func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx
 	}
 	if place.DeletedAt == nil {
 		return werrors.Newf(
-			errors.New("deletedAt is nil"),
+			errors.New("can't up delete flag. deletedAt is nil"),
+			codes.Internal,
 			werrors.ServerError.ErrorCode,
 			werrors.ServerError.ErrorMessageJP,
 			werrors.ServerError.ErrorMessageEN,
@@ -220,7 +223,8 @@ func (repo *placeRepositoryImplement) SelectAll(ctx context.Context, masterTx re
 func checkIsNil(place *placeEntity.Entity) error {
 	if place == nil {
 		return werrors.Newf(
-			errors.New("required data(place) is nil"),
+			errors.New("required data is nil"),
+			codes.Unknown,
 			werrors.ServerError.ErrorCode,
 			werrors.ServerError.ErrorMessageJP,
 			werrors.ServerError.ErrorMessageEN,

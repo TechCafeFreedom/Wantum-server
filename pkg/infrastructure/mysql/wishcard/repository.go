@@ -108,7 +108,7 @@ func (repo *wishCardRepositoryImplement) UpDeleteFlag(ctx context.Context, maste
 	}
 	if wishCard.DeletedAt == nil {
 		return werrors.Newf(
-			errors.New("deletedAt is nil"),
+			errors.New("can't up delete flag. deletedAt is nil"),
 			codes.Internal,
 			werrors.ServerError.ErrorCode,
 			werrors.ServerError.ErrorMessageJP,
@@ -310,7 +310,7 @@ func checkIsNil(wishCard *wishCardEntity.Entity) error {
 	if wishCard == nil {
 		return werrors.Newf(
 			errors.New("required data(wishCard) is nil"),
-			codes.Internal,
+			codes.Unknown,
 			werrors.ServerError.ErrorCode,
 			werrors.ServerError.ErrorMessageJP,
 			werrors.ServerError.ErrorMessageEN,

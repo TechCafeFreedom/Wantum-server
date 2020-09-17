@@ -89,7 +89,7 @@ func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, tagI
 	if tag.DeletedAt == nil {
 		return werrors.Newf(
 			fmt.Errorf("can't delete this data. this data did not up a delete flag. tagID=%v", tagID),
-			codes.Internal, // TODO: 適切か？
+			codes.FailedPrecondition,
 			http.StatusBadRequest,
 			"このデータは削除できません",
 			"could not delete this place",

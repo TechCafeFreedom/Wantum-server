@@ -213,7 +213,7 @@ func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, wish
 	if wishCard.DeletedAt == nil {
 		return werrors.Newf(
 			fmt.Errorf("can't delete this data. this data did not up a delete flag. wishCardID=%v", wishCardID),
-			codes.InvalidArgument, // TODO: 適切か？
+			codes.FailedPrecondition,
 			http.StatusBadRequest,
 			"このデータは削除できません",
 			"could not delete this place",
