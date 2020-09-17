@@ -52,9 +52,9 @@ jobs:
                 ports:
                     - 3306:3306
                 options: --health-cmd "mysqladmin ping -h localhost" --health-interval 20s --health-timeout 10s --health-retries 10
-                # env:
-                    # MYSQL_ROOT_PASSWORD: password
-                    # MYSQL_DATABASE: wantum
+                env:
+                    MYSQL_ROOT_PASSWORD: password
+                    MYSQL_DATABASE: wantum
 
         steps:
             # set up go
@@ -68,21 +68,10 @@ jobs:
                 uses: actions/checkout@v2
 
             # set up db
-            -   name: Set up mysql
-                uses: mirromutth/mysql-action@v1.1
-                with:
-                    host port: 3306
-                    container port: 3306
-                    character set server: 'utf8mb4'
-                    collation server: 'utf8mb4_unicode_ci'
-                    mysql version: '5.7'
-                    mysql database: 'wantum'
-                    mysql root password: 'password'
-                    mysql user: 'worker'
-                    mysql password: 'password'
-
             -   name: SetUp db
                 run: |
+                    sudo mysql --protocol=tcp -u root -ppassword -e "SHOW variables like '%server'"
+                    sudo mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
                     sudo mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/ddl.sql
                     sudo mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/dml.sql
 
