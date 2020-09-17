@@ -46,7 +46,7 @@ func (i *interactor) CreateNewWishCard(ctx context.Context, userID int, activity
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		place, err := i.placeService.Create(ctx, masterTx, place)
 		if err != nil {
-			// TODO: placeがすでにあったら辛いね...
+			// TODO: placeがすでにあったら無限に増えてしまう
 			return werrors.Stack(err)
 		}
 		var tagIDs []int
@@ -85,8 +85,7 @@ func (i *interactor) UpdateWishCard(ctx context.Context, wishCardID, userID int,
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		place, err := i.placeService.Create(ctx, masterTx, place)
 		if err != nil {
-			// TODO: placeがすでにあったら辛いね...
-			// bynameで撮ってきて、なかったらcreateかな...ぐぬぬ
+			// TODO: placeがすでにあったら無限に増えてしまう
 			return werrors.Stack(err)
 		}
 		var tagIDs []int
