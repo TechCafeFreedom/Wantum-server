@@ -3,9 +3,9 @@ package testutil
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"os"
 	"wantum/pkg/constants"
+	"wantum/pkg/tlog"
 )
 
 func ConnectLocalDB() (*sql.DB, error) {
@@ -32,7 +32,7 @@ func ConnectLocalDB() (*sql.DB, error) {
 	}
 
 	dataSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", dbuser, dbpassword, dbhost, dbport, dbname)
-	log.Println(dataSource)
+	tlog.GetAppLogger().Info(fmt.Sprintf("connect db: %s", dataSource))
 
 	return sql.Open("mysql", dataSource)
 }

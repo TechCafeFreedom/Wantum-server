@@ -202,7 +202,9 @@ func (repo *wishCardRepositoryImplement) SelectByID(ctx context.Context, masterT
 		&result.DeletedAt,
 		&place.ID)
 	if err != nil {
-		// TODO: これってno rowsでもえらーでおっけえなの？
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}

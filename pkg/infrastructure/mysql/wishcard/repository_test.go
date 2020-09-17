@@ -3,7 +3,6 @@ package wishcard
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"log"
 	"os"
 	"testing"
@@ -321,14 +320,14 @@ func TestDelete(t *testing.T) {
 			if err != nil {
 				return err
 			}
+			assert.NoError(t, err)
 
 			result, err = repo.SelectByID(ctx, masterTx, wishCard.ID)
-			if err == nil {
-				return errors.New("削除されたデータが見つかった")
-			}
+			assert.NoError(t, err)
+
 			return nil
 		})
-		assert.NoError(t, err)
+
 		assert.Nil(t, result)
 	})
 }
@@ -370,7 +369,7 @@ func TestSelectByID(t *testing.T) {
 			result, err = repo.SelectByID(ctx, masterTx, -1)
 			return err
 		})
-		assert.Error(t, err)
+		assert.NoError(t, err)
 		assert.Nil(t, result)
 	})
 }
