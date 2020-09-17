@@ -145,7 +145,7 @@ type CreateMemoryRequest struct {
 	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
 	// 場所
 	Place string `protobuf:"bytes,5,opt,name=place,proto3" json:"place,omitempty"`
-	// 投稿されている画像一覧（配列）
+	// アップロードしたい画像一覧（配列）
 	Photos []*Photo `protobuf:"bytes,6,rep,name=photos,proto3" json:"photos,omitempty"`
 	// タグ一覧（配列）
 	Tags []*Tag `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags,omitempty"`
