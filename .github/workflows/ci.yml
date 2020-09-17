@@ -53,8 +53,8 @@ jobs:
                     - 3306:3306
                 options: --health-cmd "mysqladmin ping -h localhost" --health-interval 20s --health-timeout 10s --health-retries 10
                 env:
-                    MYSQL_ROOT_PASSWORD: password
-                    MYSQL_DATABASE: wantum
+                    # MYSQL_ROOT_PASSWORD: password
+                    # MYSQL_DATABASE: wantum
 
         steps:
             # set up go
@@ -77,7 +77,7 @@ jobs:
                     collation server: 'utf8mb4_unicode_ci'
                     mysql version: '5.7'
                     mysql database: 'wantum'
-                    mysql root password: 'root'
+                    mysql root password: 'password'
                     mysql user: 'worker'
                     mysql password: 'password'
 
