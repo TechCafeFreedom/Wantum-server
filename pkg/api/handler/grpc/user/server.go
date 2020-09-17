@@ -18,7 +18,7 @@ func New(userInteractor userinteractor.Interactor) Server {
 	return Server{userInteractor: userInteractor}
 }
 
-func (s *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.UserInfo, error) {
+func (s *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.User, error) {
 	authID, err := wcontext.GetAuthIDFromContext(ctx)
 	if err != nil {
 		return nil, werrors.FromConstant(err, werrors.AuthFail)
@@ -45,7 +45,7 @@ func (s *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb
 		return nil, werrors.Stack(err)
 	}
 
-	return &pb.UserInfo{
+	return &pb.User{
 		UserId:    int64(createdUser.ID),
 		Name:      createdUser.Profile.Name,
 		UserName:  createdUser.UserName,
@@ -57,7 +57,7 @@ func (s *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb
 	}, nil
 }
 
-func (s *Server) GetMyProfile(ctx context.Context, req *empty.Empty) (*pb.UserInfo, error) {
+func (s *Server) GetMyProfile(ctx context.Context, req *empty.Empty) (*pb.User, error) {
 	authID, err := wcontext.GetAuthIDFromContext(ctx)
 	if err != nil {
 		return nil, werrors.FromConstant(err, werrors.AuthFail)
@@ -68,7 +68,7 @@ func (s *Server) GetMyProfile(ctx context.Context, req *empty.Empty) (*pb.UserIn
 		return nil, werrors.Stack(err)
 	}
 
-	return &pb.UserInfo{
+	return &pb.User{
 		UserId:    int64(userData.ID),
 		Name:      userData.Profile.Name,
 		UserName:  userData.UserName,
@@ -80,10 +80,10 @@ func (s *Server) GetMyProfile(ctx context.Context, req *empty.Empty) (*pb.UserIn
 	}, nil
 }
 
-func (s *Server) GetUserProfile(ctx context.Context, request *pb.GetUserRequest) (*pb.UserInfo, error) {
+func (s *Server) GetUserProfile(ctx context.Context, request *pb.GetUserRequest) (*pb.User, error) {
 	panic("implement me")
 }
 
-func (s *Server) UpdateUserProfile(ctx context.Context, request *pb.UpdateUserProfileRequest) (*pb.UserInfo, error) {
+func (s *Server) UpdateUserProfile(ctx context.Context, request *pb.UpdateUserProfileRequest) (*pb.User, error) {
 	panic("implement me")
 }
