@@ -21,6 +21,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// TODO: dummyデータを充実させる
+// TODO: test名を日本語にする
+
 var (
 	masterTx        repository.MasterTx
 	masterTxManager repository.MasterTxManager
