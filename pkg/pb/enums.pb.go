@@ -26,12 +26,13 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
+// 性別タイプ
 type GenderType int32
 
 const (
-	GenderType_UNKNOWN GenderType = 0
-	GenderType_MAN     GenderType = 1
-	GenderType_WOMAN   GenderType = 2
+	GenderType_UNKNOWN GenderType = 0 // 不明・その他
+	GenderType_MAN     GenderType = 1 // 男性
+	GenderType_WOMAN   GenderType = 2 // 女性
 )
 
 // Enum value maps for GenderType.
