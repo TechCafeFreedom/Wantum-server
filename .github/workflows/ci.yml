@@ -70,12 +70,9 @@ jobs:
             # set up db
             -   name: SetUp db
                 run: |
-                    # which mysqld
-                    # cat /etc/mysql/my.cnf
-                    # sudo service mysql status
-                    # sudo mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+                    sudo mysql --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
                     sudo mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/ddl.sql
-                    # sudo mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/dml.sql
+                    sudo mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/dml.sql
 
             # Cache
             -   name: Cache go module
