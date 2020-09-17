@@ -72,6 +72,7 @@ jobs:
             # set up db
             -   name: SetUp db
                 run: |
+                    mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
                     mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/ddl.sql
                     mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/dml.sql
 
