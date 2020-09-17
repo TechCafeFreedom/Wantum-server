@@ -4,7 +4,7 @@ services:
     image: mysql:5.7
     container_name: wantum_db
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: wantum
       MYSQL_USER: worker
       MYSQL_PASSWORD: password
