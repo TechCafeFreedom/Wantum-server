@@ -71,8 +71,9 @@ jobs:
             -   name: SetUp db
                 run: |
                     docker-compose -f docker-compose.ci.yml up -d
-                    sleep 30
-                    docker-compose exec db mysql -u root -proot -e "show databases"
+                    sleep 15
+                    docker-compose ps
+                    # docker-compose exec db mysql -u root -proot -e "show databases"
                     # docker-compose exec db mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/ddl.sql
                     # docker-compose exec db mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/dml.sql
                     # sudo mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/ddl.sql
