@@ -70,7 +70,6 @@ jobs:
             # set up db
             -   name: SetUp db
                 run: |
-                    sudo mysql --protocol=tcp -u root -ppassword -e "SHOW variables like '%server'"
                     sudo mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
                     sudo mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/ddl.sql
                     sudo mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/dml.sql
