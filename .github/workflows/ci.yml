@@ -72,8 +72,8 @@ jobs:
             # set up db
             -   name: SetUp db
                 run:
-                    mysql --protocol=tcp -u root -ppassword todone < ./db/mysql/init.d/ddl.sql
-                    mysql --protocol=tcp -u root -ppassword todone < ./db/mysql/init.d/dml.sql
+                    mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/ddl.sql
+                    mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/dml.sql
 
             # Cache
             -   name: Cache go module
