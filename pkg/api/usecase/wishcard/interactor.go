@@ -42,8 +42,7 @@ func New(masterTxManager repository.MasterTxManager, wishCardService wishcard.Se
 func (i *interactor) CreateNewWishCard(ctx context.Context, userID int, activity, description, place string, date *time.Time, categoryID int, tags []string) (*wishCardEntity.Entity, error) {
 
 	var newWishCard *wishCardEntity.Entity
-	var err error
-	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		place, err := i.placeService.Create(ctx, masterTx, place)
 		if err != nil {
 			// TODO: placeがすでにあったら無限に増えてしまう
@@ -81,8 +80,7 @@ func (i *interactor) CreateNewWishCard(ctx context.Context, userID int, activity
 
 func (i *interactor) UpdateWishCard(ctx context.Context, wishCardID, userID int, activity, description, place string, date, doneAt *time.Time, categoryID int, tags []string) (*wishCardEntity.Entity, error) {
 	var wishCard *wishCardEntity.Entity
-	var err error
-	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		place, err := i.placeService.Create(ctx, masterTx, place)
 		if err != nil {
 			// TODO: placeがすでにあったら無限に増えてしまう

@@ -58,7 +58,7 @@ var dummyUser = userEntity.Entity{
 	CreatedAt: &dummyDate,
 	UpdatedAt: &dummyDate,
 	DeletedAt: &dummyDate,
-	Profile:   nil,
+	Profile:   &dummyProfile,
 }
 
 var dummyTag1 = tagEntity.Entity{
