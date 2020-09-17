@@ -74,8 +74,9 @@ jobs:
 
             -   name: SetUp db
                 run: |
-                    mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/ddl.sql
-                    mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/dml.sql
+                    sudo service mysql status
+                    sudo mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/ddl.sql
+                    sudo mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/dml.sql
 
             # Cache
             -   name: Cache go module
