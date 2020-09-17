@@ -74,8 +74,8 @@ jobs:
 
             -   name: SetUp db
                 run: |
-                    sudo sudo /etc/init.d/mysql start
-                    sudo service mysql status
+                    sudo /etc/init.d/mysql start
+                    systemctl status mysql.service
                     sudo mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/ddl.sql
                     sudo mysql --protocol=tcp -u root -ppassword wantum < ./db/mysql/init.d/dml.sql
 
