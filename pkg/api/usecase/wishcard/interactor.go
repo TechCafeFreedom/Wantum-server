@@ -48,7 +48,7 @@ func (i *interactor) CreateNewWishCard(ctx context.Context, userID int, activity
 			// TODO: placeがすでにあったら無限に増えてしまう
 			return werrors.Stack(err)
 		}
-		var tagIDs []int
+		tagIDs := make([]int, 0, len(tags))
 		for _, tagName := range tags {
 			var tag *tagEntity.Entity
 			tag, _ = i.tagService.GetByName(ctx, masterTx, tagName)
@@ -86,7 +86,7 @@ func (i *interactor) UpdateWishCard(ctx context.Context, wishCardID, userID int,
 			// TODO: placeがすでにあったら無限に増えてしまう
 			return werrors.Stack(err)
 		}
-		var tagIDs []int
+		tagIDs := make([]int, 0, len(tags))
 		for _, tagName := range tags {
 			var tag *tagEntity.Entity
 			tag, _ = i.tagService.GetByName(ctx, masterTx, tagName)
