@@ -27,9 +27,6 @@ func New(txManager repository.MasterTxManager) tag.Repository {
 }
 
 func (repo *tagRepositoryImplement) Insert(ctx context.Context, masterTx repository.MasterTx, tag *tagEntity.Entity) (int, error) {
-	if err := checkIsNil(tag); err != nil {
-		return 0, err
-	}
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -55,10 +52,6 @@ func (repo *tagRepositoryImplement) Insert(ctx context.Context, masterTx reposit
 }
 
 func (repo *tagRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tag *tagEntity.Entity) error {
-	// NOTE: nilで降りてきた用対策。いらないかも
-	if err := checkIsNil(tag); err != nil {
-		return err
-	}
 	if tag.DeletedAt == nil {
 		return werrors.Newf(
 			errors.New("can't up delete flag. deletedAt is nil"),
@@ -90,10 +83,6 @@ func (repo *tagRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx r
 }
 
 func (repo *tagRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tag *tagEntity.Entity) error {
-	if err := checkIsNil(tag); err != nil {
-		return err
-	}
-
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -301,17 +290,4 @@ func (repo *tagRepositoryImplement) SelectByMemoryID(ctx context.Context, master
 		result = append(result, &record)
 	}
 	return result, nil
-}
-
-func checkIsNil(tag *tagEntity.Entity) error {
-	if tag == nil {
-		return werrors.Newf(
-			errors.New("required data(tag) is nil"),
-			codes.Unknown,
-			werrors.ServerError.ErrorCode,
-			werrors.ServerError.ErrorMessageJP,
-			werrors.ServerError.ErrorMessageEN,
-		)
-	}
-	return nil
 }

@@ -29,10 +29,6 @@ func New(txManager repository.MasterTxManager) wishcard.Repository {
 }
 
 func (repo *wishCardRepositoryImplement) Insert(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity, categoryID int) (int, error) {
-	if err := checkIsNil(wishCard); err != nil {
-		return 0, err
-	}
-
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -64,10 +60,6 @@ func (repo *wishCardRepositoryImplement) Insert(ctx context.Context, masterTx re
 }
 
 func (repo *wishCardRepositoryImplement) Update(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity, categoryID int) error {
-	if err := checkIsNil(wishCard); err != nil {
-		return err
-	}
-
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -103,9 +95,6 @@ func (repo *wishCardRepositoryImplement) Update(ctx context.Context, masterTx re
 }
 
 func (repo *wishCardRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity) error {
-	if err := checkIsNil(wishCard); err != nil {
-		return err
-	}
 	if wishCard.DeletedAt == nil {
 		return werrors.Newf(
 			errors.New("can't up delete flag. deletedAt is nil"),
@@ -136,9 +125,6 @@ func (repo *wishCardRepositoryImplement) UpDeleteFlag(ctx context.Context, maste
 }
 
 func (repo *wishCardRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity) error {
-	if err := checkIsNil(wishCard); err != nil {
-		return err
-	}
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -306,17 +292,4 @@ func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context,
 		result = append(result, &record)
 	}
 	return result, nil
-}
-
-func checkIsNil(wishCard *wishCardEntity.Entity) error {
-	if wishCard == nil {
-		return werrors.Newf(
-			errors.New("required data(wishCard) is nil"),
-			codes.Unknown,
-			werrors.ServerError.ErrorCode,
-			werrors.ServerError.ErrorMessageJP,
-			werrors.ServerError.ErrorMessageEN,
-		)
-	}
-	return nil
 }

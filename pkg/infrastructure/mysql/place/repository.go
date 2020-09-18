@@ -25,11 +25,6 @@ func New(txManager repository.MasterTxManager) place.Repository {
 }
 
 func (repo *placeRepositoryImplement) Insert(ctx context.Context, masterTx repository.MasterTx, place *placeEntity.Entity) (int, error) {
-	// NOTE: nilで降りてきた用対策。いらないかも
-	if err := checkIsNil(place); err != nil {
-		return 0, err
-	}
-
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -57,11 +52,6 @@ func (repo *placeRepositoryImplement) Insert(ctx context.Context, masterTx repos
 }
 
 func (repo *placeRepositoryImplement) Update(ctx context.Context, masterTx repository.MasterTx, place *placeEntity.Entity) error {
-	// NOTE: nilで降りてきた用対策。いらないかも
-	if err := checkIsNil(place); err != nil {
-		return err
-	}
-
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -83,10 +73,6 @@ func (repo *placeRepositoryImplement) Update(ctx context.Context, masterTx repos
 }
 
 func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *placeEntity.Entity) error {
-	// NOTE: nilで降りてきた用対策。いらないかも
-	if err := checkIsNil(place); err != nil {
-		return err
-	}
 	if place.DeletedAt == nil {
 		return werrors.Newf(
 			errors.New("can't up delete flag. deletedAt is nil"),
@@ -118,10 +104,6 @@ func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx
 }
 
 func (repo *placeRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *placeEntity.Entity) error {
-	if err := checkIsNil(place); err != nil {
-		return err
-	}
-
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -218,17 +200,4 @@ func (repo *placeRepositoryImplement) SelectAll(ctx context.Context, masterTx re
 		result = append(result, &place)
 	}
 	return result, nil
-}
-
-func checkIsNil(place *placeEntity.Entity) error {
-	if place == nil {
-		return werrors.Newf(
-			errors.New("required data is nil"),
-			codes.Unknown,
-			werrors.ServerError.ErrorCode,
-			werrors.ServerError.ErrorMessageJP,
-			werrors.ServerError.ErrorMessageEN,
-		)
-	}
-	return nil
 }
