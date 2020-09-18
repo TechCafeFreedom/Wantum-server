@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS profiles(
   	ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS wish_lists(
+CREATE TABLE IF NOT EXISTS wish_boards(
   id                   int           NOT NULL AUTO_INCREMENT,
   title                varchar(30)   NOT NULL,
   background_image_url varchar(2048) NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS wish_lists(
   deleted_at           datetime,
   user_id              int           NOT NULL,
   PRIMARY KEY (id),
-  CONSTRAINT `fk_wish_lists_user`
+  CONSTRAINT `fk_wish_boards_user`
   	FOREIGN KEY (user_id)
   	REFERENCES users (id)
   	ON UPDATE CASCADE
@@ -60,11 +60,11 @@ CREATE TABLE IF NOT EXISTS categories(
   created_at   datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at   datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at   datetime,
-  wish_list_id int         NOT NULL,
+  wish_board_id int         NOT NULL,
   PRIMARY KEY (id),
-  CONSTRAINT `fk_categories_wish_list`
-    FOREIGN KEY (wish_list_id)
-    REFERENCES wish_lists (id)
+  CONSTRAINT `fk_categories_wish_board`
+    FOREIGN KEY (wish_board_id)
+    REFERENCES wish_boards (id)
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );
@@ -178,24 +178,24 @@ CREATE TABLE IF NOT EXISTS photos(
 );
 
 -- define relation
-CREATE TABLE IF NOT EXISTS users_wish_lists(
+CREATE TABLE IF NOT EXISTS users_wish_boards(
   id           int NOT NULL AUTO_INCREMENT,
   user_id      int NOT NULL,
-  wish_list_id int NOT NULL,
+  wish_board_id int NOT NULL,
   PRIMARY KEY (id),
-  UNIQUE (user_id, wish_list_id),
+  UNIQUE (user_id, wish_board_id),
   CONSTRAINT
     FOREIGN KEY (user_id)
     REFERENCES users (id)
     ON UPDATE CASCADE
     ON DELETE CASCADE,
   CONSTRAINT
-    FOREIGN KEY (wish_list_id)
-    REFERENCES wish_lists (id)
+    FOREIGN KEY (wish_board_id)
+    REFERENCES wish_boards (id)
     ON UPDATE CASCADE
     ON DELETE CASCADE
 )
-COMMENT = 'wish_listsの参加メンバー';
+COMMENT = 'wish_boardsの参加メンバー';
 
 CREATE TABLE IF NOT EXISTS users_albums(
   id       int NOT NULL AUTO_INCREMENT,
