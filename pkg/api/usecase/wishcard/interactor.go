@@ -14,7 +14,7 @@ import (
 )
 
 type Interactor interface {
-	CreateNewWishCard(ctx context.Context, userID int, activity, description, place string, date *time.Time, categoryID int, tags []string) (*wishCardEntity.Entity, error)
+	CreateNewWishCard(ctx context.Context, userID, categoryID int, activity, description, place string, date *time.Time, tags []string) (*wishCardEntity.Entity, error)
 	UpdateWishCard(ctx context.Context, wishCardID, userID int, activity, description, place string, date, doneAt *time.Time, categoryID int, tags []string) (*wishCardEntity.Entity, error)
 	DeleteWishCardByID(ctx context.Context, wishCardID int) error
 	GetByID(ctx context.Context, wishCardID int) (*wishCardEntity.Entity, error)
@@ -39,7 +39,7 @@ func New(masterTxManager repository.MasterTxManager, wishCardService wishcard.Se
 	}
 }
 
-func (i *interactor) CreateNewWishCard(ctx context.Context, userID int, activity, description, place string, date *time.Time, categoryID int, tags []string) (*wishCardEntity.Entity, error) {
+func (i *interactor) CreateNewWishCard(ctx context.Context, userID, categoryID int, activity, description, place string, date *time.Time, tags []string) (*wishCardEntity.Entity, error) (*wishCardEntity.Entity, error) {
 
 	var newWishCard *wishCardEntity.Entity
 	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
