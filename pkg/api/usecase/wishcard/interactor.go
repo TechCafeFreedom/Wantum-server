@@ -39,7 +39,7 @@ func New(masterTxManager repository.MasterTxManager, wishCardService wishcard.Se
 	}
 }
 
-func (i *interactor) CreateNewWishCard(ctx context.Context, userID, categoryID int, activity, description, place string, date *time.Time, tags []string) (*wishCardEntity.Entity, error) (*wishCardEntity.Entity, error) {
+func (i *interactor) CreateNewWishCard(ctx context.Context, userID, categoryID int, activity, description, place string, date *time.Time, tags []string) (*wishCardEntity.Entity, error) {
 
 	var newWishCard *wishCardEntity.Entity
 	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
@@ -66,10 +66,10 @@ func (i *interactor) CreateNewWishCard(ctx context.Context, userID, categoryID i
 			return werrors.Stack(err)
 		}
 
-		err = i.wishCardsTagsService.CreateMultipleRelation(ctx, masterTx, newWishCard.ID, tagIDs)
-		if err != nil {
-			return werrors.Stack(err)
-		}
+		// err = i.wishCardsTagsService.CreateMultipleRelation(ctx, masterTx, newWishCard.ID, tagIDs)
+		// if err != nil {
+		// 	return werrors.Stack(err)
+		// }
 		return nil
 	})
 	if err != nil {
@@ -107,10 +107,10 @@ func (i *interactor) UpdateWishCard(ctx context.Context, wishCardID, userID int,
 		if err != nil {
 			return werrors.Stack(err)
 		}
-		err = i.wishCardsTagsService.CreateMultipleRelation(ctx, masterTx, wishCard.ID, tagIDs)
-		if err != nil {
-			return werrors.Stack(err)
-		}
+		// err = i.wishCardsTagsService.CreateMultipleRelation(ctx, masterTx, wishCard.ID, tagIDs)
+		// if err != nil {
+		// 	return werrors.Stack(err)
+		// }
 		return nil
 	})
 	if err != nil {
@@ -127,10 +127,6 @@ func (i *interactor) DeleteWishCardByID(ctx context.Context, wishCardID int) err
 			return werrors.Stack(err)
 		}
 
-		err = i.wishCardsTagsService.DeleteByWishCardID(ctx, masterTx, wishCardID)
-		if err != nil {
-			return werrors.Stack(err)
-		}
 		return nil
 	})
 	if err != nil {

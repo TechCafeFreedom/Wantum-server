@@ -13,6 +13,7 @@ import (
 	"wantum/pkg/domain/repository/tag"
 	"wantum/pkg/domain/repository/user"
 	"wantum/pkg/domain/repository/wishcard"
+	"wantum/pkg/domain/repository/wishcardtag"
 	"wantum/pkg/werrors"
 
 	"google.golang.org/grpc/codes"
@@ -37,15 +38,17 @@ type service struct {
 	wishCardRepository    wishcard.Repository
 	placeRepository       place.Repository
 	tagsRepository        tag.Repository
+	wishCardTagRepository wishcardtag.Repository
 }
 
-func New(wcRepo wishcard.Repository, userRepo user.Repository, upRepo profile.Repository, placeRepo place.Repository, tagRepo tag.Repository) Service {
+func New(wcRepo wishcard.Repository, userRepo user.Repository, upRepo profile.Repository, placeRepo place.Repository, tagRepo tag.Repository, wctRepo wishcardtag.Repository) Service {
 	return &service{
 		wishCardRepository:    wcRepo,
 		userRepository:        userRepo,
 		userProfileRepository: upRepo,
 		placeRepository:       placeRepo,
 		tagsRepository:        tagRepo,
+		wishCardTagRepository: wctRepo,
 	}
 }
 
@@ -84,11 +87,16 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, acti
 		Place:       place,
 		Tags:        tags,
 	}
-	result, err := s.wishCardRepository.Insert(ctx, masterTx, wishCard, categoryID)
+	newID, err := s.wishCardRepository.Insert(ctx, masterTx, wishCard, categoryID)
 	if err != nil {
-		return nil, err
+		return nil, werrors.Stack(err)
 	}
-	wishCard.ID = result
+	wishCard.ID = newID
+
+	// create relation
+	if err = s.wishCardTagRepository.BulkInsert(ctx, masterTx, newID, tagIDs); err != nil {
+		return nil, werrors.Stack(err)
+	}
 
 	return wishCard, nil
 }
@@ -130,6 +138,14 @@ func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, wish
 
 	err = s.wishCardRepository.Update(ctx, masterTx, wishCard, categoryID)
 	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+
+	// regist tag
+	if err = s.wishCardTagRepository.DeleteByWishCardID(ctx, masterTx, wishCardID); err != nil {
+		return nil, werrors.Stack(err)
+	}
+	if err = s.wishCardTagRepository.BulkInsert(ctx, masterTx, wishCardID, tagIDs); err != nil {
 		return nil, werrors.Stack(err)
 	}
 	return wishCard, nil
@@ -219,8 +235,10 @@ func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, wish
 			"could not delete this place",
 		)
 	}
-	err = s.wishCardRepository.Delete(ctx, masterTx, wishCardID)
-	if err != nil {
+	if err = s.wishCardRepository.Delete(ctx, masterTx, wishCardID); err != nil {
+		return werrors.Stack(err)
+	}
+	if err = s.wishCardTagRepository.DeleteByWishCardID(ctx, masterTx, wishCardID); err != nil {
 		return werrors.Stack(err)
 	}
 	return nil

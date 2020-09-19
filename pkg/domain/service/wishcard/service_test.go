@@ -16,6 +16,7 @@ import (
 	"wantum/pkg/domain/repository/tag/mock_tag"
 	"wantum/pkg/domain/repository/user/mock_user"
 	"wantum/pkg/domain/repository/wishcard/mock_wish_card"
+	"wantum/pkg/domain/repository/wishcardtag/mock_wish_card_tag"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -108,7 +109,10 @@ func TestService_Create(t *testing.T) {
 	tagRepo := mock_tag.NewMockRepository(ctrl)
 	tagRepo.EXPECT().SelectByIDs(ctx, masterTx, gomock.Any()).Return(dummyTags, nil)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo)
+	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+	wctRepo.EXPECT().BulkInsert(ctx, masterTx, gomock.Any(), gomock.Any()).Return(nil)
+
+	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
 	result, err := service.Create(ctx, masterTx, dummyActivity, dummyDescription, &dummyDate, 1, 1, 1, []int{1, 2})
 
 	assert.NoError(t, err)
@@ -156,7 +160,11 @@ func TestService_Update(t *testing.T) {
 	tagRepo := mock_tag.NewMockRepository(ctrl)
 	tagRepo.EXPECT().SelectByIDs(ctx, masterTx, gomock.Any()).Return(dummyTags, nil)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo)
+	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+	wctRepo.EXPECT().BulkInsert(ctx, masterTx, gomock.Any(), gomock.Any()).Return(nil)
+	wctRepo.EXPECT().DeleteByWishCardID(ctx, masterTx, gomock.Any()).Return(nil)
+
+	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
 	result, err := service.Update(ctx, masterTx, 1, dummyActivity, dummyDescription, &dummyDate, &dummyDate, 1, 1, 1, []int{1, 2})
 
 	assert.NoError(t, err)
@@ -205,7 +213,9 @@ func TestService_UpDeleteFlag(t *testing.T) {
 	tagRepo := mock_tag.NewMockRepository(ctrl)
 	tagRepo.EXPECT().SelectByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTags, nil)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo)
+	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
 	result, err := service.UpDeleteFlag(ctx, masterTx, 1)
 
 	assert.NoError(t, err)
@@ -254,7 +264,9 @@ func TestService_DownDeleteFlag(t *testing.T) {
 	tagRepo := mock_tag.NewMockRepository(ctrl)
 	tagRepo.EXPECT().SelectByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTags, nil)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo)
+	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
 	result, err := service.DownDeleteFlag(ctx, masterTx, 1)
 
 	assert.NoError(t, err)
@@ -297,7 +309,10 @@ func TestService_Delete(t *testing.T) {
 		placeRepo := mock_place.NewMockRepository(ctrl)
 		tagRepo := mock_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+		wctRepo.EXPECT().DeleteByWishCardID(ctx, masterTx, gomock.Any()).Return(nil)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
 		err := service.Delete(ctx, masterTx, 1)
 
 		assert.NoError(t, err)
@@ -331,8 +346,9 @@ func TestService_Delete(t *testing.T) {
 		profileRepo := mock_profile.NewMockRepository(ctrl)
 		placeRepo := mock_place.NewMockRepository(ctrl)
 		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo)
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
 		err := service.Delete(ctx, masterTx, 1)
 
 		assert.Error(t, err)
@@ -375,7 +391,9 @@ func TestService_GetByID(t *testing.T) {
 	tagRepo := mock_tag.NewMockRepository(ctrl)
 	tagRepo.EXPECT().SelectByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTags, nil)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo)
+	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
 	result, err := service.GetByID(ctx, masterTx, 1)
 
 	assert.NoError(t, err)
@@ -438,7 +456,9 @@ func TestService_GetByIDs(t *testing.T) {
 	tagRepo := mock_tag.NewMockRepository(ctrl)
 	tagRepo.EXPECT().SelectByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTags, nil).Times(2)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo)
+	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
 	result, err := service.GetByIDs(ctx, masterTx, []int{1, 2})
 
 	assert.NoError(t, err)
@@ -502,7 +522,9 @@ func TestService_GetByCategoryID(t *testing.T) {
 	tagRepo := mock_tag.NewMockRepository(ctrl)
 	tagRepo.EXPECT().SelectByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTags, nil).Times(2)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo)
+	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
 	result, err := service.GetByCategoryID(ctx, masterTx, 1)
 
 	assert.NoError(t, err)
