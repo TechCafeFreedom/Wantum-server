@@ -15,7 +15,6 @@ import (
 	"wantum/pkg/domain/service/place/mock_place"
 	"wantum/pkg/domain/service/tag/mock_tag"
 	"wantum/pkg/domain/service/wishcard/mock_wish_card"
-	"wantum/pkg/domain/service/wishcardtag/mock_wish_card_tag"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -130,13 +129,10 @@ func TestInteractor_CreateNewWishCard(t *testing.T) {
 		tagService.EXPECT().GetByName(ctx, masterTx, dummyTagName2).Return(nil, nil)
 		tagService.EXPECT().Create(ctx, masterTx, dummyTagName2).Return(&dummyTag2, nil)
 
-		wishCardTagService := mock_wish_card_tag.NewMockService(ctrl)
-		wishCardTagService.EXPECT().CreateMultipleRelation(ctx, masterTx, gomock.Any(), gomock.Any()).Return(nil)
-
-		interactor := New(masterTxManager, wishCardService, tagService, placeService, wishCardTagService)
+		interactor := New(masterTxManager, wishCardService, tagService, placeService)
 
 		tags := []string{dummyTagName1, dummyTagName2}
-		result, err := interactor.CreateNewWishCard(ctx, 1, dummyActivity, dummyDescription, dummyPlaceName, &dummyDate, 1, tags)
+		result, err := interactor.CreateNewWishCard(ctx, 1, 1, dummyActivity, dummyDescription, dummyPlaceName, &dummyDate, tags)
 
 		assert.NoError(t, err)
 		assert.NotNil(t, result)
@@ -183,11 +179,7 @@ func TestInteractor_UpdateWishCard(t *testing.T) {
 		tagService.EXPECT().GetByName(ctx, masterTx, dummyTagName2).Return(nil, nil)
 		tagService.EXPECT().Create(ctx, masterTx, dummyTagName2).Return(&dummyTag2, nil)
 
-		wishCardTagService := mock_wish_card_tag.NewMockService(ctrl)
-		wishCardTagService.EXPECT().CreateMultipleRelation(ctx, masterTx, gomock.Any(), gomock.Any()).Return(nil)
-		wishCardTagService.EXPECT().DeleteByWishCardID(ctx, masterTx, gomock.Any()).Return(nil)
-
-		interactor := New(masterTxManager, wishCardService, tagService, placeService, wishCardTagService)
+		interactor := New(masterTxManager, wishCardService, tagService, placeService)
 
 		tags := []string{dummyTagName1, dummyTagName2}
 		result, err := interactor.UpdateWishCard(ctx, 1, 1, dummyActivity, dummyDescription, dummyPlaceName, &dummyDate, &dummyDate, 1, tags)
@@ -219,10 +211,7 @@ func TestInteractor_DeleteWishCard(t *testing.T) {
 
 		tagService := mock_tag.NewMockService(ctrl)
 
-		wishCardTagService := mock_wish_card_tag.NewMockService(ctrl)
-		wishCardTagService.EXPECT().DeleteByWishCardID(ctx, masterTx, gomock.Any()).Return(nil)
-
-		interactor := New(masterTxManager, wishCardService, tagService, placeService, wishCardTagService)
+		interactor := New(masterTxManager, wishCardService, tagService, placeService)
 
 		err := interactor.DeleteWishCardByID(ctx, 1)
 
@@ -243,9 +232,7 @@ func TestInteractor_GetByID(t *testing.T) {
 
 		tagService := mock_tag.NewMockService(ctrl)
 
-		wishCardTagService := mock_wish_card_tag.NewMockService(ctrl)
-
-		interactor := New(masterTxManager, wishCardService, tagService, placeService, wishCardTagService)
+		interactor := New(masterTxManager, wishCardService, tagService, placeService)
 
 		result, err := interactor.GetByID(ctx, 1)
 
@@ -302,9 +289,7 @@ func TestInteractor_GetByCategoryID(t *testing.T) {
 
 		tagService := mock_tag.NewMockService(ctrl)
 
-		wishCardTagService := mock_wish_card_tag.NewMockService(ctrl)
-
-		interactor := New(masterTxManager, wishCardService, tagService, placeService, wishCardTagService)
+		interactor := New(masterTxManager, wishCardService, tagService, placeService)
 
 		wishCards, err := interactor.GetByCategoryID(ctx, 1)
 

@@ -9,7 +9,6 @@ import (
 	"wantum/pkg/domain/service/place"
 	"wantum/pkg/domain/service/tag"
 	"wantum/pkg/domain/service/wishcard"
-	"wantum/pkg/domain/service/wishcardtag"
 	"wantum/pkg/werrors"
 )
 
@@ -22,20 +21,18 @@ type Interactor interface {
 }
 
 type interactor struct {
-	masterTxManager      repository.MasterTxManager
-	wishCardService      wishcard.Service
-	tagService           tag.Service
-	placeService         place.Service
-	wishCardsTagsService wishcardtag.Service
+	masterTxManager repository.MasterTxManager
+	wishCardService wishcard.Service
+	tagService      tag.Service
+	placeService    place.Service
 }
 
-func New(masterTxManager repository.MasterTxManager, wishCardService wishcard.Service, tagService tag.Service, placeService place.Service, wishCardsTagsService wishcardtag.Service) Interactor {
+func New(masterTxManager repository.MasterTxManager, wishCardService wishcard.Service, tagService tag.Service, placeService place.Service) Interactor {
 	return &interactor{
-		masterTxManager:      masterTxManager,
-		wishCardService:      wishCardService,
-		tagService:           tagService,
-		placeService:         placeService,
-		wishCardsTagsService: wishCardsTagsService,
+		masterTxManager: masterTxManager,
+		wishCardService: wishCardService,
+		tagService:      tagService,
+		placeService:    placeService,
 	}
 }
 
@@ -66,10 +63,6 @@ func (i *interactor) CreateNewWishCard(ctx context.Context, userID, categoryID i
 			return werrors.Stack(err)
 		}
 
-		// err = i.wishCardsTagsService.CreateMultipleRelation(ctx, masterTx, newWishCard.ID, tagIDs)
-		// if err != nil {
-		// 	return werrors.Stack(err)
-		// }
 		return nil
 	})
 	if err != nil {
@@ -102,15 +95,6 @@ func (i *interactor) UpdateWishCard(ctx context.Context, wishCardID, userID int,
 		if err != nil {
 			return werrors.Stack(err)
 		}
-
-		err = i.wishCardsTagsService.DeleteByWishCardID(ctx, masterTx, wishCard.ID)
-		if err != nil {
-			return werrors.Stack(err)
-		}
-		// err = i.wishCardsTagsService.CreateMultipleRelation(ctx, masterTx, wishCard.ID, tagIDs)
-		// if err != nil {
-		// 	return werrors.Stack(err)
-		// }
 		return nil
 	})
 	if err != nil {
