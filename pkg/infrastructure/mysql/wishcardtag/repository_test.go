@@ -16,10 +16,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var db *sql.DB
-var txManager repository.MasterTxManager
-var repo wishcardtag.Repository
-var dummyDate time.Time
+var (
+	db        *sql.DB
+	txManager repository.MasterTxManager
+	repo      wishcardtag.Repository
+	dummyDate time.Time
+)
+
+// TODO: それぞれの関数で使っているdummyDataの切り出し
 
 func TestMain(m *testing.M) {
 	before()

@@ -26,6 +26,8 @@ var (
 	dummyDate time.Time
 )
 
+// TODO: それぞれの関数で使っているdummyDataの切り出し
+
 func TestMain(m *testing.M) {
 	before()
 	code := m.Run()
@@ -69,20 +71,6 @@ func TestInsert(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.NotNil(t, result)
-	})
-
-	t.Run("failure_データがnil", func(t *testing.T) {
-		var err error
-		ctx := context.Background()
-
-		var result int
-		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			result, err = repo.Insert(ctx, masterTx, nil)
-			return err
-		})
-
-		assert.Error(t, err)
-		assert.Equal(t, 0, result)
 	})
 }
 

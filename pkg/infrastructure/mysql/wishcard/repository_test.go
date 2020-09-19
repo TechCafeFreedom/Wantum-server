@@ -19,13 +19,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var db *sql.DB
-var txManager repository.MasterTxManager
-var repo wcrepo.Repository
-var dummyDate time.Time
+var (
+	db        *sql.DB
+	txManager repository.MasterTxManager
+	repo      wcrepo.Repository
+	dummyDate time.Time
 
-var dummyActivity = "sampleActivity"
-var dummyDescription = "sampleDescription"
+	dummyActivity    = "sampleActivity"
+	dummyDescription = "sampleDescription"
+)
+
+// TODO: それぞれの関数で使っているdummyDataの切り出し
 
 func TestMain(m *testing.M) {
 	before()
@@ -73,19 +77,6 @@ func TestInsert(t *testing.T) {
 		})
 		assert.NoError(t, err)
 		assert.NotEqual(t, 0, result)
-	})
-
-	t.Run("failure_データがnil", func(t *testing.T) {
-		var err error
-		ctx := context.Background()
-
-		var result int
-		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			result, err = repo.Insert(ctx, masterTx, nil, 1)
-			return err
-		})
-		assert.Error(t, err)
-		assert.Equal(t, 0, result)
 	})
 }
 
@@ -154,20 +145,6 @@ func TestUpdate(t *testing.T) {
 		assert.NotNil(t, result)
 		assert.Equal(t, dummyActivity, result.Activity)
 	})
-
-	t.Run("failure_データがnil", func(t *testing.T) {
-		var err error
-		ctx := context.Background()
-
-		var result *wishCardEntity.Entity
-		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			err = repo.Update(ctx, masterTx, nil, 1)
-			return err
-		})
-		assert.Error(t, err)
-		assert.Nil(t, result)
-	})
-
 }
 
 func TestUpDeleteFlag(t *testing.T) {
@@ -229,19 +206,6 @@ func TestUpDeleteFlag(t *testing.T) {
 		})
 		assert.Error(t, err)
 	})
-
-	t.Run("failure_データがnil", func(t *testing.T) {
-		var err error
-		ctx := context.Background()
-
-		var result *wishCardEntity.Entity
-		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			err = repo.UpDeleteFlag(ctx, masterTx, nil)
-			return err
-		})
-		assert.Error(t, err)
-		assert.Nil(t, result)
-	})
 }
 
 func TestDownDeleteFlag(t *testing.T) {
@@ -276,19 +240,6 @@ func TestDownDeleteFlag(t *testing.T) {
 		})
 		assert.NoError(t, err)
 		assert.Nil(t, result.DeletedAt)
-	})
-
-	t.Run("failure_データがnil", func(t *testing.T) {
-		var err error
-		ctx := context.Background()
-
-		var result *wishCardEntity.Entity
-		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			err = repo.UpDeleteFlag(ctx, masterTx, nil)
-			return err
-		})
-		assert.Error(t, err)
-		assert.Nil(t, result)
 	})
 }
 
