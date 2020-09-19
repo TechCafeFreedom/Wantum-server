@@ -98,3 +98,16 @@ func TestDeleteByWishCardID(t *testing.T) {
 		assert.NoError(t, err)
 	})
 }
+
+func TestDeleteByIDs(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			err = repo.DeleteByIDs(ctx, masterTx, 1, []int{1, 2, 3})
+			return err
+		})
+		assert.NoError(t, err)
+	})
+}

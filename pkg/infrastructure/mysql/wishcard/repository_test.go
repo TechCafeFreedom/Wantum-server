@@ -101,7 +101,7 @@ func TestUpdate(t *testing.T) {
 		}
 		var result *wishCardEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			if err = repo.Update(ctx, masterTx, wishCard, 1); err != nil {
+			if err = repo.Update(ctx, masterTx, wishCard); err != nil {
 				return err
 			}
 
@@ -132,7 +132,72 @@ func TestUpdate(t *testing.T) {
 		}
 		var result *wishCardEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			if err = repo.Update(ctx, masterTx, wishCard, 1); err != nil {
+			if err = repo.Update(ctx, masterTx, wishCard); err != nil {
+				return err
+			}
+
+			result, _ = repo.SelectByID(ctx, masterTx, 1)
+			return nil
+		})
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyActivity, result.Activity)
+	})
+}
+
+func TestUpdateWithCategoryID(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+		wishCard := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
+			Activity:    dummyActivity,
+			Description: dummyDescription,
+			Date:        &dummyDate,
+			DoneAt:      &dummyDate,
+			CreatedAt:   &dummyDate,
+			UpdatedAt:   &dummyDate,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
+		}
+		var result *wishCardEntity.Entity
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			if err = repo.UpdateWithCategoryID(ctx, masterTx, wishCard, 1); err != nil {
+				return err
+			}
+
+			result, _ = repo.SelectByID(ctx, masterTx, 1)
+			return nil
+		})
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyActivity, result.Activity)
+	})
+
+	t.Run("success_doneAtがnil", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+		wishCard := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
+			Activity:    dummyActivity,
+			Description: dummyDescription,
+			Date:        &dummyDate,
+			CreatedAt:   &dummyDate,
+			UpdatedAt:   &dummyDate,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
+		}
+		var result *wishCardEntity.Entity
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			if err = repo.UpdateWithCategoryID(ctx, masterTx, wishCard, 1); err != nil {
 				return err
 			}
 

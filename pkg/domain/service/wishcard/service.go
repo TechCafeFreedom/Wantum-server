@@ -21,13 +21,16 @@ import (
 
 type Service interface {
 	Create(ctx context.Context, masterTx repository.MasterTx, activity, description string, date *time.Time, userID, categoryID, placeID int, tagsIDs []int) (*wishCardEntity.Entity, error)
-	Update(ctx context.Context, masterTx repository.MasterTx, wishCardID int, activity, description string, date, doneAt *time.Time, userID, categoryID, placeID int, tagIDs []int) (*wishCardEntity.Entity, error)
+	Update(ctx context.Context, masterTx repository.MasterTx, wishCardID int, activity, description string, date, doneAt *time.Time, userID, placeID int) (*wishCardEntity.Entity, error)
+	UpdateWithCategoryID(ctx context.Context, masterTx repository.MasterTx, wishCardID int, activity, description string, date, doneAt *time.Time, userID, categoryID, placeID int, tagIDs []int) (*wishCardEntity.Entity, error)
 	Delete(ctx context.Context, masterTx repository.MasterTx, wishCardID int) error
 	UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (*wishCardEntity.Entity, error)
 	DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (*wishCardEntity.Entity, error)
 	GetByID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (*wishCardEntity.Entity, error)
 	GetByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []int) (wishCardEntity.EntitySlice, error)
 	GetByCategoryID(ctx context.Context, masterTx repository.MasterTx, categoryID int) (wishCardEntity.EntitySlice, error)
+	AddTags(ctx context.Context, masterTx repository.MasterTx, wishCardID int, tagIDs []int) (*wishCardEntity.Entity, error)
+	DeleteTags(ctx context.Context, masterTx repository.MasterTx, wishCardID int, tagIDs []int) (*wishCardEntity.Entity, error)
 }
 
 type service struct {
@@ -99,9 +102,49 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, acti
 	return wishCard, nil
 }
 
+func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, wishCardID int, activity, description string, date, doneAt *time.Time, userID, placeID int) (*wishCardEntity.Entity, error) {
+	wishCard, err := s.wishCardRepository.SelectByID(ctx, masterTx, wishCardID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	author, err := s.userRepository.SelectByPK(ctx, masterTx, wishCard.Author.ID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	profile, err := s.userProfileRepository.SelectByUserID(ctx, masterTx, wishCard.Author.ID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	author.Profile = profile
+	place, err := s.placeRepository.SelectByID(ctx, masterTx, placeID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	tags, err := s.tagsRepository.SelectByWishCardID(ctx, masterTx, wishCardID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+
+	now := time.Now()
+	wishCard.Author = author // NOTE: 今後、authorの更新があるかも
+	wishCard.Activity = activity
+	wishCard.Description = description
+	wishCard.Date = date
+	wishCard.DoneAt = doneAt
+	wishCard.Place = place
+	wishCard.UpdatedAt = &now
+	wishCard.Tags = tags
+
+	if err = s.wishCardRepository.Update(ctx, masterTx, wishCard); err != nil {
+		return nil, werrors.Stack(err)
+	}
+
+	return wishCard, nil
+}
+
 // WARNING: 空値があった時、元データが消滅する。
 // QUESTION: リクエストは、全フィールド埋める or 差分だけ
-func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, wishCardID int, activity, description string, date, doneAt *time.Time, userID, categoryID, placeID int, tagIDs []int) (*wishCardEntity.Entity, error) {
+func (s *service) UpdateWithCategoryID(ctx context.Context, masterTx repository.MasterTx, wishCardID int, activity, description string, date, doneAt *time.Time, userID, categoryID, placeID int, tagIDs []int) (*wishCardEntity.Entity, error) {
 	wishCard, err := s.wishCardRepository.SelectByID(ctx, masterTx, wishCardID)
 	if err != nil {
 		return nil, werrors.Stack(err)
@@ -134,7 +177,7 @@ func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, wish
 	wishCard.UpdatedAt = &now
 	wishCard.Tags = tags
 
-	if err = s.wishCardRepository.Update(ctx, masterTx, wishCard, categoryID); err != nil {
+	if err = s.wishCardRepository.UpdateWithCategoryID(ctx, masterTx, wishCard, categoryID); err != nil {
 		return nil, werrors.Stack(err)
 	}
 
@@ -333,4 +376,68 @@ func (s *service) GetByCategoryID(ctx context.Context, masterTx repository.Maste
 		wishCard.Tags = tags
 	}
 	return wishCards, nil
+}
+
+func (s *service) AddTags(ctx context.Context, masterTx repository.MasterTx, wishCardID int, tagIDs []int) (*wishCardEntity.Entity, error) {
+	if err := s.wishCardTagRepository.BulkInsert(ctx, masterTx, wishCardID, tagIDs); err != nil {
+		return nil, err
+	}
+
+	wishCard, err := s.wishCardRepository.SelectByID(ctx, masterTx, wishCardID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	author, err := s.userRepository.SelectByPK(ctx, masterTx, wishCard.Author.ID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	profile, err := s.userProfileRepository.SelectByUserID(ctx, masterTx, wishCard.Author.ID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	author.Profile = profile
+	place, err := s.placeRepository.SelectByID(ctx, masterTx, wishCard.Place.ID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	tags, err := s.tagsRepository.SelectByWishCardID(ctx, masterTx, wishCard.ID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	wishCard.Author = author
+	wishCard.Place = place
+	wishCard.Tags = tags
+	return wishCard, nil
+}
+
+func (s *service) DeleteTags(ctx context.Context, masterTx repository.MasterTx, wishCardID int, tagIDs []int) (*wishCardEntity.Entity, error) {
+	if err := s.wishCardTagRepository.DeleteByIDs(ctx, masterTx, wishCardID, tagIDs); err != nil {
+		return nil, werrors.Stack(err)
+	}
+
+	wishCard, err := s.wishCardRepository.SelectByID(ctx, masterTx, wishCardID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	author, err := s.userRepository.SelectByPK(ctx, masterTx, wishCard.Author.ID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	profile, err := s.userProfileRepository.SelectByUserID(ctx, masterTx, wishCard.Author.ID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	author.Profile = profile
+	place, err := s.placeRepository.SelectByID(ctx, masterTx, wishCard.Place.ID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	tags, err := s.tagsRepository.SelectByWishCardID(ctx, masterTx, wishCard.ID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+	wishCard.Author = author
+	wishCard.Place = place
+	wishCard.Tags = tags
+	return wishCard, nil
 }

@@ -8,7 +8,8 @@ import (
 
 type Repository interface {
 	Insert(ctx context.Context, masterTx repository.MasterTx, wishCard *wishcard.Entity, categoryID int) (int, error)
-	Update(ctx context.Context, masterTx repository.MasterTx, wishCard *wishcard.Entity, categoryID int) error
+	Update(ctx context.Context, masterTx repository.MasterTx, wishCard *wishcard.Entity) error
+	UpdateWithCategoryID(ctx context.Context, masterTx repository.MasterTx, wishCard *wishcard.Entity, categoryID int) error
 	UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCard *wishcard.Entity) error
 	DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCard *wishcard.Entity) error
 	Delete(ctx context.Context, masterTx repository.MasterTx, wishCardID int) error

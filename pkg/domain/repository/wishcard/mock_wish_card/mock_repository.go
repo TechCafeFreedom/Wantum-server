@@ -51,17 +51,31 @@ func (mr *MockRepositoryMockRecorder) Insert(ctx, masterTx, wishCard, categoryID
 }
 
 // Update mocks base method
-func (m *MockRepository) Update(ctx context.Context, masterTx repository.MasterTx, wishCard *wishcard.Entity, categoryID int) error {
+func (m *MockRepository) Update(ctx context.Context, masterTx repository.MasterTx, wishCard *wishcard.Entity) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", ctx, masterTx, wishCard, categoryID)
+	ret := m.ctrl.Call(m, "Update", ctx, masterTx, wishCard)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Update indicates an expected call of Update
-func (mr *MockRepositoryMockRecorder) Update(ctx, masterTx, wishCard, categoryID interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) Update(ctx, masterTx, wishCard interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockRepository)(nil).Update), ctx, masterTx, wishCard, categoryID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockRepository)(nil).Update), ctx, masterTx, wishCard)
+}
+
+// UpdateWithCategoryID mocks base method
+func (m *MockRepository) UpdateWithCategoryID(ctx context.Context, masterTx repository.MasterTx, wishCard *wishcard.Entity, categoryID int) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateWithCategoryID", ctx, masterTx, wishCard, categoryID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateWithCategoryID indicates an expected call of UpdateWithCategoryID
+func (mr *MockRepositoryMockRecorder) UpdateWithCategoryID(ctx, masterTx, wishCard, categoryID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateWithCategoryID", reflect.TypeOf((*MockRepository)(nil).UpdateWithCategoryID), ctx, masterTx, wishCard, categoryID)
 }
 
 // UpDeleteFlag mocks base method

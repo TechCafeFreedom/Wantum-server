@@ -2,6 +2,7 @@ package wishcardtag
 
 import (
 	"context"
+	"strconv"
 	"strings"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/wishcardtag"
@@ -46,6 +47,7 @@ func (repo *wishCardTagRepositoryImplement) BulkInsert(ctx context.Context, mast
 		return werrors.FromConstant(err, werrors.ServerError)
 	}
 
+	// TODO: うまいやりかたとは？
 	query := "INSERT INTO wish_cards_tags(wish_card_id, tag_id) VALUES "
 	values := make([]interface{}, 0, len(tagIDs))
 	for _, tagID := range tagIDs {
@@ -54,8 +56,7 @@ func (repo *wishCardTagRepositoryImplement) BulkInsert(ctx context.Context, mast
 	}
 	query = strings.TrimSuffix(query, ",")
 
-	_, err = tx.Exec(query, values...)
-	if err != nil {
+	if _, err = tx.Exec(query, values...); err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return werrors.FromConstant(err, werrors.ServerError)
 	}
@@ -90,6 +91,31 @@ func (repo *wishCardTagRepositoryImplement) DeleteByWishCardID(ctx context.Conte
 	_, err = tx.Exec(`
 		DELETE FROM wish_cards_tags
 		WHERE wish_card_id = ?
+	`, wishCardID,
+	)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	return nil
+}
+
+func (repo *wishCardTagRepositoryImplement) DeleteByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardID int, tagIDs []int) error {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+
+	tagIDsStr := make([]string, 0, len(tagIDs))
+	for _, id := range tagIDs {
+		tagIDsStr = append(tagIDsStr, strconv.Itoa(id))
+	}
+
+	_, err = tx.Exec(`
+		DELETE FROM wish_cards_tags
+		WHERE wish_card_id = ?
+			AND tag_id IN (`+strings.Join(tagIDsStr, ",")+`)
 	`, wishCardID,
 	)
 	if err != nil {

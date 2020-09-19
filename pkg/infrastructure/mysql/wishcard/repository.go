@@ -59,7 +59,40 @@ func (repo *wishCardRepositoryImplement) Insert(ctx context.Context, masterTx re
 	return int(id), nil
 }
 
-func (repo *wishCardRepositoryImplement) Update(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity, categoryID int) error {
+func (repo *wishCardRepositoryImplement) Update(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity) error {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	_, err = tx.Exec(`
+		UPDATE wish_cards
+		SET
+			user_id=?,
+			activity=?,
+			description=?,
+			date=?,
+			done_at=?,
+			updated_at=?,
+			place_id=?
+		WHERE id=?
+	`, wishCard.Author.ID,
+		wishCard.Activity,
+		wishCard.Description,
+		wishCard.Date,
+		wishCard.DoneAt,
+		wishCard.UpdatedAt,
+		wishCard.Place.ID,
+		wishCard.ID,
+	)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	return nil
+}
+
+func (repo *wishCardRepositoryImplement) UpdateWithCategoryID(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity, categoryID int) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
