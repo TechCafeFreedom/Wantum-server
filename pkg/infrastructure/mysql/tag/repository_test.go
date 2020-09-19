@@ -91,8 +91,7 @@ func TestUpDeleteFlag(t *testing.T) {
 
 			tag.ID = newTagID
 			tag.DeletedAt = &dummyDate
-			err = repo.UpDeleteFlag(ctx, masterTx, tag)
-			if err != nil {
+			if err = repo.UpDeleteFlag(ctx, masterTx, tag); err != nil {
 				return err
 			}
 
@@ -116,8 +115,7 @@ func TestUpDeleteFlag(t *testing.T) {
 		}
 
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			err = repo.UpDeleteFlag(ctx, masterTx, tag)
-			return err
+			return repo.UpDeleteFlag(ctx, masterTx, tag)
 		})
 
 		assert.Error(t, err)
@@ -141,8 +139,7 @@ func TestDownDeleteFlag(t *testing.T) {
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 
 			tag.DeletedAt = nil
-			err = repo.DownDeleteFlag(ctx, masterTx, tag)
-			if err != nil {
+			if err = repo.DownDeleteFlag(ctx, masterTx, tag); err != nil {
 				return err
 			}
 
@@ -173,8 +170,7 @@ func TestDelete(t *testing.T) {
 			tag.DeletedAt = &dummyDate
 			repo.UpDeleteFlag(ctx, masterTx, tag)
 
-			err = repo.Delete(ctx, masterTx, tag.ID)
-			if err != nil {
+			if err = repo.Delete(ctx, masterTx, tag.ID); err != nil {
 				return err
 			}
 

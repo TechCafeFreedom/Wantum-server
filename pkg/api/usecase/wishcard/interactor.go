@@ -106,8 +106,7 @@ func (i *interactor) UpdateWishCard(ctx context.Context, wishCardID, userID int,
 func (i *interactor) DeleteWishCardByID(ctx context.Context, wishCardID int) error {
 	var err error
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		err = i.wishCardService.Delete(ctx, masterTx, wishCardID)
-		if err != nil {
+		if err = i.wishCardService.Delete(ctx, masterTx, wishCardID); err != nil {
 			return werrors.Stack(err)
 		}
 

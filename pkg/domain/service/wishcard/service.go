@@ -134,8 +134,7 @@ func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, wish
 	wishCard.UpdatedAt = &now
 	wishCard.Tags = tags
 
-	err = s.wishCardRepository.Update(ctx, masterTx, wishCard, categoryID)
-	if err != nil {
+	if err = s.wishCardRepository.Update(ctx, masterTx, wishCard, categoryID); err != nil {
 		return nil, werrors.Stack(err)
 	}
 
@@ -177,8 +176,8 @@ func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx
 	wishCard.Author = author
 	wishCard.Place = place
 	wishCard.Tags = tags
-	err = s.wishCardRepository.UpDeleteFlag(ctx, masterTx, wishCard)
-	if err != nil {
+
+	if err = s.wishCardRepository.UpDeleteFlag(ctx, masterTx, wishCard); err != nil {
 		return nil, werrors.Stack(err)
 	}
 	return wishCard, nil
@@ -212,8 +211,7 @@ func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.Master
 	wishCard.Author = author
 	wishCard.Place = place
 	wishCard.Tags = tags
-	err = s.wishCardRepository.DownDeleteFlag(ctx, masterTx, wishCard)
-	if err != nil {
+	if err = s.wishCardRepository.DownDeleteFlag(ctx, masterTx, wishCard); err != nil {
 		return nil, werrors.Stack(err)
 	}
 	return wishCard, nil
@@ -275,7 +273,11 @@ func (s *service) GetByIDs(ctx context.Context, masterTx repository.MasterTx, wi
 	for _, id := range wishCardIDs {
 		idList = append(idList, strconv.Itoa(id))
 	}
+
 	wishCards, err := s.wishCardRepository.SelectByIDs(ctx, masterTx, idList)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
 	// OPTIMIZE: 絶対遅い
 	for _, wishCard := range wishCards {
 		author, err := s.userRepository.SelectByPK(ctx, masterTx, wishCard.Author.ID)
@@ -298,9 +300,6 @@ func (s *service) GetByIDs(ctx context.Context, masterTx repository.MasterTx, wi
 		wishCard.Author = author
 		wishCard.Place = place
 		wishCard.Tags = tags
-	}
-	if err != nil {
-		return nil, werrors.Stack(err)
 	}
 	return wishCards, nil
 }

@@ -101,8 +101,7 @@ func TestUpdate(t *testing.T) {
 		}
 		var result *wishCardEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			err = repo.Update(ctx, masterTx, wishCard, 1)
-			if err != nil {
+			if err = repo.Update(ctx, masterTx, wishCard, 1); err != nil {
 				return err
 			}
 
@@ -133,8 +132,7 @@ func TestUpdate(t *testing.T) {
 		}
 		var result *wishCardEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			err = repo.Update(ctx, masterTx, wishCard, 1)
-			if err != nil {
+			if err = repo.Update(ctx, masterTx, wishCard, 1); err != nil {
 				return err
 			}
 
@@ -170,8 +168,7 @@ func TestUpDeleteFlag(t *testing.T) {
 
 			wishCard.ID = newID
 			wishCard.DeletedAt = &dummyDate
-			err = repo.UpDeleteFlag(ctx, masterTx, wishCard)
-			if err != nil {
+			if err = repo.UpDeleteFlag(ctx, masterTx, wishCard); err != nil {
 				return err
 			}
 			result, _ = repo.SelectByID(ctx, masterTx, wishCard.ID)
@@ -231,8 +228,7 @@ func TestDownDeleteFlag(t *testing.T) {
 			newID, _ := repo.Insert(ctx, masterTx, wishCard, 1)
 
 			wishCard.ID = newID
-			err = repo.DownDeleteFlag(ctx, masterTx, wishCard)
-			if err != nil {
+			if err = repo.DownDeleteFlag(ctx, masterTx, wishCard); err != nil {
 				return err
 			}
 			result, _ = repo.SelectByID(ctx, masterTx, wishCard.ID)
@@ -267,8 +263,7 @@ func TestDelete(t *testing.T) {
 			wishCard.DeletedAt = &dummyDate
 			repo.UpDeleteFlag(ctx, masterTx, wishCard)
 
-			err = repo.Delete(ctx, masterTx, wishCard.ID)
-			if err != nil {
+			if err = repo.Delete(ctx, masterTx, wishCard.ID); err != nil {
 				return err
 			}
 			assert.NoError(t, err)

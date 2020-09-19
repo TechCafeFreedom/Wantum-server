@@ -57,8 +57,7 @@ func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx
 	now := time.Now()
 	tag.UpdatedAt = &now
 	tag.DeletedAt = &now
-	err = s.tagRepository.UpDeleteFlag(ctx, masterTx, tag)
-	if err != nil {
+	if err = s.tagRepository.UpDeleteFlag(ctx, masterTx, tag); err != nil {
 		return nil, werrors.Stack(err)
 	}
 	return tag, nil
@@ -72,8 +71,7 @@ func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.Master
 	now := time.Now()
 	tag.UpdatedAt = &now
 	tag.DeletedAt = nil
-	err = s.tagRepository.DownDeleteFlag(ctx, masterTx, tag)
-	if err != nil {
+	if err = s.tagRepository.DownDeleteFlag(ctx, masterTx, tag); err != nil {
 		return nil, werrors.Stack(err)
 	}
 	return tag, nil
@@ -93,8 +91,7 @@ func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, tagI
 			"could not delete this place",
 		)
 	}
-	err = s.tagRepository.Delete(ctx, masterTx, tagID)
-	if err != nil {
+	if err = s.tagRepository.Delete(ctx, masterTx, tagID); err != nil {
 		return werrors.Stack(err)
 	}
 	return nil

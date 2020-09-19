@@ -59,8 +59,7 @@ func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, plac
 	now := time.Now()
 	place.Name = name
 	place.UpdatedAt = &now
-	err = s.placeRepository.Update(ctx, masterTx, place)
-	if err != nil {
+	if err = s.placeRepository.Update(ctx, masterTx, place); err != nil {
 		return nil, werrors.Stack(err)
 	}
 	return place, nil
@@ -74,8 +73,7 @@ func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx
 	now := time.Now()
 	place.UpdatedAt = &now
 	place.DeletedAt = &now
-	err = s.placeRepository.UpDeleteFlag(ctx, masterTx, place)
-	if err != nil {
+	if err = s.placeRepository.UpDeleteFlag(ctx, masterTx, place); err != nil {
 		return nil, werrors.Stack(err)
 	}
 	return place, nil
@@ -89,8 +87,7 @@ func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.Master
 	now := time.Now()
 	place.UpdatedAt = &now
 	place.DeletedAt = nil
-	err = s.placeRepository.DownDeleteFlag(ctx, masterTx, place)
-	if err != nil {
+	if err = s.placeRepository.DownDeleteFlag(ctx, masterTx, place); err != nil {
 		return nil, werrors.Stack(err)
 	}
 	return place, nil
@@ -110,8 +107,7 @@ func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, plac
 			"could not delete this place",
 		)
 	}
-	err = s.placeRepository.Delete(ctx, masterTx, placeID)
-	if err != nil {
+	if err = s.placeRepository.Delete(ctx, masterTx, placeID); err != nil {
 		return werrors.Stack(err)
 	}
 	return nil

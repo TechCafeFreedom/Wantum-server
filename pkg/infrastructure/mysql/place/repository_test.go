@@ -87,8 +87,7 @@ func TestUpdate(t *testing.T) {
 
 		var result *placeEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			err = repo.Update(ctx, masterTx, place)
-			if err != nil {
+			if err = repo.Update(ctx, masterTx, place); err != nil {
 				return err
 			}
 
@@ -118,8 +117,7 @@ func TestUpDeleteFlag(t *testing.T) {
 
 			place.ID = newPlaceID
 			place.DeletedAt = &dummyDate
-			err = repo.UpDeleteFlag(ctx, masterTx, place)
-			if err != nil {
+			if err = repo.UpDeleteFlag(ctx, masterTx, place); err != nil {
 				return err
 			}
 
@@ -144,8 +142,7 @@ func TestUpDeleteFlag(t *testing.T) {
 			newPlaceID, _ := repo.Insert(ctx, masterTx, place)
 
 			place.ID = newPlaceID
-			err = repo.UpDeleteFlag(ctx, masterTx, place)
-			return err
+			return repo.UpDeleteFlag(ctx, masterTx, place)
 		})
 
 		assert.Error(t, err)
@@ -169,8 +166,7 @@ func TestDownDeleteFlag(t *testing.T) {
 
 			place.ID = newPlaceID
 			place.DeletedAt = nil
-			err = repo.DownDeleteFlag(ctx, masterTx, place)
-			if err != nil {
+			if err = repo.DownDeleteFlag(ctx, masterTx, place); err != nil {
 				return err
 			}
 
@@ -200,8 +196,7 @@ func TestDelete(t *testing.T) {
 			place.DeletedAt = &dummyDate
 			repo.UpDeleteFlag(ctx, masterTx, place)
 
-			err = repo.Delete(ctx, masterTx, place.ID)
-			if err != nil {
+			if err = repo.Delete(ctx, masterTx, place.ID); err != nil {
 				return err
 			}
 

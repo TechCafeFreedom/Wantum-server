@@ -173,19 +173,19 @@ func (repo *wishCardRepositoryImplement) SelectByID(ctx context.Context, masterT
 		FROM wish_cards
 		WHERE id=?
 	`, wishCardID)
-	var result wishCardEntity.Entity
+	var wishCard wishCardEntity.Entity
 	var place placeEntity.Entity
 	var user userEntity.Entity
 	err = row.Scan(
-		&result.ID,
+		&wishCard.ID,
 		&user.ID,
-		&result.Activity,
-		&result.Description,
-		&result.Date,
-		&result.DoneAt,
-		&result.CreatedAt,
-		&result.UpdatedAt,
-		&result.DeletedAt,
+		&wishCard.Activity,
+		&wishCard.Description,
+		&wishCard.Date,
+		&wishCard.DoneAt,
+		&wishCard.CreatedAt,
+		&wishCard.UpdatedAt,
+		&wishCard.DeletedAt,
 		&place.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -194,12 +194,13 @@ func (repo *wishCardRepositoryImplement) SelectByID(ctx context.Context, masterT
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	result.Author = &user
-	result.Place = &place
-	log.Println(result.Place)
-	return &result, nil
+	wishCard.Author = &user
+	wishCard.Place = &place
+	log.Println(wishCard.Place)
+	return &wishCard, nil
 }
 
+// TODO: ここのwishcardIDsはintにしたいお気持ち
 func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []string) (wishCardEntity.EntitySlice, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
@@ -217,7 +218,7 @@ func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, master
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	var result wishCardEntity.EntitySlice
+	var wishCards wishCardEntity.EntitySlice
 	for rows.Next() {
 		var wishCard wishCardEntity.Entity
 		var place placeEntity.Entity
@@ -243,9 +244,9 @@ func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, master
 		}
 		wishCard.Author = &user
 		wishCard.Place = &place
-		result = append(result, &wishCard)
+		wishCards = append(wishCards, &wishCard)
 	}
-	return result, nil
+	return wishCards, nil
 }
 
 func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context, masterTx repository.MasterTx, categryID int) (wishCardEntity.EntitySlice, error) {
@@ -263,7 +264,7 @@ func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context,
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	var result wishCardEntity.EntitySlice
+	var wishCards wishCardEntity.EntitySlice
 	for rows.Next() {
 		var wishCard wishCardEntity.Entity
 		var place placeEntity.Entity
@@ -289,7 +290,7 @@ func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context,
 		}
 		wishCard.Author = &user
 		wishCard.Place = &place
-		result = append(result, &wishCard)
+		wishCards = append(wishCards, &wishCard)
 	}
-	return result, nil
+	return wishCards, nil
 }
