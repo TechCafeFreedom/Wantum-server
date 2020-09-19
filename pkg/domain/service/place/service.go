@@ -16,11 +16,9 @@ import (
 type Service interface {
 	Create(ctx context.Context, masterTx repository.MasterTx, name string) (*placeEntity.Entity, error)
 	Update(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) (*placeEntity.Entity, error)
-
 	Delete(ctx context.Context, masterTx repository.MasterTx, placeID int) error
 	UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error)
 	DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error)
-
 	GetByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error)
 	GetAll(ctx context.Context, masterTx repository.MasterTx) (placeEntity.EntitySlice, error)
 }

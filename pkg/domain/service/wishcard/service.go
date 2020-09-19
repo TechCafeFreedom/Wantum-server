@@ -22,11 +22,9 @@ import (
 type Service interface {
 	Create(ctx context.Context, masterTx repository.MasterTx, activity, description string, date *time.Time, userID, categoryID, placeID int, tagsIDs []int) (*wishCardEntity.Entity, error)
 	Update(ctx context.Context, masterTx repository.MasterTx, wishCardID int, activity, description string, date, doneAt *time.Time, userID, categoryID, placeID int, tagIDs []int) (*wishCardEntity.Entity, error)
-
 	Delete(ctx context.Context, masterTx repository.MasterTx, wishCardID int) error
 	UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (*wishCardEntity.Entity, error)
 	DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (*wishCardEntity.Entity, error)
-
 	GetByID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (*wishCardEntity.Entity, error)
 	GetByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []int) (wishCardEntity.EntitySlice, error)
 	GetByCategoryID(ctx context.Context, masterTx repository.MasterTx, categoryID int) (wishCardEntity.EntitySlice, error)

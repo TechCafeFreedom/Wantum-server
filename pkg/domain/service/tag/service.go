@@ -15,11 +15,9 @@ import (
 
 type Service interface {
 	Create(ctx context.Context, masterTx repository.MasterTx, name string) (*tagEntity.Entity, error)
-
 	UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error)
 	DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error)
 	Delete(ctx context.Context, masterTx repository.MasterTx, tagID int) error
-
 	GetByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error)
 	GetByName(ctx context.Context, masterTx repository.MasterTx, name string) (*tagEntity.Entity, error)
 	GetByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (tagEntity.EntitySlice, error)
