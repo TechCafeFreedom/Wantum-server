@@ -199,8 +199,7 @@ func (i *interactor) UpdateDescription(ctx context.Context, userID, wishCardID i
 
 func (i *interactor) UpdatePlace(ctx context.Context, userID, wishCardID int, place string) (*wishCardEntity.Entity, error) {
 	var wishCard *wishCardEntity.Entity
-	var err error
-	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		place, err := i.placeService.Create(ctx, masterTx, place)
 		if err != nil {
 			// TODO: placeがすでにあったら無限に増えてしまう
