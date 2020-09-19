@@ -24,84 +24,80 @@ import (
 var (
 	masterTx        repository.MasterTx
 	masterTxManager repository.MasterTxManager
-)
 
-var (
 	dummyDate        = time.Date(2020, 9, 1, 12, 0, 0, 0, time.Local)
 	dummyActivity    = "dummyActivity"
 	dummyDescription = "dummyDescription"
+	dummyTagName1    = "dummyTag1"
+	dummyTagName2    = "dummyTag2"
+	dummyPlaceName   = "dummyPlace"
 
-	dummyTagName1 = "dummyTag1"
-	dummyTagName2 = "dummyTag2"
+	dummyProfile = profileEntity.Entity{
+		UserID:    1,
+		Name:      "dummyName",
+		Thumbnail: "dummyThumbnail",
+		Bio:       "dummyBio",
+		Gender:    1,
+		Phone:     "12345678901",
+		Birth:     &dummyDate,
+		CreatedAt: &dummyDate,
+		UpdatedAt: &dummyDate,
+		DeletedAt: &dummyDate,
+	}
 
-	dummyPlaceName = "dummyPlace"
+	dummyUser = userEntity.Entity{
+		ID:        1,
+		AuthID:    "dummyID",
+		UserName:  "dummyUserName",
+		Mail:      "hogehoge@example.com",
+		CreatedAt: &dummyDate,
+		UpdatedAt: &dummyDate,
+		DeletedAt: &dummyDate,
+		Profile:   &dummyProfile,
+	}
+
+	dummyTag1 = tagEntity.Entity{
+		ID:        1,
+		Name:      dummyTagName1,
+		CreatedAt: &dummyDate,
+		UpdatedAt: &dummyDate,
+		DeletedAt: &dummyDate,
+	}
+
+	dummyTag2 = tagEntity.Entity{
+		ID:        2,
+		Name:      dummyTagName2,
+		CreatedAt: &dummyDate,
+		UpdatedAt: &dummyDate,
+		DeletedAt: nil,
+	}
+
+	dummyTagSlice = tagEntity.EntitySlice{
+		&dummyTag1,
+		&dummyTag2,
+	}
+
+	dummyPlace = placeEntity.Entity{
+		ID:        1,
+		Name:      dummyPlaceName,
+		CreatedAt: &dummyDate,
+		UpdatedAt: &dummyDate,
+		DeletedAt: nil,
+	}
+
+	dummyWishCard = wishCardEntity.Entity{
+		ID:          1,
+		Author:      &dummyUser,
+		Activity:    dummyActivity,
+		Description: dummyDescription,
+		Date:        &dummyDate,
+		DoneAt:      nil,
+		CreatedAt:   &dummyDate,
+		UpdatedAt:   &dummyDate,
+		Place:       &dummyPlace,
+		Tags:        dummyTagSlice,
+	}
 )
-
-var dummyProfile = profileEntity.Entity{
-	UserID:    1,
-	Name:      "dummyName",
-	Thumbnail: "dummyThumbnail",
-	Bio:       "dummyBio",
-	Gender:    1,
-	Phone:     "12345678901",
-	Birth:     &dummyDate,
-	CreatedAt: &dummyDate,
-	UpdatedAt: &dummyDate,
-	DeletedAt: &dummyDate,
-}
-
-var dummyUser = userEntity.Entity{
-	ID:        1,
-	AuthID:    "dummyID",
-	UserName:  "dummyUserName",
-	Mail:      "hogehoge@example.com",
-	CreatedAt: &dummyDate,
-	UpdatedAt: &dummyDate,
-	DeletedAt: &dummyDate,
-	Profile:   &dummyProfile,
-}
-
-var dummyTag1 = tagEntity.Entity{
-	ID:        1,
-	Name:      dummyTagName1,
-	CreatedAt: &dummyDate,
-	UpdatedAt: &dummyDate,
-	DeletedAt: &dummyDate,
-}
-
-var dummyTag2 = tagEntity.Entity{
-	ID:        2,
-	Name:      dummyTagName2,
-	CreatedAt: &dummyDate,
-	UpdatedAt: &dummyDate,
-	DeletedAt: nil,
-}
-
-var dummyTagSlice = tagEntity.EntitySlice{
-	&dummyTag1,
-	&dummyTag2,
-}
-
-var dummyPlace = placeEntity.Entity{
-	ID:        1,
-	Name:      dummyPlaceName,
-	CreatedAt: &dummyDate,
-	UpdatedAt: &dummyDate,
-	DeletedAt: nil,
-}
-
-var dummyWishCard = wishCardEntity.Entity{
-	ID:          1,
-	Author:      &dummyUser,
-	Activity:    dummyActivity,
-	Description: dummyDescription,
-	Date:        &dummyDate,
-	DoneAt:      nil,
-	CreatedAt:   &dummyDate,
-	UpdatedAt:   &dummyDate,
-	Place:       &dummyPlace,
-	Tags:        dummyTagSlice,
-}
 
 func TestMain(m *testing.M) {
 	before()
