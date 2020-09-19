@@ -37,11 +37,11 @@ func New(repo tag.Repository) Service {
 }
 
 func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, name string) (*tagEntity.Entity, error) {
-	createdAt := time.Now()
+	now := time.Now()
 	tag := &tagEntity.Entity{
 		Name:      name,
-		CreatedAt: &createdAt,
-		UpdatedAt: &createdAt,
+		CreatedAt: &now,
+		UpdatedAt: &now,
 	}
 	result, err := s.tagRepository.Insert(ctx, masterTx, tag)
 	if err != nil {
@@ -56,9 +56,9 @@ func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	updatedAt := time.Now()
-	tag.UpdatedAt = &updatedAt
-	tag.DeletedAt = &updatedAt
+	now := time.Now()
+	tag.UpdatedAt = &now
+	tag.DeletedAt = &now
 	err = s.tagRepository.UpDeleteFlag(ctx, masterTx, tag)
 	if err != nil {
 		return nil, werrors.Stack(err)
@@ -71,8 +71,8 @@ func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.Master
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	updatedAt := time.Now()
-	tag.UpdatedAt = &updatedAt
+	now := time.Now()
+	tag.UpdatedAt = &now
 	tag.DeletedAt = nil
 	err = s.tagRepository.DownDeleteFlag(ctx, masterTx, tag)
 	if err != nil {

@@ -36,11 +36,11 @@ func New(repo place.Repository) Service {
 }
 
 func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, name string) (*placeEntity.Entity, error) {
-	createdAt := time.Now()
+	now := time.Now()
 	place := &placeEntity.Entity{
 		Name:      name,
-		CreatedAt: &createdAt,
-		UpdatedAt: &createdAt,
+		CreatedAt: &now,
+		UpdatedAt: &now,
 	}
 	result, err := s.placeRepository.Insert(ctx, masterTx, place)
 	if err != nil {
@@ -58,9 +58,9 @@ func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, plac
 		return nil, werrors.Stack(err)
 	}
 
-	updatedAt := time.Now()
+	now := time.Now()
 	place.Name = name
-	place.UpdatedAt = &updatedAt
+	place.UpdatedAt = &now
 	err = s.placeRepository.Update(ctx, masterTx, place)
 	if err != nil {
 		return nil, werrors.Stack(err)
@@ -73,9 +73,9 @@ func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	updatedAt := time.Now()
-	place.UpdatedAt = &updatedAt
-	place.DeletedAt = &updatedAt
+	now := time.Now()
+	place.UpdatedAt = &now
+	place.DeletedAt = &now
 	err = s.placeRepository.UpDeleteFlag(ctx, masterTx, place)
 	if err != nil {
 		return nil, werrors.Stack(err)
@@ -88,8 +88,8 @@ func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.Master
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	updatedAt := time.Now()
-	place.UpdatedAt = &updatedAt
+	now := time.Now()
+	place.UpdatedAt = &now
 	place.DeletedAt = nil
 	err = s.placeRepository.DownDeleteFlag(ctx, masterTx, place)
 	if err != nil {

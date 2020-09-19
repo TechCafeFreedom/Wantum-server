@@ -73,14 +73,14 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, acti
 		return nil, werrors.Stack(err)
 	}
 
-	createdAt := time.Now()
+	now := time.Now()
 	wishCard := &wishCardEntity.Entity{
 		Author:      author,
 		Activity:    activity,
 		Description: description,
 		Date:        date,
-		CreatedAt:   &createdAt,
-		UpdatedAt:   &createdAt,
+		CreatedAt:   &now,
+		UpdatedAt:   &now,
 		Place:       place,
 		Tags:        tags,
 	}
@@ -118,14 +118,14 @@ func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, wish
 		return nil, werrors.Stack(err)
 	}
 
-	updatedAt := time.Now()
+	now := time.Now()
 	wishCard.Author = author // NOTE: 今後、authorの更新があるかも
 	wishCard.Activity = activity
 	wishCard.Description = description
 	wishCard.Date = date
 	wishCard.DoneAt = doneAt
 	wishCard.Place = place
-	wishCard.UpdatedAt = &updatedAt
+	wishCard.UpdatedAt = &now
 	wishCard.Tags = tags
 
 	err = s.wishCardRepository.Update(ctx, masterTx, wishCard, categoryID)
@@ -157,9 +157,9 @@ func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	updatedAt := time.Now()
-	wishCard.UpdatedAt = &updatedAt
-	wishCard.DeletedAt = &updatedAt
+	now := time.Now()
+	wishCard.UpdatedAt = &now
+	wishCard.DeletedAt = &now
 	wishCard.Author = author
 	wishCard.Place = place
 	wishCard.Tags = tags
@@ -192,8 +192,8 @@ func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.Master
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	updatedAt := time.Now()
-	wishCard.UpdatedAt = &updatedAt
+	now := time.Now()
+	wishCard.UpdatedAt = &now
 	wishCard.DeletedAt = nil
 	wishCard.Author = author
 	wishCard.Place = place
