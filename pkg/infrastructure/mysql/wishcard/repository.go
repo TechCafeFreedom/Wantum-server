@@ -219,19 +219,19 @@ func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, master
 	}
 	var result wishCardEntity.EntitySlice
 	for rows.Next() {
-		var record wishCardEntity.Entity
+		var wishCard wishCardEntity.Entity
 		var place placeEntity.Entity
 		var user userEntity.Entity
 		err = rows.Scan(
-			&record.ID,
+			&wishCard.ID,
 			&user.ID,
-			&record.Activity,
-			&record.Description,
-			&record.Date,
-			&record.DoneAt,
-			&record.CreatedAt,
-			&record.UpdatedAt,
-			&record.DeletedAt,
+			&wishCard.Activity,
+			&wishCard.Description,
+			&wishCard.Date,
+			&wishCard.DoneAt,
+			&wishCard.CreatedAt,
+			&wishCard.UpdatedAt,
+			&wishCard.DeletedAt,
 			&place.ID,
 		)
 		if err != nil {
@@ -241,9 +241,9 @@ func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, master
 			tlog.PrintErrorLogWithCtx(ctx, err)
 			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}
-		record.Author = &user
-		record.Place = &place
-		result = append(result, &record)
+		wishCard.Author = &user
+		wishCard.Place = &place
+		result = append(result, &wishCard)
 	}
 	return result, nil
 }
@@ -265,19 +265,19 @@ func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context,
 	}
 	var result wishCardEntity.EntitySlice
 	for rows.Next() {
-		var record wishCardEntity.Entity
+		var wishCard wishCardEntity.Entity
 		var place placeEntity.Entity
 		var user userEntity.Entity
 		err = rows.Scan(
-			&record.ID,
+			&wishCard.ID,
 			&user.ID,
-			&record.Activity,
-			&record.Description,
-			&record.Date,
-			&record.DoneAt,
-			&record.CreatedAt,
-			&record.UpdatedAt,
-			&record.DeletedAt,
+			&wishCard.Activity,
+			&wishCard.Description,
+			&wishCard.Date,
+			&wishCard.DoneAt,
+			&wishCard.CreatedAt,
+			&wishCard.UpdatedAt,
+			&wishCard.DeletedAt,
 			&place.ID,
 		)
 		if err != nil {
@@ -287,9 +287,9 @@ func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context,
 			tlog.PrintErrorLogWithCtx(ctx, err)
 			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}
-		record.Author = &user
-		record.Place = &place
-		result = append(result, &record)
+		wishCard.Author = &user
+		wishCard.Place = &place
+		result = append(result, &wishCard)
 	}
 	return result, nil
 }
