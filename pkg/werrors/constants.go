@@ -25,6 +25,12 @@ var (
 		ErrorMessageJP: "リクエストされたユーザーはすでに削除されている可能性があります",
 		ErrorMessageEN: "requested user is not found",
 	}
+	WishBoardNotFound = &WantumError{
+		GrpcErrorCode:  codes.NotFound,
+		ErrorCode:      http.StatusNotFound,
+		ErrorMessageJP: "リクエストされたやりたいことボードは既に削除された可能性があります",
+		ErrorMessageEN: "requested wish_board is not found",
+	}
 	BadRequest = &WantumError{
 		GrpcErrorCode:  codes.InvalidArgument,
 		ErrorCode:      http.StatusBadRequest,
