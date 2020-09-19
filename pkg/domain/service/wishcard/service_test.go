@@ -23,62 +23,60 @@ import (
 
 var (
 	masterTx repository.MasterTx
-)
 
-var (
 	dummyDate        = time.Date(2020, 9, 1, 12, 0, 0, 0, time.Local)
 	dummyActivity    = "sampleActivity"
 	dummyDescription = "sampleDescription"
-)
 
-var dummyProfile = profileEntity.Entity{
-	UserID:    1,
-	Name:      "dummyName",
-	Thumbnail: "dummyThumbnail",
-	Bio:       "dummyBio",
-	Gender:    1,
-	Phone:     "12345678901",
-	Birth:     &dummyDate,
-	CreatedAt: &dummyDate,
-	UpdatedAt: &dummyDate,
-	DeletedAt: &dummyDate,
-}
+	dummyProfile = profileEntity.Entity{
+		UserID:    1,
+		Name:      "dummyName",
+		Thumbnail: "dummyThumbnail",
+		Bio:       "dummyBio",
+		Gender:    1,
+		Phone:     "12345678901",
+		Birth:     &dummyDate,
+		CreatedAt: &dummyDate,
+		UpdatedAt: &dummyDate,
+		DeletedAt: &dummyDate,
+	}
 
-var dummyUser = userEntity.Entity{
-	ID:        1,
-	AuthID:    "dummyID",
-	UserName:  "dummyUserName",
-	Mail:      "hogehoge@example.com",
-	CreatedAt: &dummyDate,
-	UpdatedAt: &dummyDate,
-	DeletedAt: &dummyDate,
-	Profile:   nil,
-}
-
-var dummyPlace = placeEntity.Entity{
-	ID:        1,
-	Name:      "dummyPlace",
-	CreatedAt: &dummyDate,
-	UpdatedAt: &dummyDate,
-	DeletedAt: &dummyDate,
-}
-
-var dummyTags = tagEntity.EntitySlice{
-	&tagEntity.Entity{
+	dummyUser = userEntity.Entity{
 		ID:        1,
-		Name:      "tag1",
+		AuthID:    "dummyID",
+		UserName:  "dummyUserName",
+		Mail:      "hogehoge@example.com",
 		CreatedAt: &dummyDate,
 		UpdatedAt: &dummyDate,
 		DeletedAt: &dummyDate,
-	},
-	&tagEntity.Entity{
-		ID:        2,
-		Name:      "tag2",
+		Profile:   nil,
+	}
+
+	dummyPlace = placeEntity.Entity{
+		ID:        1,
+		Name:      "dummyPlace",
 		CreatedAt: &dummyDate,
 		UpdatedAt: &dummyDate,
 		DeletedAt: &dummyDate,
-	},
-}
+	}
+
+	dummyTags = tagEntity.EntitySlice{
+		&tagEntity.Entity{
+			ID:        1,
+			Name:      "tag1",
+			CreatedAt: &dummyDate,
+			UpdatedAt: &dummyDate,
+			DeletedAt: &dummyDate,
+		},
+		&tagEntity.Entity{
+			ID:        2,
+			Name:      "tag2",
+			CreatedAt: &dummyDate,
+			UpdatedAt: &dummyDate,
+			DeletedAt: &dummyDate,
+		},
+	}
+)
 
 func TestMain(m *testing.M) {
 	before()

@@ -16,29 +16,29 @@ import (
 var (
 	masterTx  repository.MasterTx
 	dummyDate time.Time
-)
 
-var dummyTagSlice = tagEntity.EntitySlice{
-	&tagEntity.Entity{
+	dummyTag = &tagEntity.Entity{
 		ID:        1,
-		Name:      "sampleTag1",
+		Name:      "sampleTag",
 		CreatedAt: &dummyDate,
 		UpdatedAt: &dummyDate,
-	},
-	&tagEntity.Entity{
-		ID:        2,
-		Name:      "sampleTag2",
-		CreatedAt: &dummyDate,
-		UpdatedAt: &dummyDate,
-	},
-}
+	}
 
-var dummyTag = &tagEntity.Entity{
-	ID:        1,
-	Name:      "sampleTag",
-	CreatedAt: &dummyDate,
-	UpdatedAt: &dummyDate,
-}
+	dummyTagSlice = tagEntity.EntitySlice{
+		&tagEntity.Entity{
+			ID:        1,
+			Name:      "sampleTag1",
+			CreatedAt: &dummyDate,
+			UpdatedAt: &dummyDate,
+		},
+		&tagEntity.Entity{
+			ID:        2,
+			Name:      "sampleTag2",
+			CreatedAt: &dummyDate,
+			UpdatedAt: &dummyDate,
+		},
+	}
+)
 
 func TestMain(m *testing.M) {
 	before()
