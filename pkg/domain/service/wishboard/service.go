@@ -35,10 +35,17 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, titl
 		InviteUrl:          inviteUrl,
 		UserID:             userID,
 	}
+
 	created, err := s.wishBoardRepository.Insert(ctx, masterTx, &newWishBoard)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
+
+	err = s.userWishBoardRepository.Insert(ctx, masterTx, userID, created.ID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+
 	return created, nil
 }
 
