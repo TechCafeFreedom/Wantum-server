@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 	wishCardEntity "wantum/pkg/domain/entity/wishcard"
 	"wantum/pkg/domain/repository"
@@ -312,12 +311,8 @@ func (s *service) GetByID(ctx context.Context, masterTx repository.MasterTx, wis
 }
 
 func (s *service) GetByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []int) (wishCardEntity.EntitySlice, error) {
-	idList := make([]string, 0, len(wishCardIDs))
-	for _, id := range wishCardIDs {
-		idList = append(idList, strconv.Itoa(id))
-	}
 
-	wishCards, err := s.wishCardRepository.SelectByIDs(ctx, masterTx, idList)
+	wishCards, err := s.wishCardRepository.SelectByIDs(ctx, masterTx, wishCardIDs)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}

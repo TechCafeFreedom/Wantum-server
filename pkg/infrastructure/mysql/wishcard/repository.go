@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"strconv"
 	"strings"
 	placeEntity "wantum/pkg/domain/entity/place"
 	userEntity "wantum/pkg/domain/entity/user"
@@ -213,19 +214,23 @@ func (repo *wishCardRepositoryImplement) SelectByID(ctx context.Context, masterT
 	return wishCard, nil
 }
 
-// TODO: ここのwishcardIDsはintにしたいお気持ち
-func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []string) (wishCardEntity.EntitySlice, error) {
+func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []int) (wishCardEntity.EntitySlice, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
+	wishCardIDsStr := make([]string, 0, len(wishCardIDs))
+	for _, id := range wishCardIDs {
+		wishCardIDsStr = append(wishCardIDsStr, strconv.Itoa(id))
+	}
+
 	rows, err := tx.Query(`
 		SELECT id, user_id, activity, description, date, done_at, created_at, updated_at, deleted_at, place_id
 		FROM wish_cards
 		WHERE id
-		IN (` + strings.Join(wishCardIDs, ",") + `)
+		IN (` + strings.Join(wishCardIDsStr, ",") + `)
 	`)
 	if err != nil {
 		if err == sql.ErrNoRows {

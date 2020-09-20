@@ -390,7 +390,7 @@ func TestSelectByIDs(t *testing.T) {
 		var err error
 		ctx := context.Background()
 
-		ids := []string{"1", "2", "3"}
+		ids := []int{1, 2, 3}
 
 		var result wishCardEntity.EntitySlice
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {

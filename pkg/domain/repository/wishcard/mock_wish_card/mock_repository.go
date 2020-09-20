@@ -136,7 +136,7 @@ func (mr *MockRepositoryMockRecorder) SelectByID(ctx, masterTx, wishCardID inter
 }
 
 // SelectByIDs mocks base method
-func (m *MockRepository) SelectByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []string) (wishcard.EntitySlice, error) {
+func (m *MockRepository) SelectByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []int) (wishcard.EntitySlice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SelectByIDs", ctx, masterTx, wishCardIDs)
 	ret0, _ := ret[0].(wishcard.EntitySlice)
