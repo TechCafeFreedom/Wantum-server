@@ -2,6 +2,9 @@ package wishcard
 
 import (
 	"context"
+	"errors"
+	"fmt"
+	"net/http"
 	"time"
 	tagEntity "wantum/pkg/domain/entity/tag"
 	wishCardEntity "wantum/pkg/domain/entity/wishcard"
@@ -9,7 +12,10 @@ import (
 	"wantum/pkg/domain/service/place"
 	"wantum/pkg/domain/service/tag"
 	"wantum/pkg/domain/service/wishcard"
+	"wantum/pkg/tlog"
 	"wantum/pkg/werrors"
+
+	"google.golang.org/grpc/codes"
 )
 
 type Interactor interface {
@@ -43,9 +49,32 @@ func New(masterTxManager repository.MasterTxManager, wishCardService wishcard.Se
 }
 
 func (i *interactor) CreateNewWishCard(ctx context.Context, userID, categoryID int, activity, description, place string, date *time.Time, tags []string) (*wishCardEntity.Entity, error) {
+	// validation
+	var err error
+	if err = validateActivity(activity); err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.Stack(err)
+	}
+	if err = validateDescription(description); err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.Stack(err)
+	}
+	if err = validatePlace(place); err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.Stack(err)
+	}
+	if err = validateDate(date); err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.Stack(err)
+	}
+	if err = validateTags(tags); err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.Stack(err)
+	}
 
+	// create new entity
 	var newWishCard *wishCardEntity.Entity
-	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		place, err := i.placeService.Create(ctx, masterTx, place)
 		if err != nil {
 			// TODO: placeがすでにあったら無限に増えてしまう
@@ -78,8 +107,30 @@ func (i *interactor) CreateNewWishCard(ctx context.Context, userID, categoryID i
 }
 
 func (i *interactor) UpdateWishCardWithCategoryID(ctx context.Context, wishCardID, userID int, activity, description, place string, date, doneAt *time.Time, categoryID int, tags []string) (*wishCardEntity.Entity, error) {
+	var err error
+	if err = validateActivity(activity); err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.Stack(err)
+	}
+	if err = validateDescription(description); err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.Stack(err)
+	}
+	if err = validatePlace(place); err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.Stack(err)
+	}
+	if err = validateDate(date); err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.Stack(err)
+	}
+	if err = validateTags(tags); err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.Stack(err)
+	}
+
 	var wishCard *wishCardEntity.Entity
-	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		place, err := i.placeService.Create(ctx, masterTx, place)
 		if err != nil {
 			// TODO: placeがすでにあったら無限に増えてしまう
@@ -157,8 +208,13 @@ func (i *interactor) GetByCategoryID(ctx context.Context, categoryID int) (wishC
 }
 
 func (i *interactor) UpdateActivity(ctx context.Context, userID, wishCardID int, activity string) (*wishCardEntity.Entity, error) {
-	var wishCard *wishCardEntity.Entity
 	var err error
+	if err = validateActivity(activity); err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.Stack(err)
+	}
+
+	var wishCard *wishCardEntity.Entity
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		wishCard, err = i.wishCardService.GetByID(ctx, masterTx, wishCardID)
 		if err != nil {
@@ -178,8 +234,13 @@ func (i *interactor) UpdateActivity(ctx context.Context, userID, wishCardID int,
 }
 
 func (i *interactor) UpdateDescription(ctx context.Context, userID, wishCardID int, description string) (*wishCardEntity.Entity, error) {
-	var wishCard *wishCardEntity.Entity
 	var err error
+	if err = validateDescription(description); err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.Stack(err)
+	}
+
+	var wishCard *wishCardEntity.Entity
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		wishCard, err = i.wishCardService.GetByID(ctx, masterTx, wishCardID)
 		if err != nil {
@@ -198,8 +259,14 @@ func (i *interactor) UpdateDescription(ctx context.Context, userID, wishCardID i
 }
 
 func (i *interactor) UpdatePlace(ctx context.Context, userID, wishCardID int, place string) (*wishCardEntity.Entity, error) {
+	var err error
+	if err = validatePlace(place); err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.Stack(err)
+	}
+
 	var wishCard *wishCardEntity.Entity
-	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		place, err := i.placeService.Create(ctx, masterTx, place)
 		if err != nil {
 			// TODO: placeがすでにあったら無限に増えてしまう
@@ -222,8 +289,13 @@ func (i *interactor) UpdatePlace(ctx context.Context, userID, wishCardID int, pl
 }
 
 func (i *interactor) UpdateDate(ctx context.Context, userID, wishCardID int, date *time.Time) (*wishCardEntity.Entity, error) {
-	var wishCard *wishCardEntity.Entity
 	var err error
+	if err = validateDate(date); err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.Stack(err)
+	}
+
+	var wishCard *wishCardEntity.Entity
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		wishCard, err = i.wishCardService.GetByID(ctx, masterTx, wishCardID)
 		if err != nil {
@@ -286,4 +358,75 @@ func (i *interactor) DeleteTags(ctx context.Context, userID, wishCardID int, tag
 		return nil, werrors.Stack(err)
 	}
 	return wishCard, nil
+}
+
+func validateActivity(activity string) error {
+	if activity == "" {
+		err := errors.New("activity is empty error")
+		return werrors.Newf(err, codes.InvalidArgument, http.StatusBadRequest, "「やりたいこと」は必須項目です。", "activity is required.")
+	}
+	if len(activity) > 50 {
+		err := errors.New("activity is too long error")
+		return werrors.Newf(err, codes.InvalidArgument, http.StatusBadRequest, "「やりたいこと」が長すぎます。", "activity is too long.")
+	}
+	return nil
+}
+
+func validateDescription(description string) error {
+	if len(description) > 100 {
+		err := errors.New("description is too long error")
+		return werrors.Newf(err, codes.InvalidArgument, http.StatusBadRequest, "「詳細」が長すぎます。", "description is too long.")
+	}
+	return nil
+}
+
+func validatePlace(place string) error {
+	if place == "" {
+		err := errors.New("place is empty error")
+		return werrors.Newf(err, codes.InvalidArgument, http.StatusBadRequest, "「場所」は必須項目です。", "place is required.")
+	}
+	if len(place) > 200 {
+		err := errors.New("place is too long error")
+		return werrors.Newf(err, codes.InvalidArgument, http.StatusBadRequest, "「場所」が長すぎます。", "place is too long.")
+	}
+	return nil
+}
+
+func validateDate(date *time.Time) error {
+	if date == nil {
+		err := errors.New("date is empty error")
+		return werrors.Newf(err, codes.InvalidArgument, http.StatusBadRequest, "「日付」は必須項目です。", "date is required.")
+	}
+	if date.Before(time.Now()) {
+		err := errors.New("date is in the past")
+		return werrors.Newf(err, codes.InvalidArgument, http.StatusBadRequest, "過去の「日付」は指定できません。", "date is in the past.")
+	}
+	return nil
+}
+
+func validateTags(tags []string) error {
+	for _, tag := range tags {
+		if err := validateTag(tag); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func validateTag(tag string) error {
+	if tag == "" {
+		err := errors.New("tag is invalid error")
+		return werrors.Newf(
+			err,
+			codes.InvalidArgument,
+			http.StatusBadRequest,
+			fmt.Sprintf("「%s」は無効なタグです。", tag),
+			fmt.Sprintf("「%s」is invalid.", tag),
+		)
+	}
+	if len(tag) > 100 {
+		err := errors.New("tag is too long error")
+		return werrors.Newf(err, codes.InvalidArgument, http.StatusBadRequest, "「タグ」が長すぎます。", "tag is too long.")
+	}
+	return nil
 }

@@ -3,6 +3,7 @@ package wishcard
 import (
 	"context"
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -24,7 +25,7 @@ var (
 	masterTx        repository.MasterTx
 	masterTxManager repository.MasterTxManager
 
-	dummyDate        = time.Date(2020, 9, 1, 12, 0, 0, 0, time.Local)
+	dummyDate        = time.Date(2040, 9, 1, 12, 0, 0, 0, time.Local)
 	dummyActivity    = "dummyActivity"
 	dummyDescription = "dummyDescription"
 	dummyTagName1    = "dummyTag1"
@@ -528,5 +529,127 @@ func TestInteractor_DeleteTags(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.NotNil(t, result)
+	})
+}
+
+// validation test
+func TestIntereractor_validateActivity(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		err := validateActivity("activityyyy")
+		assert.NoError(t, err)
+	})
+
+	t.Run("success_文字列制限ぴったり", func(t *testing.T) {
+		err := validateActivity(strings.Repeat("a", 50))
+		assert.NoError(t, err)
+	})
+
+	t.Run("failure_空値", func(t *testing.T) {
+		err := validateActivity("")
+		assert.Error(t, err)
+	})
+
+	t.Run("failure_文字列超過", func(t *testing.T) {
+		err := validateActivity(strings.Repeat("a", 51))
+		assert.Error(t, err)
+	})
+}
+
+func TestIntereractor_validateDescription(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		err := validateDescription("sampleDescription")
+		assert.NoError(t, err)
+	})
+
+	t.Run("success_文字列制限ぴったり", func(t *testing.T) {
+		err := validateDescription(strings.Repeat("a", 100))
+		assert.NoError(t, err)
+	})
+
+	t.Run("success_空値", func(t *testing.T) {
+		err := validateDescription("")
+		assert.NoError(t, err)
+	})
+
+	t.Run("failure_文字列超過", func(t *testing.T) {
+		err := validateDescription(strings.Repeat("a", 101))
+		assert.Error(t, err)
+	})
+}
+
+func TestIntereractor_validatePlace(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		err := validatePlace("samplePlace")
+		assert.NoError(t, err)
+	})
+
+	t.Run("success_文字列制限ぴったり", func(t *testing.T) {
+		err := validatePlace(strings.Repeat("a", 200))
+		assert.NoError(t, err)
+	})
+
+	t.Run("failure_空値", func(t *testing.T) {
+		err := validatePlace("")
+		assert.Error(t, err)
+	})
+
+	t.Run("failure_文字列超過", func(t *testing.T) {
+		err := validatePlace(strings.Repeat("a", 201))
+		assert.Error(t, err)
+	})
+}
+
+func TestIntereractor_validateDate(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		future := time.Now().AddDate(1, 0, 0)
+		err := validateDate(&future)
+		assert.NoError(t, err)
+	})
+
+	t.Run("failure_空値", func(t *testing.T) {
+		err := validateDate(nil)
+		assert.Error(t, err)
+	})
+
+	t.Run("failure_過去の日付を指定", func(t *testing.T) {
+		past := time.Date(1990, 9, 1, 12, 0, 0, 0, time.Local)
+		err := validateDate(&past)
+		assert.Error(t, err)
+	})
+}
+
+func TestIntereractor_validateTags(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		tags := []string{"sample1", "sample2", "sample3"}
+		err := validateTags(tags)
+		assert.NoError(t, err)
+	})
+
+	t.Run("failure_エラー混じり", func(t *testing.T) {
+		tags := []string{"sample1", "sample2", strings.Repeat("a", 101)}
+		err := validateTags(tags)
+		assert.Error(t, err)
+	})
+}
+
+func TestIntereractor_validateTag(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		err := validateTag("sampleTag")
+		assert.NoError(t, err)
+	})
+
+	t.Run("success_文字列制限ぴったり", func(t *testing.T) {
+		err := validateTag(strings.Repeat("a", 100))
+		assert.NoError(t, err)
+	})
+
+	t.Run("failure_空値", func(t *testing.T) {
+		err := validateTag("")
+		assert.Error(t, err)
+	})
+
+	t.Run("failure_文字列超過", func(t *testing.T) {
+		err := validateTag(strings.Repeat("a", 101))
+		assert.Error(t, err)
 	})
 }
