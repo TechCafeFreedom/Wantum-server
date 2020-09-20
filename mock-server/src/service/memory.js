@@ -25,7 +25,6 @@ module.exports = class MemoryService {
   getUserMemories(call, callback) {
     // TODO: 数の調整ができるようにしたい
     var memories = [];
-    var memoryCount = new MemoryCountResourceBuilder();
     for(var i = 0; i < 10; i++) {
       memories.push(new MemoryResourceBuilder()
         .withMemoryId(i + 1)
@@ -35,13 +34,13 @@ module.exports = class MemoryService {
           .withUserName(call.request.user_name)
           .build())
         .build());
-      memoryCount
-        .incrementMemoriesCount(1)
-        .incrementPublishedCount(1);
     }
     callback(null, {
-      memory_count: memoryCount.build(),
-      memories: memories
+      memories: memories,
+      memory_count: new MemoryCountResourceBuilder()
+        .withMemoriesCount(memories.length)
+        .withPublichedCount(memories.length)
+        .build()
     });
   }
 
