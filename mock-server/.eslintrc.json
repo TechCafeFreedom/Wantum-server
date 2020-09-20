@@ -1,0 +1,30 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true
+        }
+    },
+    "rules": {
+        "indent": [
+            "error",
+            2,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "semi": "error",
+        "quotes": "error",
+        "prefer-destructuring": "warn",
+        "import/prefer-default-export": "off",
+        "implicit-arrow-linebreak": "error",
+        "function-paren-newline": "error",
+        "comma-dangle": "error",
+        "no-console": "warn",
+        "consistent-return": "error",
+        "no-unused-vars": "error"
+    },
+    "env": {
+        "browser": true
+    }
+}
