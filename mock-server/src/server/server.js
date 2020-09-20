@@ -1,6 +1,7 @@
 const grpc = require("grpc");
 const UserService = require("../service/user");
 const MemoryService = require("../service/memory");
+const AlbumService = require("../service/album");
 
 /**
  * get server instance
@@ -32,5 +33,13 @@ exports.getServer = function () {
     deleteMemoryTags: memoryService.deleteMemoryTags
   });
 
+  const albumService = new AlbumService();
+  server.addProtoService(albumService.albumProto.AlbumService.service, {
+    createAlbum: albumService.createAlbum,
+    getAlbum: albumService.getAlbum,
+    getMyAlbums: albumService.getMyAlbums,
+    changeAlbumTitle: albumService.changeAlbumTitle,
+    deleteAlbum: albumService.deleteAlbum
+  });
   return server;
 };
