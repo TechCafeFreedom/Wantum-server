@@ -28,8 +28,14 @@ var (
 	WishBoardNotFound = &WantumError{
 		GrpcErrorCode:  codes.NotFound,
 		ErrorCode:      http.StatusNotFound,
-		ErrorMessageJP: "リクエストされたやりたいことボードは既に削除された可能性があります",
+		ErrorMessageJP: "ボードは既に削除された可能性があります",
 		ErrorMessageEN: "requested wish_board is not found",
+	}
+	WishBoardPermissionDenied = &WantumError{
+		GrpcErrorCode:  codes.PermissionDenied,
+		ErrorCode:      http.StatusForbidden,
+		ErrorMessageJP: "ボードへのアクセスが許可されていません",
+		ErrorMessageEN: "you don't have access to wish_board",
 	}
 	BadRequest = &WantumError{
 		GrpcErrorCode:  codes.InvalidArgument,
