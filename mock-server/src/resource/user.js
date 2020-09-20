@@ -2,17 +2,17 @@
  * dummy builder for user
  * 最後にbuildするとそれっぽいレスポンスができます
  */
-class UserResourceBuilder {
+module.exports = class UserResourceBuilder {
   constructor() {
-    this.userId = 1
-    this.name = "hogehoge"
-    this.userName = "fugafuga"
-    this.thumbnail = "hogefuga.png"
-    this.bio = "hogefuga"
-    this.gender = "MAN"
-    this.place = "tsushima"
-    this.birth = 1600513200
-    this.phone = "01234567890"
+    this.userId = 1;
+    this.name = "hogehoge";
+    this.userName = "fugafuga";
+    this.thumbnail = "hogefuga.png";
+    this.bio = "hogefuga";
+    this.gender = "MAN";
+    this.place = "tsushima";
+    this.birth = 1600513200;
+    this.phone = "01234567890";
   }
 
   build() {
@@ -24,8 +24,8 @@ class UserResourceBuilder {
       bio: this.bio,
       gender: this.gender,
       place: this.place,
-      birth: this.birth,
-    }
+      birth: this.birth
+    };
   }
 
   withUserId(userId) {
@@ -82,12 +82,10 @@ class UserResourceBuilder {
     this.phone = phone;
     return this;
   }
-}
+};
 
 var GENDER = {
   MAN: "MAN",
   WOMAN: "WOMAN",
   UNKNOWN: "UNKNOWN"
 };
-
-module.exports = UserResourceBuilder;

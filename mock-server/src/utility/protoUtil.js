@@ -10,4 +10,4 @@ exports.getProtoDescriptor = function (protoFileName) {
     constants.PROTO_OPTION
   );
   return grpc.loadPackageDefinition(packageDefinition);
-}
+};

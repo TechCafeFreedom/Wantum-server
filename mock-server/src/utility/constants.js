@@ -6,5 +6,5 @@ exports.PROTO_OPTION = {
   longs: String,
   enums: String,
   defaults: true,
-  oneofs: true,
-}
+  oneofs: true
+};
