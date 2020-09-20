@@ -27,8 +27,6 @@ var (
 	dummyPlace = "samplePlace"
 )
 
-// TODO: それぞれの関数で使っているdummyDataの切り出し
-
 func TestMain(m *testing.M) {
 	before()
 	code := m.Run()
