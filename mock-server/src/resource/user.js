@@ -1,25 +1,93 @@
 /**
- * return dummy user
- * 
- * @param {Object} request 
- * @param {Number} request.user_id
- * @param {String} request.name
- * @param {String} request.user_name
- * @param {Object} request.thumbnail
- * @param {String} request.bio
- * @param {Enumerator} request.gender
- * @param {String} request.place
- * @param {Number} request.birth
+ * dummy builder for user
+ * 最後にbuildするとそれっぽいレスポンスができます
  */
-exports.getDummyUser = function(request) {
-  return {
-    user_id: request.user_id ? request.user_id : 1,
-    name: request.name ? request.name : "hogehoge",
-    user_name: request.user_name ? request.user_name : "fugafuga",
-    thumbnail: "hogehoge.png",
-    bio: request.bio ? request.bio : "hogefuga",
-    gender: request.gender ? request.gender : "MAN",
-    place: request.place ? request.place : "tushima",
-    birth: request.birth ? request.birth : 1600513200,
-  };
+class UserResourceBuilder {
+  constructor() {
+    this.userId = 1
+    this.name = "hogehoge"
+    this.userName = "fugafuga"
+    this.thumbnail = "hogefuga.png"
+    this.bio = "hogefuga"
+    this.gender = "MAN"
+    this.place = "tsushima"
+    this.birth = 1600513200
+    this.phone = "01234567890"
+  }
+
+  build() {
+    return {
+      user_id: this.userId,
+      name: this.name,
+      user_name: this.userName,
+      thumbnail: this.thumbnail,
+      bio: this.bio,
+      gender: this.gender,
+      place: this.place,
+      birth: this.birth,
+    }
+  }
+
+  withUserId(userId) {
+    this.userId = userId;
+    return this;
+  }
+
+  withName(name) {
+    this.name = name;
+    return this;
+  }
+
+  withUserName(userName) {
+    this.userName = userName;
+    return this;
+  }
+
+  withThumbnail(thumbnail) {
+    this.thumbnail = thumbnail;
+    return this;
+  }
+  
+  withBio(bio) {
+    this.bio = bio;
+    return this;
+  }
+  
+  withGender(gender) {
+    switch(gender) {
+      case GENDER.MAN:
+        this.gender = GENDER.MAN;
+        break;
+      case GENDER.WOMAN:
+        this.gender = GENDER.WOMAN;
+        break;
+      default:
+        this.gender = GENDER.UNKNOWN;
+    }
+
+    return this;
+  }
+  
+  withPlace(place) {
+    this.place = place;
+    return this;
+  }
+  
+  withBirth(birth) {
+    this.birth = birth;
+    return this;
+  }
+
+  withPhone(phone) {
+    this.phone = phone;
+    return this;
+  }
 }
+
+var GENDER = {
+  MAN: "MAN",
+  WOMAN: "WOMAN",
+  UNKNOWN: "UNKNOWN"
+};
+
+module.exports = UserResourceBuilder;

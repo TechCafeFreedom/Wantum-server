@@ -1,45 +1,62 @@
 const protoUtil = require("../utility/protoUtil");
-const userResource = require("../resource/user");
-
-const protoDescriptor = protoUtil.getProtoDescriptor("user.proto");
-exports.userProto = protoDescriptor.proto_user;
+const UserResourceBuilder = require("../resource/user");
 
 /**
- * mock service in userService
- * 
- * @param {*} call 
- * @param {*} callback 
+ * mock service for userService
  */
-exports.createUser = function (call, callback) {
-  callback(null, userResource.getDummyUser(call.request));
+class UserService {
+  constructor() {
+    const protoDescriptor = protoUtil.getProtoDescriptor("user.proto");
+    this.userProto = protoDescriptor.proto_user;
+  }
+
+  createUser(call, callback) {
+    callback(
+      null,
+      new UserResourceBuilder()
+        .withName(call.request.name)
+        .withUserName(call.request.user_name)
+        .withBio(call.request.bio)
+        .withGender(call.request.gender)
+        .withPhone(call.request.phone)
+        .withPlace(call.request.place)
+        .withBirth(call.request.birth)
+        .build()
+    );
+  }
+
+  getMyProfile(call, callback) {
+    callback(
+      null,
+      new UserResourceBuilder()
+        .build()
+    );
+  }
+
+  getUserProfile(call, callback) {
+    callback(
+      null,
+      new UserResourceBuilder()
+        .withUserName(call.request.user_name)
+        .build()
+    );
+  }
+
+  updateUserProfile(call, callback) {
+    callback(
+      null,
+      new UserResourceBuilder()
+        .withUserId(call.request.user_id)
+        .withName(call.request.name)
+        .withUserName(call.request.user_name)
+        .withBio(call.request.bio)
+        .withGender(call.request.gender)
+        .withPhone(call.request.phone)
+        .withPlace(call.request.place)
+        .withBirth(call.request.birth)
+        .build()
+    );
+  }
 }
 
-/**
- * mock service in userService
- * 
- * @param {*} call
- * @param {*} callback
- */
-exports.getMyProfile = function (call, callback) {
-  callback(null, userResource.getDummyUser(call.request));
-}
-
-/**
- * mock service in userService
- *
- * @param {*} call
- * @param {*} callback
- */
-exports.getUserProfile = function (call, callback) {
-  callback(null, userResource.getDummyUser(call.request));
-}
-
-/**
- * mock service in userService
- *
- * @param {*} call
- * @param {*} callback
- */
-exports.updateUserProfile = function (call, callback) {
-  callback(null, userResource.getDummyUser(call.request));
-}
+module.exports = UserService;
