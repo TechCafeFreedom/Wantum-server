@@ -152,19 +152,12 @@ func (repo *placeRepositoryImplement) SelectByID(ctx context.Context, masterTx r
 		FROM places
 		WHERE id=?
 	`, placeID)
-	var result placeEntity.Entity
-	err = row.Scan(
-		&result.ID,
-		&result.Name,
-		&result.CreatedAt,
-		&result.UpdatedAt,
-		&result.DeletedAt)
+	result, err := convertToPlaceEntity(row)
 	if err != nil {
-		// QUESTION: no rows無くて大丈夫？no rowsをエラーにするかしないか迷うのでどうしよう
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	return &result, nil
+	return result, nil
 }
 
 func (repo *placeRepositoryImplement) SelectAll(ctx context.Context, masterTx repository.MasterTx) (placeEntity.EntitySlice, error) {
@@ -184,20 +177,36 @@ func (repo *placeRepositoryImplement) SelectAll(ctx context.Context, masterTx re
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	var result placeEntity.EntitySlice
-	for rows.Next() {
-		var place placeEntity.Entity
-		err = rows.Scan(
-			&place.ID,
-			&place.Name,
-			&place.CreatedAt,
-			&place.UpdatedAt,
-			&place.DeletedAt)
-		if err != nil {
-			tlog.PrintErrorLogWithCtx(ctx, err)
-			return nil, werrors.FromConstant(err, werrors.ServerError)
-		}
-		result = append(result, &place)
+	result, err := convertToPlaceEntitySlice(rows)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 	return result, nil
+}
+
+func convertToPlaceEntity(row *sql.Row) (*placeEntity.Entity, error) {
+	var place placeEntity.Entity
+	if err := row.Scan(&place.ID, &place.Name, &place.CreatedAt, &place.UpdatedAt, &place.DeletedAt); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, werrors.FromConstant(err, werrors.ServerError)
+	}
+	return &place, nil
+}
+
+func convertToPlaceEntitySlice(rows *sql.Rows) (placeEntity.EntitySlice, error) {
+	var places placeEntity.EntitySlice
+	for rows.Next() {
+		var place placeEntity.Entity
+		if err := rows.Scan(&place.ID, &place.Name, &place.CreatedAt, &place.UpdatedAt, &place.DeletedAt); err != nil {
+			if err == sql.ErrNoRows {
+				return nil, nil
+			}
+			return nil, werrors.FromConstant(err, werrors.ServerError)
+		}
+		places = append(places, &place)
+	}
+	return places, nil
 }

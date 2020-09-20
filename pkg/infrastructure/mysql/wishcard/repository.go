@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"log"
 	"strings"
 	placeEntity "wantum/pkg/domain/entity/place"
 	userEntity "wantum/pkg/domain/entity/user"
@@ -206,31 +205,12 @@ func (repo *wishCardRepositoryImplement) SelectByID(ctx context.Context, masterT
 		FROM wish_cards
 		WHERE id=?
 	`, wishCardID)
-	var wishCard wishCardEntity.Entity
-	var place placeEntity.Entity
-	var user userEntity.Entity
-	err = row.Scan(
-		&wishCard.ID,
-		&user.ID,
-		&wishCard.Activity,
-		&wishCard.Description,
-		&wishCard.Date,
-		&wishCard.DoneAt,
-		&wishCard.CreatedAt,
-		&wishCard.UpdatedAt,
-		&wishCard.DeletedAt,
-		&place.ID)
+	wishCard, err := convertToWishCardEntity(row)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, nil
-		}
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	wishCard.Author = &user
-	wishCard.Place = &place
-	log.Println(wishCard.Place)
-	return &wishCard, nil
+	return wishCard, nil
 }
 
 // TODO: ここのwishcardIDsはintにしたいお気持ち
@@ -248,36 +228,16 @@ func (repo *wishCardRepositoryImplement) SelectByIDs(ctx context.Context, master
 		IN (` + strings.Join(wishCardIDs, ",") + `)
 	`)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	var wishCards wishCardEntity.EntitySlice
-	for rows.Next() {
-		var wishCard wishCardEntity.Entity
-		var place placeEntity.Entity
-		var user userEntity.Entity
-		err = rows.Scan(
-			&wishCard.ID,
-			&user.ID,
-			&wishCard.Activity,
-			&wishCard.Description,
-			&wishCard.Date,
-			&wishCard.DoneAt,
-			&wishCard.CreatedAt,
-			&wishCard.UpdatedAt,
-			&wishCard.DeletedAt,
-			&place.ID,
-		)
-		if err != nil {
-			if err != sql.ErrNoRows {
-				return nil, nil
-			}
-			tlog.PrintErrorLogWithCtx(ctx, err)
-			return nil, werrors.FromConstant(err, werrors.ServerError)
-		}
-		wishCard.Author = &user
-		wishCard.Place = &place
-		wishCards = append(wishCards, &wishCard)
+	wishCards, err := convertToWishCardEntitySlice(rows)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 	return wishCards, nil
 }
@@ -294,15 +254,53 @@ func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context,
 		WHERE category_id=?
 	`, categryID)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
+	wishCards, err := convertToWishCardEntitySlice(rows)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
+	}
+	return wishCards, nil
+}
+
+func convertToWishCardEntity(row *sql.Row) (*wishCardEntity.Entity, error) {
+	var wishCard wishCardEntity.Entity
+	var place placeEntity.Entity
+	var user userEntity.Entity
+	err := row.Scan(
+		&wishCard.ID,
+		&user.ID,
+		&wishCard.Activity,
+		&wishCard.Description,
+		&wishCard.Date,
+		&wishCard.DoneAt,
+		&wishCard.CreatedAt,
+		&wishCard.UpdatedAt,
+		&wishCard.DeletedAt,
+		&place.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, werrors.FromConstant(err, werrors.ServerError)
+	}
+	wishCard.Author = &user
+	wishCard.Place = &place
+	return &wishCard, nil
+}
+
+func convertToWishCardEntitySlice(rows *sql.Rows) (wishCardEntity.EntitySlice, error) {
 	var wishCards wishCardEntity.EntitySlice
 	for rows.Next() {
 		var wishCard wishCardEntity.Entity
 		var place placeEntity.Entity
 		var user userEntity.Entity
-		err = rows.Scan(
+		err := rows.Scan(
 			&wishCard.ID,
 			&user.ID,
 			&wishCard.Activity,
@@ -315,10 +313,9 @@ func (repo *wishCardRepositoryImplement) SelectByCategoryID(ctx context.Context,
 			&place.ID,
 		)
 		if err != nil {
-			if err != sql.ErrNoRows {
+			if err == sql.ErrNoRows {
 				return nil, nil
 			}
-			tlog.PrintErrorLogWithCtx(ctx, err)
 			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}
 		wishCard.Author = &user

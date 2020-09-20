@@ -201,7 +201,7 @@ func TestDelete(t *testing.T) {
 			}
 
 			result, err = repo.SelectByID(ctx, masterTx, place.ID)
-			if err == nil {
+			if result != nil {
 				return errors.New("削除されたデータが引っかかった")
 			}
 			return nil

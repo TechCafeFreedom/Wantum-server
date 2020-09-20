@@ -131,19 +131,12 @@ func (repo *tagRepositoryImplement) SelectByID(ctx context.Context, masterTx rep
 		FROM tags
 		WHERE id=?
 	`, tagID)
-	var result tagEntity.Entity
-	err = row.Scan(
-		&result.ID,
-		&result.Name,
-		&result.CreatedAt,
-		&result.UpdatedAt,
-		&result.DeletedAt,
-	)
+	result, err := convertToTagEntity(row)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	return &result, nil
+	return result, nil
 }
 
 func (repo *tagRepositoryImplement) SelectByIDs(ctx context.Context, masterTx repository.MasterTx, tagIDs []int) (tagEntity.EntitySlice, error) {
@@ -165,27 +158,16 @@ func (repo *tagRepositoryImplement) SelectByIDs(ctx context.Context, masterTx re
 		IN (` + strings.Join(tagIDsStr, ",") + `)
 	`)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	var result tagEntity.EntitySlice
-	for rows.Next() {
-		var record tagEntity.Entity
-		err = rows.Scan(
-			&record.ID,
-			&record.Name,
-			&record.CreatedAt,
-			&record.UpdatedAt,
-			&record.DeletedAt,
-		)
-		if err != nil {
-			if err != sql.ErrNoRows {
-				return nil, nil
-			}
-			tlog.PrintErrorLogWithCtx(ctx, err)
-			return nil, werrors.FromConstant(err, werrors.ServerError)
-		}
-		result = append(result, &record)
+	result, err := convertToTagEntitySlice(rows)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 	return result, nil
 }
@@ -201,19 +183,12 @@ func (repo *tagRepositoryImplement) SelectByName(ctx context.Context, masterTx r
 		FROM tags
 		WHERE name=?
 	`, name)
-	var result tagEntity.Entity
-	err = row.Scan(
-		&result.ID,
-		&result.Name,
-		&result.CreatedAt,
-		&result.UpdatedAt,
-		&result.DeletedAt,
-	)
+	result, err := convertToTagEntity(row)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	return &result, nil
+	return result, nil
 }
 
 func (repo *tagRepositoryImplement) SelectByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (tagEntity.EntitySlice, error) {
@@ -235,21 +210,10 @@ func (repo *tagRepositoryImplement) SelectByWishCardID(ctx context.Context, mast
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	var result tagEntity.EntitySlice
-	for rows.Next() {
-		var record tagEntity.Entity
-		err = rows.Scan(
-			&record.ID,
-			&record.Name,
-			&record.CreatedAt,
-			&record.UpdatedAt,
-			&record.DeletedAt,
-		)
-		if err != nil {
-			tlog.PrintErrorLogWithCtx(ctx, err)
-			return nil, werrors.FromConstant(err, werrors.ServerError)
-		}
-		result = append(result, &record)
+	result, err := convertToTagEntitySlice(rows)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 	return result, nil
 }
@@ -273,21 +237,36 @@ func (repo *tagRepositoryImplement) SelectByMemoryID(ctx context.Context, master
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	var result tagEntity.EntitySlice
-	for rows.Next() {
-		var record tagEntity.Entity
-		err = rows.Scan(
-			&record.ID,
-			&record.Name,
-			&record.CreatedAt,
-			&record.UpdatedAt,
-			&record.DeletedAt,
-		)
-		if err != nil {
-			tlog.PrintErrorLogWithCtx(ctx, err)
-			return nil, werrors.FromConstant(err, werrors.ServerError)
-		}
-		result = append(result, &record)
+	result, err := convertToTagEntitySlice(rows)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 	return result, nil
+}
+
+func convertToTagEntity(row *sql.Row) (*tagEntity.Entity, error) {
+	var tag tagEntity.Entity
+	if err := row.Scan(&tag.ID, &tag.Name, &tag.CreatedAt, &tag.UpdatedAt, &tag.DeletedAt); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, werrors.FromConstant(err, werrors.ServerError)
+	}
+	return &tag, nil
+}
+
+func convertToTagEntitySlice(rows *sql.Rows) (tagEntity.EntitySlice, error) {
+	var tags tagEntity.EntitySlice
+	for rows.Next() {
+		var tag tagEntity.Entity
+		if err := rows.Scan(&tag.ID, &tag.Name, &tag.CreatedAt, &tag.UpdatedAt, &tag.DeletedAt); err != nil {
+			if err == sql.ErrNoRows {
+				return nil, nil
+			}
+			return nil, werrors.FromConstant(err, werrors.ServerError)
+		}
+		tags = append(tags, &tag)
+	}
+	return tags, nil
 }
