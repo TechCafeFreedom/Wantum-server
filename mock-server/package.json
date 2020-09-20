@@ -1,0 +1,17 @@
+{
+  "name": "mock-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "grpc": "^1.24.3"
+  },
+  "dependencies": {
+    "@grpc/proto-loader": "^0.5.5"
+  }
+}
