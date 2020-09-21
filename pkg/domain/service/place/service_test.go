@@ -67,7 +67,7 @@ func TestService_Update(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestService_UpDeleteFlag(t *testing.T) {
+func TestService_Delete(t *testing.T) {
 	ctx := context.Background()
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -84,81 +84,11 @@ func TestService_UpDeleteFlag(t *testing.T) {
 	repo.EXPECT().SelectByID(ctx, masterTx, dummyData.ID).Return(dummyData, nil)
 
 	service := New(repo)
-	result, err := service.UpDeleteFlag(ctx, masterTx, dummyData.ID)
+	result, err := service.Delete(ctx, masterTx, dummyData.ID)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.NotNil(t, result.DeletedAt)
-}
-
-func TestService_DownDeleteFlag(t *testing.T) {
-	ctx := context.Background()
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	dummyData := &placeEntity.Entity{
-		ID:        1,
-		Name:      "tokyo",
-		CreatedAt: &dummyDate,
-		UpdatedAt: &dummyDate,
-		DeletedAt: &dummyDate,
-	}
-
-	repo := mock_place.NewMockRepository(ctrl)
-	repo.EXPECT().DownDeleteFlag(ctx, masterTx, gomock.Any()).Return(nil)
-	repo.EXPECT().SelectByID(ctx, masterTx, dummyData.ID).Return(dummyData, nil)
-
-	service := New(repo)
-	result, err := service.DownDeleteFlag(ctx, masterTx, dummyData.ID)
-
-	assert.NoError(t, err)
-	assert.NotNil(t, result)
-	assert.Nil(t, result.DeletedAt)
-}
-
-func TestService_Delete(t *testing.T) {
-	t.Run("success", func(t *testing.T) {
-		ctx := context.Background()
-		ctrl := gomock.NewController(t)
-		defer ctrl.Finish()
-		dummyData := &placeEntity.Entity{
-			ID:        1,
-			Name:      "tokyo",
-			CreatedAt: &dummyDate,
-			UpdatedAt: &dummyDate,
-			DeletedAt: &dummyDate,
-		}
-
-		repo := mock_place.NewMockRepository(ctrl)
-		repo.EXPECT().Delete(ctx, masterTx, 1).Return(nil)
-		repo.EXPECT().SelectByID(ctx, masterTx, 1).Return(dummyData, nil)
-
-		service := New(repo)
-		err := service.Delete(ctx, masterTx, 1)
-
-		assert.NoError(t, err)
-	})
-
-	t.Run("failure_deleteフラグが上がってない", func(t *testing.T) {
-		ctx := context.Background()
-		ctrl := gomock.NewController(t)
-		defer ctrl.Finish()
-		dummyData := &placeEntity.Entity{
-			ID:        1,
-			Name:      "tokyo",
-			CreatedAt: &dummyDate,
-			UpdatedAt: &dummyDate,
-		}
-
-		repo := mock_place.NewMockRepository(ctrl)
-		repo.EXPECT().SelectByID(ctx, masterTx, 1).Return(dummyData, nil)
-
-		service := New(repo)
-		err := service.Delete(ctx, masterTx, 1)
-
-		assert.Error(t, err)
-	})
-
 }
 
 func TestService_GetByID(t *testing.T) {

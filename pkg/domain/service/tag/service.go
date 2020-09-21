@@ -2,22 +2,16 @@ package tag
 
 import (
 	"context"
-	"fmt"
-	"net/http"
 	"time"
 	tagEntity "wantum/pkg/domain/entity/tag"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/tag"
 	"wantum/pkg/werrors"
-
-	"google.golang.org/grpc/codes"
 )
 
 type Service interface {
 	Create(ctx context.Context, masterTx repository.MasterTx, name string) (*tagEntity.Entity, error)
-	UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error)
-	DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error)
-	Delete(ctx context.Context, masterTx repository.MasterTx, tagID int) error
+	Delete(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error)
 	GetByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error)
 	GetByName(ctx context.Context, masterTx repository.MasterTx, name string) (*tagEntity.Entity, error)
 	GetByWishCardID(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (tagEntity.EntitySlice, error)
@@ -49,7 +43,7 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, name
 	return tag, nil
 }
 
-func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error) {
+func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error) {
 	tag, err := s.tagRepository.SelectByID(ctx, masterTx, tagID)
 	if err != nil {
 		return nil, werrors.Stack(err)
@@ -61,40 +55,6 @@ func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx
 		return nil, werrors.Stack(err)
 	}
 	return tag, nil
-}
-
-func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error) {
-	tag, err := s.tagRepository.SelectByID(ctx, masterTx, tagID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	now := time.Now()
-	tag.UpdatedAt = &now
-	tag.DeletedAt = nil
-	if err = s.tagRepository.DownDeleteFlag(ctx, masterTx, tag); err != nil {
-		return nil, werrors.Stack(err)
-	}
-	return tag, nil
-}
-
-func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, tagID int) error {
-	tag, err := s.tagRepository.SelectByID(ctx, masterTx, tagID)
-	if err != nil {
-		return werrors.Stack(err)
-	}
-	if tag.DeletedAt == nil {
-		return werrors.Newf(
-			fmt.Errorf("can't delete this data. this data did not up a delete flag. tagID=%v", tagID),
-			codes.FailedPrecondition,
-			http.StatusBadRequest,
-			"このデータは削除できません",
-			"could not delete this place",
-		)
-	}
-	if err = s.tagRepository.Delete(ctx, masterTx, tagID); err != nil {
-		return werrors.Stack(err)
-	}
-	return nil
 }
 
 func (s *service) GetByID(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tagEntity.Entity, error) {

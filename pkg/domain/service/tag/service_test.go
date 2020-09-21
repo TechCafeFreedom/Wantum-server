@@ -66,7 +66,7 @@ func TestService_Create(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestService_UpDeleteFlag(t *testing.T) {
+func TestService_Delete(t *testing.T) {
 	ctx := context.Background()
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -76,67 +76,11 @@ func TestService_UpDeleteFlag(t *testing.T) {
 	repo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyTag, nil)
 
 	service := New(repo)
-	result, err := service.UpDeleteFlag(ctx, masterTx, dummyTag.ID)
+	result, err := service.Delete(ctx, masterTx, dummyTag.ID)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.NotNil(t, result.DeletedAt)
-}
-
-func TestService_DownDeleteFlag(t *testing.T) {
-	ctx := context.Background()
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	repo := mock_tag.NewMockRepository(ctrl)
-	repo.EXPECT().DownDeleteFlag(ctx, masterTx, gomock.Any()).Return(nil)
-	repo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyTag, nil)
-
-	service := New(repo)
-	result, err := service.DownDeleteFlag(ctx, masterTx, dummyTag.ID)
-
-	assert.NoError(t, err)
-	assert.NotNil(t, result)
-	assert.Nil(t, result.DeletedAt)
-}
-
-func TestService_Delete(t *testing.T) {
-	t.Run("success", func(t *testing.T) {
-		ctx := context.Background()
-		ctrl := gomock.NewController(t)
-		defer ctrl.Finish()
-
-		dummy := &tagEntity.Entity{
-			ID:        1,
-			Name:      "sampleTag",
-			CreatedAt: &dummyDate,
-			UpdatedAt: &dummyDate,
-			DeletedAt: &dummyDate,
-		}
-
-		repo := mock_tag.NewMockRepository(ctrl)
-		repo.EXPECT().Delete(ctx, masterTx, gomock.Any()).Return(nil)
-		repo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummy, nil)
-
-		service := New(repo)
-		err := service.Delete(ctx, masterTx, 1)
-
-		assert.NoError(t, err)
-	})
-
-	t.Run("failure_deleteフラグがたってない", func(t *testing.T) {
-		ctx := context.Background()
-		ctrl := gomock.NewController(t)
-		defer ctrl.Finish()
-
-		repo := mock_tag.NewMockRepository(ctrl)
-		repo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyTag, nil)
-
-		service := New(repo)
-		err := service.Delete(ctx, masterTx, 1)
-
-		assert.Error(t, err)
-	})
 }
 
 func TestService_GetByID(t *testing.T) {
