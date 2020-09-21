@@ -40,11 +40,11 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, name
 		CreatedAt: &now,
 		UpdatedAt: &now,
 	}
-	result, err := s.placeRepository.Insert(ctx, masterTx, place)
+	newID, err := s.placeRepository.Insert(ctx, masterTx, place)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	place.ID = result
+	place.ID = newID
 	return place, nil
 }
 

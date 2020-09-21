@@ -41,11 +41,11 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, name
 		CreatedAt: &now,
 		UpdatedAt: &now,
 	}
-	result, err := s.tagRepository.Insert(ctx, masterTx, tag)
+	newID, err := s.tagRepository.Insert(ctx, masterTx, tag)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	tag.ID = result
+	tag.ID = newID
 	return tag, nil
 }
 
