@@ -66,47 +66,18 @@ func (mr *MockServiceMockRecorder) Update(ctx, masterTx, placeID, name interface
 }
 
 // Delete mocks base method
-func (m *MockService) Delete(ctx context.Context, masterTx repository.MasterTx, placeID int) error {
+func (m *MockService) Delete(ctx context.Context, masterTx repository.MasterTx, placeID int) (*place.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", ctx, masterTx, placeID)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*place.Entity)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Delete indicates an expected call of Delete
 func (mr *MockServiceMockRecorder) Delete(ctx, masterTx, placeID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockService)(nil).Delete), ctx, masterTx, placeID)
-}
-
-// UpDeleteFlag mocks base method
-func (m *MockService) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*place.Entity, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpDeleteFlag", ctx, masterTx, placeID)
-	ret0, _ := ret[0].(*place.Entity)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpDeleteFlag indicates an expected call of UpDeleteFlag
-func (mr *MockServiceMockRecorder) UpDeleteFlag(ctx, masterTx, placeID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpDeleteFlag", reflect.TypeOf((*MockService)(nil).UpDeleteFlag), ctx, masterTx, placeID)
-}
-
-// DownDeleteFlag mocks base method
-func (m *MockService) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int) (*place.Entity, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DownDeleteFlag", ctx, masterTx, placeID)
-	ret0, _ := ret[0].(*place.Entity)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DownDeleteFlag indicates an expected call of DownDeleteFlag
-func (mr *MockServiceMockRecorder) DownDeleteFlag(ctx, masterTx, placeID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DownDeleteFlag", reflect.TypeOf((*MockService)(nil).DownDeleteFlag), ctx, masterTx, placeID)
 }
 
 // GetByID mocks base method

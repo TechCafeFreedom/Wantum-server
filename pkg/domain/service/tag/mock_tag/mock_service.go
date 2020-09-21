@@ -50,42 +50,13 @@ func (mr *MockServiceMockRecorder) Create(ctx, masterTx, name interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockService)(nil).Create), ctx, masterTx, name)
 }
 
-// UpDeleteFlag mocks base method
-func (m *MockService) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tag.Entity, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpDeleteFlag", ctx, masterTx, tagID)
-	ret0, _ := ret[0].(*tag.Entity)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpDeleteFlag indicates an expected call of UpDeleteFlag
-func (mr *MockServiceMockRecorder) UpDeleteFlag(ctx, masterTx, tagID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpDeleteFlag", reflect.TypeOf((*MockService)(nil).UpDeleteFlag), ctx, masterTx, tagID)
-}
-
-// DownDeleteFlag mocks base method
-func (m *MockService) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tag.Entity, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DownDeleteFlag", ctx, masterTx, tagID)
-	ret0, _ := ret[0].(*tag.Entity)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DownDeleteFlag indicates an expected call of DownDeleteFlag
-func (mr *MockServiceMockRecorder) DownDeleteFlag(ctx, masterTx, tagID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DownDeleteFlag", reflect.TypeOf((*MockService)(nil).DownDeleteFlag), ctx, masterTx, tagID)
-}
-
 // Delete mocks base method
-func (m *MockService) Delete(ctx context.Context, masterTx repository.MasterTx, tagID int) error {
+func (m *MockService) Delete(ctx context.Context, masterTx repository.MasterTx, tagID int) (*tag.Entity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", ctx, masterTx, tagID)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*tag.Entity)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Delete indicates an expected call of Delete
