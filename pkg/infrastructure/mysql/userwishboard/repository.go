@@ -28,7 +28,7 @@ func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.Ma
 	}
 
 	_, err = tx.Exec(`
-		INSERT INTO users_wish_boards(user_id, wish_board_id) VALUES (?, ?);
+		INSERT INTO users_wish_boards(user_id, wish_board_id) VALUES (?, ?)
 	`, userID, wishBoardID)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -46,7 +46,7 @@ func (r *repositoryImpliment) Select(ctx context.Context, masterTx repository.Ma
 	}
 
 	row := tx.QueryRow(`
-		SELECT id FROM users_wish_boards WHERE user_id = ? AND wish_board_id = ?;
+		SELECT id FROM users_wish_boards WHERE user_id = ? AND wish_board_id = ?
 	`, userID, wishBoardID)
 
 	var i int
@@ -69,7 +69,7 @@ func (r *repositoryImpliment) Delete(ctx context.Context, masterTx repository.Ma
 	}
 
 	_, err = tx.Exec(`
-		DELETE FROM users_wish_boards WHERE user_id = ? AND wish_board_id = ?;
+		DELETE FROM users_wish_boards WHERE user_id = ? AND wish_board_id = ?
 	`, userID, wishBoardID)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
