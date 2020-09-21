@@ -21,7 +21,7 @@ func New(masterTxManager repository.MasterTxManager) wishboardrepository.Reposit
 	}
 }
 
-func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.MasterTx, b *wishboard.Entity) (*wishboard.Entity, error) {
+func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.MasterTx, title, backgroundImageUrl, inviteUrl string, userID int) (*wishboard.Entity, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)

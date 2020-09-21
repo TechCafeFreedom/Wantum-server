@@ -29,24 +29,17 @@ func New(wishBoardRepository wishboardrepository.Repository, userWishBoardReposi
 }
 
 func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, title, backgroundImageUrl, inviteUrl string, userID int) (*wishboard.Entity, error) {
-	newWishBoard := wishboard.Entity{
-		Title:              title,
-		BackgroundImageUrl: backgroundImageUrl,
-		InviteUrl:          inviteUrl,
-		UserID:             userID,
-	}
-
-	created, err := s.wishBoardRepository.Insert(ctx, masterTx, &newWishBoard)
+	b, err := s.wishBoardRepository.Insert(ctx, masterTx, title, backgroundImageUrl, inviteUrl, userID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
 
-	err = s.userWishBoardRepository.Insert(ctx, masterTx, userID, created.ID)
+	err = s.userWishBoardRepository.Insert(ctx, masterTx, userID, b.ID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
 
-	return created, nil
+	return b, nil
 }
 
 func (s *service) GetByPK(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) (*wishboard.Entity, error) {
