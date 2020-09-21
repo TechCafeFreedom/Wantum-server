@@ -187,20 +187,20 @@ func (x *GetMyAlbumsRequest) GetLimit() int64 {
 	return 0
 }
 
-// アルバム名変更用リクエスト
-type ChangeAlbumTitleRequest struct {
+// アルバムタイトル変更用リクエスト
+type UpdateAlbumTitleRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	// 変更したいアルバムのID
 	AlbumId int64 `protobuf:"varint,1,opt,name=album_id,json=albumId,proto3" json:"album_id,omitempty"`
-	// 変更したいアルバム名
+	// 変更したいアルバムタイトル
 	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 }
 
-func (x *ChangeAlbumTitleRequest) Reset() {
-	*x = ChangeAlbumTitleRequest{}
+func (x *UpdateAlbumTitleRequest) Reset() {
+	*x = UpdateAlbumTitleRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_album_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -208,13 +208,13 @@ func (x *ChangeAlbumTitleRequest) Reset() {
 	}
 }
 
-func (x *ChangeAlbumTitleRequest) String() string {
+func (x *UpdateAlbumTitleRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ChangeAlbumTitleRequest) ProtoMessage() {}
+func (*UpdateAlbumTitleRequest) ProtoMessage() {}
 
-func (x *ChangeAlbumTitleRequest) ProtoReflect() protoreflect.Message {
+func (x *UpdateAlbumTitleRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_album_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -226,19 +226,19 @@ func (x *ChangeAlbumTitleRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ChangeAlbumTitleRequest.ProtoReflect.Descriptor instead.
-func (*ChangeAlbumTitleRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdateAlbumTitleRequest.ProtoReflect.Descriptor instead.
+func (*UpdateAlbumTitleRequest) Descriptor() ([]byte, []int) {
 	return file_album_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ChangeAlbumTitleRequest) GetAlbumId() int64 {
+func (x *UpdateAlbumTitleRequest) GetAlbumId() int64 {
 	if x != nil {
 		return x.AlbumId
 	}
 	return 0
 }
 
-func (x *ChangeAlbumTitleRequest) GetTitle() string {
+func (x *UpdateAlbumTitleRequest) GetTitle() string {
 	if x != nil {
 		return x.Title
 	}
@@ -427,7 +427,7 @@ var file_album_proto_rawDesc = []byte{
 	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x19, 0x0a, 0x08, 0x61, 0x6c, 0x62, 0x75, 0x6d, 0x5f, 0x69,
 	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x07, 0x61, 0x6c, 0x62, 0x75, 0x6d, 0x49, 0x64,
 	0x12, 0x14, 0x0a, 0x05, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52,
-	0x05, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x22, 0x4a, 0x0a, 0x17, 0x43, 0x68, 0x61, 0x6e, 0x67, 0x65,
+	0x05, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x22, 0x4a, 0x0a, 0x17, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
 	0x41, 0x6c, 0x62, 0x75, 0x6d, 0x54, 0x69, 0x74, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
 	0x74, 0x12, 0x19, 0x0a, 0x08, 0x61, 0x6c, 0x62, 0x75, 0x6d, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
 	0x01, 0x28, 0x03, 0x52, 0x07, 0x61, 0x6c, 0x62, 0x75, 0x6d, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05,
@@ -459,9 +459,9 @@ var file_album_proto_rawDesc = []byte{
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x61, 0x6c, 0x62, 0x75, 0x6d, 0x2e, 0x47, 0x65, 0x74, 0x4d,
 	0x79, 0x41, 0x6c, 0x62, 0x75, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x13,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x61, 0x6c, 0x62, 0x75, 0x6d, 0x2e, 0x41, 0x6c, 0x62,
-	0x75, 0x6d, 0x73, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x10, 0x43, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x41,
+	0x75, 0x6d, 0x73, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x10, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x41,
 	0x6c, 0x62, 0x75, 0x6d, 0x54, 0x69, 0x74, 0x6c, 0x65, 0x12, 0x24, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x5f, 0x61, 0x6c, 0x62, 0x75, 0x6d, 0x2e, 0x43, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x41, 0x6c,
+	0x6f, 0x5f, 0x61, 0x6c, 0x62, 0x75, 0x6d, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x41, 0x6c,
 	0x62, 0x75, 0x6d, 0x54, 0x69, 0x74, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
 	0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x5f, 0x61, 0x6c, 0x62, 0x75, 0x6d, 0x2e, 0x41, 0x6c,
 	0x62, 0x75, 0x6d, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x0b, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x41,
@@ -489,7 +489,7 @@ var file_album_proto_goTypes = []interface{}{
 	(*CreateAlbumRequest)(nil),      // 0: proto_album.CreateAlbumRequest
 	(*GetAlbumRequest)(nil),         // 1: proto_album.GetAlbumRequest
 	(*GetMyAlbumsRequest)(nil),      // 2: proto_album.GetMyAlbumsRequest
-	(*ChangeAlbumTitleRequest)(nil), // 3: proto_album.ChangeAlbumTitleRequest
+	(*UpdateAlbumTitleRequest)(nil), // 3: proto_album.UpdateAlbumTitleRequest
 	(*DeleteAlbumRequest)(nil),      // 4: proto_album.DeleteAlbumRequest
 	(*Albums)(nil),                  // 5: proto_album.Albums
 	(*Album)(nil),                   // 6: proto_album.Album
@@ -502,12 +502,12 @@ var file_album_proto_depIdxs = []int32{
 	0, // 2: proto_album.AlbumService.CreateAlbum:input_type -> proto_album.CreateAlbumRequest
 	1, // 3: proto_album.AlbumService.GetAlbum:input_type -> proto_album.GetAlbumRequest
 	2, // 4: proto_album.AlbumService.GetMyAlbums:input_type -> proto_album.GetMyAlbumsRequest
-	3, // 5: proto_album.AlbumService.ChangeAlbumTitle:input_type -> proto_album.ChangeAlbumTitleRequest
+	3, // 5: proto_album.AlbumService.UpdateAlbumTitle:input_type -> proto_album.UpdateAlbumTitleRequest
 	4, // 6: proto_album.AlbumService.DeleteAlbum:input_type -> proto_album.DeleteAlbumRequest
 	6, // 7: proto_album.AlbumService.CreateAlbum:output_type -> proto_album.Album
 	6, // 8: proto_album.AlbumService.GetAlbum:output_type -> proto_album.Album
 	5, // 9: proto_album.AlbumService.GetMyAlbums:output_type -> proto_album.Albums
-	6, // 10: proto_album.AlbumService.ChangeAlbumTitle:output_type -> proto_album.Album
+	6, // 10: proto_album.AlbumService.UpdateAlbumTitle:output_type -> proto_album.Album
 	8, // 11: proto_album.AlbumService.DeleteAlbum:output_type -> google.protobuf.Empty
 	7, // [7:12] is the sub-list for method output_type
 	2, // [2:7] is the sub-list for method input_type
@@ -560,7 +560,7 @@ func file_album_proto_init() {
 			}
 		}
 		file_album_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ChangeAlbumTitleRequest); i {
+			switch v := v.(*UpdateAlbumTitleRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -646,8 +646,8 @@ type AlbumServiceClient interface {
 	GetAlbum(ctx context.Context, in *GetAlbumRequest, opts ...grpc.CallOption) (*Album, error)
 	// アルバム一覧情報の取得
 	GetMyAlbums(ctx context.Context, in *GetMyAlbumsRequest, opts ...grpc.CallOption) (*Albums, error)
-	// アルバム名の変更
-	ChangeAlbumTitle(ctx context.Context, in *ChangeAlbumTitleRequest, opts ...grpc.CallOption) (*Album, error)
+	// アルバムタイトルの変更
+	UpdateAlbumTitle(ctx context.Context, in *UpdateAlbumTitleRequest, opts ...grpc.CallOption) (*Album, error)
 	// アルバムの削除
 	DeleteAlbum(ctx context.Context, in *DeleteAlbumRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 }
@@ -687,9 +687,9 @@ func (c *albumServiceClient) GetMyAlbums(ctx context.Context, in *GetMyAlbumsReq
 	return out, nil
 }
 
-func (c *albumServiceClient) ChangeAlbumTitle(ctx context.Context, in *ChangeAlbumTitleRequest, opts ...grpc.CallOption) (*Album, error) {
+func (c *albumServiceClient) UpdateAlbumTitle(ctx context.Context, in *UpdateAlbumTitleRequest, opts ...grpc.CallOption) (*Album, error) {
 	out := new(Album)
-	err := c.cc.Invoke(ctx, "/proto_album.AlbumService/ChangeAlbumTitle", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto_album.AlbumService/UpdateAlbumTitle", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -713,8 +713,8 @@ type AlbumServiceServer interface {
 	GetAlbum(context.Context, *GetAlbumRequest) (*Album, error)
 	// アルバム一覧情報の取得
 	GetMyAlbums(context.Context, *GetMyAlbumsRequest) (*Albums, error)
-	// アルバム名の変更
-	ChangeAlbumTitle(context.Context, *ChangeAlbumTitleRequest) (*Album, error)
+	// アルバムタイトルの変更
+	UpdateAlbumTitle(context.Context, *UpdateAlbumTitleRequest) (*Album, error)
 	// アルバムの削除
 	DeleteAlbum(context.Context, *DeleteAlbumRequest) (*empty.Empty, error)
 }
@@ -732,8 +732,8 @@ func (*UnimplementedAlbumServiceServer) GetAlbum(context.Context, *GetAlbumReque
 func (*UnimplementedAlbumServiceServer) GetMyAlbums(context.Context, *GetMyAlbumsRequest) (*Albums, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMyAlbums not implemented")
 }
-func (*UnimplementedAlbumServiceServer) ChangeAlbumTitle(context.Context, *ChangeAlbumTitleRequest) (*Album, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ChangeAlbumTitle not implemented")
+func (*UnimplementedAlbumServiceServer) UpdateAlbumTitle(context.Context, *UpdateAlbumTitleRequest) (*Album, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateAlbumTitle not implemented")
 }
 func (*UnimplementedAlbumServiceServer) DeleteAlbum(context.Context, *DeleteAlbumRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteAlbum not implemented")
@@ -797,20 +797,20 @@ func _AlbumService_GetMyAlbums_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AlbumService_ChangeAlbumTitle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ChangeAlbumTitleRequest)
+func _AlbumService_UpdateAlbumTitle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAlbumTitleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AlbumServiceServer).ChangeAlbumTitle(ctx, in)
+		return srv.(AlbumServiceServer).UpdateAlbumTitle(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto_album.AlbumService/ChangeAlbumTitle",
+		FullMethod: "/proto_album.AlbumService/UpdateAlbumTitle",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AlbumServiceServer).ChangeAlbumTitle(ctx, req.(*ChangeAlbumTitleRequest))
+		return srv.(AlbumServiceServer).UpdateAlbumTitle(ctx, req.(*UpdateAlbumTitleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -850,8 +850,8 @@ var _AlbumService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _AlbumService_GetMyAlbums_Handler,
 		},
 		{
-			MethodName: "ChangeAlbumTitle",
-			Handler:    _AlbumService_ChangeAlbumTitle_Handler,
+			MethodName: "UpdateAlbumTitle",
+			Handler:    _AlbumService_UpdateAlbumTitle_Handler,
 		},
 		{
 			MethodName: "DeleteAlbum",
