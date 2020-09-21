@@ -100,7 +100,7 @@ dev-stop: ## 全コンテナを止める
 	docker-compose stop
 
 dev-down: ## 全コンテナを停止し、かつイメージを削除
-	docker-compose down --rmi local
+	docker-compose down --rmi local --volumes
 
 dev-api-watch: ## apiのログを監視
 	docker-compose logs -f api
