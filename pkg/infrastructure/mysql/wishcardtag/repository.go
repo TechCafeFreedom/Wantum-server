@@ -47,18 +47,17 @@ func (repo *wishCardTagRepositoryImplement) BulkInsert(ctx context.Context, mast
 		return werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	// TODO: うまいやりかたとは？
-	query := "INSERT INTO wish_cards_tags(wish_card_id, tag_id) VALUES "
-	values := make([]interface{}, 0, len(tagIDs))
-	for _, tagID := range tagIDs {
-		query = query + "(?, ?),"
-		values = append(values, wishCardID, tagID)
-	}
-	query = strings.TrimSuffix(query, ",")
-
-	if _, err = tx.Exec(query, values...); err != nil {
+	stmt, err := tx.Prepare("INSERT INTO wish_cards_tags(wish_card_id, tag_id) VALUES (?, ?)")
+	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	for _, tagID := range tagIDs {
+		_, err = stmt.Exec(wishCardID, tagID)
+		if err != nil {
+			tlog.PrintErrorLogWithCtx(ctx, err)
+			return werrors.FromConstant(err, werrors.ServerError)
+		}
 	}
 	return nil
 }
