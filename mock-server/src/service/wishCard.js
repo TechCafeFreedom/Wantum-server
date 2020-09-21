@@ -9,7 +9,6 @@ module.exports = class WishCardService {
   }
 
   createWishCardInfo(call, callback) {
-    // TODO: なんかreturnがemptyらしいよ
     callback(
       null,
       new WishCardResourceBuilder()

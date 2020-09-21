@@ -7,7 +7,7 @@ module.exports = class TimelineService {
     this.timelineProto = protoDescriptor.proto_timeline;
   }
 
-  getTimeLine(call, callback) {
+  getTimeline(call, callback) {
     var memories = [];
     // TODO: 固定値...
     for (var i = 0; i < 10; i++) {

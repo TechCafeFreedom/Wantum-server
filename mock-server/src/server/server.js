@@ -81,7 +81,7 @@ exports.getServer = function () {
   // timeline service
   const timelineService = new TimelineService();
   server.addProtoService(timelineService.timelineProto.TimeLineService.service, {
-    getTimeLine: timelineService.getTimeLine
+    getTimeLine: timelineService.getTimeline
   });
 
   return server;
