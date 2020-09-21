@@ -83,7 +83,10 @@ func (i *interactor) CreateNewWishCard(ctx context.Context, userID, categoryID i
 		tagIDs := make([]int, 0, len(tags))
 		for _, tagName := range tags {
 			var tag *tagEntity.Entity
-			tag, _ = i.tagService.GetByName(ctx, masterTx, tagName)
+			tag, err = i.tagService.GetByName(ctx, masterTx, tagName)
+			if err != nil {
+				return werrors.Stack(err)
+			}
 			if tag == nil {
 				tag, err = i.tagService.Create(ctx, masterTx, tagName)
 				if err != nil {
@@ -139,7 +142,10 @@ func (i *interactor) UpdateWishCardWithCategoryID(ctx context.Context, wishCardI
 		tagIDs := make([]int, 0, len(tags))
 		for _, tagName := range tags {
 			var tag *tagEntity.Entity
-			tag, _ = i.tagService.GetByName(ctx, masterTx, tagName)
+			tag, err = i.tagService.GetByName(ctx, masterTx, tagName)
+			if err != nil {
+				return werrors.Stack(err)
+			}
 			if tag == nil {
 				tag, err = i.tagService.Create(ctx, masterTx, tagName)
 				if err != nil {
@@ -321,7 +327,10 @@ func (i *interactor) AddTags(ctx context.Context, userID, wishCardID int, tags [
 		tagIDs := make([]int, 0, len(tags))
 		for _, tagName := range tags {
 			var tag *tagEntity.Entity
-			tag, _ = i.tagService.GetByName(ctx, masterTx, tagName)
+			tag, err = i.tagService.GetByName(ctx, masterTx, tagName)
+			if err != nil {
+				return werrors.Stack(err)
+			}
 			if tag == nil {
 				tag, err = i.tagService.Create(ctx, masterTx, tagName)
 				if err != nil {
