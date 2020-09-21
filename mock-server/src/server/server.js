@@ -2,6 +2,10 @@ const grpc = require("grpc");
 const UserService = require("../service/user");
 const MemoryService = require("../service/memory");
 const AlbumService = require("../service/album");
+const WishCardService = require("../service/wishCard");
+const WishCategoryService = require("../service/wishCategory");
+const WishBoardService = require("../service/wishBoard");
+const TimelineService = require("../service/timeline");
 
 /**
  * get server instance
@@ -33,6 +37,7 @@ exports.getServer = function () {
     deleteMemoryTags: memoryService.deleteMemoryTags
   });
 
+  // album service
   const albumService = new AlbumService();
   server.addProtoService(albumService.albumProto.AlbumService.service, {
     createAlbum: albumService.createAlbum,
@@ -41,5 +46,43 @@ exports.getServer = function () {
     changeAlbumTitle: albumService.changeAlbumTitle,
     deleteAlbum: albumService.deleteAlbum
   });
+
+  // wish card service
+  const wishCardService = new WishCardService();
+  server.addProtoService(wishCardService.wishCardProto.WishCardService.service, {
+    createWishCardInfo: wishCardService.createWishCardInfo,
+    updateWishCardActivity: wishCardService.updateWishCardActivity,
+    updateWishCardDescription: wishCardService.updateWishCardDescription,
+    updateWishCardDate: wishCardService.updateWishCardDate,
+    updateWishCardPlace: wishCardService.updateWishCardPlace,
+    addWishCardTags: wishCardService.addWishCardTags,
+    deleteWishCardTags: wishCardService.deleteWishCardTags
+  });
+
+  // wish category service
+  const wishCategoryService = new WishCategoryService();
+  server.addProtoService(wishCategoryService.wishCategoryProto.WishCategoryService.service, {
+    createWishCategory: wishCategoryService.createWishCategory,
+    updateWishCategoryName: wishCategoryService.updateWishCategoryName
+  });
+
+  // wish board service
+  const wishBoardService = new WishBoardService();
+  server.addProtoService(wishBoardService.wishBoardProto.WishBoardService.service, {
+    createWishBoard: wishBoardService.createWishBoard,
+    getWishBoardList: wishBoardService.getWishBoardList,
+    getWishBoard: wishBoardService.getWishBoard,
+    updateWishBoardName: wishBoardService.updateWishBoardName,
+    updateWishBoardBackGroundImage: wishBoardService.updateWishBoardBackgroundImage,
+    updateWishCategoryPriority: wishBoardService.updateWishCategoryPriority,
+    deleteWishBoard: wishBoardService.deleteWishBoard
+  });
+
+  // timeline service
+  const timelineService = new TimelineService();
+  server.addProtoService(timelineService.timelineProto.TimeLineService.service, {
+    getTimeLine: timelineService.getTimeLine
+  });
+
   return server;
 };
