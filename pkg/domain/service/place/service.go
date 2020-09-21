@@ -49,7 +49,6 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, name
 }
 
 // WARNING: 空値があった時、元データが消滅する。
-// QUESTION: リクエストは、全フィールド埋める or 差分だけ
 func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) (*placeEntity.Entity, error) {
 	place, err := s.placeRepository.SelectByID(ctx, masterTx, placeID)
 	if err != nil {
