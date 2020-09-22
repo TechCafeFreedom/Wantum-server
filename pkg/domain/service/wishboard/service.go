@@ -14,6 +14,8 @@ type Service interface {
 	GetByPK(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) (*wishboard.Entity, error)
 	GetByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error)
 	UserBelongs(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error)
+	UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string) error
+	UpdateBackgroundImageUrl(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageUrl string) error
 }
 
 type service struct {
@@ -64,4 +66,20 @@ func (s *service) UserBelongs(ctx context.Context, masterTx repository.MasterTx,
 		return false, werrors.Stack(err)
 	}
 	return exists, nil
+}
+
+func (s *service) UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string) error {
+	err := s.wishBoardRepository.UpdateTitle(ctx, masterTx, wishBoardID, title)
+	if err != nil {
+		return werrors.Stack(err)
+	}
+	return nil
+}
+
+func (s *service) UpdateBackgroundImageUrl(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageUrl string) error {
+	err := s.wishBoardRepository.UpdateBackgroundImageUrl(ctx, masterTx, wishBoardID, backgroundImageUrl)
+	if err != nil {
+		return werrors.Stack(err)
+	}
+	return nil
 }
