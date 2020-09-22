@@ -8,8 +8,8 @@ type Entity struct {
 	BackgroundImageUrl string
 	InviteUrl          string
 	UserID             int
-	CreatedAt          *time.Time
-	UpdatedAt          *time.Time
+	CreatedAt          time.Time
+	UpdatedAt          time.Time
 	DeletedAt          *time.Time
 }
 

@@ -3,6 +3,7 @@ package wishboard
 import (
 	"context"
 	"database/sql"
+	"time"
 	"wantum/pkg/domain/entity/wishboard"
 	"wantum/pkg/domain/repository"
 	wishboardrepository "wantum/pkg/domain/repository/wishboard"
@@ -28,11 +29,13 @@ func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.Ma
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
+	now := time.Now()
+
 	result, err := tx.Exec(`
 		INSERT INTO wish_boards(
-			title, background_image_url, invite_url, user_id
-		) VALUES (?, ?, ?, ?)
-	`, b.Title, b.BackgroundImageUrl, b.InviteUrl, b.UserID)
+			title, background_image_url, invite_url, user_id, created_at, updated_at
+		) VALUES (?, ?, ?, ?, ?, ?)
+	`, title, backgroundImageUrl, inviteUrl, userID, now, now)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
@@ -43,9 +46,17 @@ func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.Ma
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
-	b.ID = int(insertID)
 
-	return b, nil
+	return &wishboard.Entity{
+		ID:                 int(insertID),
+		Title:              title,
+		BackgroundImageUrl: backgroundImageUrl,
+		InviteUrl:          inviteUrl,
+		UserID:             userID,
+		CreatedAt:          now,
+		UpdatedAt:          now,
+		DeletedAt:          nil,
+	}, nil
 }
 
 func (r *repositoryImpliment) SelectByPK(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) (*wishboard.Entity, error) {
@@ -57,14 +68,14 @@ func (r *repositoryImpliment) SelectByPK(ctx context.Context, masterTx repositor
 
 	row := tx.QueryRow(`
 		SELECT
-			id, title, background_image_url, invite_url, user_id, created_at, updated_at, deleted_at
+			id, title, background_image_url, invite_url, user_id, created_at, updated_at
 		FROM wish_boards
-		WHERE id = ?
+		WHERE id = ? AND deleted_at = NULL
 	`, wishBoardID)
 
 	b := wishboard.Entity{}
 	err = row.Scan(
-		&b.ID, &b.Title, &b.BackgroundImageUrl, &b.InviteUrl, &b.UserID, &b.CreatedAt, &b.UpdatedAt, &b.DeletedAt)
+		&b.ID, &b.Title, &b.BackgroundImageUrl, &b.InviteUrl, &b.UserID, &b.CreatedAt, &b.UpdatedAt)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -85,9 +96,9 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 
 	rows, err := tx.Query(`
 		SELECT
-			id, title, background_image_url, invite_url, user_id, created_at, updated_at, deleted_at
+			id, title, background_image_url, invite_url, user_id, created_at, updated_at
 		FROM wish_boards
-		WHERE user_id = ?
+		WHERE user_id = ? AND deleted_at = NULL
 	`, userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -100,7 +111,7 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 	for rows.Next() {
 		b := wishboard.Entity{}
 		err = rows.Scan(
-			&b.ID, &b.Title, &b.BackgroundImageUrl, &b.InviteUrl, &b.UserID, &b.CreatedAt, &b.UpdatedAt, &b.DeletedAt)
+			&b.ID, &b.Title, &b.BackgroundImageUrl, &b.InviteUrl, &b.UserID, &b.CreatedAt, &b.UpdatedAt)
 
 		if err != nil {
 			if err == sql.ErrNoRows {
