@@ -125,3 +125,72 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 
 	return bs, nil
 }
+
+func (r *repositoryImpliment) UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string) error {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+
+	now := time.Now()
+
+	_, err = tx.Exec(`
+		UPDATE wish_boards SET
+			title=?,
+			updated_at=?
+		WHERE id = ?
+	`, title, now, wishBoardID)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+
+	return nil
+}
+
+func (r *repositoryImpliment) UpdateBackgroundImageUrl(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageUrl string) error {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+
+	now := time.Now()
+
+	_, err = tx.Exec(`
+		UPDATE wish_boards SET
+			background_image_url=?,
+			updated_at=?
+		WHERE id = ?
+	`, backgroundImageUrl, now, wishBoardID)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+
+	return nil
+}
+
+func (r *repositoryImpliment) Delete(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) error {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+
+	now := time.Now()
+
+	_, err = tx.Exec(`
+		UPDATE wish_boards SET
+			updated_at=?,
+			deleted_at=?
+		WHERE id = ?
+	`, now, now, wishBoardID)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+
+	return nil
+}
