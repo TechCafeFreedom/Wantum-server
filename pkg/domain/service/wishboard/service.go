@@ -17,6 +17,7 @@ type Service interface {
 	UserBelongs(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error)
 	UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string) error
 	UpdateBackgroundImageUrl(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageUrl string) error
+	Delete(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) error
 }
 
 type service struct {
@@ -93,6 +94,14 @@ func (s *service) UpdateTitle(ctx context.Context, masterTx repository.MasterTx,
 
 func (s *service) UpdateBackgroundImageUrl(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageUrl string) error {
 	err := s.wishBoardRepository.UpdateBackgroundImageUrl(ctx, masterTx, wishBoardID, backgroundImageUrl)
+	if err != nil {
+		return werrors.Stack(err)
+	}
+	return nil
+}
+
+func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) error {
+	err := s.wishBoardRepository.Delete(ctx, masterTx, wishBoardID)
 	if err != nil {
 		return werrors.Stack(err)
 	}

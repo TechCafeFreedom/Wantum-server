@@ -18,7 +18,7 @@ type Interactor interface {
 	GetWishBoard(ctx context.Context, wishBoardID int, authID string) (*wishboard.Entity, error)
 	UpdateTitle(ctx context.Context, wishBoardID int, title, authID string) error
 	UpdateBackgroundImage(ctx context.Context, wishBoardID int, backgroundImage []byte, authID string) error
-	DeleteWishBoard(ctx context.Context, wishBoardID int) error
+	DeleteWishBoard(ctx context.Context, wishBoardID int, authID string) error
 }
 
 type interactor struct {
@@ -217,6 +217,46 @@ func (i *interactor) UpdateBackgroundImage(ctx context.Context, wishBoardID int,
 
 		// 背景画像URLの更新
 		err = i.wishBoardService.UpdateBackgroundImageUrl(ctx, masterTx, b.ID, backgroundImageUrl)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+
+		return nil
+	})
+	if err != nil {
+		return werrors.Stack(err)
+	}
+
+	return nil
+}
+
+func (i *interactor) DeleteWishBoard(ctx context.Context, wishBoardID int, authID string) error {
+	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+		// ログイン済ユーザ情報の取得
+		u, err := i.userService.GetByAuthID(ctx, masterTx, authID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+
+		// WishBoardが存在するか確認
+		b, err := i.wishBoardService.GetByPK(ctx, masterTx, wishBoardID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+
+		// ユーザがWishBoardのメンバーでなければPermissionDenied
+		isMember, err := i.wishBoardService.UserBelongs(ctx, masterTx, u.ID, b.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		if !isMember {
+			err := errors.New("you don't belong to wish_board")
+			tlog.PrintErrorLogWithCtx(ctx, err)
+			return werrors.FromConstant(err, werrors.WishBoardPermissionDenied)
+		}
+
+		// WishBoardを削除
+		err = i.wishBoardService.Delete(ctx, masterTx, b.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
