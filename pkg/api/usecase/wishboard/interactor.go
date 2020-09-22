@@ -86,9 +86,8 @@ func (i *interactor) GetMyWishBoards(ctx context.Context, authID string) (wishbo
 			return werrors.Stack(err)
 		}
 
-		// TODO: GetByMember de syuusei
 		// 自分が所属しているWishBoardのリストを取得
-		bs, err = i.wishBoardService.GetByUserID(ctx, masterTx, u.ID)
+		bs, err = i.wishBoardService.GetByMember(ctx, masterTx, u.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}

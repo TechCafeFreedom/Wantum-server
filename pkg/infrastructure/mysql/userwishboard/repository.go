@@ -38,7 +38,7 @@ func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.Ma
 	return nil
 }
 
-func (r *repositoryImpliment) Select(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error) {
+func (r *repositoryImpliment) SelectByUserIDAndWishBoardID(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -59,6 +59,39 @@ func (r *repositoryImpliment) Select(ctx context.Context, masterTx repository.Ma
 	}
 
 	return true, nil
+}
+
+func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) ([]int, error) {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
+	}
+
+	rows, err := tx.Query(`
+		SELECT wish_board_id FROM users_wish_boards WHERE user_id = ?
+	`, userID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return []int{}, nil
+		}
+		return nil, werrors.FromConstant(err, werrors.ServerError)
+	}
+
+	bis := make([]int, 0, 4)
+	for rows.Next() {
+		var bi int
+		if err := rows.Scan(&bi); err != nil {
+			if err == sql.ErrNoRows {
+				return []int{}, nil
+			}
+			return nil, werrors.FromConstant(err, werrors.ServerError)
+		}
+
+		bis = append(bis, bi)
+	}
+
+	return bis, nil
 }
 
 func (r *repositoryImpliment) Delete(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) error {

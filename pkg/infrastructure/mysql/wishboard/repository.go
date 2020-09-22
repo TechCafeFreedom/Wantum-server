@@ -1,8 +1,10 @@
 package wishboard
 
 import (
+	"bytes"
 	"context"
 	"database/sql"
+	"strconv"
 	"time"
 	"wantum/pkg/domain/entity/wishboard"
 	"wantum/pkg/domain/repository"
@@ -70,7 +72,7 @@ func (r *repositoryImpliment) SelectByPK(ctx context.Context, masterTx repositor
 		SELECT
 			id, title, background_image_url, invite_url, user_id, created_at, updated_at
 		FROM wish_boards
-		WHERE id = ? AND deleted_at = NULL
+		WHERE id = ? AND deleted_at IS NULL
 	`, wishBoardID)
 
 	b := wishboard.Entity{}
@@ -87,6 +89,56 @@ func (r *repositoryImpliment) SelectByPK(ctx context.Context, masterTx repositor
 	return &b, nil
 }
 
+func (r *repositoryImpliment) SelectByPKs(ctx context.Context, masterTx repository.MasterTx, wishBoardIDs []int) (wishboard.EntitySlice, error) {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return nil, werrors.FromConstant(err, werrors.ServerError)
+	}
+
+	var buf bytes.Buffer
+	for i, wishBoardID := range wishBoardIDs {
+		if i == 0 {
+			buf.WriteString(strconv.Itoa(wishBoardID))
+		} else {
+			buf.WriteString(",")
+			buf.WriteString(strconv.Itoa(wishBoardID))
+		}
+	}
+
+	rows, err := tx.Query(`
+		SELECT
+			id, title, background_image_url, invite_url, user_id, created_at, updated_at
+		FROM wish_boards
+		WHERE id IN (` + buf.String() +
+		`) AND deleted_at IS NULL
+	`)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return []*wishboard.Entity{}, nil
+		}
+		return nil, werrors.FromConstant(err, werrors.ServerError)
+	}
+
+	bs := make(wishboard.EntitySlice, 0, 4)
+	for rows.Next() {
+		b := wishboard.Entity{}
+		err := rows.Scan(
+			&b.ID, &b.Title, &b.BackgroundImageUrl, &b.InviteUrl, &b.UserID, &b.CreatedAt, &b.UpdatedAt)
+
+		if err != nil {
+			if err == sql.ErrNoRows {
+				return []*wishboard.Entity{}, nil
+			}
+			return nil, werrors.FromConstant(err, werrors.ServerError)
+		}
+
+		bs = append(bs, &b)
+	}
+
+	return bs, nil
+}
+
 func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
@@ -98,7 +150,7 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 		SELECT
 			id, title, background_image_url, invite_url, user_id, created_at, updated_at
 		FROM wish_boards
-		WHERE user_id = ? AND deleted_at = NULL
+		WHERE user_id = ? AND deleted_at IS NULL
 	`, userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -110,7 +162,7 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 	bs := make(wishboard.EntitySlice, 0, 4)
 	for rows.Next() {
 		b := wishboard.Entity{}
-		err = rows.Scan(
+		err := rows.Scan(
 			&b.ID, &b.Title, &b.BackgroundImageUrl, &b.InviteUrl, &b.UserID, &b.CreatedAt, &b.UpdatedAt)
 
 		if err != nil {

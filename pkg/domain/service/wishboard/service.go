@@ -12,7 +12,8 @@ import (
 type Service interface {
 	Create(ctx context.Context, masterTx repository.MasterTx, title, backgroundImageUrl, inviteUrl string, userID int) (*wishboard.Entity, error)
 	GetByPK(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) (*wishboard.Entity, error)
-	GetByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error)
+	GetByOwner(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error)
+	GetByMember(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error)
 	UserBelongs(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error)
 	UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string) error
 	UpdateBackgroundImageUrl(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageUrl string) error
@@ -52,7 +53,7 @@ func (s *service) GetByPK(ctx context.Context, masterTx repository.MasterTx, wis
 	return b, nil
 }
 
-func (s *service) GetByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error) {
+func (s *service) GetByOwner(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error) {
 	bs, err := s.wishBoardRepository.SelectByUserID(ctx, masterTx, userID)
 	if err != nil {
 		return nil, werrors.Stack(err)
@@ -60,8 +61,22 @@ func (s *service) GetByUserID(ctx context.Context, masterTx repository.MasterTx,
 	return bs, err
 }
 
+func (s *service) GetByMember(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error) {
+	wishBoardIDs, err := s.userWishBoardRepository.SelectByUserID(ctx, masterTx, userID)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+
+	bs, err := s.wishBoardRepository.SelectByPKs(ctx, masterTx, wishBoardIDs)
+	if err != nil {
+		return nil, werrors.Stack(err)
+	}
+
+	return bs, nil
+}
+
 func (s *service) UserBelongs(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error) {
-	exists, err := s.userWishBoardRepository.Select(ctx, masterTx, userID, wishBoardID)
+	exists, err := s.userWishBoardRepository.SelectByUserIDAndWishBoardID(ctx, masterTx, userID, wishBoardID)
 	if err != nil {
 		return false, werrors.Stack(err)
 	}
