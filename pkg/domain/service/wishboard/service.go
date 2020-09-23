@@ -10,13 +10,13 @@ import (
 )
 
 type Service interface {
-	Create(ctx context.Context, masterTx repository.MasterTx, title, backgroundImageUrl, inviteUrl string, userID int) (*wishboard.Entity, error)
+	Create(ctx context.Context, masterTx repository.MasterTx, title, backgroundImageURL, inviteURL string, userID int) (*wishboard.Entity, error)
 	GetByPK(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) (*wishboard.Entity, error)
 	GetByOwner(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error)
 	GetByMember(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error)
 	UserBelongs(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error)
 	UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string) error
-	UpdateBackgroundImageUrl(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageUrl string) error
+	UpdateBackgroundImageURL(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageURL string) error
 	Delete(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) error
 }
 
@@ -32,9 +32,9 @@ func New(wishBoardRepository wishboardrepository.Repository, userWishBoardReposi
 	}
 }
 
-func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, title, backgroundImageUrl, inviteUrl string, userID int) (*wishboard.Entity, error) {
+func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, title, backgroundImageURL, inviteURL string, userID int) (*wishboard.Entity, error) {
 	// WishBoardの新規作成
-	b, err := s.wishBoardRepository.Insert(ctx, masterTx, title, backgroundImageUrl, inviteUrl, userID)
+	b, err := s.wishBoardRepository.Insert(ctx, masterTx, title, backgroundImageURL, inviteURL, userID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
@@ -100,9 +100,9 @@ func (s *service) UpdateTitle(ctx context.Context, masterTx repository.MasterTx,
 	return nil
 }
 
-func (s *service) UpdateBackgroundImageUrl(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageUrl string) error {
+func (s *service) UpdateBackgroundImageURL(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageURL string) error {
 	// WishBoardの背景画像URLを更新
-	err := s.wishBoardRepository.UpdateBackgroundImageUrl(ctx, masterTx, wishBoardID, backgroundImageUrl)
+	err := s.wishBoardRepository.UpdateBackgroundImageURL(ctx, masterTx, wishBoardID, backgroundImageURL)
 	if err != nil {
 		return werrors.Stack(err)
 	}

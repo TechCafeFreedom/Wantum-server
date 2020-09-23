@@ -54,16 +54,16 @@ func (i *interactor) CreateNewWishBoard(ctx context.Context, authID, title strin
 		}
 
 		// 背景画像を保存し、URLを取得
-		backgroundImageUrl, err := i.fileService.UploadImageToLocalFolder(backgroundImage)
+		backgroundImageURL, err := i.fileService.UploadImageToLocalFolder(backgroundImage)
 		if err != nil {
 			return werrors.Stack(err)
 		}
 
 		// TODO: 招待URLの自動生成
-		inviteUrl := "hoge" // karioki
+		inviteURL := "hoge" // karioki
 
 		// WishBoardの新規作成
-		b, err = i.wishBoardService.Create(ctx, masterTx, title, backgroundImageUrl, inviteUrl, u.ID)
+		b, err = i.wishBoardService.Create(ctx, masterTx, title, backgroundImageURL, inviteURL, u.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
@@ -210,13 +210,13 @@ func (i *interactor) UpdateBackgroundImage(ctx context.Context, wishBoardID int,
 		}
 
 		// 背景画像を保存し、URLを取得
-		backgroundImageUrl, err := i.fileService.UploadImageToLocalFolder(backgroundImage)
+		backgroundImageURL, err := i.fileService.UploadImageToLocalFolder(backgroundImage)
 		if err != nil {
 			return werrors.Stack(err)
 		}
 
 		// 背景画像URLの更新
-		err = i.wishBoardService.UpdateBackgroundImageUrl(ctx, masterTx, b.ID, backgroundImageUrl)
+		err = i.wishBoardService.UpdateBackgroundImageURL(ctx, masterTx, b.ID, backgroundImageURL)
 		if err != nil {
 			return werrors.Stack(err)
 		}
