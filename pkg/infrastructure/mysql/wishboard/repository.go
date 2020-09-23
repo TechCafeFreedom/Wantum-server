@@ -31,8 +31,10 @@ func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.Ma
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
+	// 現在時刻を取得
 	now := time.Now()
 
+	// WishBoardの新規レコード追加
 	result, err := tx.Exec(`
 		INSERT INTO wish_boards(
 			title, background_image_url, invite_url, user_id, created_at, updated_at
@@ -43,6 +45,7 @@ func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.Ma
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
+	// 新規作成されたWishBoardのIDを取得
 	insertID, err := result.LastInsertId()
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -68,6 +71,7 @@ func (r *repositoryImpliment) SelectByPK(ctx context.Context, masterTx repositor
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
+	// 主キーで検索（削除されていないもののみ）
 	row := tx.QueryRow(`
 		SELECT
 			id, title, background_image_url, invite_url, user_id, created_at, updated_at
@@ -75,12 +79,14 @@ func (r *repositoryImpliment) SelectByPK(ctx context.Context, masterTx repositor
 		WHERE id = ? AND deleted_at IS NULL
 	`, wishBoardID)
 
+	// Entityにコピー
 	b := wishboard.Entity{}
 	err = row.Scan(
 		&b.ID, &b.Title, &b.BackgroundImageUrl, &b.InviteUrl, &b.UserID, &b.CreatedAt, &b.UpdatedAt)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
+			// 見つからなかったらNOT FOUNDエラー
 			return nil, werrors.FromConstant(err, werrors.WishBoardNotFound)
 		}
 		return nil, werrors.FromConstant(err, werrors.ServerError)
@@ -96,6 +102,7 @@ func (r *repositoryImpliment) SelectByPKs(ctx context.Context, masterTx reposito
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
+	// IDのリストからSQL文のIN句用の文字列を作成
 	var buf bytes.Buffer
 	for i, wishBoardID := range wishBoardIDs {
 		if i == 0 {
@@ -106,6 +113,7 @@ func (r *repositoryImpliment) SelectByPKs(ctx context.Context, masterTx reposito
 		}
 	}
 
+	// 主キーで複数検索（削除されていないもののみ）
 	rows, err := tx.Query(`
 		SELECT
 			id, title, background_image_url, invite_url, user_id, created_at, updated_at
@@ -115,20 +123,23 @@ func (r *repositoryImpliment) SelectByPKs(ctx context.Context, masterTx reposito
 	`)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return []*wishboard.Entity{}, nil
+			// 見つからなかったらNOT FOUNDエラー
+			return nil, werrors.FromConstant(err, werrors.WishBoardNotFound)
 		}
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
 	bs := make(wishboard.EntitySlice, 0, 4)
 	for rows.Next() {
+		// Entityへのコピー
 		b := wishboard.Entity{}
 		err := rows.Scan(
 			&b.ID, &b.Title, &b.BackgroundImageUrl, &b.InviteUrl, &b.UserID, &b.CreatedAt, &b.UpdatedAt)
 
 		if err != nil {
 			if err == sql.ErrNoRows {
-				return []*wishboard.Entity{}, nil
+				// 見つからなかったらNOT FOUNDエラー
+				return nil, werrors.FromConstant(err, werrors.WishBoardNotFound)
 			}
 			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}
@@ -146,6 +157,7 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
+	// ユーザIDで検索
 	rows, err := tx.Query(`
 		SELECT
 			id, title, background_image_url, invite_url, user_id, created_at, updated_at
@@ -154,6 +166,7 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 	`, userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			// 見つからなかったから空リストを返す
 			return []*wishboard.Entity{}, nil
 		}
 		return nil, werrors.FromConstant(err, werrors.ServerError)
@@ -161,12 +174,14 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 
 	bs := make(wishboard.EntitySlice, 0, 4)
 	for rows.Next() {
+		// Entityへのコピー
 		b := wishboard.Entity{}
 		err := rows.Scan(
 			&b.ID, &b.Title, &b.BackgroundImageUrl, &b.InviteUrl, &b.UserID, &b.CreatedAt, &b.UpdatedAt)
 
 		if err != nil {
 			if err == sql.ErrNoRows {
+				// 見つからなかったから空リストを返す
 				return []*wishboard.Entity{}, nil
 			}
 			return nil, werrors.FromConstant(err, werrors.ServerError)
@@ -185,8 +200,10 @@ func (r *repositoryImpliment) UpdateTitle(ctx context.Context, masterTx reposito
 		return werrors.FromConstant(err, werrors.ServerError)
 	}
 
+	// 現在時刻を取得
 	now := time.Now()
 
+	// titleとupdated_atを更新
 	_, err = tx.Exec(`
 		UPDATE wish_boards SET
 			title=?,
@@ -208,8 +225,10 @@ func (r *repositoryImpliment) UpdateBackgroundImageUrl(ctx context.Context, mast
 		return werrors.FromConstant(err, werrors.ServerError)
 	}
 
+	// 現在時刻を取得
 	now := time.Now()
 
+	// back_ground_urlとupdated_atを更新
 	_, err = tx.Exec(`
 		UPDATE wish_boards SET
 			background_image_url=?,
@@ -231,8 +250,10 @@ func (r *repositoryImpliment) Delete(ctx context.Context, masterTx repository.Ma
 		return werrors.FromConstant(err, werrors.ServerError)
 	}
 
+	// 現在時刻を取得
 	now := time.Now()
 
+	// updated_atとdeleted_atに現在時刻をセット
 	_, err = tx.Exec(`
 		UPDATE wish_boards SET
 			updated_at=?,
