@@ -38,11 +38,9 @@ func New(masterTxManager repository.MasterTxManager, userService userservice.Ser
 }
 
 func (i *interactor) CreateNewWishBoard(ctx context.Context, authID, title string, backgroundImage []byte) (*wishboard.Entity, error) {
-	// 空のタイトルは許容しない
-	if title == "" {
-		err := errors.New("title is empty")
-		tlog.PrintErrorLogWithCtx(ctx, err)
-		return nil, werrors.FromConstant(err, werrors.BadRequest)
+	// タイトルのバリデーション
+	if err := validateTitle(ctx, title); err != nil {
+		return nil, werrors.Stack(err)
 	}
 
 	var b *wishboard.Entity
@@ -139,11 +137,9 @@ func (i *interactor) GetWishBoard(ctx context.Context, wishBoardID int, authID s
 }
 
 func (i *interactor) UpdateTitle(ctx context.Context, wishBoardID int, title, authID string) error {
-	// 空のタイトルは許容しない
-	if title == "" {
-		err := errors.New("title is empty")
-		tlog.PrintErrorLogWithCtx(ctx, err)
-		return werrors.FromConstant(err, werrors.BadRequest)
+	// タイトルのバリデーション
+	if err := validateTitle(ctx, title); err != nil {
+		return werrors.Stack(err)
 	}
 
 	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
@@ -265,6 +261,17 @@ func (i *interactor) DeleteWishBoard(ctx context.Context, wishBoardID int, authI
 	})
 	if err != nil {
 		return werrors.Stack(err)
+	}
+
+	return nil
+}
+
+func validateTitle(ctx context.Context, title string) error {
+	// 空のタイトルは許容しない
+	if title == "" {
+		err := errors.New("title is empty")
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.BadRequest)
 	}
 
 	return nil
