@@ -167,7 +167,7 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 	if err != nil {
 		if err == sql.ErrNoRows {
 			// 見つからなかったから空リストを返す
-			return []*wishboard.Entity{}, nil
+			return nil, nil
 		}
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
@@ -182,7 +182,7 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 		if err != nil {
 			if err == sql.ErrNoRows {
 				// 見つからなかったから空リストを返す
-				return []*wishboard.Entity{}, nil
+				return nil, nil
 			}
 			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}

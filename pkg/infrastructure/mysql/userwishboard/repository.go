@@ -79,7 +79,7 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 	if err != nil {
 		if err == sql.ErrNoRows {
 			// 見つからなければ空リストを返す
-			return []int{}, nil
+			return nil, nil
 		}
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
@@ -91,7 +91,7 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 		if err := rows.Scan(&bi); err != nil {
 			if err == sql.ErrNoRows {
 				// 見つからなければ空リストを返す
-				return []int{}, nil
+				return nil, nil
 			}
 			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}

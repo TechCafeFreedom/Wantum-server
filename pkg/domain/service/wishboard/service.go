@@ -73,6 +73,11 @@ func (s *service) GetByMember(ctx context.Context, masterTx repository.MasterTx,
 		return nil, werrors.Stack(err)
 	}
 
+	// 存在しないなら空で返す
+	if len(wishBoardIDs) == 0 {
+		return nil, nil
+	}
+
 	// IDのリストをもとにWishBoardを複数取得
 	bs, err := s.wishBoardRepository.SelectByPKs(ctx, masterTx, wishBoardIDs)
 	if err != nil {
