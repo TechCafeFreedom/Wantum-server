@@ -84,7 +84,7 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	bis := make([]int, 0, 4)
+	bis := []int{}
 	for rows.Next() {
 		var bi int
 		// wishBoardIDを取得

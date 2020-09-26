@@ -129,7 +129,7 @@ func (r *repositoryImpliment) SelectByPKs(ctx context.Context, masterTx reposito
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	bs := make(wishboard.EntitySlice, 0, 4)
+	bs := wishboard.EntitySlice{}
 	for rows.Next() {
 		// Entityへのコピー
 		b := wishboard.Entity{}
@@ -172,7 +172,7 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	bs := make(wishboard.EntitySlice, 0, 4)
+	bs := wishboard.EntitySlice{}
 	for rows.Next() {
 		// Entityへのコピー
 		b := wishboard.Entity{}
