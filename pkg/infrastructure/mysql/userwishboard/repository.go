@@ -39,7 +39,7 @@ func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.Ma
 	return nil
 }
 
-func (r *repositoryImpliment) SelectByUserIDAndWishBoardID(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error) {
+func (r *repositoryImpliment) Exists(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)

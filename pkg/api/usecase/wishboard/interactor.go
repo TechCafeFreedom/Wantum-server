@@ -109,7 +109,7 @@ func (i *interactor) GetWishBoard(ctx context.Context, wishBoardID int, authID s
 		}
 
 		// ユーザがWishBoardのメンバーでなければPermissionDenied
-		isMember, err := i.wishBoardService.UserBelongs(ctx, masterTx, u.ID, wishBoardID)
+		isMember, err := i.wishBoardService.IsUserMember(ctx, masterTx, u.ID, wishBoardID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
@@ -156,7 +156,7 @@ func (i *interactor) UpdateTitle(ctx context.Context, wishBoardID int, title, au
 		}
 
 		// ユーザがWishBoardのメンバーでなければPermissionDenied
-		isMember, err := i.wishBoardService.UserBelongs(ctx, masterTx, u.ID, b.ID)
+		isMember, err := i.wishBoardService.IsUserMember(ctx, masterTx, u.ID, b.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
@@ -195,7 +195,7 @@ func (i *interactor) UpdateBackgroundImage(ctx context.Context, wishBoardID int,
 		}
 
 		// ユーザがWishBoardのメンバーでなければPermissionDenied
-		isMember, err := i.wishBoardService.UserBelongs(ctx, masterTx, u.ID, b.ID)
+		isMember, err := i.wishBoardService.IsUserMember(ctx, masterTx, u.ID, b.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
@@ -241,7 +241,7 @@ func (i *interactor) DeleteWishBoard(ctx context.Context, wishBoardID int, authI
 		}
 
 		// ユーザがWishBoardのメンバーでなければPermissionDenied
-		isMember, err := i.wishBoardService.UserBelongs(ctx, masterTx, u.ID, b.ID)
+		isMember, err := i.wishBoardService.IsUserMember(ctx, masterTx, u.ID, b.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
