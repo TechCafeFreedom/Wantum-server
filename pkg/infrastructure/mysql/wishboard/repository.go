@@ -24,22 +24,19 @@ func New(masterTxManager repository.MasterTxManager) wishboardrepository.Reposit
 	}
 }
 
-func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.MasterTx, title, backgroundImageURL, inviteURL string, userID int) (*wishboard.Entity, error) {
+func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.MasterTx, title, backgroundImageURL, inviteURL string, userID int, createdAt, updatedAt time.Time) (*wishboard.Entity, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	// 現在時刻を取得
-	now := time.Now()
-
 	// WishBoardの新規レコード追加
 	result, err := tx.Exec(`
 		INSERT INTO wish_boards(
 			title, background_image_url, invite_url, user_id, created_at, updated_at
 		) VALUES (?, ?, ?, ?, ?, ?)
-	`, title, backgroundImageURL, inviteURL, userID, now, now)
+	`, title, backgroundImageURL, inviteURL, userID, createdAt, updatedAt)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
@@ -58,8 +55,8 @@ func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.Ma
 		BackgroundImageURL: backgroundImageURL,
 		InviteURL:          inviteURL,
 		UserID:             userID,
-		CreatedAt:          now,
-		UpdatedAt:          now,
+		CreatedAt:          createdAt,
+		UpdatedAt:          updatedAt,
 		DeletedAt:          nil,
 	}, nil
 }
@@ -193,15 +190,12 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 	return bs, nil
 }
 
-func (r *repositoryImpliment) UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string) error {
+func (r *repositoryImpliment) UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string, updatedAt time.Time) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return werrors.FromConstant(err, werrors.ServerError)
 	}
-
-	// 現在時刻を取得
-	now := time.Now()
 
 	// titleとupdated_atを更新
 	_, err = tx.Exec(`
@@ -209,7 +203,7 @@ func (r *repositoryImpliment) UpdateTitle(ctx context.Context, masterTx reposito
 			title=?,
 			updated_at=?
 		WHERE id = ?
-	`, title, now, wishBoardID)
+	`, title, updatedAt, wishBoardID)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return werrors.FromConstant(err, werrors.ServerError)
@@ -218,15 +212,12 @@ func (r *repositoryImpliment) UpdateTitle(ctx context.Context, masterTx reposito
 	return nil
 }
 
-func (r *repositoryImpliment) UpdateBackgroundImageURL(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageURL string) error {
+func (r *repositoryImpliment) UpdateBackgroundImageURL(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageURL string, updatedAt time.Time) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return werrors.FromConstant(err, werrors.ServerError)
 	}
-
-	// 現在時刻を取得
-	now := time.Now()
 
 	// back_ground_urlとupdated_atを更新
 	_, err = tx.Exec(`
@@ -234,7 +225,7 @@ func (r *repositoryImpliment) UpdateBackgroundImageURL(ctx context.Context, mast
 			background_image_url=?,
 			updated_at=?
 		WHERE id = ?
-	`, backgroundImageURL, now, wishBoardID)
+	`, backgroundImageURL, updatedAt, wishBoardID)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return werrors.FromConstant(err, werrors.ServerError)
@@ -243,15 +234,12 @@ func (r *repositoryImpliment) UpdateBackgroundImageURL(ctx context.Context, mast
 	return nil
 }
 
-func (r *repositoryImpliment) Delete(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) error {
+func (r *repositoryImpliment) Delete(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, updatedAt, deletedAt time.Time) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return werrors.FromConstant(err, werrors.ServerError)
 	}
-
-	// 現在時刻を取得
-	now := time.Now()
 
 	// updated_atとdeleted_atに現在時刻をセット
 	_, err = tx.Exec(`
@@ -259,7 +247,7 @@ func (r *repositoryImpliment) Delete(ctx context.Context, masterTx repository.Ma
 			updated_at=?,
 			deleted_at=?
 		WHERE id = ?
-	`, now, now, wishBoardID)
+	`, updatedAt, deletedAt, wishBoardID)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return werrors.FromConstant(err, werrors.ServerError)

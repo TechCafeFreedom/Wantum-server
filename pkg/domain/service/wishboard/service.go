@@ -2,6 +2,7 @@ package wishboard
 
 import (
 	"context"
+	"time"
 	"wantum/pkg/domain/entity/wishboard"
 	"wantum/pkg/domain/repository"
 	userwishboardrepository "wantum/pkg/domain/repository/userwishboard"
@@ -33,8 +34,11 @@ func New(wishBoardRepository wishboardrepository.Repository, userWishBoardReposi
 }
 
 func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, title, backgroundImageURL, inviteURL string, userID int) (*wishboard.Entity, error) {
+	// 現在時刻を取得
+	now := time.Now()
+
 	// WishBoardの新規作成
-	b, err := s.wishBoardRepository.Insert(ctx, masterTx, title, backgroundImageURL, inviteURL, userID)
+	b, err := s.wishBoardRepository.Insert(ctx, masterTx, title, backgroundImageURL, inviteURL, userID, now, now)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
@@ -97,8 +101,11 @@ func (s *service) IsUserMember(ctx context.Context, masterTx repository.MasterTx
 }
 
 func (s *service) UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string) error {
+	// 現在時刻を取得
+	now := time.Now()
+
 	// WishBoardのタイトルを更新
-	err := s.wishBoardRepository.UpdateTitle(ctx, masterTx, wishBoardID, title)
+	err := s.wishBoardRepository.UpdateTitle(ctx, masterTx, wishBoardID, title, now)
 	if err != nil {
 		return werrors.Stack(err)
 	}
@@ -106,8 +113,11 @@ func (s *service) UpdateTitle(ctx context.Context, masterTx repository.MasterTx,
 }
 
 func (s *service) UpdateBackgroundImageURL(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageURL string) error {
+	// 現在時刻を取得
+	now := time.Now()
+
 	// WishBoardの背景画像URLを更新
-	err := s.wishBoardRepository.UpdateBackgroundImageURL(ctx, masterTx, wishBoardID, backgroundImageURL)
+	err := s.wishBoardRepository.UpdateBackgroundImageURL(ctx, masterTx, wishBoardID, backgroundImageURL, now)
 	if err != nil {
 		return werrors.Stack(err)
 	}
@@ -115,8 +125,11 @@ func (s *service) UpdateBackgroundImageURL(ctx context.Context, masterTx reposit
 }
 
 func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) error {
+	// 現在時刻を取得
+	now := time.Now()
+
 	// WishBoardの削除
-	err := s.wishBoardRepository.Delete(ctx, masterTx, wishBoardID)
+	err := s.wishBoardRepository.Delete(ctx, masterTx, wishBoardID, now, now)
 	if err != nil {
 		return werrors.Stack(err)
 	}
