@@ -8,6 +8,7 @@ import (
 	context "context"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
+	time "time"
 	tag "wantum/pkg/domain/entity/tag"
 	repository "wantum/pkg/domain/repository"
 )
@@ -51,45 +52,45 @@ func (mr *MockRepositoryMockRecorder) Insert(ctx, masterTx, tag interface{}) *go
 }
 
 // UpDeleteFlag mocks base method
-func (m *MockRepository) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tag *tag.Entity) error {
+func (m *MockRepository) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int, updatedAt, deletedAt *time.Time) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpDeleteFlag", ctx, masterTx, tag)
+	ret := m.ctrl.Call(m, "UpDeleteFlag", ctx, masterTx, tagID, updatedAt, deletedAt)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // UpDeleteFlag indicates an expected call of UpDeleteFlag
-func (mr *MockRepositoryMockRecorder) UpDeleteFlag(ctx, masterTx, tag interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) UpDeleteFlag(ctx, masterTx, tagID, updatedAt, deletedAt interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpDeleteFlag", reflect.TypeOf((*MockRepository)(nil).UpDeleteFlag), ctx, masterTx, tag)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpDeleteFlag", reflect.TypeOf((*MockRepository)(nil).UpDeleteFlag), ctx, masterTx, tagID, updatedAt, deletedAt)
 }
 
 // DownDeleteFlag mocks base method
-func (m *MockRepository) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tag *tag.Entity) error {
+func (m *MockRepository) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int, updatedAt *time.Time) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DownDeleteFlag", ctx, masterTx, tag)
+	ret := m.ctrl.Call(m, "DownDeleteFlag", ctx, masterTx, tagID, updatedAt)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DownDeleteFlag indicates an expected call of DownDeleteFlag
-func (mr *MockRepositoryMockRecorder) DownDeleteFlag(ctx, masterTx, tag interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) DownDeleteFlag(ctx, masterTx, tagID, updatedAt interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DownDeleteFlag", reflect.TypeOf((*MockRepository)(nil).DownDeleteFlag), ctx, masterTx, tag)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DownDeleteFlag", reflect.TypeOf((*MockRepository)(nil).DownDeleteFlag), ctx, masterTx, tagID, updatedAt)
 }
 
 // Delete mocks base method
-func (m *MockRepository) Delete(ctx context.Context, masterTx repository.MasterTx, tagID int) error {
+func (m *MockRepository) Delete(ctx context.Context, masterTx repository.MasterTx, tag *tag.Entity) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Delete", ctx, masterTx, tagID)
+	ret := m.ctrl.Call(m, "Delete", ctx, masterTx, tag)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Delete indicates an expected call of Delete
-func (mr *MockRepositoryMockRecorder) Delete(ctx, masterTx, tagID interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) Delete(ctx, masterTx, tag interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRepository)(nil).Delete), ctx, masterTx, tagID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRepository)(nil).Delete), ctx, masterTx, tag)
 }
 
 // SelectByID mocks base method

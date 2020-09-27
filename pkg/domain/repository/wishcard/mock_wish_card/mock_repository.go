@@ -8,6 +8,7 @@ import (
 	context "context"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
+	time "time"
 	wishcard "wantum/pkg/domain/entity/wishcard"
 	repository "wantum/pkg/domain/repository"
 )
@@ -64,6 +65,104 @@ func (mr *MockRepositoryMockRecorder) Update(ctx, masterTx, wishCard interface{}
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockRepository)(nil).Update), ctx, masterTx, wishCard)
 }
 
+// UpdateActivity mocks base method
+func (m *MockRepository) UpdateActivity(ctx context.Context, masterTx repository.MasterTx, wishCardID int, activity string, updatedAt *time.Time) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateActivity", ctx, masterTx, wishCardID, activity, updatedAt)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateActivity indicates an expected call of UpdateActivity
+func (mr *MockRepositoryMockRecorder) UpdateActivity(ctx, masterTx, wishCardID, activity, updatedAt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateActivity", reflect.TypeOf((*MockRepository)(nil).UpdateActivity), ctx, masterTx, wishCardID, activity, updatedAt)
+}
+
+// UpdateDescription mocks base method
+func (m *MockRepository) UpdateDescription(ctx context.Context, masterTx repository.MasterTx, wishCardID int, description string, updatedAt *time.Time) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateDescription", ctx, masterTx, wishCardID, description, updatedAt)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateDescription indicates an expected call of UpdateDescription
+func (mr *MockRepositoryMockRecorder) UpdateDescription(ctx, masterTx, wishCardID, description, updatedAt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDescription", reflect.TypeOf((*MockRepository)(nil).UpdateDescription), ctx, masterTx, wishCardID, description, updatedAt)
+}
+
+// UpdateDate mocks base method
+func (m *MockRepository) UpdateDate(ctx context.Context, masterTx repository.MasterTx, wishCardID int, date, updatedAt *time.Time) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateDate", ctx, masterTx, wishCardID, date, updatedAt)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateDate indicates an expected call of UpdateDate
+func (mr *MockRepositoryMockRecorder) UpdateDate(ctx, masterTx, wishCardID, date, updatedAt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDate", reflect.TypeOf((*MockRepository)(nil).UpdateDate), ctx, masterTx, wishCardID, date, updatedAt)
+}
+
+// UpdateDoneAt mocks base method
+func (m *MockRepository) UpdateDoneAt(ctx context.Context, masterTx repository.MasterTx, wishCardID int, doneAt, updatedAt *time.Time) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateDoneAt", ctx, masterTx, wishCardID, doneAt, updatedAt)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateDoneAt indicates an expected call of UpdateDoneAt
+func (mr *MockRepositoryMockRecorder) UpdateDoneAt(ctx, masterTx, wishCardID, doneAt, updatedAt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDoneAt", reflect.TypeOf((*MockRepository)(nil).UpdateDoneAt), ctx, masterTx, wishCardID, doneAt, updatedAt)
+}
+
+// UpdateUserID mocks base method
+func (m *MockRepository) UpdateUserID(ctx context.Context, masterTx repository.MasterTx, wishCardID, userID int, updatedAt *time.Time) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUserID", ctx, masterTx, wishCardID, userID, updatedAt)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateUserID indicates an expected call of UpdateUserID
+func (mr *MockRepositoryMockRecorder) UpdateUserID(ctx, masterTx, wishCardID, userID, updatedAt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserID", reflect.TypeOf((*MockRepository)(nil).UpdateUserID), ctx, masterTx, wishCardID, userID, updatedAt)
+}
+
+// UpdatePlaceID mocks base method
+func (m *MockRepository) UpdatePlaceID(ctx context.Context, masterTx repository.MasterTx, wishCardID, placeID int, updatedAt *time.Time) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdatePlaceID", ctx, masterTx, wishCardID, placeID, updatedAt)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdatePlaceID indicates an expected call of UpdatePlaceID
+func (mr *MockRepositoryMockRecorder) UpdatePlaceID(ctx, masterTx, wishCardID, placeID, updatedAt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePlaceID", reflect.TypeOf((*MockRepository)(nil).UpdatePlaceID), ctx, masterTx, wishCardID, placeID, updatedAt)
+}
+
+// UpdateCategoryID mocks base method
+func (m *MockRepository) UpdateCategoryID(ctx context.Context, masterTx repository.MasterTx, wishCardID, categoryID int, updatedAt *time.Time) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateCategoryID", ctx, masterTx, wishCardID, categoryID, updatedAt)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateCategoryID indicates an expected call of UpdateCategoryID
+func (mr *MockRepositoryMockRecorder) UpdateCategoryID(ctx, masterTx, wishCardID, categoryID, updatedAt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateCategoryID", reflect.TypeOf((*MockRepository)(nil).UpdateCategoryID), ctx, masterTx, wishCardID, categoryID, updatedAt)
+}
+
 // UpdateWithCategoryID mocks base method
 func (m *MockRepository) UpdateWithCategoryID(ctx context.Context, masterTx repository.MasterTx, wishCard *wishcard.Entity, categoryID int) error {
 	m.ctrl.T.Helper()
@@ -79,45 +178,45 @@ func (mr *MockRepositoryMockRecorder) UpdateWithCategoryID(ctx, masterTx, wishCa
 }
 
 // UpDeleteFlag mocks base method
-func (m *MockRepository) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCard *wishcard.Entity) error {
+func (m *MockRepository) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCardID int, updatedAt, deletedAt *time.Time) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpDeleteFlag", ctx, masterTx, wishCard)
+	ret := m.ctrl.Call(m, "UpDeleteFlag", ctx, masterTx, wishCardID, updatedAt, deletedAt)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // UpDeleteFlag indicates an expected call of UpDeleteFlag
-func (mr *MockRepositoryMockRecorder) UpDeleteFlag(ctx, masterTx, wishCard interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) UpDeleteFlag(ctx, masterTx, wishCardID, updatedAt, deletedAt interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpDeleteFlag", reflect.TypeOf((*MockRepository)(nil).UpDeleteFlag), ctx, masterTx, wishCard)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpDeleteFlag", reflect.TypeOf((*MockRepository)(nil).UpDeleteFlag), ctx, masterTx, wishCardID, updatedAt, deletedAt)
 }
 
 // DownDeleteFlag mocks base method
-func (m *MockRepository) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCard *wishcard.Entity) error {
+func (m *MockRepository) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCardID int, updatedAt *time.Time) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DownDeleteFlag", ctx, masterTx, wishCard)
+	ret := m.ctrl.Call(m, "DownDeleteFlag", ctx, masterTx, wishCardID, updatedAt)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DownDeleteFlag indicates an expected call of DownDeleteFlag
-func (mr *MockRepositoryMockRecorder) DownDeleteFlag(ctx, masterTx, wishCard interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) DownDeleteFlag(ctx, masterTx, wishCardID, updatedAt interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DownDeleteFlag", reflect.TypeOf((*MockRepository)(nil).DownDeleteFlag), ctx, masterTx, wishCard)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DownDeleteFlag", reflect.TypeOf((*MockRepository)(nil).DownDeleteFlag), ctx, masterTx, wishCardID, updatedAt)
 }
 
 // Delete mocks base method
-func (m *MockRepository) Delete(ctx context.Context, masterTx repository.MasterTx, wishCardID int) error {
+func (m *MockRepository) Delete(ctx context.Context, masterTx repository.MasterTx, wishCard *wishcard.Entity) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Delete", ctx, masterTx, wishCardID)
+	ret := m.ctrl.Call(m, "Delete", ctx, masterTx, wishCard)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Delete indicates an expected call of Delete
-func (mr *MockRepositoryMockRecorder) Delete(ctx, masterTx, wishCardID interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) Delete(ctx, masterTx, wishCard interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRepository)(nil).Delete), ctx, masterTx, wishCardID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRepository)(nil).Delete), ctx, masterTx, wishCard)
 }
 
 // SelectByID mocks base method
