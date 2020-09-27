@@ -27,6 +27,10 @@ var (
 
 	dummyActivity    = "sampleActivity"
 	dummyDescription = "sampleDescription"
+	dummyWishCardID  = 2
+	dummyUserID      = 1
+	dummyCategoryID  = 1
+	dummyPlaceID     = 1
 )
 
 func TestMain(m *testing.M) {
@@ -143,6 +147,142 @@ func TestUpdate(t *testing.T) {
 	})
 }
 
+func TestUpdateActivity(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+
+		var result *wishCardEntity.Entity
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			if err = repo.UpdateActivity(ctx, masterTx, dummyWishCardID, dummyActivity, &dummyDate); err != nil {
+				return err
+			}
+
+			result, _ = repo.SelectByID(ctx, masterTx, dummyWishCardID)
+			return nil
+		})
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyActivity, result.Activity)
+	})
+}
+
+func TestUpdateDescription(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+
+		var result *wishCardEntity.Entity
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			if err = repo.UpdateDescription(ctx, masterTx, dummyWishCardID, dummyDescription, &dummyDate); err != nil {
+				return err
+			}
+
+			result, _ = repo.SelectByID(ctx, masterTx, dummyWishCardID)
+			return nil
+		})
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyDescription, result.Description)
+	})
+}
+
+func TestUpdateDate(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+
+		var result *wishCardEntity.Entity
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			if err = repo.UpdateDate(ctx, masterTx, dummyWishCardID, &dummyDate, &dummyDate); err != nil {
+				return err
+			}
+
+			result, _ = repo.SelectByID(ctx, masterTx, dummyWishCardID)
+			return nil
+		})
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyDate, result.Date.Local())
+	})
+}
+
+func TestUpdateDoneAt(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+
+		var result *wishCardEntity.Entity
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			if err = repo.UpdateDoneAt(ctx, masterTx, dummyWishCardID, &dummyDate, &dummyDate); err != nil {
+				return err
+			}
+
+			result, _ = repo.SelectByID(ctx, masterTx, dummyWishCardID)
+			return nil
+		})
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyDate, result.DoneAt.Local())
+	})
+}
+
+func TestUpdateUserID(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+
+		var result *wishCardEntity.Entity
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			if err = repo.UpdateUserID(ctx, masterTx, dummyWishCardID, dummyUserID, &dummyDate); err != nil {
+				return err
+			}
+
+			result, _ = repo.SelectByID(ctx, masterTx, dummyWishCardID)
+			return nil
+		})
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyUserID, result.Author.ID)
+	})
+}
+
+func TestUpdatePlaceID(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+
+		var result *wishCardEntity.Entity
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			if err = repo.UpdatePlaceID(ctx, masterTx, dummyWishCardID, dummyPlaceID, &dummyDate); err != nil {
+				return err
+			}
+
+			result, _ = repo.SelectByID(ctx, masterTx, dummyWishCardID)
+			return nil
+		})
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyPlaceID, result.Place.ID)
+	})
+}
+
+func TestUpdateCategoryID(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			if err = repo.UpdateCategoryID(ctx, masterTx, dummyWishCardID, dummyCategoryID, &dummyDate); err != nil {
+				return err
+			}
+
+			return nil
+		})
+		assert.NoError(t, err)
+	})
+}
+
 func TestUpdateWithCategoryID(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
@@ -212,6 +352,7 @@ func TestUpDeleteFlag(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
+		_dummyDate := time.Date(2020, 10, 10, 10, 0, 0, 0, time.Local)
 		wishCard := &wishCardEntity.Entity{
 			Author: &userEntity.Entity{
 				ID: 1,
@@ -220,7 +361,7 @@ func TestUpDeleteFlag(t *testing.T) {
 			Description: dummyDescription,
 			Date:        &dummyDate,
 			CreatedAt:   &dummyDate,
-			UpdatedAt:   &dummyDate,
+			UpdatedAt:   &_dummyDate,
 			Place: &placeEntity.Entity{
 				ID: 1,
 			},
@@ -230,8 +371,7 @@ func TestUpDeleteFlag(t *testing.T) {
 			newID, _ := repo.Insert(ctx, masterTx, wishCard, 1)
 
 			wishCard.ID = newID
-			wishCard.DeletedAt = &dummyDate
-			if err = repo.UpDeleteFlag(ctx, masterTx, wishCard); err != nil {
+			if err = repo.UpDeleteFlag(ctx, masterTx, newID, &dummyDate, &dummyDate); err != nil {
 				return err
 			}
 			result, _ = repo.SelectByID(ctx, masterTx, wishCard.ID)
@@ -239,6 +379,8 @@ func TestUpDeleteFlag(t *testing.T) {
 		})
 		assert.NoError(t, err)
 		assert.NotNil(t, result.DeletedAt)
+		assert.Equal(t, dummyDate, result.DeletedAt.Local())
+		assert.Equal(t, dummyDate, result.UpdatedAt.Local())
 	})
 
 	t.Run("failure_deletedAtがnil", func(t *testing.T) {
@@ -261,7 +403,7 @@ func TestUpDeleteFlag(t *testing.T) {
 			newID, _ := repo.Insert(ctx, masterTx, wishCard, 1)
 
 			wishCard.ID = newID
-			err = repo.UpDeleteFlag(ctx, masterTx, wishCard)
+			err = repo.UpDeleteFlag(ctx, masterTx, newID, &dummyDate, nil)
 			return err
 		})
 		assert.Error(t, err)
@@ -290,11 +432,10 @@ func TestDownDeleteFlag(t *testing.T) {
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			newID, _ := repo.Insert(ctx, masterTx, wishCard, 1)
 
-			wishCard.ID = newID
-			if err = repo.DownDeleteFlag(ctx, masterTx, wishCard); err != nil {
+			if err = repo.DownDeleteFlag(ctx, masterTx, newID, &dummyDate); err != nil {
 				return err
 			}
-			result, _ = repo.SelectByID(ctx, masterTx, wishCard.ID)
+			result, _ = repo.SelectByID(ctx, masterTx, newID)
 			return nil
 		})
 		assert.NoError(t, err)
@@ -323,10 +464,9 @@ func TestDelete(t *testing.T) {
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			newID, _ := repo.Insert(ctx, masterTx, wishCard, 1)
 			wishCard.ID = newID
-			wishCard.DeletedAt = &dummyDate
-			repo.UpDeleteFlag(ctx, masterTx, wishCard)
+			repo.UpDeleteFlag(ctx, masterTx, newID, &dummyDate, &dummyDate)
 
-			if err = repo.Delete(ctx, masterTx, wishCard.ID); err != nil {
+			if err = repo.Delete(ctx, masterTx, wishCard); err != nil {
 				return err
 			}
 			assert.NoError(t, err)

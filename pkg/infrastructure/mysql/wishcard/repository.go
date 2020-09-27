@@ -6,6 +6,7 @@ import (
 	"errors"
 	"strconv"
 	"strings"
+	"time"
 	placeEntity "wantum/pkg/domain/entity/place"
 	userEntity "wantum/pkg/domain/entity/user"
 	wishCardEntity "wantum/pkg/domain/entity/wishcard"
@@ -92,6 +93,161 @@ func (repo *wishCardRepositoryImplement) Update(ctx context.Context, masterTx re
 	return nil
 }
 
+func (repo *wishCardRepositoryImplement) UpdateActivity(ctx context.Context, masterTx repository.MasterTx, wishCardID int, activity string, updatedAt *time.Time) error {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	_, err = tx.Exec(`
+		UPDATE wish_cards
+		SET activity=?,
+			updated_at=?
+		WHERE id=?
+	`, activity,
+		updatedAt,
+		wishCardID,
+	)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	return nil
+}
+
+func (repo *wishCardRepositoryImplement) UpdateDescription(ctx context.Context, masterTx repository.MasterTx, wishCardID int, description string, updatedAt *time.Time) error {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	_, err = tx.Exec(`
+		UPDATE wish_cards
+		SET description=?,
+			updated_at=?
+		WHERE id=?
+	`, description,
+		updatedAt,
+		wishCardID,
+	)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	return nil
+
+}
+
+func (repo *wishCardRepositoryImplement) UpdateDate(ctx context.Context, masterTx repository.MasterTx, wishCardID int, date, updatedAt *time.Time) error {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	_, err = tx.Exec(`
+		UPDATE wish_cards
+		SET date=?,
+			updated_at=?
+		WHERE id=?
+	`, date,
+		updatedAt,
+		wishCardID,
+	)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	return nil
+}
+
+func (repo *wishCardRepositoryImplement) UpdateDoneAt(ctx context.Context, masterTx repository.MasterTx, wishCardID int, doneAt, updatedAt *time.Time) error {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	_, err = tx.Exec(`
+		UPDATE wish_cards
+		SET done_at=?,
+			updated_at=?
+		WHERE id=?
+	`, doneAt,
+		updatedAt,
+		wishCardID,
+	)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	return nil
+}
+
+func (repo *wishCardRepositoryImplement) UpdateUserID(ctx context.Context, masterTx repository.MasterTx, wishCardID int, userID int, updatedAt *time.Time) error {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	_, err = tx.Exec(`
+		UPDATE wish_cards
+		SET user_id=?,
+			updated_at=?
+		WHERE id=?
+	`, userID,
+		updatedAt,
+		wishCardID,
+	)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	return nil
+}
+
+func (repo *wishCardRepositoryImplement) UpdatePlaceID(ctx context.Context, masterTx repository.MasterTx, wishCardID int, placeID int, updatedAt *time.Time) error {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	_, err = tx.Exec(`
+		UPDATE wish_cards
+		SET place_id=?,
+			updated_at=?
+		WHERE id=?
+	`, placeID,
+		updatedAt,
+		wishCardID,
+	)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	return nil
+}
+
+func (repo *wishCardRepositoryImplement) UpdateCategoryID(ctx context.Context, masterTx repository.MasterTx, wishCardID int, categoryID int, updatedAt *time.Time) error {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	_, err = tx.Exec(`
+		UPDATE wish_cards
+		SET category_id=?,
+			updated_at=?
+		WHERE id=?
+	`, categoryID,
+		updatedAt,
+		wishCardID,
+	)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	return nil
+}
+
 func (repo *wishCardRepositoryImplement) UpdateWithCategoryID(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity, categoryID int) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
@@ -127,8 +283,8 @@ func (repo *wishCardRepositoryImplement) UpdateWithCategoryID(ctx context.Contex
 	return nil
 }
 
-func (repo *wishCardRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity) error {
-	if wishCard.DeletedAt == nil {
+func (repo *wishCardRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCardID int, updatedAt, deletedAt *time.Time) error {
+	if deletedAt == nil {
 		return werrors.Newf(
 			errors.New("can't up delete flag. deletedAt is nil"),
 			codes.Internal,
@@ -146,9 +302,9 @@ func (repo *wishCardRepositoryImplement) UpDeleteFlag(ctx context.Context, maste
 		UPDATE wish_cards
 		SET updated_at=?, deleted_at=?
 		WHERE id=?
-	`, wishCard.UpdatedAt,
-		wishCard.DeletedAt,
-		wishCard.ID,
+	`, updatedAt,
+		deletedAt,
+		wishCardID,
 	)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -157,7 +313,7 @@ func (repo *wishCardRepositoryImplement) UpDeleteFlag(ctx context.Context, maste
 	return nil
 }
 
-func (repo *wishCardRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity) error {
+func (repo *wishCardRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCardID int, updatedAt *time.Time) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -167,9 +323,9 @@ func (repo *wishCardRepositoryImplement) DownDeleteFlag(ctx context.Context, mas
 		UPDATE wish_cards
 		SET updated_at=?, deleted_at=?
 		WHERE id=?
-	`, wishCard.UpdatedAt,
+	`, updatedAt,
 		nil,
-		wishCard.ID,
+		wishCardID,
 	)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -178,7 +334,7 @@ func (repo *wishCardRepositoryImplement) DownDeleteFlag(ctx context.Context, mas
 	return nil
 }
 
-func (repo *wishCardRepositoryImplement) Delete(ctx context.Context, masterTx repository.MasterTx, wishCardID int) error {
+func (repo *wishCardRepositoryImplement) Delete(ctx context.Context, masterTx repository.MasterTx, wishCard *wishCardEntity.Entity) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -187,7 +343,7 @@ func (repo *wishCardRepositoryImplement) Delete(ctx context.Context, masterTx re
 	_, err = tx.Exec(`
 		DELETE FROM wish_cards
 		WHERE id=? and deleted_at is not null
-	`, wishCardID)
+	`, wishCard.ID)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return werrors.FromConstant(err, werrors.ServerError)
