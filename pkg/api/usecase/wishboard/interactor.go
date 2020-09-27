@@ -117,7 +117,7 @@ func (i *interactor) UpdateTitle(ctx context.Context, wishBoardID int, title, au
 			return werrors.Stack(err)
 		}
 		if !isMember {
-			err := errors.New("you don't belong to wish_board")
+			err := errors.New("Error occurred when update board title. cause: permission denied")
 			tlog.PrintErrorLogWithCtx(ctx, err)
 			return werrors.FromConstant(err, werrors.WishBoardPermissionDenied)
 		}
@@ -153,7 +153,7 @@ func (i *interactor) UpdateBackgroundImage(ctx context.Context, wishBoardID int,
 			return werrors.Stack(err)
 		}
 		if !isMember {
-			err := errors.New("you don't belong to wish_board")
+			err := errors.New("Error occurred when update board background image. cause: permission denied")
 			tlog.PrintErrorLogWithCtx(ctx, err)
 			return werrors.FromConstant(err, werrors.WishBoardPermissionDenied)
 		}
@@ -196,7 +196,7 @@ func (i *interactor) DeleteWishBoard(ctx context.Context, wishBoardID int, authI
 			return werrors.Stack(err)
 		}
 		if !isMember {
-			err := errors.New("you don't belong to wish_board")
+			err := errors.New("Error occurred when delete board. cause: permission denied")
 			tlog.PrintErrorLogWithCtx(ctx, err)
 			return werrors.FromConstant(err, werrors.WishBoardPermissionDenied)
 		}
@@ -216,7 +216,7 @@ func (i *interactor) DeleteWishBoard(ctx context.Context, wishBoardID int, authI
 
 func validateTitle(ctx context.Context, title string) error {
 	if title == "" {
-		err := errors.New("title is empty")
+		err := errors.New("Error occurred when board title validation.")
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return werrors.FromConstant(err, werrors.BadRequest)
 	}
