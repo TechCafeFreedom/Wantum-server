@@ -24,7 +24,7 @@ func New(masterTxManager repository.MasterTxManager) wishboardrepository.Reposit
 	}
 }
 
-func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.MasterTx, b *wishboard.Entity) (*wishboard.Entity, error) {
+func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.MasterTx, wishBoardEntity *wishboard.Entity) (*wishboard.Entity, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -36,7 +36,7 @@ func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.Ma
 		INSERT INTO wish_boards(
 			title, background_image_url, invite_url, user_id, created_at, updated_at
 		) VALUES (?, ?, ?, ?, ?, ?)
-	`, b.Title, b.BackgroundImageURL, b.InviteURL, b.UserID, *b.CreatedAt, *b.UpdatedAt)
+	`, wishBoardEntity.Title, wishBoardEntity.BackgroundImageURL, wishBoardEntity.InviteURL, wishBoardEntity.UserID, *wishBoardEntity.CreatedAt, *wishBoardEntity.UpdatedAt)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return nil, werrors.FromConstant(err, werrors.ServerError)
@@ -48,9 +48,9 @@ func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.Ma
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	b.ID = int(insertID)
+	wishBoardEntity.ID = int(insertID)
 
-	return b, nil
+	return wishBoardEntity, nil
 }
 
 func (r *repositoryImpliment) SelectByPK(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) (*wishboard.Entity, error) {
@@ -68,10 +68,10 @@ func (r *repositoryImpliment) SelectByPK(ctx context.Context, masterTx repositor
 	`, wishBoardID)
 
 	// ポインタ型のフィールドについては、あらかじめメモリ確保する
-	b := wishboard.Entity{CreatedAt: &time.Time{}, UpdatedAt: &time.Time{}}
+	wishBoardEntity := wishboard.Entity{CreatedAt: &time.Time{}, UpdatedAt: &time.Time{}}
 	// CreatedAt, UpdatedAtはポインタなので「&」はつけずにそのまま渡す
 	err = row.Scan(
-		&b.ID, &b.Title, &b.BackgroundImageURL, &b.InviteURL, &b.UserID, b.CreatedAt, b.UpdatedAt)
+		&wishBoardEntity.ID, &wishBoardEntity.Title, &wishBoardEntity.BackgroundImageURL, &wishBoardEntity.InviteURL, &wishBoardEntity.UserID, wishBoardEntity.CreatedAt, wishBoardEntity.UpdatedAt)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -80,7 +80,7 @@ func (r *repositoryImpliment) SelectByPK(ctx context.Context, masterTx repositor
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	return &b, nil
+	return &wishBoardEntity, nil
 }
 
 func (r *repositoryImpliment) SelectByPKs(ctx context.Context, masterTx repository.MasterTx, wishBoardIDs []int) (wishboard.EntitySlice, error) {
@@ -115,13 +115,13 @@ func (r *repositoryImpliment) SelectByPKs(ctx context.Context, masterTx reposito
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	bs := wishboard.EntitySlice{}
+	wishBoardEntitySlice := wishboard.EntitySlice{}
 	for rows.Next() {
 		// ポインタ型のフィールドについては、あらかじめメモリ確保する
-		b := wishboard.Entity{CreatedAt: &time.Time{}, UpdatedAt: &time.Time{}}
+		wishBoardEntity := wishboard.Entity{CreatedAt: &time.Time{}, UpdatedAt: &time.Time{}}
 		// CreatedAt, UpdatedAtはポインタなので「&」はつけずにそのまま渡す
 		err := rows.Scan(
-			&b.ID, &b.Title, &b.BackgroundImageURL, &b.InviteURL, &b.UserID, b.CreatedAt, b.UpdatedAt)
+			&wishBoardEntity.ID, &wishBoardEntity.Title, &wishBoardEntity.BackgroundImageURL, &wishBoardEntity.InviteURL, &wishBoardEntity.UserID, wishBoardEntity.CreatedAt, wishBoardEntity.UpdatedAt)
 
 		if err != nil {
 			if err == sql.ErrNoRows {
@@ -130,10 +130,10 @@ func (r *repositoryImpliment) SelectByPKs(ctx context.Context, masterTx reposito
 			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}
 
-		bs = append(bs, &b)
+		wishBoardEntitySlice = append(wishBoardEntitySlice, &wishBoardEntity)
 	}
 
-	return bs, nil
+	return wishBoardEntitySlice, nil
 }
 
 func (r *repositoryImpliment) UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string, updatedAt *time.Time) error {
@@ -180,7 +180,7 @@ func (r *repositoryImpliment) UpdateBackgroundImageURL(ctx context.Context, mast
 	return nil
 }
 
-func (r *repositoryImpliment) Delete(ctx context.Context, masterTx repository.MasterTx, b *wishboard.Entity) error {
+func (r *repositoryImpliment) Delete(ctx context.Context, masterTx repository.MasterTx, wishBoardEntity *wishboard.Entity) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -193,7 +193,7 @@ func (r *repositoryImpliment) Delete(ctx context.Context, masterTx repository.Ma
 			updated_at=?,
 			deleted_at=?
 		WHERE id = ?
-	`, *b.UpdatedAt, *b.DeletedAt, b.ID)
+	`, *wishBoardEntity.UpdatedAt, *wishBoardEntity.DeletedAt, wishBoardEntity.ID)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return werrors.FromConstant(err, werrors.ServerError)

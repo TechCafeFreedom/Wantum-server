@@ -35,7 +35,7 @@ func New(wishBoardRepository wishboardrepository.Repository, userWishBoardReposi
 func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, title, backgroundImageURL, inviteURL string, userID int) (*wishboard.Entity, error) {
 	now := time.Now()
 
-	b := &wishboard.Entity{
+	newWishBoard := &wishboard.Entity{
 		Title:              title,
 		BackgroundImageURL: backgroundImageURL,
 		InviteURL:          inviteURL,
@@ -44,25 +44,25 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, titl
 		UpdatedAt:          &now,
 	}
 
-	b, err := s.wishBoardRepository.Insert(ctx, masterTx, b)
+	createdWishBoard, err := s.wishBoardRepository.Insert(ctx, masterTx, newWishBoard)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
 
-	err = s.userWishBoardRepository.Insert(ctx, masterTx, userID, b.ID)
+	err = s.userWishBoardRepository.Insert(ctx, masterTx, userID, createdWishBoard.ID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
 
-	return b, nil
+	return createdWishBoard, nil
 }
 
 func (s *service) GetByPK(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) (*wishboard.Entity, error) {
-	b, err := s.wishBoardRepository.SelectByPK(ctx, masterTx, wishBoardID)
+	wishBoardEntity, err := s.wishBoardRepository.SelectByPK(ctx, masterTx, wishBoardID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	return b, nil
+	return wishBoardEntity, nil
 }
 
 func (s *service) GetMyBoards(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error) {
@@ -75,12 +75,12 @@ func (s *service) GetMyBoards(ctx context.Context, masterTx repository.MasterTx,
 		return nil, nil
 	}
 
-	bs, err := s.wishBoardRepository.SelectByPKs(ctx, masterTx, wishBoardIDs)
+	wishBoardEntitySlice, err := s.wishBoardRepository.SelectByPKs(ctx, masterTx, wishBoardIDs)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
 
-	return bs, nil
+	return wishBoardEntitySlice, nil
 }
 
 func (s *service) IsMember(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error) {
@@ -114,9 +114,9 @@ func (s *service) UpdateBackgroundImageURL(ctx context.Context, masterTx reposit
 func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) error {
 	now := time.Now()
 
-	b := &wishboard.Entity{ID: wishBoardID, UpdatedAt: &now, DeletedAt: &now}
+	wishBoardEntity := &wishboard.Entity{ID: wishBoardID, UpdatedAt: &now, DeletedAt: &now}
 
-	err := s.wishBoardRepository.Delete(ctx, masterTx, b)
+	err := s.wishBoardRepository.Delete(ctx, masterTx, wishBoardEntity)
 	if err != nil {
 		return werrors.Stack(err)
 	}
