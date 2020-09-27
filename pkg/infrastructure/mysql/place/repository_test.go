@@ -99,6 +99,27 @@ func TestUpdate(t *testing.T) {
 	})
 }
 
+func TestUpdateName(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		var err error
+		ctx := context.Background()
+
+		var result *placeEntity.Entity
+		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
+			if err = repo.UpdateName(ctx, masterTx, 2, dummyPlace, &dummyDate); err != nil {
+				return err
+			}
+
+			result, err = repo.SelectByID(ctx, masterTx, 2)
+			return err
+		})
+
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyPlace, result.Name)
+	})
+}
+
 func TestUpDeleteFlag(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
@@ -194,7 +215,7 @@ func TestDelete(t *testing.T) {
 			place.DeletedAt = &dummyDate
 			repo.UpDeleteFlag(ctx, masterTx, place)
 
-			if err = repo.Delete(ctx, masterTx, place.ID); err != nil {
+			if err = repo.Delete(ctx, masterTx, place); err != nil {
 				return err
 			}
 

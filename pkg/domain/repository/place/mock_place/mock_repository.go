@@ -8,6 +8,7 @@ import (
 	context "context"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
+	time "time"
 	place "wantum/pkg/domain/entity/place"
 	repository "wantum/pkg/domain/repository"
 )
@@ -62,6 +63,20 @@ func (m *MockRepository) Update(ctx context.Context, masterTx repository.MasterT
 func (mr *MockRepositoryMockRecorder) Update(ctx, masterTx, place interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockRepository)(nil).Update), ctx, masterTx, place)
+}
+
+// UpdateName mocks base method
+func (m *MockRepository) UpdateName(ctx context.Context, masterTx repository.MasterTx, placeID int, name string, updatedAt *time.Time) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateName", ctx, masterTx, placeID, name, updatedAt)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateName indicates an expected call of UpdateName
+func (mr *MockRepositoryMockRecorder) UpdateName(ctx, masterTx, placeID, name, updatedAt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateName", reflect.TypeOf((*MockRepository)(nil).UpdateName), ctx, masterTx, placeID, name, updatedAt)
 }
 
 // Delete mocks base method

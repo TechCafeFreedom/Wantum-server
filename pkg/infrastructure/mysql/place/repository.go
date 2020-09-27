@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"time"
 	placeEntity "wantum/pkg/domain/entity/place"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/place"
@@ -72,6 +73,27 @@ func (repo *placeRepositoryImplement) Update(ctx context.Context, masterTx repos
 	return nil
 }
 
+func (repo *placeRepositoryImplement) UpdateName(ctx context.Context, masterTx repository.MasterTx, placeID int, name string, updatedAt *time.Time) error {
+	tx, err := mysql.ExtractTx(masterTx)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	_, err = tx.Exec(`
+		UPDATE places
+		SET name=?, updated_at=?
+		WHERE id=?
+	`, name,
+		updatedAt,
+		placeID,
+	)
+	if err != nil {
+		tlog.PrintErrorLogWithCtx(ctx, err)
+		return werrors.FromConstant(err, werrors.ServerError)
+	}
+	return nil
+}
+
 func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *placeEntity.Entity) error {
 	if place.DeletedAt == nil {
 		return werrors.Newf(
@@ -124,7 +146,7 @@ func (repo *placeRepositoryImplement) DownDeleteFlag(ctx context.Context, master
 	return nil
 }
 
-func (repo *placeRepositoryImplement) Delete(ctx context.Context, masterTx repository.MasterTx, placeID int) error {
+func (repo *placeRepositoryImplement) Delete(ctx context.Context, masterTx repository.MasterTx, place *placeEntity.Entity) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -133,7 +155,7 @@ func (repo *placeRepositoryImplement) Delete(ctx context.Context, masterTx repos
 	_, err = tx.Exec(`
 		DELETE FROM places
 		WHERE id=? and deleted_at is not null
-	`, placeID)
+	`, place.ID)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return werrors.FromConstant(err, werrors.ServerError)
