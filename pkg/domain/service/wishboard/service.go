@@ -75,12 +75,12 @@ func (s *service) GetMyBoards(ctx context.Context, masterTx repository.MasterTx,
 		return nil, nil
 	}
 
-	wishBoardEntitySlice, err := s.wishBoardRepository.SelectByPKs(ctx, masterTx, wishBoardIDs)
+	wishBoardSlice, err := s.wishBoardRepository.SelectByPKs(ctx, masterTx, wishBoardIDs)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
 
-	return wishBoardEntitySlice, nil
+	return wishBoardSlice, nil
 }
 
 func (s *service) IsMember(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error) {

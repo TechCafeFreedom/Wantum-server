@@ -43,7 +43,7 @@ func (i *interactor) CreateNewWishBoard(ctx context.Context, authID, title strin
 
 	var wishBoardEntity *wishboard.Entity
 	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		u, err := i.userService.GetByAuthID(ctx, masterTx, authID)
+		userEntity, err := i.userService.GetByAuthID(ctx, masterTx, authID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
@@ -57,7 +57,7 @@ func (i *interactor) CreateNewWishBoard(ctx context.Context, authID, title strin
 		// TODO: 招待URLの自動生成
 		inviteURL := "hoge"
 
-		wishBoardEntity, err = i.wishBoardService.Create(ctx, masterTx, title, backgroundImageURL, inviteURL, u.ID)
+		wishBoardEntity, err = i.wishBoardService.Create(ctx, masterTx, title, backgroundImageURL, inviteURL, userEntity.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
@@ -72,7 +72,7 @@ func (i *interactor) CreateNewWishBoard(ctx context.Context, authID, title strin
 }
 
 func (i *interactor) GetMyWishBoards(ctx context.Context, authID string) (wishboard.EntitySlice, error) {
-	var wishBoardEntitySlice wishboard.EntitySlice
+	var wishBoardSlice wishboard.EntitySlice
 	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		userEntity, err := i.userService.GetByAuthID(ctx, masterTx, authID)
 		if err != nil {
@@ -80,7 +80,7 @@ func (i *interactor) GetMyWishBoards(ctx context.Context, authID string) (wishbo
 		}
 
 		// 自分が所属しているWishBoardのリストを取得
-		wishBoardEntitySlice, err = i.wishBoardService.GetMyBoards(ctx, masterTx, userEntity.ID)
+		wishBoardSlice, err = i.wishBoardService.GetMyBoards(ctx, masterTx, userEntity.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
@@ -91,7 +91,7 @@ func (i *interactor) GetMyWishBoards(ctx context.Context, authID string) (wishbo
 		return nil, werrors.Stack(err)
 	}
 
-	return wishBoardEntitySlice, nil
+	return wishBoardSlice, nil
 }
 
 func (i *interactor) UpdateTitle(ctx context.Context, wishBoardID int, title, authID string) error {

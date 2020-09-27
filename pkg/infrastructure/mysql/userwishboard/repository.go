@@ -27,7 +27,6 @@ func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.Ma
 		return werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	// 新規レコード追加
 	_, err = tx.Exec(`
 		INSERT INTO users_wish_boards(user_id, wish_board_id) VALUES (?, ?)
 	`, userID, wishBoardID)
@@ -46,7 +45,6 @@ func (r *repositoryImpliment) Exists(ctx context.Context, masterTx repository.Ma
 		return false, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	// userIDとwishBoardIDで検索
 	row := tx.QueryRow(`
 		SELECT id FROM users_wish_boards WHERE user_id = ? AND wish_board_id = ?
 	`, userID, wishBoardID)
@@ -55,13 +53,11 @@ func (r *repositoryImpliment) Exists(ctx context.Context, masterTx repository.Ma
 	err = row.Scan(&i)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			// 見つからなければfalseを返す
 			return false, nil
 		}
 		return false, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	// 見つかればtrueを返す
 	return true, nil
 }
 
@@ -72,34 +68,30 @@ func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repos
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	// userIDで検索
 	rows, err := tx.Query(`
 		SELECT wish_board_id FROM users_wish_boards WHERE user_id = ?
 	`, userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			// 見つからなければ空リストを返す
 			return nil, nil
 		}
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	bis := []int{}
+	wishBoardIDSlice := []int{}
 	for rows.Next() {
-		var bi int
-		// wishBoardIDを取得
-		if err := rows.Scan(&bi); err != nil {
+		var wishBoardID int
+		if err := rows.Scan(&wishBoardID); err != nil {
 			if err == sql.ErrNoRows {
-				// 見つからなければ空リストを返す
 				return nil, nil
 			}
 			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}
 
-		bis = append(bis, bi)
+		wishBoardIDSlice = append(wishBoardIDSlice, wishBoardID)
 	}
 
-	return bis, nil
+	return wishBoardIDSlice, nil
 }
 
 func (r *repositoryImpliment) Delete(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) error {
@@ -109,7 +101,6 @@ func (r *repositoryImpliment) Delete(ctx context.Context, masterTx repository.Ma
 		return werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	// レコードの削除
 	_, err = tx.Exec(`
 		DELETE FROM users_wish_boards WHERE user_id = ? AND wish_board_id = ?
 	`, userID, wishBoardID)

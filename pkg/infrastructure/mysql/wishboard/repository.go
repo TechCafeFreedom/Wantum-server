@@ -115,7 +115,7 @@ func (r *repositoryImpliment) SelectByPKs(ctx context.Context, masterTx reposito
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	wishBoardEntitySlice := wishboard.EntitySlice{}
+	wishBoardSlice := wishboard.EntitySlice{}
 	for rows.Next() {
 		// ポインタ型のフィールドについては、あらかじめメモリ確保する
 		wishBoardEntity := wishboard.Entity{CreatedAt: &time.Time{}, UpdatedAt: &time.Time{}}
@@ -130,10 +130,10 @@ func (r *repositoryImpliment) SelectByPKs(ctx context.Context, masterTx reposito
 			return nil, werrors.FromConstant(err, werrors.ServerError)
 		}
 
-		wishBoardEntitySlice = append(wishBoardEntitySlice, &wishBoardEntity)
+		wishBoardSlice = append(wishBoardSlice, &wishBoardEntity)
 	}
 
-	return wishBoardEntitySlice, nil
+	return wishBoardSlice, nil
 }
 
 func (r *repositoryImpliment) UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string, updatedAt *time.Time) error {
