@@ -21,6 +21,13 @@ import (
 type Service interface {
 	Create(ctx context.Context, masterTx repository.MasterTx, activity, description string, date *time.Time, userID, categoryID, placeID int, tagsIDs []int) (*wishCardEntity.Entity, error)
 	Update(ctx context.Context, masterTx repository.MasterTx, wishCardID int, activity, description string, date, doneAt *time.Time, userID, placeID int) (*wishCardEntity.Entity, error)
+	UpdateActivity(ctx context.Context, masterTx repository.MasterTx, wishCardID int, activity string) (*wishCardEntity.Entity, error)
+	UpdateDescription(ctx context.Context, masterTx repository.MasterTx, wishCardID int, description string) (*wishCardEntity.Entity, error)
+	UpdateDate(ctx context.Context, masterTx repository.MasterTx, wishCardID int, date *time.Time) (*wishCardEntity.Entity, error)
+	UpdateDoneAt(ctx context.Context, masterTx repository.MasterTx, wishCardID int, doneAt *time.Time) (*wishCardEntity.Entity, error)
+	UpdateAuthor(ctx context.Context, masterTx repository.MasterTx, wishCardID, userID int) (*wishCardEntity.Entity, error)
+	UpdatePlace(ctx context.Context, masterTx repository.MasterTx, wishCardID, placeID int) (*wishCardEntity.Entity, error)
+	UpdateCategory(ctx context.Context, masterTx repository.MasterTx, wishCardID, categoryID int) (*wishCardEntity.Entity, error)
 	UpdateWithCategoryID(ctx context.Context, masterTx repository.MasterTx, wishCardID int, activity, description string, date, doneAt *time.Time, userID, categoryID, placeID int, tagIDs []int) (*wishCardEntity.Entity, error)
 	Delete(ctx context.Context, masterTx repository.MasterTx, wishCardID int) error
 	UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, wishCardID int) (*wishCardEntity.Entity, error)
@@ -30,15 +37,6 @@ type Service interface {
 	GetByCategoryID(ctx context.Context, masterTx repository.MasterTx, categoryID int) (wishCardEntity.EntitySlice, error)
 	AddTags(ctx context.Context, masterTx repository.MasterTx, wishCardID int, tagIDs []int) (*wishCardEntity.Entity, error)
 	DeleteTags(ctx context.Context, masterTx repository.MasterTx, wishCardID int, tagIDs []int) (*wishCardEntity.Entity, error)
-
-	// QUESTION: returnはerrorのみ or entity含め
-	UpdateActivity(ctx context.Context, masterTx repository.MasterTx, wishCardID int, activity string) (*wishCardEntity.Entity, error)
-	UpdateDescription(ctx context.Context, masterTx repository.MasterTx, wishCardID int, description string) (*wishCardEntity.Entity, error)
-	UpdateDate(ctx context.Context, masterTx repository.MasterTx, wishCardID int, date *time.Time) (*wishCardEntity.Entity, error)
-	UpdateDoneAt(ctx context.Context, masterTx repository.MasterTx, wishCardID int, doneAt *time.Time) (*wishCardEntity.Entity, error)
-	UpdateAuthor(ctx context.Context, masterTx repository.MasterTx, wishCardID, userID int) (*wishCardEntity.Entity, error)
-	UpdatePlace(ctx context.Context, masterTx repository.MasterTx, wishCardID, placeID int) (*wishCardEntity.Entity, error)
-	UpdateCategory(ctx context.Context, masterTx repository.MasterTx, wishCardID, categoryID int) (*wishCardEntity.Entity, error)
 }
 
 type service struct {
