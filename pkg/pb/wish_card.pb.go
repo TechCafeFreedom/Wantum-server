@@ -37,15 +37,15 @@ type CreateWishCardRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// やりたいことカテゴリーID
+	// やりたいことカテゴリーID [required]
 	WishCategoryId int64 `protobuf:"varint,1,opt,name=wish_category_id,json=wishCategoryId,proto3" json:"wish_category_id,omitempty"`
-	// 何をしたいのか
+	// 何をしたいのか [required, max=50]
 	Activity string `protobuf:"bytes,2,opt,name=activity,proto3" json:"activity,omitempty"`
-	// やりたいことの説明
+	// やりたいことの説明 [max=100]
 	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	// いつやりたいか（UNIX）
+	// いつやりたいか（UNIX） [過去の日付ではない]
 	Date int64 `protobuf:"varint,4,opt,name=date,proto3" json:"date,omitempty"`
-	// どこでそれをしたいのか
+	// どこでそれをしたいのか [required, max=200]
 	Place string `protobuf:"bytes,5,opt,name=place,proto3" json:"place,omitempty"`
 }
 
@@ -122,9 +122,9 @@ type UpdateWishCardActivityRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// カードのID
+	// カードのID [required]
 	WishCardId int64 `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"`
-	// アクティビティ名
+	// アクティビティ名 [required, max=50]
 	Activity string `protobuf:"bytes,2,opt,name=activity,proto3" json:"activity,omitempty"`
 }
 
@@ -180,9 +180,9 @@ type UpdateWishCardDescriptionRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// カードのID
+	// カードのID [required]
 	WishCardId int64 `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"`
-	// 説明
+	// 説明 [required, max=100]
 	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
 }
 
@@ -238,9 +238,9 @@ type UpdateWishCardDateRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// カードのID
+	// カードのID [required]
 	WishCardId int64 `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"`
-	// 日付
+	// 日付 [required, 過去の日付ではない]
 	Date int64 `protobuf:"varint,2,opt,name=date,proto3" json:"date,omitempty"`
 }
 
@@ -296,9 +296,9 @@ type UpdateWishCardPlaceRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// カードのID
+	// カードのID [required]
 	WishCardId int64 `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"`
-	// 場所
+	// 場所 [required, max=200]
 	Place string `protobuf:"bytes,2,opt,name=place,proto3" json:"place,omitempty"`
 }
 
@@ -354,9 +354,9 @@ type AddWishCardTagsRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// タグを追加するやりたいことカードのID
+	// タグを追加するやりたいことカードのID [required]
 	WishCardId int64 `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"`
-	// 追加したいタグの名前一覧（配列）
+	// 追加したいタグの名前一覧（配列） [required, max=20]
 	TagNames []string `protobuf:"bytes,2,rep,name=tag_names,json=tagNames,proto3" json:"tag_names,omitempty"`
 }
 
@@ -412,9 +412,9 @@ type DeleteWishCardTagsRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// タグを削除するやりたいことカードのID
+	// タグを削除するやりたいことカードのID [required]
 	WishCardId int64 `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"`
-	// 削除したいタグのID一覧（配列）
+	// 削除したいタグのID一覧（配列） [required]
 	TagIds []int64 `protobuf:"varint,2,rep,packed,name=tag_ids,json=tagIds,proto3" json:"tag_ids,omitempty"`
 }
 
@@ -470,7 +470,7 @@ type DeleteWishCardRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 削除したいやりたいことカードのID
+	// 削除したいやりたいことカードのID [required]
 	WishCardId int64 `protobuf:"varint,1,opt,name=wish_card_id,json=wishCardId,proto3" json:"wish_card_id,omitempty"`
 }
 

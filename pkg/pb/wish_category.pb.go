@@ -37,9 +37,9 @@ type CreateWishCategoryRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// やりたいことリストID
+	// やりたいことリストID [required]
 	WishListId int64 `protobuf:"varint,1,opt,name=wish_list_id,json=wishListId,proto3" json:"wish_list_id,omitempty"`
-	// やりたいことカテゴリー名
+	// やりたいことカテゴリー名 [required, max=30]
 	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 }
 
@@ -95,9 +95,9 @@ type UpdateWishCategoryTitleRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// やりたいことカテゴリーID
+	// やりたいことカテゴリーID [required]
 	WishCategoryId int64 `protobuf:"varint,1,opt,name=wish_category_id,json=wishCategoryId,proto3" json:"wish_category_id,omitempty"`
-	// 新規やりたいことカテゴリータイトル
+	// 新規やりたいことカテゴリータイトル [required, max=30]
 	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 }
 
@@ -153,7 +153,7 @@ type DeleteWishCategoryRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 削除したいやりたいことカテゴリーのID
+	// 削除したいやりたいことカテゴリーのID [required]
 	WishCategoryId int64 `protobuf:"varint,1,opt,name=wish_category_id,json=wishCategoryId,proto3" json:"wish_category_id,omitempty"`
 }
 

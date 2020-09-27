@@ -37,19 +37,19 @@ type CreateUserRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 表示名
+	// 表示名 [required, max=50]
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// ユーザ名
+	// ユーザ名 [required, max=20]
 	UserName string `protobuf:"bytes,2,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"`
 	// アイコン画像ファイル
 	Thumbnail []byte `protobuf:"bytes,3,opt,name=thumbnail,proto3" json:"thumbnail,omitempty"`
-	// ひとこと
+	// ひとこと [max=100]
 	Bio string `protobuf:"bytes,4,opt,name=bio,proto3" json:"bio,omitempty"`
-	// 性別（1: man, 2: woman, 3: unknown）
+	// 性別（1: man, 2: woman, 3: unknown） [required]
 	Gender GenderType `protobuf:"varint,5,opt,name=gender,proto3,enum=proto_enums.GenderType" json:"gender,omitempty"`
-	// 電話番号
+	// 電話番号 [max=15]
 	Phone string `protobuf:"bytes,6,opt,name=phone,proto3" json:"phone,omitempty"`
-	// 現在地的な。Twitterの真似
+	// 現在地的な。Twitterの真似 [max=30]
 	Place string `protobuf:"bytes,7,opt,name=place,proto3" json:"place,omitempty"`
 	// 生年月日(UNIX)
 	Birth int64 `protobuf:"varint,8,opt,name=birth,proto3" json:"birth,omitempty"`
@@ -149,7 +149,7 @@ type GetUserRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// ユーザー名
+	// ユーザー名 [required, max=20]
 	UserName string `protobuf:"bytes,1,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"`
 }
 
@@ -198,21 +198,23 @@ type UpdateUserProfileRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 更新したいユーザーのID
+	// 更新したいユーザーのID [required]
 	UserId int64 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	// 表示名
+	// 表示名 [required, max=50] ← ユーザー入力がない場合は現在の値を埋め込むこと
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	// ユーザ名
+	// ユーザ名 [required, max=20, 他ユーザーと重複していない]
+	// ←ユーザー入力がない場合は現在の値を埋め込むこと
 	UserName string `protobuf:"bytes,3,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"`
-	// アイコンのURL
+	// アイコン画像
 	Thumbnail []byte `protobuf:"bytes,4,opt,name=thumbnail,proto3" json:"thumbnail,omitempty"`
-	// ひとこと
+	// ひとこと [max=100]
 	Bio string `protobuf:"bytes,5,opt,name=bio,proto3" json:"bio,omitempty"`
-	// 性別（1: man, 2: woman, 3: unknown）
+	// 性別（1: man, 2: woman, 3: unknown） [required]
+	// ←ユーザー入力がない場合は現在の値を埋め込むこと
 	Gender GenderType `protobuf:"varint,6,opt,name=gender,proto3,enum=proto_enums.GenderType" json:"gender,omitempty"`
-	// 電話番号
+	// 電話番号 [max=15]
 	Phone string `protobuf:"bytes,7,opt,name=phone,proto3" json:"phone,omitempty"`
-	// 現在地的な。Twitterの真似
+	// 現在地的な。Twitterの真似 [max=30]
 	Place string `protobuf:"bytes,8,opt,name=place,proto3" json:"place,omitempty"`
 	// 生年月日(UNIX)
 	Birth int64 `protobuf:"varint,9,opt,name=birth,proto3" json:"birth,omitempty"`

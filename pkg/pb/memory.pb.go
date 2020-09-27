@@ -37,7 +37,7 @@ type GetMemoryRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 思い出1件を特定するための思い出ID
+	// 思い出1件を特定するための思い出ID [required]
 	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
 }
 
@@ -86,7 +86,7 @@ type GetUserMemoriesRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// ユーザー名
+	// ユーザー名 [required, max=20]
 	UserName string `protobuf:"bytes,1,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"`
 }
 
@@ -135,15 +135,15 @@ type CreateMemoryRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 投稿した思い出を保存するアルバムのID
+	// 投稿した思い出を保存するアルバムのID [required]
 	AlbumId int64 `protobuf:"varint,1,opt,name=album_id,json=albumId,proto3" json:"album_id,omitempty"`
-	// やったこと
+	// やったこと [required, max=50]
 	Activity string `protobuf:"bytes,2,opt,name=activity,proto3" json:"activity,omitempty"`
-	// 日付(UNIX)
+	// 日付(UNIX) [required]
 	Date int64 `protobuf:"varint,3,opt,name=date,proto3" json:"date,omitempty"`
 	// 思い出の説明
 	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
-	// 場所
+	// 場所 [required, max=200]
 	Place string `protobuf:"bytes,5,opt,name=place,proto3" json:"place,omitempty"`
 	// アップロードしたい画像一覧（配列）
 	Photos []*Photo `protobuf:"bytes,6,rep,name=photos,proto3" json:"photos,omitempty"`
@@ -238,7 +238,7 @@ type DeleteMemoryRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 削除する思い出のID
+	// 削除する思い出のID [required]
 	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
 }
 
@@ -287,15 +287,15 @@ type UpdateMemoryRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 更新する思い出のID
+	// 更新する思い出のID [required]
 	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
-	// やったこと
+	// やったこと [required] ← ユーザー入力がない場合は現在の値を埋め込むこと
 	Activity string `protobuf:"bytes,2,opt,name=activity,proto3" json:"activity,omitempty"`
-	// 日付(UNIX)
+	// 日付(UNIX) [required] ← ユーザー入力がない場合は現在の値を埋め込むこと
 	Date int64 `protobuf:"varint,3,opt,name=date,proto3" json:"date,omitempty"`
-	// 思い出の説明
+	// 思い出の説明 ← ユーザー入力がない場合は現在の値を埋め込むこと
 	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
-	// 場所
+	// 場所 [required, max=200] ← ユーザー入力がない場合は現在の値を埋め込むこと
 	Place string `protobuf:"bytes,5,opt,name=place,proto3" json:"place,omitempty"`
 }
 
@@ -372,9 +372,9 @@ type CreateMemoryPhotosRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 画像を追加する思い出のID
+	// 画像を追加する思い出のID [required]
 	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
-	// アップロードしたい画像ファイル(配列)
+	// アップロードしたい画像ファイル(配列) [required, max_len=5]
 	PhotoFile [][]byte `protobuf:"bytes,2,rep,name=photo_file,json=photoFile,proto3" json:"photo_file,omitempty"`
 }
 
@@ -430,9 +430,9 @@ type DeleteMemoryPhotosRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 画像を削除する思い出のID
+	// 画像を削除する思い出のID [required]
 	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
-	// 削除したい画像のID一覧（配列）
+	// 削除したい画像のID一覧（配列） [required]
 	PhotoIds []int64 `protobuf:"varint,2,rep,packed,name=photo_ids,json=photoIds,proto3" json:"photo_ids,omitempty"`
 }
 
@@ -488,9 +488,9 @@ type AddMemoryTagsRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// タグを追加する思い出のID
+	// タグを追加する思い出のID [required]
 	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
-	// 追加したいタグの名前一覧（配列）
+	// 追加したいタグの名前一覧（配列） [required, max_len=20]
 	TagNames []string `protobuf:"bytes,2,rep,name=tag_names,json=tagNames,proto3" json:"tag_names,omitempty"`
 }
 
@@ -546,9 +546,9 @@ type DeleteMemoryTagsRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// タグを削除する思い出のID
+	// タグを削除する思い出のID [required]
 	MemoryId int64 `protobuf:"varint,1,opt,name=memory_id,json=memoryId,proto3" json:"memory_id,omitempty"`
-	// 削除したいタグのID一覧（配列）
+	// 削除したいタグのID一覧（配列） [required]
 	TagIds []int64 `protobuf:"varint,2,rep,packed,name=tag_ids,json=tagIds,proto3" json:"tag_ids,omitempty"`
 }
 

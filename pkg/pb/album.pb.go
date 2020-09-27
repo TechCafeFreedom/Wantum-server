@@ -37,7 +37,7 @@ type CreateAlbumRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// アルバム名
+	// アルバム名 [required, max=200]
 	Title string `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
 }
 
@@ -86,7 +86,7 @@ type GetAlbumRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// アルバムを特定するためのID
+	// アルバムを特定するためのID [required]
 	AlbumId int64 `protobuf:"varint,1,opt,name=album_id,json=albumId,proto3" json:"album_id,omitempty"`
 }
 
@@ -135,9 +135,9 @@ type GetMyAlbumsRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 取得開始位置を知らせるためのアルバムID
+	// 取得開始位置を知らせるためのアルバムID [required]
 	AlbumId int64 `protobuf:"varint,1,opt,name=album_id,json=albumId,proto3" json:"album_id,omitempty"`
-	// 最大取得件数
+	// 最大取得件数 [default=1, max=20]
 	Limit int64 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
 }
 
@@ -193,9 +193,9 @@ type UpdateAlbumTitleRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 変更したいアルバムのID
+	// 変更したいアルバムのID [required]
 	AlbumId int64 `protobuf:"varint,1,opt,name=album_id,json=albumId,proto3" json:"album_id,omitempty"`
-	// 変更したいアルバムタイトル
+	// 変更したいアルバムタイトル [required, max=200]
 	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 }
 
@@ -251,7 +251,7 @@ type DeleteAlbumRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 削除したいアルバムのID
+	// 削除したいアルバムのID [required]
 	AlbumId int64 `protobuf:"varint,1,opt,name=album_id,json=albumId,proto3" json:"album_id,omitempty"`
 }
 

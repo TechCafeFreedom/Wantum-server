@@ -37,7 +37,7 @@ type CreateWishBoardRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// やりたいことボード名
+	// やりたいことボード名 [required, max=30]
 	Title string `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
 }
 
@@ -86,9 +86,9 @@ type GetWishBoardListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 取得開始位置を知らせるためのやりたいことボードID
+	// 取得開始位置を知らせるためのやりたいことボードID [required]
 	WishBoardId int64 `protobuf:"varint,1,opt,name=wish_board_id,json=wishBoardId,proto3" json:"wish_board_id,omitempty"`
-	// 最大取得件数
+	// 最大取得件数 [default=1, max=20]
 	Limit int64 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
 }
 
@@ -144,7 +144,7 @@ type GetWishBoardRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// やりたいことボードを特定するためのID
+	// やりたいことボードを特定するためのID [required]
 	WishBoardId int64 `protobuf:"varint,1,opt,name=wish_board_id,json=wishBoardId,proto3" json:"wish_board_id,omitempty"`
 }
 
@@ -193,9 +193,9 @@ type UpdateWishBoardNameRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// やりたいことボードID
+	// やりたいことボードID [required]
 	WishBoardId int64 `protobuf:"varint,1,opt,name=wish_board_id,json=wishBoardId,proto3" json:"wish_board_id,omitempty"`
-	// 新しいやりたいことボード名
+	// 新しいやりたいことボード名 [required, max=30]
 	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 }
 
@@ -251,9 +251,9 @@ type UpdateWishBoardBackgroundImageRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// やりたいことボードID
+	// やりたいことボードID [required]
 	WishBoardId int64 `protobuf:"varint,1,opt,name=wish_board_id,json=wishBoardId,proto3" json:"wish_board_id,omitempty"`
-	// 新しい背景画像ファイル
+	// 新しい背景画像ファイル [required]
 	BackgroundImage []byte `protobuf:"bytes,2,opt,name=background_image,json=backgroundImage,proto3" json:"background_image,omitempty"`
 }
 
@@ -309,9 +309,9 @@ type UpdateWishCategoryAndCardPositionRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// やりたいことボードID
+	// やりたいことボードID [required]
 	WishBoardId int64 `protobuf:"varint,1,opt,name=wish_board_id,json=wishBoardId,proto3" json:"wish_board_id,omitempty"`
-	// やりたいことカテゴリーの並び順（IDの配列）
+	// やりたいことカテゴリーの並び順（IDの配列） [required]
 	Position []*WishCategoryAndCardPosition `protobuf:"bytes,2,rep,name=position,proto3" json:"position,omitempty"`
 }
 
@@ -367,7 +367,7 @@ type WishCategoryAndCardPosition struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// やりたいことカテゴリーID
+	// やりたいことカテゴリーID [max_len=1]
 	WishCategoryId int64 `protobuf:"varint,1,opt,name=wish_category_id,json=wishCategoryId,proto3" json:"wish_category_id,omitempty"`
 	// やりたいことカテゴリーに所属するカードのID一覧（並び順を表す配列）
 	WishCardIds []int64 `protobuf:"varint,2,rep,packed,name=wish_card_ids,json=wishCardIds,proto3" json:"wish_card_ids,omitempty"`
@@ -425,7 +425,7 @@ type DeleteWishBoardRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 削除したいやりたいことボードのID
+	// 削除したいやりたいことボードのID [required]
 	WishBoardId int64 `protobuf:"varint,1,opt,name=wish_board_id,json=wishBoardId,proto3" json:"wish_board_id,omitempty"`
 }
 
