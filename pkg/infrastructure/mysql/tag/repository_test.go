@@ -24,6 +24,8 @@ var (
 	txManager repository.MasterTxManager
 	repo      tag.Repository
 	dummyDate time.Time
+
+	dummyTagID = 1
 )
 
 func TestMain(m *testing.M) {
@@ -77,43 +79,37 @@ func TestUpDeleteFlag(t *testing.T) {
 		var err error
 		ctx := context.Background()
 		name, _ := makeRandomStr(10)
+		dummyTime := time.Date(2020, 10, 10, 10, 0, 0, 0, time.Local)
 		tag := &tagEntity.Entity{
 			Name:      name,
-			CreatedAt: &dummyDate,
-			UpdatedAt: &dummyDate,
+			CreatedAt: &dummyTime,
+			UpdatedAt: &dummyTime,
 		}
 
 		var result *tagEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			newTagID, _ := repo.Insert(ctx, masterTx, tag)
 
-			tag.ID = newTagID
-			tag.DeletedAt = &dummyDate
-			if err = repo.UpDeleteFlag(ctx, masterTx, tag); err != nil {
+			if err = repo.UpDeleteFlag(ctx, masterTx, newTagID, &dummyDate, &dummyDate); err != nil {
 				return err
 			}
 
-			result, _ = repo.SelectByID(ctx, masterTx, tag.ID)
+			result, _ = repo.SelectByID(ctx, masterTx, newTagID)
 			return nil
 		})
 
 		assert.NoError(t, err)
 		assert.NotNil(t, result.DeletedAt)
+		assert.Equal(t, dummyDate, result.DeletedAt.Local())
+		assert.Equal(t, dummyDate, result.UpdatedAt.Local())
 	})
 
 	t.Run("failure_deletedAtがnil", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		name, _ := makeRandomStr(10)
-		tag := &tagEntity.Entity{
-			ID:        1,
-			Name:      name,
-			CreatedAt: &dummyDate,
-			UpdatedAt: &dummyDate,
-		}
 
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-			return repo.UpDeleteFlag(ctx, masterTx, tag)
+			return repo.UpDeleteFlag(ctx, masterTx, dummyTagID, &dummyDate, nil)
 		})
 
 		assert.Error(t, err)
@@ -124,24 +120,15 @@ func TestDownDeleteFlag(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
-		name, _ := makeRandomStr(10)
-		tag := &tagEntity.Entity{
-			ID:        1,
-			Name:      name,
-			CreatedAt: &dummyDate,
-			UpdatedAt: &dummyDate,
-			DeletedAt: &dummyDate,
-		}
 
 		var result *tagEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 
-			tag.DeletedAt = nil
-			if err = repo.DownDeleteFlag(ctx, masterTx, tag); err != nil {
+			if err = repo.DownDeleteFlag(ctx, masterTx, dummyTagID, &dummyDate); err != nil {
 				return err
 			}
 
-			result, _ = repo.SelectByID(ctx, masterTx, tag.ID)
+			result, _ = repo.SelectByID(ctx, masterTx, dummyTagID)
 			return nil
 		})
 
@@ -166,9 +153,9 @@ func TestDelete(t *testing.T) {
 			newTagID, _ := repo.Insert(ctx, masterTx, tag)
 			tag.ID = newTagID
 			tag.DeletedAt = &dummyDate
-			repo.UpDeleteFlag(ctx, masterTx, tag)
+			repo.UpDeleteFlag(ctx, masterTx, tag.ID, tag.DeletedAt, tag.DeletedAt)
 
-			if err = repo.Delete(ctx, masterTx, tag.ID); err != nil {
+			if err = repo.Delete(ctx, masterTx, tag); err != nil {
 				return err
 			}
 

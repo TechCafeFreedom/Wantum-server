@@ -6,6 +6,7 @@ import (
 	"errors"
 	"strconv"
 	"strings"
+	"time"
 	tagEntity "wantum/pkg/domain/entity/tag"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/repository/tag"
@@ -51,8 +52,8 @@ func (repo *tagRepositoryImplement) Insert(ctx context.Context, masterTx reposit
 	return int(id), nil
 }
 
-func (repo *tagRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tag *tagEntity.Entity) error {
-	if tag.DeletedAt == nil {
+func (repo *tagRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int, updatedAt, deletedAt *time.Time) error {
+	if deletedAt == nil {
 		return werrors.Newf(
 			errors.New("can't up delete flag. deletedAt is nil"),
 			codes.Internal,
@@ -71,9 +72,9 @@ func (repo *tagRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx r
 		UPDATE tags
 		SET updated_at=?, deleted_at=?
 		WHERE id=?
-	`, tag.UpdatedAt,
-		tag.DeletedAt,
-		tag.ID,
+	`, deletedAt,
+		deletedAt,
+		tagID,
 	)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -82,7 +83,7 @@ func (repo *tagRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx r
 	return nil
 }
 
-func (repo *tagRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tag *tagEntity.Entity) error {
+func (repo *tagRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, tagID int, updatedAt *time.Time) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -92,9 +93,9 @@ func (repo *tagRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx
 		UPDATE tags
 		SET updated_at=?, deleted_at=?
 		WHERE id=?
-	`, tag.UpdatedAt,
+	`, updatedAt,
 		nil,
-		tag.ID,
+		tagID,
 	)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -103,7 +104,7 @@ func (repo *tagRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx
 	return nil
 }
 
-func (repo *tagRepositoryImplement) Delete(ctx context.Context, masterTx repository.MasterTx, tagID int) error {
+func (repo *tagRepositoryImplement) Delete(ctx context.Context, masterTx repository.MasterTx, tag *tagEntity.Entity) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -112,7 +113,7 @@ func (repo *tagRepositoryImplement) Delete(ctx context.Context, masterTx reposit
 	_, err = tx.Exec(`
 		DELETE FROM tags
 		WHERE id=? and deleted_at is not null
-	`, tagID)
+	`, tag.ID)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
 		return werrors.FromConstant(err, werrors.ServerError)
