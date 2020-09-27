@@ -28,6 +28,10 @@ var (
 	dummyDate        = time.Date(2020, 9, 1, 12, 0, 0, 0, time.Local)
 	dummyActivity    = "sampleActivity"
 	dummyDescription = "sampleDescription"
+	dummyWishCardID  = 2
+	dummyUserID      = 1
+	dummyPlaceID     = 1
+	dummyCategoryID  = 1
 
 	dummyProfile = profileEntity.Entity{
 		UserID:    1,
@@ -174,6 +178,445 @@ func TestService_Update(t *testing.T) {
 	assert.Equal(t, dummyTags, result.Tags)
 }
 
+func TestService_UpdateActivity(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		dummyData := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
+			Activity:    "act",
+			Description: dummyDescription,
+			Date:        &dummyDate,
+			DoneAt:      &dummyDate,
+			CreatedAt:   &dummyDate,
+			UpdatedAt:   &dummyDate,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
+		}
+
+		wcRepo := mock_wish_card.NewMockRepository(ctrl)
+		wcRepo.EXPECT().UpdateActivity(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
+
+		userRepo := mock_user.NewMockRepository(ctrl)
+		profileRepo := mock_profile.NewMockRepository(ctrl)
+		placeRepo := mock_place.NewMockRepository(ctrl)
+		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		result, err := service.UpdateActivity(ctx, masterTx, dummyWishCardID, dummyActivity)
+
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyActivity, result.Activity)
+		assert.NotEqual(t, dummyDate, result.UpdatedAt)
+	})
+
+	t.Run("failure_存在しないデータ", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		wcRepo := mock_wish_card.NewMockRepository(ctrl)
+		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
+
+		userRepo := mock_user.NewMockRepository(ctrl)
+		profileRepo := mock_profile.NewMockRepository(ctrl)
+		placeRepo := mock_place.NewMockRepository(ctrl)
+		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		_, err := service.UpdateActivity(ctx, masterTx, dummyWishCardID, dummyActivity)
+
+		assert.Error(t, err)
+	})
+}
+
+func TestService_UpdateDescription(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		dummyData := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
+			Activity:    dummyActivity,
+			Description: "desc",
+			Date:        &dummyDate,
+			DoneAt:      &dummyDate,
+			CreatedAt:   &dummyDate,
+			UpdatedAt:   &dummyDate,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
+		}
+
+		wcRepo := mock_wish_card.NewMockRepository(ctrl)
+		wcRepo.EXPECT().UpdateDescription(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
+
+		userRepo := mock_user.NewMockRepository(ctrl)
+		profileRepo := mock_profile.NewMockRepository(ctrl)
+		placeRepo := mock_place.NewMockRepository(ctrl)
+		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		result, err := service.UpdateDescription(ctx, masterTx, dummyWishCardID, dummyDescription)
+
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyDescription, result.Description)
+		assert.NotEqual(t, dummyDate, result.UpdatedAt)
+	})
+
+	t.Run("failure_存在しないデータ", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		wcRepo := mock_wish_card.NewMockRepository(ctrl)
+		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
+
+		userRepo := mock_user.NewMockRepository(ctrl)
+		profileRepo := mock_profile.NewMockRepository(ctrl)
+		placeRepo := mock_place.NewMockRepository(ctrl)
+		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		_, err := service.UpdateDescription(ctx, masterTx, dummyWishCardID, dummyDescription)
+
+		assert.Error(t, err)
+	})
+}
+
+func TestService_UpdateDate(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		_dummyDate := time.Date(2020, 10, 10, 10, 0, 0, 0, time.Local)
+
+		dummyData := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
+			Activity:    dummyActivity,
+			Description: dummyDescription,
+			Date:        &_dummyDate,
+			DoneAt:      &dummyDate,
+			CreatedAt:   &dummyDate,
+			UpdatedAt:   &dummyDate,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
+		}
+
+		wcRepo := mock_wish_card.NewMockRepository(ctrl)
+		wcRepo.EXPECT().UpdateDate(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
+
+		userRepo := mock_user.NewMockRepository(ctrl)
+		profileRepo := mock_profile.NewMockRepository(ctrl)
+		placeRepo := mock_place.NewMockRepository(ctrl)
+		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		result, err := service.UpdateDate(ctx, masterTx, dummyWishCardID, &dummyDate)
+
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyDate, result.Date.Local())
+		assert.NotEqual(t, dummyDate, result.UpdatedAt)
+	})
+
+	t.Run("failure_存在しないデータ", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		wcRepo := mock_wish_card.NewMockRepository(ctrl)
+		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
+
+		userRepo := mock_user.NewMockRepository(ctrl)
+		profileRepo := mock_profile.NewMockRepository(ctrl)
+		placeRepo := mock_place.NewMockRepository(ctrl)
+		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		_, err := service.UpdateDate(ctx, masterTx, dummyWishCardID, &dummyDate)
+
+		assert.Error(t, err)
+	})
+}
+
+func TestService_UpdateDoneAt(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		_dummyDate := time.Date(2020, 10, 10, 10, 0, 0, 0, time.Local)
+
+		dummyData := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
+			Activity:    dummyActivity,
+			Description: dummyDescription,
+			Date:        &dummyDate,
+			DoneAt:      &_dummyDate,
+			CreatedAt:   &dummyDate,
+			UpdatedAt:   &dummyDate,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
+		}
+
+		wcRepo := mock_wish_card.NewMockRepository(ctrl)
+		wcRepo.EXPECT().UpdateDoneAt(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
+
+		userRepo := mock_user.NewMockRepository(ctrl)
+		profileRepo := mock_profile.NewMockRepository(ctrl)
+		placeRepo := mock_place.NewMockRepository(ctrl)
+		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		result, err := service.UpdateDoneAt(ctx, masterTx, dummyWishCardID, &dummyDate)
+
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyDate, result.DoneAt.Local())
+		assert.NotEqual(t, dummyDate, result.UpdatedAt)
+	})
+
+	t.Run("failure_存在しないデータ", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		wcRepo := mock_wish_card.NewMockRepository(ctrl)
+		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
+
+		userRepo := mock_user.NewMockRepository(ctrl)
+		profileRepo := mock_profile.NewMockRepository(ctrl)
+		placeRepo := mock_place.NewMockRepository(ctrl)
+		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		_, err := service.UpdateDoneAt(ctx, masterTx, dummyWishCardID, &dummyDate)
+
+		assert.Error(t, err)
+	})
+
+}
+
+func TestService_UpdateAuthor(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		dummyData := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 5,
+			},
+			Activity:    dummyActivity,
+			Description: dummyDescription,
+			Date:        &dummyDate,
+			DoneAt:      &dummyDate,
+			CreatedAt:   &dummyDate,
+			UpdatedAt:   &dummyDate,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
+		}
+
+		wcRepo := mock_wish_card.NewMockRepository(ctrl)
+		wcRepo.EXPECT().UpdateUserID(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
+
+		userRepo := mock_user.NewMockRepository(ctrl)
+		profileRepo := mock_profile.NewMockRepository(ctrl)
+		placeRepo := mock_place.NewMockRepository(ctrl)
+		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		result, err := service.UpdateAuthor(ctx, masterTx, dummyWishCardID, dummyUserID)
+
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyUserID, result.Author.ID)
+		assert.NotEqual(t, dummyDate, result.UpdatedAt)
+	})
+
+	t.Run("failure_存在しないデータ", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		wcRepo := mock_wish_card.NewMockRepository(ctrl)
+		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
+
+		userRepo := mock_user.NewMockRepository(ctrl)
+		profileRepo := mock_profile.NewMockRepository(ctrl)
+		placeRepo := mock_place.NewMockRepository(ctrl)
+		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		_, err := service.UpdateAuthor(ctx, masterTx, dummyWishCardID, dummyUserID)
+
+		assert.Error(t, err)
+	})
+}
+
+func TestService_UpdatePlace(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		dummyData := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
+			Activity:    dummyActivity,
+			Description: dummyDescription,
+			Date:        &dummyDate,
+			DoneAt:      &dummyDate,
+			CreatedAt:   &dummyDate,
+			UpdatedAt:   &dummyDate,
+			Place: &placeEntity.Entity{
+				ID: 5,
+			},
+		}
+
+		wcRepo := mock_wish_card.NewMockRepository(ctrl)
+		wcRepo.EXPECT().UpdatePlaceID(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
+
+		userRepo := mock_user.NewMockRepository(ctrl)
+		profileRepo := mock_profile.NewMockRepository(ctrl)
+		placeRepo := mock_place.NewMockRepository(ctrl)
+		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		result, err := service.UpdatePlace(ctx, masterTx, dummyWishCardID, dummyPlaceID)
+
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, dummyPlaceID, result.Place.ID)
+		assert.NotEqual(t, dummyDate, result.UpdatedAt)
+	})
+
+	t.Run("failure_存在しないデータ", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		wcRepo := mock_wish_card.NewMockRepository(ctrl)
+		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
+
+		userRepo := mock_user.NewMockRepository(ctrl)
+		profileRepo := mock_profile.NewMockRepository(ctrl)
+		placeRepo := mock_place.NewMockRepository(ctrl)
+		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		_, err := service.UpdatePlace(ctx, masterTx, dummyWishCardID, dummyPlaceID)
+
+		assert.Error(t, err)
+	})
+
+}
+
+func TestService_UpdateCategory(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		dummyData := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
+			Activity:    dummyActivity,
+			Description: dummyDescription,
+			Date:        &dummyDate,
+			DoneAt:      &dummyDate,
+			CreatedAt:   &dummyDate,
+			UpdatedAt:   &dummyDate,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
+		}
+
+		wcRepo := mock_wish_card.NewMockRepository(ctrl)
+		wcRepo.EXPECT().UpdateCategoryID(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
+
+		userRepo := mock_user.NewMockRepository(ctrl)
+		profileRepo := mock_profile.NewMockRepository(ctrl)
+		placeRepo := mock_place.NewMockRepository(ctrl)
+		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		result, err := service.UpdateCategory(ctx, masterTx, dummyWishCardID, dummyCategoryID)
+
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.NotEqual(t, dummyDate, result.UpdatedAt)
+	})
+
+	t.Run("failure_存在しないデータ", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		wcRepo := mock_wish_card.NewMockRepository(ctrl)
+		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
+
+		userRepo := mock_user.NewMockRepository(ctrl)
+		profileRepo := mock_profile.NewMockRepository(ctrl)
+		placeRepo := mock_place.NewMockRepository(ctrl)
+		tagRepo := mock_tag.NewMockRepository(ctrl)
+		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
+
+		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		_, err := service.UpdateCategory(ctx, masterTx, dummyWishCardID, dummyCategoryID)
+
+		assert.Error(t, err)
+	})
+}
+
 func TestService_UpdateWithCategoryID(t *testing.T) {
 	ctx := context.Background()
 	ctrl := gomock.NewController(t)
@@ -250,7 +693,7 @@ func TestService_UpDeleteFlag(t *testing.T) {
 
 	wcRepo := mock_wish_card.NewMockRepository(ctrl)
 	wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
-	wcRepo.EXPECT().UpDeleteFlag(ctx, masterTx, gomock.Any()).Return(nil)
+	wcRepo.EXPECT().UpDeleteFlag(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 
 	userRepo := mock_user.NewMockRepository(ctrl)
 	userRepo.EXPECT().SelectByPK(ctx, masterTx, gomock.Any()).Return(&dummyUser, nil)
@@ -301,7 +744,7 @@ func TestService_DownDeleteFlag(t *testing.T) {
 
 	wcRepo := mock_wish_card.NewMockRepository(ctrl)
 	wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
-	wcRepo.EXPECT().DownDeleteFlag(ctx, masterTx, gomock.Any()).Return(nil)
+	wcRepo.EXPECT().DownDeleteFlag(ctx, masterTx, gomock.Any(), gomock.Any()).Return(nil)
 
 	userRepo := mock_user.NewMockRepository(ctrl)
 	userRepo.EXPECT().SelectByPK(ctx, masterTx, gomock.Any()).Return(&dummyUser, nil)

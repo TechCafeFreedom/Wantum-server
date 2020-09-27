@@ -1,6 +1,7 @@
 package werrors
 
 import (
+	"fmt"
 	"net/http"
 
 	"google.golang.org/grpc/codes"
@@ -30,5 +31,12 @@ var (
 		ErrorCode:      http.StatusBadRequest,
 		ErrorMessageJP: "リクエスト内容をもう一度見直してください",
 		ErrorMessageEN: "Please check your request",
+	}
+	WishCardNotFound = &WantumError{
+		err:            fmt.Errorf("Attempted to update non-existent data"),
+		GrpcErrorCode:  codes.NotFound,
+		ErrorCode:      http.StatusNotFound,
+		ErrorMessageJP: "存在しない「やりたいこと」です。",
+		ErrorMessageEN: "the wish card is not exists.",
 	}
 )
