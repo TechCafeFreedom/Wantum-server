@@ -6,11 +6,17 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+
+	placeEntity "wantum/pkg/domain/entity/place"
 	tagEntity "wantum/pkg/domain/entity/tag"
+	userEntity "wantum/pkg/domain/entity/user"
+	profileEntity "wantum/pkg/domain/entity/userprofile"
 	wishCardEntity "wantum/pkg/domain/entity/wishcard"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/service/place"
+	"wantum/pkg/domain/service/profile"
 	"wantum/pkg/domain/service/tag"
+	"wantum/pkg/domain/service/user"
 	"wantum/pkg/domain/service/wishcard"
 	"wantum/pkg/tlog"
 	"wantum/pkg/werrors"
@@ -35,18 +41,25 @@ type Interactor interface {
 type interactor struct {
 	masterTxManager repository.MasterTxManager
 	wishCardService wishcard.Service
+	userService     user.Service
+	profileService  profile.Service
 	tagService      tag.Service
 	placeService    place.Service
 }
 
-func New(masterTxManager repository.MasterTxManager, wishCardService wishcard.Service, tagService tag.Service, placeService place.Service) Interactor {
+func New(masterTxManager repository.MasterTxManager, wishCardService wishcard.Service, userService user.Service, profileService profile.Service, tagService tag.Service, placeService place.Service) Interactor {
 	return &interactor{
 		masterTxManager: masterTxManager,
 		wishCardService: wishCardService,
+		userService:     userService,
+		profileService:  profileService,
 		tagService:      tagService,
 		placeService:    placeService,
 	}
 }
+
+// TODO: 先に取得した値ボンボン詰め込んで大丈夫か...?
+// TODO: upd系の編集権限があるか
 
 func (i *interactor) CreateNewWishCard(ctx context.Context, userID, categoryID int, activity, description, place string, date *time.Time, tags []string) (*wishCardEntity.Entity, error) {
 	// validation
@@ -74,12 +87,30 @@ func (i *interactor) CreateNewWishCard(ctx context.Context, userID, categoryID i
 
 	// create new entity
 	var newWishCard *wishCardEntity.Entity
+	_author := &userEntity.Entity{}
+	_profile := &profileEntity.Entity{}
+	_place := &placeEntity.Entity{}
+	_tags := tagEntity.EntitySlice{}
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		place, err := i.placeService.Create(ctx, masterTx, place)
+		_author, err = i.userService.GetByPK(ctx, masterTx, userID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		if _author == nil {
+			return werrors.Stack(werrors.UserNotFound)
+		}
+		_profile, err = i.profileService.GetByUserID(ctx, masterTx, _author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+
+		_place, err = i.placeService.Create(ctx, masterTx, place)
 		if err != nil {
 			// TODO: placeがすでにあったら無限に増えてしまう
 			return werrors.Stack(err)
 		}
+
+		// TODO: きたない
 		tagIDs := make([]int, 0, len(tags))
 		for _, tagName := range tags {
 			var tag *tagEntity.Entity
@@ -93,10 +124,13 @@ func (i *interactor) CreateNewWishCard(ctx context.Context, userID, categoryID i
 					return werrors.Stack(err)
 				}
 			}
+			_tags = append(_tags, tag)
 			tagIDs = append(tagIDs, tag.ID)
 		}
 
-		newWishCard, err = i.wishCardService.Create(ctx, masterTx, activity, description, date, userID, categoryID, place.ID, tagIDs)
+		// TODO: カテゴリが存在するか確認する
+
+		newWishCard, err = i.wishCardService.Create(ctx, masterTx, activity, description, date, _author.ID, categoryID, _place.ID, tagIDs)
 		if err != nil {
 			return werrors.Stack(err)
 		}
@@ -106,6 +140,10 @@ func (i *interactor) CreateNewWishCard(ctx context.Context, userID, categoryID i
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
+	newWishCard.Author = _author
+	newWishCard.Author.Profile = _profile
+	newWishCard.Place = _place
+	newWishCard.Tags = _tags
 	return newWishCard, nil
 }
 
@@ -133,12 +171,29 @@ func (i *interactor) UpdateWishCardWithCategoryID(ctx context.Context, wishCardI
 	}
 
 	var wishCard *wishCardEntity.Entity
+	_author := &userEntity.Entity{}
+	_profile := &profileEntity.Entity{}
+	_place := &placeEntity.Entity{}
+	_tags := tagEntity.EntitySlice{}
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		place, err := i.placeService.Create(ctx, masterTx, place)
+		_author, err = i.userService.GetByPK(ctx, masterTx, userID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		if _author == nil {
+			return werrors.Stack(werrors.UserNotFound)
+		}
+		_profile, err = i.profileService.GetByUserID(ctx, masterTx, _author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+
+		_place, err = i.placeService.Create(ctx, masterTx, place)
 		if err != nil {
 			// TODO: placeがすでにあったら無限に増えてしまう
 			return werrors.Stack(err)
 		}
+
 		tagIDs := make([]int, 0, len(tags))
 		for _, tagName := range tags {
 			var tag *tagEntity.Entity
@@ -152,9 +207,11 @@ func (i *interactor) UpdateWishCardWithCategoryID(ctx context.Context, wishCardI
 					return werrors.Stack(err)
 				}
 			}
+			_tags = append(_tags, tag)
 			tagIDs = append(tagIDs, tag.ID)
 		}
-		wishCard, err = i.wishCardService.UpdateWithCategoryID(ctx, masterTx, wishCardID, activity, description, date, doneAt, userID, categoryID, place.ID, tagIDs)
+
+		wishCard, err = i.wishCardService.UpdateWithCategoryID(ctx, masterTx, wishCardID, activity, description, date, doneAt, userID, categoryID, _place.ID, tagIDs)
 		if err != nil {
 			return werrors.Stack(err)
 		}
@@ -163,6 +220,10 @@ func (i *interactor) UpdateWishCardWithCategoryID(ctx context.Context, wishCardI
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
+	wishCard.Author = _author
+	wishCard.Author.Profile = _profile
+	wishCard.Place = _place
+	wishCard.Tags = _tags
 	return wishCard, nil
 }
 
@@ -183,9 +244,30 @@ func (i *interactor) DeleteWishCardByID(ctx context.Context, wishCardID int) err
 
 func (i *interactor) GetByID(ctx context.Context, wishCardID int) (*wishCardEntity.Entity, error) {
 	var wishCard *wishCardEntity.Entity
+	_author := &userEntity.Entity{}
+	_profile := &profileEntity.Entity{}
+	_place := &placeEntity.Entity{}
+	_tags := tagEntity.EntitySlice{}
 	var err error
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		wishCard, err = i.wishCardService.GetByID(ctx, masterTx, wishCardID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		_author, err = i.userService.GetByPK(ctx, masterTx, wishCard.Author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		// QUESTION: author == nilだった時？
+		_profile, err = i.profileService.GetByUserID(ctx, masterTx, wishCard.Author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		_place, err = i.placeService.GetByID(ctx, masterTx, wishCard.Place.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		_tags, err = i.tagService.GetByWishCardID(ctx, masterTx, wishCard.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
@@ -194,6 +276,10 @@ func (i *interactor) GetByID(ctx context.Context, wishCardID int) (*wishCardEnti
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
+	wishCard.Author = _author
+	wishCard.Author.Profile = _profile
+	wishCard.Place = _place
+	wishCard.Tags = _tags
 	return wishCard, nil
 }
 
@@ -204,6 +290,26 @@ func (i *interactor) GetByCategoryID(ctx context.Context, categoryID int) (wishC
 		wishCards, err = i.wishCardService.GetByCategoryID(ctx, masterTx, categoryID)
 		if err != nil {
 			return werrors.Stack(err)
+		}
+		// OPTIMIZE: でら遅い...?
+		for _, wishCard := range wishCards {
+			wishCard.Author, err = i.userService.GetByPK(ctx, masterTx, wishCard.Author.ID)
+			if err != nil {
+				return werrors.Stack(err)
+			}
+			// QUESTION: author == nilだった時？
+			wishCard.Author.Profile, err = i.profileService.GetByUserID(ctx, masterTx, wishCard.Author.ID)
+			if err != nil {
+				return werrors.Stack(err)
+			}
+			wishCard.Place, err = i.placeService.GetByID(ctx, masterTx, wishCard.Place.ID)
+			if err != nil {
+				return werrors.Stack(err)
+			}
+			wishCard.Tags, err = i.tagService.GetByWishCardID(ctx, masterTx, wishCard.ID)
+			if err != nil {
+				return werrors.Stack(err)
+			}
 		}
 		return nil
 	})
@@ -220,13 +326,26 @@ func (i *interactor) UpdateActivity(ctx context.Context, userID, wishCardID int,
 		return nil, werrors.Stack(err)
 	}
 
-	var wishCard *wishCardEntity.Entity
+	var wishCard = new(wishCardEntity.Entity)
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		wishCard, err = i.wishCardService.GetByID(ctx, masterTx, wishCardID)
+		wishCard, err = i.wishCardService.UpdateActivity(ctx, masterTx, wishCardID, activity)
 		if err != nil {
 			return werrors.Stack(err)
 		}
-		wishCard, err = i.wishCardService.Update(ctx, masterTx, wishCardID, activity, wishCard.Description, wishCard.Date, wishCard.DoneAt, wishCard.Author.ID, wishCard.Place.ID)
+		wishCard.Author, err = i.userService.GetByPK(ctx, masterTx, wishCard.Author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		// QUESTION: author == nilだった時？
+		wishCard.Author.Profile, err = i.profileService.GetByUserID(ctx, masterTx, wishCard.Author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		wishCard.Place, err = i.placeService.GetByID(ctx, masterTx, wishCard.Place.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		wishCard.Tags, err = i.tagService.GetByWishCardID(ctx, masterTx, wishCard.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
@@ -246,13 +365,26 @@ func (i *interactor) UpdateDescription(ctx context.Context, userID, wishCardID i
 		return nil, werrors.Stack(err)
 	}
 
-	var wishCard *wishCardEntity.Entity
+	var wishCard = new(wishCardEntity.Entity)
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		wishCard, err = i.wishCardService.GetByID(ctx, masterTx, wishCardID)
+		wishCard, err = i.wishCardService.UpdateDescription(ctx, masterTx, wishCardID, description)
 		if err != nil {
 			return werrors.Stack(err)
 		}
-		wishCard, err = i.wishCardService.Update(ctx, masterTx, wishCardID, wishCard.Activity, description, wishCard.Date, wishCard.DoneAt, wishCard.Author.ID, wishCard.Place.ID)
+		wishCard.Author, err = i.userService.GetByPK(ctx, masterTx, wishCard.Author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		// QUESTION: author == nilだった時？
+		wishCard.Author.Profile, err = i.profileService.GetByUserID(ctx, masterTx, wishCard.Author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		wishCard.Place, err = i.placeService.GetByID(ctx, masterTx, wishCard.Place.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		wishCard.Tags, err = i.tagService.GetByWishCardID(ctx, masterTx, wishCard.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
@@ -271,18 +403,27 @@ func (i *interactor) UpdatePlace(ctx context.Context, userID, wishCardID int, pl
 		return nil, werrors.Stack(err)
 	}
 
-	var wishCard *wishCardEntity.Entity
+	var wishCard = new(wishCardEntity.Entity)
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		place, err := i.placeService.Create(ctx, masterTx, place)
+		wishCard.Place, err = i.placeService.Create(ctx, masterTx, place)
 		if err != nil {
 			// TODO: placeがすでにあったら無限に増えてしまう
 			return werrors.Stack(err)
 		}
-		wishCard, err = i.wishCardService.GetByID(ctx, masterTx, wishCardID)
+		wishCard, err = i.wishCardService.UpdatePlace(ctx, masterTx, wishCardID, wishCard.Place.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
-		wishCard, err = i.wishCardService.Update(ctx, masterTx, wishCardID, wishCard.Activity, wishCard.Description, wishCard.Date, wishCard.DoneAt, wishCard.Author.ID, place.ID)
+		wishCard.Author, err = i.userService.GetByPK(ctx, masterTx, wishCard.Author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		// QUESTION: author == nilだった時？
+		wishCard.Author.Profile, err = i.profileService.GetByUserID(ctx, masterTx, wishCard.Author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		wishCard.Tags, err = i.tagService.GetByWishCardID(ctx, masterTx, wishCard.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
@@ -301,13 +442,26 @@ func (i *interactor) UpdateDate(ctx context.Context, userID, wishCardID int, dat
 		return nil, werrors.Stack(err)
 	}
 
-	var wishCard *wishCardEntity.Entity
+	var wishCard = new(wishCardEntity.Entity)
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		wishCard, err = i.wishCardService.GetByID(ctx, masterTx, wishCardID)
+		wishCard, err = i.wishCardService.UpdateDate(ctx, masterTx, wishCardID, date)
 		if err != nil {
 			return werrors.Stack(err)
 		}
-		wishCard, err = i.wishCardService.Update(ctx, masterTx, wishCardID, wishCard.Activity, wishCard.Description, date, wishCard.DoneAt, wishCard.Author.ID, wishCard.Place.ID)
+		wishCard.Author, err = i.userService.GetByPK(ctx, masterTx, wishCard.Author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		// QUESTION: author == nilだった時？
+		wishCard.Author.Profile, err = i.profileService.GetByUserID(ctx, masterTx, wishCard.Author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		wishCard.Place, err = i.placeService.GetByID(ctx, masterTx, wishCard.Place.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		wishCard.Tags, err = i.tagService.GetByWishCardID(ctx, masterTx, wishCard.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}
@@ -320,7 +474,7 @@ func (i *interactor) UpdateDate(ctx context.Context, userID, wishCardID int, dat
 }
 
 func (i *interactor) AddTags(ctx context.Context, userID, wishCardID int, tags []string) (*wishCardEntity.Entity, error) {
-	var wishCard *wishCardEntity.Entity
+	var wishCard = new(wishCardEntity.Entity)
 	var err error
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		// create or get tagIDs
@@ -344,6 +498,23 @@ func (i *interactor) AddTags(ctx context.Context, userID, wishCardID int, tags [
 		if err != nil {
 			return werrors.Stack(err)
 		}
+		wishCard.Author, err = i.userService.GetByPK(ctx, masterTx, wishCard.Author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		// QUESTION: author == nilだった時？
+		wishCard.Author.Profile, err = i.profileService.GetByUserID(ctx, masterTx, wishCard.Author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		wishCard.Place, err = i.placeService.GetByID(ctx, masterTx, wishCard.Place.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		wishCard.Tags, err = i.tagService.GetByWishCardID(ctx, masterTx, wishCard.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
 		return nil
 	})
 	if err != nil {
@@ -353,11 +524,28 @@ func (i *interactor) AddTags(ctx context.Context, userID, wishCardID int, tags [
 }
 
 func (i *interactor) DeleteTags(ctx context.Context, userID, wishCardID int, tagIDs []int) (*wishCardEntity.Entity, error) {
-	var wishCard *wishCardEntity.Entity
+	var wishCard = new(wishCardEntity.Entity)
 	var err error
 	err = i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 		// delete relation
 		wishCard, err = i.wishCardService.DeleteTags(ctx, masterTx, wishCardID, tagIDs)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		wishCard.Author, err = i.userService.GetByPK(ctx, masterTx, wishCard.Author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		// QUESTION: author == nilだった時？
+		wishCard.Author.Profile, err = i.profileService.GetByUserID(ctx, masterTx, wishCard.Author.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		wishCard.Place, err = i.placeService.GetByID(ctx, masterTx, wishCard.Place.ID)
+		if err != nil {
+			return werrors.Stack(err)
+		}
+		wishCard.Tags, err = i.tagService.GetByWishCardID(ctx, masterTx, wishCard.ID)
 		if err != nil {
 			return werrors.Stack(err)
 		}

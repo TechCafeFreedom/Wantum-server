@@ -14,7 +14,9 @@ import (
 	wishCardEntity "wantum/pkg/domain/entity/wishcard"
 	"wantum/pkg/domain/repository"
 	"wantum/pkg/domain/service/place/mock_place"
+	"wantum/pkg/domain/service/profile/mock_profile"
 	"wantum/pkg/domain/service/tag/mock_tag"
+	"wantum/pkg/domain/service/user/mock_user"
 	"wantum/pkg/domain/service/wishcard/mock_wish_card"
 
 	"github.com/golang/mock/gomock"
@@ -32,7 +34,7 @@ var (
 	dummyTagName2    = "dummyTag2"
 	dummyPlaceName   = "dummyPlace"
 
-	dummyProfile = profileEntity.Entity{
+	dummyProfile = &profileEntity.Entity{
 		UserID:    1,
 		Name:      "dummyName",
 		Thumbnail: "dummyThumbnail",
@@ -45,7 +47,7 @@ var (
 		DeletedAt: &dummyDate,
 	}
 
-	dummyUser = userEntity.Entity{
+	dummyUser = &userEntity.Entity{
 		ID:        1,
 		AuthID:    "dummyID",
 		UserName:  "dummyUserName",
@@ -53,10 +55,9 @@ var (
 		CreatedAt: &dummyDate,
 		UpdatedAt: &dummyDate,
 		DeletedAt: &dummyDate,
-		Profile:   &dummyProfile,
 	}
 
-	dummyTag1 = tagEntity.Entity{
+	dummyTag1 = &tagEntity.Entity{
 		ID:        1,
 		Name:      dummyTagName1,
 		CreatedAt: &dummyDate,
@@ -64,7 +65,7 @@ var (
 		DeletedAt: &dummyDate,
 	}
 
-	dummyTag2 = tagEntity.Entity{
+	dummyTag2 = &tagEntity.Entity{
 		ID:        2,
 		Name:      dummyTagName2,
 		CreatedAt: &dummyDate,
@@ -73,29 +74,16 @@ var (
 	}
 
 	dummyTagSlice = tagEntity.EntitySlice{
-		&dummyTag1,
-		&dummyTag2,
+		dummyTag1,
+		dummyTag2,
 	}
 
-	dummyPlace = placeEntity.Entity{
+	dummyPlace = &placeEntity.Entity{
 		ID:        1,
 		Name:      dummyPlaceName,
 		CreatedAt: &dummyDate,
 		UpdatedAt: &dummyDate,
 		DeletedAt: nil,
-	}
-
-	dummyWishCard = wishCardEntity.Entity{
-		ID:          1,
-		Author:      &dummyUser,
-		Activity:    dummyActivity,
-		Description: dummyDescription,
-		Date:        &dummyDate,
-		DoneAt:      nil,
-		CreatedAt:   &dummyDate,
-		UpdatedAt:   &dummyDate,
-		Place:       &dummyPlace,
-		Tags:        dummyTagSlice,
 	}
 )
 
@@ -119,18 +107,34 @@ func TestInteractor_CreateNewWishCard(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
+		dummyWishCard := &wishCardEntity.Entity{
+			ID:          1,
+			Activity:    dummyActivity,
+			Description: dummyDescription,
+			Date:        &dummyDate,
+			CreatedAt:   &dummyDate,
+			UpdatedAt:   &dummyDate,
+			DeletedAt:   nil,
+		}
+
+		userService := mock_user.NewMockService(ctrl)
+		userService.EXPECT().GetByPK(ctx, masterTx, gomock.Any()).Return(dummyUser, nil)
+
+		profileService := mock_profile.NewMockService(ctrl)
+		profileService.EXPECT().GetByUserID(ctx, masterTx, gomock.Any()).Return(dummyProfile, nil)
+
 		placeService := mock_place.NewMockService(ctrl)
-		placeService.EXPECT().Create(ctx, masterTx, gomock.Any()).Return(&dummyPlace, nil)
+		placeService.EXPECT().Create(ctx, masterTx, gomock.Any()).Return(dummyPlace, nil)
 
 		wishCardService := mock_wish_card.NewMockService(ctrl)
-		wishCardService.EXPECT().Create(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(&dummyWishCard, nil)
+		wishCardService.EXPECT().Create(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(dummyWishCard, nil)
 
 		tagService := mock_tag.NewMockService(ctrl)
-		tagService.EXPECT().GetByName(ctx, masterTx, dummyTagName1).Return(&dummyTag1, nil)
+		tagService.EXPECT().GetByName(ctx, masterTx, dummyTagName1).Return(dummyTag1, nil)
 		tagService.EXPECT().GetByName(ctx, masterTx, dummyTagName2).Return(nil, nil)
-		tagService.EXPECT().Create(ctx, masterTx, dummyTagName2).Return(&dummyTag2, nil)
+		tagService.EXPECT().Create(ctx, masterTx, dummyTagName2).Return(dummyTag2, nil)
 
-		interactor := New(masterTxManager, wishCardService, tagService, placeService)
+		interactor := New(masterTxManager, wishCardService, userService, profileService, tagService, placeService)
 
 		tags := []string{dummyTagName1, dummyTagName2}
 		result, err := interactor.CreateNewWishCard(ctx, 1, 1, dummyActivity, dummyDescription, dummyPlaceName, &dummyDate, tags)
@@ -155,9 +159,8 @@ func TestInteractor_UpdateWishCardWithCategoryID(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
-		dummyWishCard := wishCardEntity.Entity{
+		dummyWishCard := &wishCardEntity.Entity{
 			ID:          1,
-			Author:      &dummyUser,
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -165,22 +168,26 @@ func TestInteractor_UpdateWishCardWithCategoryID(t *testing.T) {
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
 			DeletedAt:   nil,
-			Place:       &dummyPlace,
-			Tags:        dummyTagSlice,
 		}
 
+		userService := mock_user.NewMockService(ctrl)
+		userService.EXPECT().GetByPK(ctx, masterTx, gomock.Any()).Return(dummyUser, nil)
+
+		profileService := mock_profile.NewMockService(ctrl)
+		profileService.EXPECT().GetByUserID(ctx, masterTx, gomock.Any()).Return(dummyProfile, nil)
+
 		placeService := mock_place.NewMockService(ctrl)
-		placeService.EXPECT().Create(ctx, masterTx, gomock.Any()).Return(&dummyPlace, nil)
+		placeService.EXPECT().Create(ctx, masterTx, gomock.Any()).Return(dummyPlace, nil)
 
 		wishCardService := mock_wish_card.NewMockService(ctrl)
-		wishCardService.EXPECT().UpdateWithCategoryID(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(&dummyWishCard, nil)
+		wishCardService.EXPECT().UpdateWithCategoryID(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(dummyWishCard, nil)
 
 		tagService := mock_tag.NewMockService(ctrl)
-		tagService.EXPECT().GetByName(ctx, masterTx, dummyTagName1).Return(&dummyTag1, nil)
+		tagService.EXPECT().GetByName(ctx, masterTx, dummyTagName1).Return(dummyTag1, nil)
 		tagService.EXPECT().GetByName(ctx, masterTx, dummyTagName2).Return(nil, nil)
-		tagService.EXPECT().Create(ctx, masterTx, dummyTagName2).Return(&dummyTag2, nil)
+		tagService.EXPECT().Create(ctx, masterTx, dummyTagName2).Return(dummyTag2, nil)
 
-		interactor := New(masterTxManager, wishCardService, tagService, placeService)
+		interactor := New(masterTxManager, wishCardService, userService, profileService, tagService, placeService)
 
 		tags := []string{dummyTagName1, dummyTagName2}
 		result, err := interactor.UpdateWishCardWithCategoryID(ctx, 1, 1, dummyActivity, dummyDescription, dummyPlaceName, &dummyDate, &dummyDate, 1, tags)
@@ -205,6 +212,10 @@ func TestInteractor_DeleteWishCard(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
+		userService := mock_user.NewMockService(ctrl)
+
+		profileService := mock_profile.NewMockService(ctrl)
+
 		placeService := mock_place.NewMockService(ctrl)
 
 		wishCardService := mock_wish_card.NewMockService(ctrl)
@@ -212,7 +223,7 @@ func TestInteractor_DeleteWishCard(t *testing.T) {
 
 		tagService := mock_tag.NewMockService(ctrl)
 
-		interactor := New(masterTxManager, wishCardService, tagService, placeService)
+		interactor := New(masterTxManager, wishCardService, userService, profileService, tagService, placeService)
 
 		err := interactor.DeleteWishCardByID(ctx, 1)
 
@@ -225,15 +236,39 @@ func TestInteractor_GetByID(t *testing.T) {
 		ctx := context.Background()
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
+		dummyWishCard := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
+			Activity:    dummyActivity,
+			Description: dummyDescription,
+			Date:        &dummyDate,
+			DoneAt:      &dummyDate,
+			CreatedAt:   &dummyDate,
+			UpdatedAt:   &dummyDate,
+			DeletedAt:   nil,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
+		}
+
+		userService := mock_user.NewMockService(ctrl)
+		userService.EXPECT().GetByPK(ctx, masterTx, gomock.Any()).Return(dummyUser, nil)
+
+		profileService := mock_profile.NewMockService(ctrl)
+		profileService.EXPECT().GetByUserID(ctx, masterTx, gomock.Any()).Return(dummyProfile, nil)
 
 		placeService := mock_place.NewMockService(ctrl)
+		placeService.EXPECT().GetByID(ctx, masterTx, gomock.Any()).Return(dummyPlace, nil)
 
 		wishCardService := mock_wish_card.NewMockService(ctrl)
-		wishCardService.EXPECT().GetByID(ctx, masterTx, gomock.Any()).Return(&dummyWishCard, nil)
+		wishCardService.EXPECT().GetByID(ctx, masterTx, gomock.Any()).Return(dummyWishCard, nil)
 
 		tagService := mock_tag.NewMockService(ctrl)
+		tagService.EXPECT().GetByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTagSlice, nil)
 
-		interactor := New(masterTxManager, wishCardService, tagService, placeService)
+		interactor := New(masterTxManager, wishCardService, userService, profileService, tagService, placeService)
 
 		result, err := interactor.GetByID(ctx, 1)
 
@@ -256,8 +291,10 @@ func TestInteractor_GetByCategoryID(t *testing.T) {
 
 		dummyWishCards := wishCardEntity.EntitySlice{
 			&wishCardEntity.Entity{
-				ID:          1,
-				Author:      &dummyUser,
+				ID: 1,
+				Author: &userEntity.Entity{
+					ID: 1,
+				},
 				Activity:    dummyActivity,
 				Description: dummyDescription,
 				Date:        &dummyDate,
@@ -265,32 +302,44 @@ func TestInteractor_GetByCategoryID(t *testing.T) {
 				CreatedAt:   &dummyDate,
 				UpdatedAt:   &dummyDate,
 				DeletedAt:   nil,
-				Place:       &dummyPlace,
-				Tags:        dummyTagSlice,
+				Place: &placeEntity.Entity{
+					ID: 1,
+				},
 			},
 			&wishCardEntity.Entity{
-				ID:          2,
-				Author:      &dummyUser,
+				ID: 2,
+				Author: &userEntity.Entity{
+					ID: 1,
+				},
 				Activity:    dummyActivity,
 				Description: dummyDescription,
 				Date:        &dummyDate,
-				DoneAt:      nil,
+				DoneAt:      &dummyDate,
 				CreatedAt:   &dummyDate,
 				UpdatedAt:   &dummyDate,
 				DeletedAt:   nil,
-				Place:       &dummyPlace,
-				Tags:        dummyTagSlice,
+				Place: &placeEntity.Entity{
+					ID: 1,
+				},
 			},
 		}
 
+		userService := mock_user.NewMockService(ctrl)
+		userService.EXPECT().GetByPK(ctx, masterTx, gomock.Any()).Return(dummyUser, nil).Times(2)
+
+		profileService := mock_profile.NewMockService(ctrl)
+		profileService.EXPECT().GetByUserID(ctx, masterTx, gomock.Any()).Return(dummyProfile, nil).Times(2)
+
 		placeService := mock_place.NewMockService(ctrl)
+		placeService.EXPECT().GetByID(ctx, masterTx, gomock.Any()).Return(dummyPlace, nil).Times(2)
 
 		wishCardService := mock_wish_card.NewMockService(ctrl)
 		wishCardService.EXPECT().GetByCategoryID(ctx, masterTx, gomock.Any()).Return(dummyWishCards, nil)
 
 		tagService := mock_tag.NewMockService(ctrl)
+		tagService.EXPECT().GetByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTagSlice, nil).Times(2)
 
-		interactor := New(masterTxManager, wishCardService, tagService, placeService)
+		interactor := New(masterTxManager, wishCardService, userService, profileService, tagService, placeService)
 
 		wishCards, err := interactor.GetByCategoryID(ctx, 1)
 
@@ -314,9 +363,11 @@ func TestInteractor_UpdateActivity(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
-		dummyWishCard := wishCardEntity.Entity{
-			ID:          1,
-			Author:      &dummyUser,
+		dummyWishCard := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -324,19 +375,27 @@ func TestInteractor_UpdateActivity(t *testing.T) {
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
 			DeletedAt:   nil,
-			Place:       &dummyPlace,
-			Tags:        dummyTagSlice,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
 
+		userService := mock_user.NewMockService(ctrl)
+		userService.EXPECT().GetByPK(ctx, masterTx, gomock.Any()).Return(dummyUser, nil)
+
+		profileService := mock_profile.NewMockService(ctrl)
+		profileService.EXPECT().GetByUserID(ctx, masterTx, gomock.Any()).Return(dummyProfile, nil)
+
 		placeService := mock_place.NewMockService(ctrl)
+		placeService.EXPECT().GetByID(ctx, masterTx, gomock.Any()).Return(dummyPlace, nil)
 
 		wishCardService := mock_wish_card.NewMockService(ctrl)
-		wishCardService.EXPECT().GetByID(ctx, masterTx, gomock.Any()).Return(&dummyWishCard, nil)
-		wishCardService.EXPECT().Update(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(&dummyWishCard, nil)
+		wishCardService.EXPECT().UpdateActivity(ctx, masterTx, gomock.Any(), gomock.Any()).Return(dummyWishCard, nil)
 
 		tagService := mock_tag.NewMockService(ctrl)
+		tagService.EXPECT().GetByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTagSlice, nil)
 
-		interactor := New(masterTxManager, wishCardService, tagService, placeService)
+		interactor := New(masterTxManager, wishCardService, userService, profileService, tagService, placeService)
 
 		result, err := interactor.UpdateActivity(ctx, 1, 1, dummyActivity)
 
@@ -351,9 +410,11 @@ func TestInteractor_UpdateDescription(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
-		dummyWishCard := wishCardEntity.Entity{
-			ID:          1,
-			Author:      &dummyUser,
+		dummyWishCard := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -361,19 +422,27 @@ func TestInteractor_UpdateDescription(t *testing.T) {
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
 			DeletedAt:   nil,
-			Place:       &dummyPlace,
-			Tags:        dummyTagSlice,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
 
+		userService := mock_user.NewMockService(ctrl)
+		userService.EXPECT().GetByPK(ctx, masterTx, gomock.Any()).Return(dummyUser, nil)
+
+		profileService := mock_profile.NewMockService(ctrl)
+		profileService.EXPECT().GetByUserID(ctx, masterTx, gomock.Any()).Return(dummyProfile, nil)
+
 		placeService := mock_place.NewMockService(ctrl)
+		placeService.EXPECT().GetByID(ctx, masterTx, gomock.Any()).Return(dummyPlace, nil)
 
 		wishCardService := mock_wish_card.NewMockService(ctrl)
-		wishCardService.EXPECT().GetByID(ctx, masterTx, gomock.Any()).Return(&dummyWishCard, nil)
-		wishCardService.EXPECT().Update(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(&dummyWishCard, nil)
+		wishCardService.EXPECT().UpdateDescription(ctx, masterTx, gomock.Any(), gomock.Any()).Return(dummyWishCard, nil)
 
 		tagService := mock_tag.NewMockService(ctrl)
+		tagService.EXPECT().GetByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTagSlice, nil)
 
-		interactor := New(masterTxManager, wishCardService, tagService, placeService)
+		interactor := New(masterTxManager, wishCardService, userService, profileService, tagService, placeService)
 
 		result, err := interactor.UpdateDescription(ctx, 1, 1, dummyDescription)
 
@@ -388,9 +457,11 @@ func TestInteractor_UpdatePlace(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
-		dummyWishCard := wishCardEntity.Entity{
-			ID:          1,
-			Author:      &dummyUser,
+		dummyWishCard := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -398,20 +469,27 @@ func TestInteractor_UpdatePlace(t *testing.T) {
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
 			DeletedAt:   nil,
-			Place:       &dummyPlace,
-			Tags:        dummyTagSlice,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
 
+		userService := mock_user.NewMockService(ctrl)
+		userService.EXPECT().GetByPK(ctx, masterTx, gomock.Any()).Return(dummyUser, nil)
+
+		profileService := mock_profile.NewMockService(ctrl)
+		profileService.EXPECT().GetByUserID(ctx, masterTx, gomock.Any()).Return(dummyProfile, nil)
+
 		placeService := mock_place.NewMockService(ctrl)
-		placeService.EXPECT().Create(ctx, masterTx, gomock.Any()).Return(&dummyPlace, nil)
+		placeService.EXPECT().Create(ctx, masterTx, gomock.Any()).Return(dummyPlace, nil)
 
 		wishCardService := mock_wish_card.NewMockService(ctrl)
-		wishCardService.EXPECT().GetByID(ctx, masterTx, gomock.Any()).Return(&dummyWishCard, nil)
-		wishCardService.EXPECT().Update(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(&dummyWishCard, nil)
+		wishCardService.EXPECT().UpdatePlace(ctx, masterTx, gomock.Any(), gomock.Any()).Return(dummyWishCard, nil)
 
 		tagService := mock_tag.NewMockService(ctrl)
+		tagService.EXPECT().GetByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTagSlice, nil)
 
-		interactor := New(masterTxManager, wishCardService, tagService, placeService)
+		interactor := New(masterTxManager, wishCardService, userService, profileService, tagService, placeService)
 
 		result, err := interactor.UpdatePlace(ctx, 1, 1, dummyPlaceName)
 
@@ -426,9 +504,11 @@ func TestInteractor_UpdateDate(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
-		dummyWishCard := wishCardEntity.Entity{
-			ID:          1,
-			Author:      &dummyUser,
+		dummyWishCard := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -436,19 +516,27 @@ func TestInteractor_UpdateDate(t *testing.T) {
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
 			DeletedAt:   nil,
-			Place:       &dummyPlace,
-			Tags:        dummyTagSlice,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
 
+		userService := mock_user.NewMockService(ctrl)
+		userService.EXPECT().GetByPK(ctx, masterTx, gomock.Any()).Return(dummyUser, nil)
+
+		profileService := mock_profile.NewMockService(ctrl)
+		profileService.EXPECT().GetByUserID(ctx, masterTx, gomock.Any()).Return(dummyProfile, nil)
+
 		placeService := mock_place.NewMockService(ctrl)
+		placeService.EXPECT().GetByID(ctx, masterTx, gomock.Any()).Return(dummyPlace, nil)
 
 		wishCardService := mock_wish_card.NewMockService(ctrl)
-		wishCardService.EXPECT().GetByID(ctx, masterTx, gomock.Any()).Return(&dummyWishCard, nil)
-		wishCardService.EXPECT().Update(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(&dummyWishCard, nil)
+		wishCardService.EXPECT().UpdateDate(ctx, masterTx, gomock.Any(), gomock.Any()).Return(dummyWishCard, nil)
 
 		tagService := mock_tag.NewMockService(ctrl)
+		tagService.EXPECT().GetByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTagSlice, nil)
 
-		interactor := New(masterTxManager, wishCardService, tagService, placeService)
+		interactor := New(masterTxManager, wishCardService, userService, profileService, tagService, placeService)
 
 		result, err := interactor.UpdateDate(ctx, 1, 1, &dummyDate)
 
@@ -463,9 +551,11 @@ func TestInteractor_AddTags(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
-		dummyWishCard := wishCardEntity.Entity{
-			ID:          1,
-			Author:      &dummyUser,
+		dummyWishCard := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -473,21 +563,30 @@ func TestInteractor_AddTags(t *testing.T) {
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
 			DeletedAt:   nil,
-			Place:       &dummyPlace,
-			Tags:        dummyTagSlice,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
 
+		userService := mock_user.NewMockService(ctrl)
+		userService.EXPECT().GetByPK(ctx, masterTx, gomock.Any()).Return(dummyUser, nil)
+
+		profileService := mock_profile.NewMockService(ctrl)
+		profileService.EXPECT().GetByUserID(ctx, masterTx, gomock.Any()).Return(dummyProfile, nil)
+
 		placeService := mock_place.NewMockService(ctrl)
+		placeService.EXPECT().GetByID(ctx, masterTx, gomock.Any()).Return(dummyPlace, nil)
 
 		wishCardService := mock_wish_card.NewMockService(ctrl)
-		wishCardService.EXPECT().AddTags(ctx, masterTx, gomock.Any(), gomock.Any()).Return(&dummyWishCard, nil)
+		wishCardService.EXPECT().AddTags(ctx, masterTx, gomock.Any(), gomock.Any()).Return(dummyWishCard, nil)
 
 		tagService := mock_tag.NewMockService(ctrl)
-		tagService.EXPECT().GetByName(ctx, masterTx, dummyTagName1).Return(&dummyTag1, nil)
+		tagService.EXPECT().GetByName(ctx, masterTx, dummyTagName1).Return(dummyTag1, nil)
 		tagService.EXPECT().GetByName(ctx, masterTx, dummyTagName2).Return(nil, nil)
-		tagService.EXPECT().Create(ctx, masterTx, dummyTagName2).Return(&dummyTag2, nil)
+		tagService.EXPECT().Create(ctx, masterTx, dummyTagName2).Return(dummyTag2, nil)
+		tagService.EXPECT().GetByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTagSlice, nil)
 
-		interactor := New(masterTxManager, wishCardService, tagService, placeService)
+		interactor := New(masterTxManager, wishCardService, userService, profileService, tagService, placeService)
 
 		result, err := interactor.AddTags(ctx, 1, 1, []string{dummyTagName1, dummyTagName2})
 
@@ -502,9 +601,11 @@ func TestInteractor_DeleteTags(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
-		dummyWishCard := wishCardEntity.Entity{
-			ID:          1,
-			Author:      &dummyUser,
+		dummyWishCard := &wishCardEntity.Entity{
+			ID: 1,
+			Author: &userEntity.Entity{
+				ID: 1,
+			},
 			Activity:    dummyActivity,
 			Description: dummyDescription,
 			Date:        &dummyDate,
@@ -512,18 +613,27 @@ func TestInteractor_DeleteTags(t *testing.T) {
 			CreatedAt:   &dummyDate,
 			UpdatedAt:   &dummyDate,
 			DeletedAt:   nil,
-			Place:       &dummyPlace,
-			Tags:        dummyTagSlice,
+			Place: &placeEntity.Entity{
+				ID: 1,
+			},
 		}
 
+		userService := mock_user.NewMockService(ctrl)
+		userService.EXPECT().GetByPK(ctx, masterTx, gomock.Any()).Return(dummyUser, nil)
+
+		profileService := mock_profile.NewMockService(ctrl)
+		profileService.EXPECT().GetByUserID(ctx, masterTx, gomock.Any()).Return(dummyProfile, nil)
+
 		placeService := mock_place.NewMockService(ctrl)
+		placeService.EXPECT().GetByID(ctx, masterTx, gomock.Any()).Return(dummyPlace, nil)
 
 		wishCardService := mock_wish_card.NewMockService(ctrl)
-		wishCardService.EXPECT().DeleteTags(ctx, masterTx, gomock.Any(), gomock.Any()).Return(&dummyWishCard, nil)
+		wishCardService.EXPECT().DeleteTags(ctx, masterTx, gomock.Any(), gomock.Any()).Return(dummyWishCard, nil)
 
 		tagService := mock_tag.NewMockService(ctrl)
+		tagService.EXPECT().GetByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTagSlice, nil)
 
-		interactor := New(masterTxManager, wishCardService, tagService, placeService)
+		interactor := New(masterTxManager, wishCardService, userService, profileService, tagService, placeService)
 
 		result, err := interactor.DeleteTags(ctx, 1, 1, []int{1, 2})
 
