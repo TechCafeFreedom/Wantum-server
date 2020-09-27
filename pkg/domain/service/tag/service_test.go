@@ -72,7 +72,7 @@ func TestService_Delete(t *testing.T) {
 	defer ctrl.Finish()
 
 	repo := mock_tag.NewMockRepository(ctrl)
-	repo.EXPECT().UpDeleteFlag(ctx, masterTx, gomock.Any()).Return(nil)
+	repo.EXPECT().UpDeleteFlag(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 	repo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyTag, nil)
 
 	service := New(repo)

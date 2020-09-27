@@ -51,7 +51,7 @@ func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, tagI
 	now := time.Now()
 	tag.UpdatedAt = &now
 	tag.DeletedAt = &now
-	if err = s.tagRepository.UpDeleteFlag(ctx, masterTx, tag); err != nil {
+	if err = s.tagRepository.UpDeleteFlag(ctx, masterTx, tag.ID, tag.UpdatedAt, tag.DeletedAt); err != nil {
 		return nil, werrors.Stack(err)
 	}
 	return tag, nil
