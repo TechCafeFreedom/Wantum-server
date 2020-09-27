@@ -94,8 +94,8 @@ func (repo *placeRepositoryImplement) UpdateName(ctx context.Context, masterTx r
 	return nil
 }
 
-func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *placeEntity.Entity) error {
-	if place.DeletedAt == nil {
+func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int, updatedAt, deletedAt *time.Time) error {
+	if deletedAt == nil {
 		return werrors.Newf(
 			errors.New("can't up delete flag. deletedAt is nil"),
 			codes.Internal,
@@ -114,9 +114,9 @@ func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx
 		UPDATE places
 		SET updated_at=?, deleted_at=?
 		WHERE id=?
-	`, place.UpdatedAt,
-		place.DeletedAt,
-		place.ID,
+	`, updatedAt,
+		deletedAt,
+		placeID,
 	)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -125,7 +125,7 @@ func (repo *placeRepositoryImplement) UpDeleteFlag(ctx context.Context, masterTx
 	return nil
 }
 
-func (repo *placeRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, place *placeEntity.Entity) error {
+func (repo *placeRepositoryImplement) DownDeleteFlag(ctx context.Context, masterTx repository.MasterTx, placeID int, updatedAt *time.Time) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -135,9 +135,9 @@ func (repo *placeRepositoryImplement) DownDeleteFlag(ctx context.Context, master
 		UPDATE places
 		SET updated_at=?, deleted_at=?
 		WHERE id=?
-	`, place.UpdatedAt,
+	`, updatedAt,
 		nil,
-		place.ID,
+		placeID,
 	)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)

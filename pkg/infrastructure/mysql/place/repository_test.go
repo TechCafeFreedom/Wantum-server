@@ -124,28 +124,29 @@ func TestUpDeleteFlag(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		var err error
 		ctx := context.Background()
+		_dummyDate := time.Date(2020, 10, 10, 10, 0, 0, 0, time.Local)
 		place := &placeEntity.Entity{
 			Name:      dummyPlace,
-			CreatedAt: &dummyDate,
-			UpdatedAt: &dummyDate,
+			CreatedAt: &_dummyDate,
+			UpdatedAt: &_dummyDate,
 		}
 
 		var result *placeEntity.Entity
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			newPlaceID, _ := repo.Insert(ctx, masterTx, place)
 
-			place.ID = newPlaceID
-			place.DeletedAt = &dummyDate
-			if err = repo.UpDeleteFlag(ctx, masterTx, place); err != nil {
+			if err = repo.UpDeleteFlag(ctx, masterTx, newPlaceID, &dummyDate, &dummyDate); err != nil {
 				return err
 			}
 
-			result, _ = repo.SelectByID(ctx, masterTx, place.ID)
+			result, _ = repo.SelectByID(ctx, masterTx, newPlaceID)
 			return nil
 		})
 
 		assert.NoError(t, err)
 		assert.NotNil(t, result.DeletedAt)
+		assert.Equal(t, dummyDate, result.UpdatedAt.Local())
+		assert.Equal(t, dummyDate, result.DeletedAt.Local())
 	})
 
 	t.Run("failure_deletedAtがnil", func(t *testing.T) {
@@ -161,7 +162,7 @@ func TestUpDeleteFlag(t *testing.T) {
 			newPlaceID, _ := repo.Insert(ctx, masterTx, place)
 
 			place.ID = newPlaceID
-			return repo.UpDeleteFlag(ctx, masterTx, place)
+			return repo.UpDeleteFlag(ctx, masterTx, newPlaceID, &dummyDate, nil)
 		})
 
 		assert.Error(t, err)
@@ -183,13 +184,11 @@ func TestDownDeleteFlag(t *testing.T) {
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			newPlaceID, _ := repo.Insert(ctx, masterTx, place)
 
-			place.ID = newPlaceID
-			place.DeletedAt = nil
-			if err = repo.DownDeleteFlag(ctx, masterTx, place); err != nil {
+			if err = repo.DownDeleteFlag(ctx, masterTx, newPlaceID, &dummyDate); err != nil {
 				return err
 			}
 
-			result, _ = repo.SelectByID(ctx, masterTx, place.ID)
+			result, _ = repo.SelectByID(ctx, masterTx, newPlaceID)
 			return nil
 		})
 
@@ -212,8 +211,7 @@ func TestDelete(t *testing.T) {
 		err = txManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
 			newPlaceID, _ := repo.Insert(ctx, masterTx, place)
 			place.ID = newPlaceID
-			place.DeletedAt = &dummyDate
-			repo.UpDeleteFlag(ctx, masterTx, place)
+			repo.UpDeleteFlag(ctx, masterTx, place.ID, &dummyDate, &dummyDate)
 
 			if err = repo.Delete(ctx, masterTx, place); err != nil {
 				return err
