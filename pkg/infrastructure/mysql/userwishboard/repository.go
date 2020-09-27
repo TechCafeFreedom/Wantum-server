@@ -48,22 +48,21 @@ func (r *repositoryImpliment) Exists(ctx context.Context, masterTx repository.Ma
 	}
 
 	row := tx.QueryRow(`
-		SELECT id FROM users_wish_boards WHERE user_id = ? AND wish_board_id = ?
+		SELECT EXISTS (
+			SELECT * FROM users_wish_boards WHERE user_id = ? AND wish_board_id = ?
+		)
 	`, userID, wishBoardID)
 
-	var i int
-	err = row.Scan(&i)
+	var exists bool
+	err = row.Scan(&exists)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return false, nil
-		}
 		return false, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	return true, nil
+	return exists, nil
 }
 
-func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) ([]int, error) {
+func (r *repositoryImpliment) SelectWishBoardIDsByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) ([]int, error) {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)

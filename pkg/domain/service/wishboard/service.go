@@ -65,7 +65,7 @@ func (s *service) GetByPK(ctx context.Context, masterTx repository.MasterTx, wis
 }
 
 func (s *service) GetMyBoards(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error) {
-	wishBoardIDs, err := s.userWishBoardRepository.SelectByUserID(ctx, masterTx, userID)
+	wishBoardIDs, err := s.userWishBoardRepository.SelectWishBoardIDsByUserID(ctx, masterTx, userID)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
