@@ -122,8 +122,7 @@ func (i *interactor) UpdateTitle(ctx context.Context, wishBoardID int, title, au
 			return werrors.FromConstant(err, werrors.WishBoardPermissionDenied)
 		}
 
-		err = i.wishBoardService.UpdateTitle(ctx, masterTx, wishBoardEntity.ID, title)
-		if err != nil {
+		if err := i.wishBoardService.UpdateTitle(ctx, masterTx, wishBoardEntity.ID, title); err != nil {
 			return werrors.Stack(err)
 		}
 		return nil
@@ -165,8 +164,7 @@ func (i *interactor) UpdateBackgroundImage(ctx context.Context, wishBoardID int,
 			return werrors.Stack(err)
 		}
 
-		err = i.wishBoardService.UpdateBackgroundImageURL(ctx, masterTx, wishBoardEntity.ID, backgroundImageURL)
-		if err != nil {
+		if err := i.wishBoardService.UpdateBackgroundImageURL(ctx, masterTx, wishBoardEntity.ID, backgroundImageURL); err != nil {
 			return werrors.Stack(err)
 		}
 
@@ -203,8 +201,7 @@ func (i *interactor) DeleteWishBoard(ctx context.Context, wishBoardID int, authI
 			return werrors.FromConstant(err, werrors.WishBoardPermissionDenied)
 		}
 
-		err = i.wishBoardService.Delete(ctx, masterTx, wishBoardEntity.ID)
-		if err != nil {
+		if err := i.wishBoardService.Delete(ctx, masterTx, wishBoardEntity.ID); err != nil {
 			return werrors.Stack(err)
 		}
 

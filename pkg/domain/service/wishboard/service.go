@@ -49,8 +49,7 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, titl
 		return nil, werrors.Stack(err)
 	}
 
-	err = s.userWishBoardRepository.Insert(ctx, masterTx, userID, createdWishBoard.ID)
-	if err != nil {
+	if err := s.userWishBoardRepository.Insert(ctx, masterTx, userID, createdWishBoard.ID); err != nil {
 		return nil, werrors.Stack(err)
 	}
 
@@ -94,8 +93,7 @@ func (s *service) IsMember(ctx context.Context, masterTx repository.MasterTx, us
 func (s *service) UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string) error {
 	now := time.Now()
 
-	err := s.wishBoardRepository.UpdateTitle(ctx, masterTx, wishBoardID, title, &now)
-	if err != nil {
+	if err := s.wishBoardRepository.UpdateTitle(ctx, masterTx, wishBoardID, title, &now); err != nil {
 		return werrors.Stack(err)
 	}
 	return nil
@@ -104,8 +102,7 @@ func (s *service) UpdateTitle(ctx context.Context, masterTx repository.MasterTx,
 func (s *service) UpdateBackgroundImageURL(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageURL string) error {
 	now := time.Now()
 
-	err := s.wishBoardRepository.UpdateBackgroundImageURL(ctx, masterTx, wishBoardID, backgroundImageURL, &now)
-	if err != nil {
+	if err := s.wishBoardRepository.UpdateBackgroundImageURL(ctx, masterTx, wishBoardID, backgroundImageURL, &now); err != nil {
 		return werrors.Stack(err)
 	}
 	return nil
@@ -114,10 +111,13 @@ func (s *service) UpdateBackgroundImageURL(ctx context.Context, masterTx reposit
 func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) error {
 	now := time.Now()
 
-	wishBoardEntity := &wishboard.Entity{ID: wishBoardID, UpdatedAt: &now, DeletedAt: &now}
+	wishBoardEntity := &wishboard.Entity{
+		ID:        wishBoardID,
+		UpdatedAt: &now,
+		DeletedAt: &now,
+	}
 
-	err := s.wishBoardRepository.Delete(ctx, masterTx, wishBoardEntity)
-	if err != nil {
+	if err := s.wishBoardRepository.Delete(ctx, masterTx, wishBoardEntity); err != nil {
 		return werrors.Stack(err)
 	}
 	return nil

@@ -28,7 +28,9 @@ func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.Ma
 	}
 
 	_, err = tx.Exec(`
-		INSERT INTO users_wish_boards(user_id, wish_board_id) VALUES (?, ?)
+		INSERT INTO users_wish_boards(
+			user_id, wish_board_id
+		) VALUES (?, ?)
 	`, userID, wishBoardID)
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
