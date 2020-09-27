@@ -7,10 +7,6 @@ import (
 	"time"
 	wishCardEntity "wantum/pkg/domain/entity/wishcard"
 	"wantum/pkg/domain/repository"
-	"wantum/pkg/domain/repository/place"
-	"wantum/pkg/domain/repository/profile"
-	"wantum/pkg/domain/repository/tag"
-	"wantum/pkg/domain/repository/user"
 	"wantum/pkg/domain/repository/wishcard"
 	"wantum/pkg/domain/repository/wishcardtag"
 	"wantum/pkg/werrors"
@@ -40,59 +36,26 @@ type Service interface {
 }
 
 type service struct {
-	userRepository        user.Repository
-	userProfileRepository profile.Repository
 	wishCardRepository    wishcard.Repository
-	placeRepository       place.Repository
-	tagsRepository        tag.Repository
 	wishCardTagRepository wishcardtag.Repository
 }
 
-func New(wcRepo wishcard.Repository, userRepo user.Repository, upRepo profile.Repository, placeRepo place.Repository, tagRepo tag.Repository, wctRepo wishcardtag.Repository) Service {
+func New(wcRepo wishcard.Repository, wctRepo wishcardtag.Repository) Service {
 	return &service{
 		wishCardRepository:    wcRepo,
-		userRepository:        userRepo,
-		userProfileRepository: upRepo,
-		placeRepository:       placeRepo,
-		tagsRepository:        tagRepo,
 		wishCardTagRepository: wctRepo,
 	}
 }
 
 func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, activity, description string, date *time.Time, userID, categoryID, placeID int, tagIDs []int) (*wishCardEntity.Entity, error) {
-	// get user
-	author, err := s.userRepository.SelectByPK(ctx, masterTx, userID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	authorProfile, err := s.userProfileRepository.SelectByUserID(ctx, masterTx, userID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	author.Profile = authorProfile
-
-	// get place
-	place, err := s.placeRepository.SelectByID(ctx, masterTx, placeID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-
-	// get tag
-	tags, err := s.tagsRepository.SelectByIDs(ctx, masterTx, tagIDs)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
 
 	now := time.Now()
 	wishCard := &wishCardEntity.Entity{
-		Author:      author,
 		Activity:    activity,
 		Description: description,
 		Date:        date,
 		CreatedAt:   &now,
 		UpdatedAt:   &now,
-		Place:       place,
-		Tags:        tags,
 	}
 	newID, err := s.wishCardRepository.Insert(ctx, masterTx, wishCard, categoryID)
 	if err != nil {
@@ -113,33 +76,16 @@ func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, wish
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	author, err := s.userRepository.SelectByPK(ctx, masterTx, wishCard.Author.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	profile, err := s.userProfileRepository.SelectByUserID(ctx, masterTx, wishCard.Author.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	author.Profile = profile
-	place, err := s.placeRepository.SelectByID(ctx, masterTx, placeID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	tags, err := s.tagsRepository.SelectByWishCardID(ctx, masterTx, wishCardID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
 
 	now := time.Now()
-	wishCard.Author = author // NOTE: 今後、authorの更新があるかも
+	wishCard.Author.ID = userID // NOTE: 今後、authorの更新があるかも
 	wishCard.Activity = activity
 	wishCard.Description = description
 	wishCard.Date = date
 	wishCard.DoneAt = doneAt
-	wishCard.Place = place
 	wishCard.UpdatedAt = &now
-	wishCard.Tags = tags
+	wishCard.Place.ID = placeID
+	// wishCard.Tags = tags // TODO: 消す
 
 	if err = s.wishCardRepository.Update(ctx, masterTx, wishCard); err != nil {
 		return nil, werrors.Stack(err)
@@ -272,33 +218,16 @@ func (s *service) UpdateWithCategoryID(ctx context.Context, masterTx repository.
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	author, err := s.userRepository.SelectByPK(ctx, masterTx, wishCard.Author.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	profile, err := s.userProfileRepository.SelectByUserID(ctx, masterTx, wishCard.Author.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	author.Profile = profile
-	place, err := s.placeRepository.SelectByID(ctx, masterTx, placeID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	tags, err := s.tagsRepository.SelectByIDs(ctx, masterTx, tagIDs)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
 
 	now := time.Now()
-	wishCard.Author = author // NOTE: 今後、authorの更新があるかも
+	wishCard.Author.ID = userID // NOTE: 今後、authorの更新があるかも
 	wishCard.Activity = activity
 	wishCard.Description = description
 	wishCard.Date = date
 	wishCard.DoneAt = doneAt
-	wishCard.Place = place
+	wishCard.Place.ID = placeID
 	wishCard.UpdatedAt = &now
-	wishCard.Tags = tags
+	// wishCard.Tags = tags // TODO: 消す
 
 	if err = s.wishCardRepository.UpdateWithCategoryID(ctx, masterTx, wishCard, categoryID); err != nil {
 		return nil, werrors.Stack(err)
@@ -319,29 +248,9 @@ func (s *service) UpDeleteFlag(ctx context.Context, masterTx repository.MasterTx
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	author, err := s.userRepository.SelectByPK(ctx, masterTx, wishCard.Author.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	profile, err := s.userProfileRepository.SelectByUserID(ctx, masterTx, wishCard.Author.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	author.Profile = profile
-	place, err := s.placeRepository.SelectByID(ctx, masterTx, wishCard.Place.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	tags, err := s.tagsRepository.SelectByWishCardID(ctx, masterTx, wishCard.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
 	now := time.Now()
 	wishCard.UpdatedAt = &now
 	wishCard.DeletedAt = &now
-	wishCard.Author = author
-	wishCard.Place = place
-	wishCard.Tags = tags
 
 	if err = s.wishCardRepository.UpDeleteFlag(ctx, masterTx, wishCard.ID, wishCard.UpdatedAt, wishCard.DeletedAt); err != nil {
 		return nil, werrors.Stack(err)
@@ -354,29 +263,10 @@ func (s *service) DownDeleteFlag(ctx context.Context, masterTx repository.Master
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	author, err := s.userRepository.SelectByPK(ctx, masterTx, wishCard.Author.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	profile, err := s.userProfileRepository.SelectByUserID(ctx, masterTx, wishCard.Author.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	author.Profile = profile
-	place, err := s.placeRepository.SelectByID(ctx, masterTx, wishCard.Place.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	tags, err := s.tagsRepository.SelectByWishCardID(ctx, masterTx, wishCard.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
+
 	now := time.Now()
 	wishCard.UpdatedAt = &now
 	wishCard.DeletedAt = nil
-	wishCard.Author = author
-	wishCard.Place = place
-	wishCard.Tags = tags
 	if err = s.wishCardRepository.DownDeleteFlag(ctx, masterTx, wishCard.ID, wishCard.UpdatedAt); err != nil {
 		return nil, werrors.Stack(err)
 	}
@@ -411,57 +301,13 @@ func (s *service) GetByID(ctx context.Context, masterTx repository.MasterTx, wis
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	author, err := s.userRepository.SelectByPK(ctx, masterTx, wishCard.Author.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	profile, err := s.userProfileRepository.SelectByUserID(ctx, masterTx, wishCard.Author.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	author.Profile = profile
-	place, err := s.placeRepository.SelectByID(ctx, masterTx, wishCard.Place.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	tags, err := s.tagsRepository.SelectByWishCardID(ctx, masterTx, wishCard.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	wishCard.Author = author
-	wishCard.Place = place
-	wishCard.Tags = tags
 	return wishCard, nil
 }
 
 func (s *service) GetByIDs(ctx context.Context, masterTx repository.MasterTx, wishCardIDs []int) (wishCardEntity.EntitySlice, error) {
-
 	wishCards, err := s.wishCardRepository.SelectByIDs(ctx, masterTx, wishCardIDs)
 	if err != nil {
 		return nil, werrors.Stack(err)
-	}
-	// OPTIMIZE: 絶対遅い
-	for _, wishCard := range wishCards {
-		author, err := s.userRepository.SelectByPK(ctx, masterTx, wishCard.Author.ID)
-		if err != nil {
-			return nil, werrors.Stack(err)
-		}
-		profile, err := s.userProfileRepository.SelectByUserID(ctx, masterTx, wishCard.Author.ID)
-		if err != nil {
-			return nil, werrors.Stack(err)
-		}
-		author.Profile = profile
-		place, err := s.placeRepository.SelectByID(ctx, masterTx, wishCard.Place.ID)
-		if err != nil {
-			return nil, werrors.Stack(err)
-		}
-		tags, err := s.tagsRepository.SelectByWishCardID(ctx, masterTx, wishCard.ID)
-		if err != nil {
-			return nil, werrors.Stack(err)
-		}
-		wishCard.Author = author
-		wishCard.Place = place
-		wishCard.Tags = tags
 	}
 	return wishCards, nil
 }
@@ -470,29 +316,6 @@ func (s *service) GetByCategoryID(ctx context.Context, masterTx repository.Maste
 	wishCards, err := s.wishCardRepository.SelectByCategoryID(ctx, masterTx, categoryID)
 	if err != nil {
 		return nil, werrors.Stack(err)
-	}
-	// OPTIMIZE: 絶対遅い
-	for _, wishCard := range wishCards {
-		author, err := s.userRepository.SelectByPK(ctx, masterTx, wishCard.Author.ID)
-		if err != nil {
-			return nil, werrors.Stack(err)
-		}
-		profile, err := s.userProfileRepository.SelectByUserID(ctx, masterTx, wishCard.Author.ID)
-		if err != nil {
-			return nil, werrors.Stack(err)
-		}
-		author.Profile = profile
-		place, err := s.placeRepository.SelectByID(ctx, masterTx, wishCard.Place.ID)
-		if err != nil {
-			return nil, werrors.Stack(err)
-		}
-		tags, err := s.tagsRepository.SelectByWishCardID(ctx, masterTx, wishCard.ID)
-		if err != nil {
-			return nil, werrors.Stack(err)
-		}
-		wishCard.Author = author
-		wishCard.Place = place
-		wishCard.Tags = tags
 	}
 	return wishCards, nil
 }
@@ -506,26 +329,6 @@ func (s *service) AddTags(ctx context.Context, masterTx repository.MasterTx, wis
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	author, err := s.userRepository.SelectByPK(ctx, masterTx, wishCard.Author.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	profile, err := s.userProfileRepository.SelectByUserID(ctx, masterTx, wishCard.Author.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	author.Profile = profile
-	place, err := s.placeRepository.SelectByID(ctx, masterTx, wishCard.Place.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	tags, err := s.tagsRepository.SelectByWishCardID(ctx, masterTx, wishCard.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	wishCard.Author = author
-	wishCard.Place = place
-	wishCard.Tags = tags
 	return wishCard, nil
 }
 
@@ -538,25 +341,5 @@ func (s *service) DeleteTags(ctx context.Context, masterTx repository.MasterTx, 
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
-	author, err := s.userRepository.SelectByPK(ctx, masterTx, wishCard.Author.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	profile, err := s.userProfileRepository.SelectByUserID(ctx, masterTx, wishCard.Author.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	author.Profile = profile
-	place, err := s.placeRepository.SelectByID(ctx, masterTx, wishCard.Place.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	tags, err := s.tagsRepository.SelectByWishCardID(ctx, masterTx, wishCard.ID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	wishCard.Author = author
-	wishCard.Place = place
-	wishCard.Tags = tags
 	return wishCard, nil
 }

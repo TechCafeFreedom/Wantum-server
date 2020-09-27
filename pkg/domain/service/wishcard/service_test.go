@@ -11,10 +11,6 @@ import (
 	profileEntity "wantum/pkg/domain/entity/userprofile"
 	wishCardEntity "wantum/pkg/domain/entity/wishcard"
 	"wantum/pkg/domain/repository"
-	"wantum/pkg/domain/repository/place/mock_place"
-	"wantum/pkg/domain/repository/profile/mock_profile"
-	"wantum/pkg/domain/repository/tag/mock_tag"
-	"wantum/pkg/domain/repository/user/mock_user"
 	"wantum/pkg/domain/repository/wishcard/mock_wish_card"
 	"wantum/pkg/domain/repository/wishcardtag/mock_wish_card_tag"
 
@@ -101,30 +97,15 @@ func TestService_Create(t *testing.T) {
 	wcRepo := mock_wish_card.NewMockRepository(ctrl)
 	wcRepo.EXPECT().Insert(ctx, masterTx, gomock.Any(), gomock.Any()).Return(1, nil)
 
-	userRepo := mock_user.NewMockRepository(ctrl)
-	userRepo.EXPECT().SelectByPK(ctx, masterTx, gomock.Any()).Return(&dummyUser, nil)
-
-	profileRepo := mock_profile.NewMockRepository(ctrl)
-	profileRepo.EXPECT().SelectByUserID(ctx, masterTx, gomock.Any()).Return(&dummyProfile, nil)
-
-	placeRepo := mock_place.NewMockRepository(ctrl)
-	placeRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(&dummyPlace, nil)
-
-	tagRepo := mock_tag.NewMockRepository(ctrl)
-	tagRepo.EXPECT().SelectByIDs(ctx, masterTx, gomock.Any()).Return(dummyTags, nil)
-
 	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 	wctRepo.EXPECT().BulkInsert(ctx, masterTx, gomock.Any(), gomock.Any()).Return(nil)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+	service := New(wcRepo, wctRepo)
 	result, err := service.Create(ctx, masterTx, dummyActivity, dummyDescription, &dummyDate, 1, 1, 1, []int{1, 2})
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Equal(t, 1, result.ID)
-	assert.Equal(t, &dummyUser, result.Author)
-	assert.Equal(t, &dummyPlace, result.Place)
-	assert.Equal(t, dummyTags, result.Tags)
 }
 
 func TestService_Update(t *testing.T) {
@@ -152,30 +133,15 @@ func TestService_Update(t *testing.T) {
 	wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 	wcRepo.EXPECT().Update(ctx, masterTx, gomock.Any()).Return(nil)
 
-	userRepo := mock_user.NewMockRepository(ctrl)
-	userRepo.EXPECT().SelectByPK(ctx, masterTx, gomock.Any()).Return(&dummyUser, nil)
-
-	profileRepo := mock_profile.NewMockRepository(ctrl)
-	profileRepo.EXPECT().SelectByUserID(ctx, masterTx, gomock.Any()).Return(&dummyProfile, nil)
-
-	placeRepo := mock_place.NewMockRepository(ctrl)
-	placeRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(&dummyPlace, nil)
-
-	tagRepo := mock_tag.NewMockRepository(ctrl)
-	tagRepo.EXPECT().SelectByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTags, nil)
-
 	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+	service := New(wcRepo, wctRepo)
 	result, err := service.Update(ctx, masterTx, 1, dummyActivity, dummyDescription, &dummyDate, &dummyDate, 1, 1)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Equal(t, dummyActivity, result.Activity)
 	assert.Equal(t, dummyDescription, result.Description)
-	assert.Equal(t, &dummyUser, result.Author)
-	assert.Equal(t, &dummyPlace, result.Place)
-	assert.Equal(t, dummyTags, result.Tags)
 }
 
 func TestService_UpdateActivity(t *testing.T) {
@@ -204,13 +170,9 @@ func TestService_UpdateActivity(t *testing.T) {
 		wcRepo.EXPECT().UpdateActivity(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		result, err := service.UpdateActivity(ctx, masterTx, dummyWishCardID, dummyActivity)
 
 		assert.NoError(t, err)
@@ -227,13 +189,9 @@ func TestService_UpdateActivity(t *testing.T) {
 		wcRepo := mock_wish_card.NewMockRepository(ctrl)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		_, err := service.UpdateActivity(ctx, masterTx, dummyWishCardID, dummyActivity)
 
 		assert.Error(t, err)
@@ -266,13 +224,9 @@ func TestService_UpdateDescription(t *testing.T) {
 		wcRepo.EXPECT().UpdateDescription(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		result, err := service.UpdateDescription(ctx, masterTx, dummyWishCardID, dummyDescription)
 
 		assert.NoError(t, err)
@@ -289,13 +243,9 @@ func TestService_UpdateDescription(t *testing.T) {
 		wcRepo := mock_wish_card.NewMockRepository(ctrl)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		_, err := service.UpdateDescription(ctx, masterTx, dummyWishCardID, dummyDescription)
 
 		assert.Error(t, err)
@@ -330,13 +280,9 @@ func TestService_UpdateDate(t *testing.T) {
 		wcRepo.EXPECT().UpdateDate(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		result, err := service.UpdateDate(ctx, masterTx, dummyWishCardID, &dummyDate)
 
 		assert.NoError(t, err)
@@ -353,13 +299,9 @@ func TestService_UpdateDate(t *testing.T) {
 		wcRepo := mock_wish_card.NewMockRepository(ctrl)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		_, err := service.UpdateDate(ctx, masterTx, dummyWishCardID, &dummyDate)
 
 		assert.Error(t, err)
@@ -394,13 +336,9 @@ func TestService_UpdateDoneAt(t *testing.T) {
 		wcRepo.EXPECT().UpdateDoneAt(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		result, err := service.UpdateDoneAt(ctx, masterTx, dummyWishCardID, &dummyDate)
 
 		assert.NoError(t, err)
@@ -417,13 +355,9 @@ func TestService_UpdateDoneAt(t *testing.T) {
 		wcRepo := mock_wish_card.NewMockRepository(ctrl)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		_, err := service.UpdateDoneAt(ctx, masterTx, dummyWishCardID, &dummyDate)
 
 		assert.Error(t, err)
@@ -457,13 +391,9 @@ func TestService_UpdateAuthor(t *testing.T) {
 		wcRepo.EXPECT().UpdateUserID(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		result, err := service.UpdateAuthor(ctx, masterTx, dummyWishCardID, dummyUserID)
 
 		assert.NoError(t, err)
@@ -480,13 +410,9 @@ func TestService_UpdateAuthor(t *testing.T) {
 		wcRepo := mock_wish_card.NewMockRepository(ctrl)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		_, err := service.UpdateAuthor(ctx, masterTx, dummyWishCardID, dummyUserID)
 
 		assert.Error(t, err)
@@ -519,13 +445,9 @@ func TestService_UpdatePlace(t *testing.T) {
 		wcRepo.EXPECT().UpdatePlaceID(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		result, err := service.UpdatePlace(ctx, masterTx, dummyWishCardID, dummyPlaceID)
 
 		assert.NoError(t, err)
@@ -542,13 +464,9 @@ func TestService_UpdatePlace(t *testing.T) {
 		wcRepo := mock_wish_card.NewMockRepository(ctrl)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		_, err := service.UpdatePlace(ctx, masterTx, dummyWishCardID, dummyPlaceID)
 
 		assert.Error(t, err)
@@ -582,13 +500,9 @@ func TestService_UpdateCategory(t *testing.T) {
 		wcRepo.EXPECT().UpdateCategoryID(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		result, err := service.UpdateCategory(ctx, masterTx, dummyWishCardID, dummyCategoryID)
 
 		assert.NoError(t, err)
@@ -604,13 +518,9 @@ func TestService_UpdateCategory(t *testing.T) {
 		wcRepo := mock_wish_card.NewMockRepository(ctrl)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		_, err := service.UpdateCategory(ctx, masterTx, dummyWishCardID, dummyCategoryID)
 
 		assert.Error(t, err)
@@ -642,32 +552,17 @@ func TestService_UpdateWithCategoryID(t *testing.T) {
 	wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 	wcRepo.EXPECT().UpdateWithCategoryID(ctx, masterTx, gomock.Any(), gomock.Any()).Return(nil)
 
-	userRepo := mock_user.NewMockRepository(ctrl)
-	userRepo.EXPECT().SelectByPK(ctx, masterTx, gomock.Any()).Return(&dummyUser, nil)
-
-	profileRepo := mock_profile.NewMockRepository(ctrl)
-	profileRepo.EXPECT().SelectByUserID(ctx, masterTx, gomock.Any()).Return(&dummyProfile, nil)
-
-	placeRepo := mock_place.NewMockRepository(ctrl)
-	placeRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(&dummyPlace, nil)
-
-	tagRepo := mock_tag.NewMockRepository(ctrl)
-	tagRepo.EXPECT().SelectByIDs(ctx, masterTx, gomock.Any()).Return(dummyTags, nil)
-
 	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 	wctRepo.EXPECT().BulkInsert(ctx, masterTx, gomock.Any(), gomock.Any()).Return(nil)
 	wctRepo.EXPECT().DeleteByWishCardID(ctx, masterTx, gomock.Any()).Return(nil)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+	service := New(wcRepo, wctRepo)
 	result, err := service.UpdateWithCategoryID(ctx, masterTx, 1, dummyActivity, dummyDescription, &dummyDate, &dummyDate, 1, 1, 1, []int{1, 2})
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Equal(t, dummyActivity, result.Activity)
 	assert.Equal(t, dummyDescription, result.Description)
-	assert.Equal(t, &dummyUser, result.Author)
-	assert.Equal(t, &dummyPlace, result.Place)
-	assert.Equal(t, dummyTags, result.Tags)
 }
 
 func TestService_UpDeleteFlag(t *testing.T) {
@@ -695,29 +590,14 @@ func TestService_UpDeleteFlag(t *testing.T) {
 	wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 	wcRepo.EXPECT().UpDeleteFlag(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 
-	userRepo := mock_user.NewMockRepository(ctrl)
-	userRepo.EXPECT().SelectByPK(ctx, masterTx, gomock.Any()).Return(&dummyUser, nil)
-
-	profileRepo := mock_profile.NewMockRepository(ctrl)
-	profileRepo.EXPECT().SelectByUserID(ctx, masterTx, gomock.Any()).Return(&dummyProfile, nil)
-
-	placeRepo := mock_place.NewMockRepository(ctrl)
-	placeRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(&dummyPlace, nil)
-
-	tagRepo := mock_tag.NewMockRepository(ctrl)
-	tagRepo.EXPECT().SelectByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTags, nil)
-
 	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+	service := New(wcRepo, wctRepo)
 	result, err := service.UpDeleteFlag(ctx, masterTx, 1)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.NotNil(t, result.DeletedAt)
-	assert.Equal(t, &dummyUser, result.Author)
-	assert.Equal(t, &dummyPlace, result.Place)
-	assert.Equal(t, dummyTags, result.Tags)
 }
 
 func TestService_DownDeleteFlag(t *testing.T) {
@@ -746,29 +626,14 @@ func TestService_DownDeleteFlag(t *testing.T) {
 	wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 	wcRepo.EXPECT().DownDeleteFlag(ctx, masterTx, gomock.Any(), gomock.Any()).Return(nil)
 
-	userRepo := mock_user.NewMockRepository(ctrl)
-	userRepo.EXPECT().SelectByPK(ctx, masterTx, gomock.Any()).Return(&dummyUser, nil)
-
-	profileRepo := mock_profile.NewMockRepository(ctrl)
-	profileRepo.EXPECT().SelectByUserID(ctx, masterTx, gomock.Any()).Return(&dummyProfile, nil)
-
-	placeRepo := mock_place.NewMockRepository(ctrl)
-	placeRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(&dummyPlace, nil)
-
-	tagRepo := mock_tag.NewMockRepository(ctrl)
-	tagRepo.EXPECT().SelectByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTags, nil)
-
 	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+	service := New(wcRepo, wctRepo)
 	result, err := service.DownDeleteFlag(ctx, masterTx, 1)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Nil(t, result.DeletedAt)
-	assert.Equal(t, &dummyUser, result.Author)
-	assert.Equal(t, &dummyPlace, result.Place)
-	assert.Equal(t, dummyTags, result.Tags)
 }
 
 func TestService_Delete(t *testing.T) {
@@ -798,15 +663,10 @@ func TestService_Delete(t *testing.T) {
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 		wcRepo.EXPECT().Delete(ctx, masterTx, gomock.Any()).Return(nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
-
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 		wctRepo.EXPECT().DeleteByWishCardID(ctx, masterTx, gomock.Any()).Return(nil)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		err := service.Delete(ctx, masterTx, 1)
 
 		assert.NoError(t, err)
@@ -836,13 +696,9 @@ func TestService_Delete(t *testing.T) {
 		wcRepo := mock_wish_card.NewMockRepository(ctrl)
 		wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 
-		userRepo := mock_user.NewMockRepository(ctrl)
-		profileRepo := mock_profile.NewMockRepository(ctrl)
-		placeRepo := mock_place.NewMockRepository(ctrl)
-		tagRepo := mock_tag.NewMockRepository(ctrl)
 		wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-		service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+		service := New(wcRepo, wctRepo)
 		err := service.Delete(ctx, masterTx, 1)
 
 		assert.Error(t, err)
@@ -873,28 +729,13 @@ func TestService_GetByID(t *testing.T) {
 	wcRepo := mock_wish_card.NewMockRepository(ctrl)
 	wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 
-	userRepo := mock_user.NewMockRepository(ctrl)
-	userRepo.EXPECT().SelectByPK(ctx, masterTx, gomock.Any()).Return(&dummyUser, nil)
-
-	profileRepo := mock_profile.NewMockRepository(ctrl)
-	profileRepo.EXPECT().SelectByUserID(ctx, masterTx, gomock.Any()).Return(&dummyProfile, nil)
-
-	placeRepo := mock_place.NewMockRepository(ctrl)
-	placeRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(&dummyPlace, nil)
-
-	tagRepo := mock_tag.NewMockRepository(ctrl)
-	tagRepo.EXPECT().SelectByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTags, nil)
-
 	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+	service := New(wcRepo, wctRepo)
 	result, err := service.GetByID(ctx, masterTx, 1)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
-	assert.Equal(t, &dummyUser, result.Author)
-	assert.Equal(t, &dummyPlace, result.Place)
-	assert.Equal(t, dummyTags, result.Tags)
 }
 
 func TestService_GetByIDs(t *testing.T) {
@@ -938,29 +779,14 @@ func TestService_GetByIDs(t *testing.T) {
 	wcRepo := mock_wish_card.NewMockRepository(ctrl)
 	wcRepo.EXPECT().SelectByIDs(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 
-	userRepo := mock_user.NewMockRepository(ctrl)
-	userRepo.EXPECT().SelectByPK(ctx, masterTx, gomock.Any()).Return(&dummyUser, nil).Times(2)
-
-	profileRepo := mock_profile.NewMockRepository(ctrl)
-	profileRepo.EXPECT().SelectByUserID(ctx, masterTx, gomock.Any()).Return(&dummyProfile, nil).Times(2)
-
-	placeRepo := mock_place.NewMockRepository(ctrl)
-	placeRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(&dummyPlace, nil).Times(2)
-
-	tagRepo := mock_tag.NewMockRepository(ctrl)
-	tagRepo.EXPECT().SelectByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTags, nil).Times(2)
-
 	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+	service := New(wcRepo, wctRepo)
 	result, err := service.GetByIDs(ctx, masterTx, []int{1, 2})
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Equal(t, 2, len(result))
-	assert.Equal(t, &dummyUser, result[0].Author)
-	assert.Equal(t, &dummyPlace, result[0].Place)
-	assert.Equal(t, dummyTags, result[0].Tags)
 }
 
 func TestService_GetByCategoryID(t *testing.T) {
@@ -1004,29 +830,14 @@ func TestService_GetByCategoryID(t *testing.T) {
 	wcRepo := mock_wish_card.NewMockRepository(ctrl)
 	wcRepo.EXPECT().SelectByCategoryID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 
-	userRepo := mock_user.NewMockRepository(ctrl)
-	userRepo.EXPECT().SelectByPK(ctx, masterTx, gomock.Any()).Return(&dummyUser, nil).Times(2)
-
-	profileRepo := mock_profile.NewMockRepository(ctrl)
-	profileRepo.EXPECT().SelectByUserID(ctx, masterTx, gomock.Any()).Return(&dummyProfile, nil).Times(2)
-
-	placeRepo := mock_place.NewMockRepository(ctrl)
-	placeRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(&dummyPlace, nil).Times(2)
-
-	tagRepo := mock_tag.NewMockRepository(ctrl)
-	tagRepo.EXPECT().SelectByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTags, nil).Times(2)
-
 	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+	service := New(wcRepo, wctRepo)
 	result, err := service.GetByCategoryID(ctx, masterTx, 1)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Equal(t, 2, len(result))
-	assert.Equal(t, &dummyUser, result[0].Author)
-	assert.Equal(t, &dummyPlace, result[0].Place)
-	assert.Equal(t, dummyTags, result[0].Tags)
 }
 
 func TestService_AddTags(t *testing.T) {
@@ -1053,29 +864,14 @@ func TestService_AddTags(t *testing.T) {
 	wcRepo := mock_wish_card.NewMockRepository(ctrl)
 	wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 
-	userRepo := mock_user.NewMockRepository(ctrl)
-	userRepo.EXPECT().SelectByPK(ctx, masterTx, gomock.Any()).Return(&dummyUser, nil)
-
-	profileRepo := mock_profile.NewMockRepository(ctrl)
-	profileRepo.EXPECT().SelectByUserID(ctx, masterTx, gomock.Any()).Return(&dummyProfile, nil)
-
-	placeRepo := mock_place.NewMockRepository(ctrl)
-	placeRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(&dummyPlace, nil)
-
-	tagRepo := mock_tag.NewMockRepository(ctrl)
-	tagRepo.EXPECT().SelectByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTags, nil)
-
 	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 	wctRepo.EXPECT().BulkInsert(ctx, masterTx, gomock.Any(), gomock.Any()).Return(nil)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+	service := New(wcRepo, wctRepo)
 	result, err := service.AddTags(ctx, masterTx, 1, []int{1, 2})
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
-	assert.Equal(t, &dummyUser, result.Author)
-	assert.Equal(t, &dummyPlace, result.Place)
-	assert.Equal(t, dummyTags, result.Tags)
 }
 
 func TestService_DeleteTags(t *testing.T) {
@@ -1102,27 +898,12 @@ func TestService_DeleteTags(t *testing.T) {
 	wcRepo := mock_wish_card.NewMockRepository(ctrl)
 	wcRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
 
-	userRepo := mock_user.NewMockRepository(ctrl)
-	userRepo.EXPECT().SelectByPK(ctx, masterTx, gomock.Any()).Return(&dummyUser, nil)
-
-	profileRepo := mock_profile.NewMockRepository(ctrl)
-	profileRepo.EXPECT().SelectByUserID(ctx, masterTx, gomock.Any()).Return(&dummyProfile, nil)
-
-	placeRepo := mock_place.NewMockRepository(ctrl)
-	placeRepo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(&dummyPlace, nil)
-
-	tagRepo := mock_tag.NewMockRepository(ctrl)
-	tagRepo.EXPECT().SelectByWishCardID(ctx, masterTx, gomock.Any()).Return(dummyTags, nil)
-
 	wctRepo := mock_wish_card_tag.NewMockRepository(ctrl)
 	wctRepo.EXPECT().DeleteByIDs(ctx, masterTx, gomock.Any(), gomock.Any()).Return(nil)
 
-	service := New(wcRepo, userRepo, profileRepo, placeRepo, tagRepo, wctRepo)
+	service := New(wcRepo, wctRepo)
 	result, err := service.DeleteTags(ctx, masterTx, 1, []int{1, 2})
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
-	assert.Equal(t, &dummyUser, result.Author)
-	assert.Equal(t, &dummyPlace, result.Place)
-	assert.Equal(t, dummyTags, result.Tags)
 }
