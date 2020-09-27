@@ -15,7 +15,7 @@ type Service interface {
 	GetByPK(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) (*wishboard.Entity, error)
 	GetByOwner(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error)
 	GetByMember(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error)
-	IsUserMember(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error)
+	IsMember(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error)
 	UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string) error
 	UpdateBackgroundImageURL(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageURL string) error
 	Delete(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) error
@@ -100,7 +100,7 @@ func (s *service) GetByMember(ctx context.Context, masterTx repository.MasterTx,
 	return bs, nil
 }
 
-func (s *service) IsUserMember(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error) {
+func (s *service) IsMember(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error) {
 	// UserとWishBoardの間にリレーションはあるか？
 	exists, err := s.userWishBoardRepository.Exists(ctx, masterTx, userID, wishBoardID)
 	if err != nil {
