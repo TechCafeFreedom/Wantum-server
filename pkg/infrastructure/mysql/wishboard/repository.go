@@ -140,49 +140,6 @@ func (r *repositoryImpliment) SelectByPKs(ctx context.Context, masterTx reposito
 	return bs, nil
 }
 
-func (r *repositoryImpliment) SelectByUserID(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error) {
-	tx, err := mysql.ExtractTx(masterTx)
-	if err != nil {
-		tlog.PrintErrorLogWithCtx(ctx, err)
-		return nil, werrors.FromConstant(err, werrors.ServerError)
-	}
-
-	// ユーザIDで検索
-	rows, err := tx.Query(`
-		SELECT
-			id, title, background_image_url, invite_url, user_id, created_at, updated_at
-		FROM wish_boards
-		WHERE user_id = ? AND deleted_at IS NULL
-	`, userID)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			// 見つからなかったから空リストを返す
-			return nil, nil
-		}
-		return nil, werrors.FromConstant(err, werrors.ServerError)
-	}
-
-	bs := wishboard.EntitySlice{}
-	for rows.Next() {
-		// Entityへのコピー
-		b := wishboard.Entity{CreatedAt: &time.Time{}, UpdatedAt: &time.Time{}}
-		err := rows.Scan(
-			&b.ID, &b.Title, &b.BackgroundImageURL, &b.InviteURL, &b.UserID, b.CreatedAt, b.UpdatedAt)
-
-		if err != nil {
-			if err == sql.ErrNoRows {
-				// 見つからなかったから空リストを返す
-				return nil, nil
-			}
-			return nil, werrors.FromConstant(err, werrors.ServerError)
-		}
-
-		bs = append(bs, &b)
-	}
-
-	return bs, nil
-}
-
 func (r *repositoryImpliment) UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string, updatedAt *time.Time) error {
 	tx, err := mysql.ExtractTx(masterTx)
 	if err != nil {

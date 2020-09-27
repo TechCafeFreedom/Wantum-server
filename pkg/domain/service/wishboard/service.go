@@ -13,8 +13,7 @@ import (
 type Service interface {
 	Create(ctx context.Context, masterTx repository.MasterTx, title, backgroundImageURL, inviteURL string, userID int) (*wishboard.Entity, error)
 	GetByPK(ctx context.Context, masterTx repository.MasterTx, wishBoardID int) (*wishboard.Entity, error)
-	GetByOwner(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error)
-	GetByMember(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error)
+	GetMyBoards(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error)
 	IsMember(ctx context.Context, masterTx repository.MasterTx, userID, wishBoardID int) (bool, error)
 	UpdateTitle(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, title string) error
 	UpdateBackgroundImageURL(ctx context.Context, masterTx repository.MasterTx, wishBoardID int, backgroundImageURL string) error
@@ -70,16 +69,7 @@ func (s *service) GetByPK(ctx context.Context, masterTx repository.MasterTx, wis
 	return b, nil
 }
 
-func (s *service) GetByOwner(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error) {
-	// Userが所有するWishBoard一覧を取得（招待されているだけのものは含まない）
-	bs, err := s.wishBoardRepository.SelectByUserID(ctx, masterTx, userID)
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-	return bs, err
-}
-
-func (s *service) GetByMember(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error) {
+func (s *service) GetMyBoards(ctx context.Context, masterTx repository.MasterTx, userID int) (wishboard.EntitySlice, error) {
 	// Userが所属するWishBoardのIDをリストで取得（招待されているものも含む）
 	wishBoardIDs, err := s.userWishBoardRepository.SelectByUserID(ctx, masterTx, userID)
 	if err != nil {
