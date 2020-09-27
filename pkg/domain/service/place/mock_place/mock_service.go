@@ -65,6 +65,21 @@ func (mr *MockServiceMockRecorder) Update(ctx, masterTx, placeID, name interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockService)(nil).Update), ctx, masterTx, placeID, name)
 }
 
+// UpdateName mocks base method
+func (m *MockService) UpdateName(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) (*place.Entity, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateName", ctx, masterTx, placeID, name)
+	ret0, _ := ret[0].(*place.Entity)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateName indicates an expected call of UpdateName
+func (mr *MockServiceMockRecorder) UpdateName(ctx, masterTx, placeID, name interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateName", reflect.TypeOf((*MockService)(nil).UpdateName), ctx, masterTx, placeID, name)
+}
+
 // Delete mocks base method
 func (m *MockService) Delete(ctx context.Context, masterTx repository.MasterTx, placeID int) (*place.Entity, error) {
 	m.ctrl.T.Helper()
