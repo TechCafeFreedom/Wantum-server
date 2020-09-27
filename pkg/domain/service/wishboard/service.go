@@ -37,8 +37,17 @@ func (s *service) Create(ctx context.Context, masterTx repository.MasterTx, titl
 	// 現在時刻を取得
 	now := time.Now()
 
+	b := &wishboard.Entity{
+		Title:              title,
+		BackgroundImageURL: backgroundImageURL,
+		InviteURL:          inviteURL,
+		UserID:             userID,
+		CreatedAt:          &now,
+		UpdatedAt:          &now,
+	}
+
 	// WishBoardの新規作成
-	b, err := s.wishBoardRepository.Insert(ctx, masterTx, title, backgroundImageURL, inviteURL, userID, now, now)
+	b, err := s.wishBoardRepository.Insert(ctx, masterTx, b)
 	if err != nil {
 		return nil, werrors.Stack(err)
 	}
@@ -105,7 +114,7 @@ func (s *service) UpdateTitle(ctx context.Context, masterTx repository.MasterTx,
 	now := time.Now()
 
 	// WishBoardのタイトルを更新
-	err := s.wishBoardRepository.UpdateTitle(ctx, masterTx, wishBoardID, title, now)
+	err := s.wishBoardRepository.UpdateTitle(ctx, masterTx, wishBoardID, title, &now)
 	if err != nil {
 		return werrors.Stack(err)
 	}
@@ -117,7 +126,7 @@ func (s *service) UpdateBackgroundImageURL(ctx context.Context, masterTx reposit
 	now := time.Now()
 
 	// WishBoardの背景画像URLを更新
-	err := s.wishBoardRepository.UpdateBackgroundImageURL(ctx, masterTx, wishBoardID, backgroundImageURL, now)
+	err := s.wishBoardRepository.UpdateBackgroundImageURL(ctx, masterTx, wishBoardID, backgroundImageURL, &now)
 	if err != nil {
 		return werrors.Stack(err)
 	}
@@ -128,8 +137,10 @@ func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, wish
 	// 現在時刻を取得
 	now := time.Now()
 
+	b := &wishboard.Entity{ID: wishBoardID, UpdatedAt: &now, DeletedAt: &now}
+
 	// WishBoardの削除
-	err := s.wishBoardRepository.Delete(ctx, masterTx, wishBoardID, now, now)
+	err := s.wishBoardRepository.Delete(ctx, masterTx, b)
 	if err != nil {
 		return werrors.Stack(err)
 	}

@@ -8,9 +8,10 @@ type Entity struct {
 	BackgroundImageURL string
 	InviteURL          string
 	UserID             int
-	CreatedAt          time.Time
-	UpdatedAt          time.Time
+	CreatedAt          *time.Time
+	UpdatedAt          *time.Time
 	DeletedAt          *time.Time
+	//WishCategories
 }
 
 type EntitySlice []*Entity
