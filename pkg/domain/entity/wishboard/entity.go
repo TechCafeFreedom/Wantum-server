@@ -11,7 +11,7 @@ type Entity struct {
 	CreatedAt          *time.Time
 	UpdatedAt          *time.Time
 	DeletedAt          *time.Time
-	//WishCategories
+	// WishCategories
 }
 
 type EntitySlice []*Entity
