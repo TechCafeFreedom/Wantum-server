@@ -15,7 +15,6 @@ import (
 type Interactor interface {
 	CreateNewWishBoard(ctx context.Context, authID, title string, backgroundImage []byte) (*wishboard.Entity, error)
 	GetMyWishBoards(ctx context.Context, authID string) (wishboard.EntitySlice, error)
-	GetWishBoard(ctx context.Context, wishBoardID int, authID string) (*wishboard.Entity, error)
 	UpdateTitle(ctx context.Context, wishBoardID int, title, authID string) error
 	UpdateBackgroundImage(ctx context.Context, wishBoardID int, backgroundImage []byte, authID string) error
 	DeleteWishBoard(ctx context.Context, wishBoardID int, authID string) error
@@ -93,41 +92,6 @@ func (i *interactor) GetMyWishBoards(ctx context.Context, authID string) (wishbo
 	}
 
 	return wishBoardEntitySlice, nil
-}
-
-func (i *interactor) GetWishBoard(ctx context.Context, wishBoardID int, authID string) (*wishboard.Entity, error) {
-	var wishBoardEntity *wishboard.Entity
-	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		userEntity, err := i.userService.GetByAuthID(ctx, masterTx, authID)
-		if err != nil {
-			return werrors.Stack(err)
-		}
-
-		// ユーザがWishBoardのメンバーでなければPermissionDenied
-		isMember, err := i.wishBoardService.IsMember(ctx, masterTx, userEntity.ID, wishBoardID)
-		if err != nil {
-			return werrors.Stack(err)
-		}
-		if !isMember {
-			err := errors.New("you don't belong to wish_board")
-			tlog.PrintErrorLogWithCtx(ctx, err)
-			return werrors.FromConstant(err, werrors.WishBoardPermissionDenied)
-		}
-
-		wishBoardEntity, err = i.wishBoardService.GetByPK(ctx, masterTx, wishBoardID)
-		if err != nil {
-			return werrors.Stack(err)
-		}
-
-		// TODO: WishCategory, WishCardの取得
-
-		return nil
-	})
-	if err != nil {
-		return nil, werrors.Stack(err)
-	}
-
-	return wishBoardEntity, nil
 }
 
 func (i *interactor) UpdateTitle(ctx context.Context, wishBoardID int, title, authID string) error {
