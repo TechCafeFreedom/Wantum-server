@@ -94,7 +94,7 @@ build: ## APIをビルドして立ち上げるコマンド
 	./binary/wantum
 
 dev-up: ## 全コンテナの起動
-	docker-compose up -d
+	docker-compose -f docker-compose.yml up -d
 
 dev-stop: ## 全コンテナを止める
 	docker-compose stop

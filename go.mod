@@ -7,7 +7,7 @@ require (
 	cloud.google.com/go/firestore v1.2.0 // indirect
 	firebase.google.com/go v3.12.0+incompatible
 	github.com/go-sql-driver/mysql v1.5.0
-	github.com/golang/mock v1.4.3
+	github.com/golang/mock v1.4.4
 	github.com/golang/protobuf v1.4.1
 	github.com/google/uuid v1.1.2
 	github.com/google/wire v0.4.0
@@ -19,6 +19,7 @@ require (
 	github.com/rs/cors v1.7.0
 	github.com/stretchr/testify v1.5.1
 	go.uber.org/zap v1.10.0
+	golang.org/x/arch v0.0.0-20200826200359-b19915210f00 // indirect
 	golang.org/x/sys v0.0.0-20200501145240-bc7a7d42d5c3 // indirect
 	golang.org/x/tools v0.0.0-20200425043458-8463f397d07c // indirect
 	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543

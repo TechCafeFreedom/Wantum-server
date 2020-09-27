@@ -58,6 +58,12 @@ jobs:
             -   name: Check out code into the Go module directory
                 uses: actions/checkout@v2
 
+            # set up db
+            -   name: SetUp db
+                run: |
+                    docker-compose -f docker-compose.ci.yml up -d
+                    sleep 15
+
             # Cache
             -   name: Cache go module
                 uses: actions/cache@v1
@@ -76,7 +82,13 @@ jobs:
 
             # Run test
             -   name: Test
-                run: go test -v ./...
+                run: |
+                    export MYSQL_USER=root
+                    export MYSQL_PASSWORD=root
+                    export MYSQL_HOST=localhost
+                    export MYSQL_PORT=3306
+                    export MYSQL_DATABASE=wantum
+                    go test -v ./...
 
     # slackの通知
     slack-notification:
