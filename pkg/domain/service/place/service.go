@@ -12,7 +12,7 @@ import (
 type Service interface {
 	Create(ctx context.Context, masterTx repository.MasterTx, name string) (*placeEntity.Entity, error)
 	Update(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) (*placeEntity.Entity, error)
-	UpdateName(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) error
+	UpdateName(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) (*placeEntity.Entity, error)
 	Delete(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error)
 	GetByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error)
 	GetAll(ctx context.Context, masterTx repository.MasterTx) (placeEntity.EntitySlice, error)
@@ -59,12 +59,21 @@ func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, plac
 	return place, nil
 }
 
-func (s *service) UpdateName(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) error {
-	now := time.Now()
-	if err := s.placeRepository.UpdateName(ctx, masterTx, placeID, name, &now); err != nil {
-		return werrors.Stack(err)
+func (s *service) UpdateName(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) (*placeEntity.Entity, error) {
+	place, err := s.placeRepository.SelectByID(ctx, masterTx, placeID)
+	if err != nil {
+		return nil, werrors.Stack(err)
 	}
-	return nil
+	if place == nil {
+		return nil, werrors.Stack(werrors.PlaceNotFound)
+	}
+	now := time.Now()
+	place.UpdatedAt = &now
+	place.Name = name
+	if err = s.placeRepository.UpdateName(ctx, masterTx, placeID, place.Name, place.UpdatedAt); err != nil {
+		return nil, werrors.Stack(err)
+	}
+	return place, nil
 }
 
 func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error) {

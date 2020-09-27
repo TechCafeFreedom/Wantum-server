@@ -71,17 +71,43 @@ func TestService_Update(t *testing.T) {
 }
 
 func TestService_UpdateName(t *testing.T) {
-	ctx := context.Background()
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
 
-	repo := mock_place.NewMockRepository(ctrl)
-	repo.EXPECT().UpdateName(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+		dummyData := &placeEntity.Entity{
+			ID:        1,
+			Name:      "tokyo",
+			CreatedAt: &dummyDate,
+			UpdatedAt: &dummyDate,
+		}
 
-	service := New(repo)
-	err := service.UpdateName(ctx, masterTx, dummyPlaceID, dummyPlaceName)
+		repo := mock_place.NewMockRepository(ctrl)
+		repo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(dummyData, nil)
+		repo.EXPECT().UpdateName(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 
-	assert.NoError(t, err)
+		service := New(repo)
+		result, err := service.UpdateName(ctx, masterTx, dummyPlaceID, dummyPlaceName)
+
+		assert.NoError(t, err)
+		assert.NotEqual(t, dummyDate, result.UpdatedAt.Local())
+		assert.Equal(t, dummyPlaceName, result.Name)
+	})
+
+	t.Run("failure_存在しないデータ", func(t *testing.T) {
+		ctx := context.Background()
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		repo := mock_place.NewMockRepository(ctrl)
+		repo.EXPECT().SelectByID(ctx, masterTx, gomock.Any()).Return(nil, nil)
+
+		service := New(repo)
+		_, err := service.UpdateName(ctx, masterTx, dummyPlaceID, dummyPlaceName)
+
+		assert.Error(t, err)
+	})
 }
 
 func TestService_Delete(t *testing.T) {

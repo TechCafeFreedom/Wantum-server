@@ -39,4 +39,11 @@ var (
 		ErrorMessageJP: "存在しない「やりたいこと」です。",
 		ErrorMessageEN: "the wish card is not exists.",
 	}
+	PlaceNotFound = &WantumError{
+		err:            fmt.Errorf("Attempted to update non-existent data"),
+		GrpcErrorCode:  codes.NotFound,
+		ErrorCode:      http.StatusNotFound,
+		ErrorMessageJP: "存在しない「場所」です。",
+		ErrorMessageEN: "the place is not exists.",
+	}
 )
