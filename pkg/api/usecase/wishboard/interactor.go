@@ -38,14 +38,12 @@ func New(masterTxManager repository.MasterTxManager, userService userservice.Ser
 }
 
 func (i *interactor) CreateNewWishBoard(ctx context.Context, authID, title string, backgroundImage []byte) (*wishboard.Entity, error) {
-	// タイトルのバリデーション
 	if err := validateTitle(ctx, title); err != nil {
 		return nil, werrors.Stack(err)
 	}
 
 	var b *wishboard.Entity
 	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		// ログイン済ユーザ情報の取得
 		u, err := i.userService.GetByAuthID(ctx, masterTx, authID)
 		if err != nil {
 			return werrors.Stack(err)
@@ -58,9 +56,8 @@ func (i *interactor) CreateNewWishBoard(ctx context.Context, authID, title strin
 		}
 
 		// TODO: 招待URLの自動生成
-		inviteURL := "hoge" // karioki
+		inviteURL := "hoge"
 
-		// WishBoardの新規作成
 		b, err = i.wishBoardService.Create(ctx, masterTx, title, backgroundImageURL, inviteURL, u.ID)
 		if err != nil {
 			return werrors.Stack(err)
@@ -78,7 +75,6 @@ func (i *interactor) CreateNewWishBoard(ctx context.Context, authID, title strin
 func (i *interactor) GetMyWishBoards(ctx context.Context, authID string) (wishboard.EntitySlice, error) {
 	var bs wishboard.EntitySlice
 	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		// ログイン済ユーザ情報の取得
 		u, err := i.userService.GetByAuthID(ctx, masterTx, authID)
 		if err != nil {
 			return werrors.Stack(err)
@@ -102,7 +98,6 @@ func (i *interactor) GetMyWishBoards(ctx context.Context, authID string) (wishbo
 func (i *interactor) GetWishBoard(ctx context.Context, wishBoardID int, authID string) (*wishboard.Entity, error) {
 	var b *wishboard.Entity
 	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		// ログイン済ユーザ情報の取得
 		u, err := i.userService.GetByAuthID(ctx, masterTx, authID)
 		if err != nil {
 			return werrors.Stack(err)
@@ -119,7 +114,6 @@ func (i *interactor) GetWishBoard(ctx context.Context, wishBoardID int, authID s
 			return werrors.FromConstant(err, werrors.WishBoardPermissionDenied)
 		}
 
-		// WishBoardを取得
 		b, err = i.wishBoardService.GetByPK(ctx, masterTx, wishBoardID)
 		if err != nil {
 			return werrors.Stack(err)
@@ -137,13 +131,11 @@ func (i *interactor) GetWishBoard(ctx context.Context, wishBoardID int, authID s
 }
 
 func (i *interactor) UpdateTitle(ctx context.Context, wishBoardID int, title, authID string) error {
-	// タイトルのバリデーション
 	if err := validateTitle(ctx, title); err != nil {
 		return werrors.Stack(err)
 	}
 
 	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		// ログイン済ユーザ情報の取得
 		u, err := i.userService.GetByAuthID(ctx, masterTx, authID)
 		if err != nil {
 			return werrors.Stack(err)
@@ -166,7 +158,6 @@ func (i *interactor) UpdateTitle(ctx context.Context, wishBoardID int, title, au
 			return werrors.FromConstant(err, werrors.WishBoardPermissionDenied)
 		}
 
-		// タイトル更新
 		err = i.wishBoardService.UpdateTitle(ctx, masterTx, b.ID, title)
 		if err != nil {
 			return werrors.Stack(err)
@@ -182,7 +173,6 @@ func (i *interactor) UpdateTitle(ctx context.Context, wishBoardID int, title, au
 
 func (i *interactor) UpdateBackgroundImage(ctx context.Context, wishBoardID int, backgroundImage []byte, authID string) error {
 	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		// ログイン済ユーザ情報の取得
 		u, err := i.userService.GetByAuthID(ctx, masterTx, authID)
 		if err != nil {
 			return werrors.Stack(err)
@@ -211,7 +201,6 @@ func (i *interactor) UpdateBackgroundImage(ctx context.Context, wishBoardID int,
 			return werrors.Stack(err)
 		}
 
-		// 背景画像URLの更新
 		err = i.wishBoardService.UpdateBackgroundImageURL(ctx, masterTx, b.ID, backgroundImageURL)
 		if err != nil {
 			return werrors.Stack(err)
@@ -228,7 +217,6 @@ func (i *interactor) UpdateBackgroundImage(ctx context.Context, wishBoardID int,
 
 func (i *interactor) DeleteWishBoard(ctx context.Context, wishBoardID int, authID string) error {
 	err := i.masterTxManager.Transaction(ctx, func(ctx context.Context, masterTx repository.MasterTx) error {
-		// ログイン済ユーザ情報の取得
 		u, err := i.userService.GetByAuthID(ctx, masterTx, authID)
 		if err != nil {
 			return werrors.Stack(err)
@@ -251,7 +239,6 @@ func (i *interactor) DeleteWishBoard(ctx context.Context, wishBoardID int, authI
 			return werrors.FromConstant(err, werrors.WishBoardPermissionDenied)
 		}
 
-		// WishBoardを削除
 		err = i.wishBoardService.Delete(ctx, masterTx, b.ID)
 		if err != nil {
 			return werrors.Stack(err)
@@ -267,7 +254,6 @@ func (i *interactor) DeleteWishBoard(ctx context.Context, wishBoardID int, authI
 }
 
 func validateTitle(ctx context.Context, title string) error {
-	// 空のタイトルは許容しない
 	if title == "" {
 		err := errors.New("title is empty")
 		tlog.PrintErrorLogWithCtx(ctx, err)

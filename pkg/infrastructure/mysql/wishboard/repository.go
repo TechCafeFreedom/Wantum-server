@@ -31,7 +31,7 @@ func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.Ma
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	// WishBoardの新規レコード追加
+	// CreatedAt, UpdatedAtの実体を渡す
 	result, err := tx.Exec(`
 		INSERT INTO wish_boards(
 			title, background_image_url, invite_url, user_id, created_at, updated_at
@@ -42,7 +42,6 @@ func (r *repositoryImpliment) Insert(ctx context.Context, masterTx repository.Ma
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	// 新規作成されたWishBoardのIDを取得
 	insertID, err := result.LastInsertId()
 	if err != nil {
 		tlog.PrintErrorLogWithCtx(ctx, err)
@@ -61,7 +60,6 @@ func (r *repositoryImpliment) SelectByPK(ctx context.Context, masterTx repositor
 		return nil, werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	// 主キーで検索（削除されていないもののみ）
 	row := tx.QueryRow(`
 		SELECT
 			id, title, background_image_url, invite_url, user_id, created_at, updated_at
@@ -69,14 +67,14 @@ func (r *repositoryImpliment) SelectByPK(ctx context.Context, masterTx repositor
 		WHERE id = ? AND deleted_at IS NULL
 	`, wishBoardID)
 
-	// Entityにコピー
+	// ポインタ型のフィールドについては、あらかじめメモリ確保する
 	b := wishboard.Entity{CreatedAt: &time.Time{}, UpdatedAt: &time.Time{}}
+	// CreatedAt, UpdatedAtはポインタなので「&」はつけずにそのまま渡す
 	err = row.Scan(
 		&b.ID, &b.Title, &b.BackgroundImageURL, &b.InviteURL, &b.UserID, b.CreatedAt, b.UpdatedAt)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			// 見つからなかったらNOT FOUNDエラー
 			return nil, werrors.FromConstant(err, werrors.WishBoardNotFound)
 		}
 		return nil, werrors.FromConstant(err, werrors.ServerError)
@@ -103,7 +101,6 @@ func (r *repositoryImpliment) SelectByPKs(ctx context.Context, masterTx reposito
 		}
 	}
 
-	// 主キーで複数検索（削除されていないもののみ）
 	rows, err := tx.Query(`
 		SELECT
 			id, title, background_image_url, invite_url, user_id, created_at, updated_at
@@ -113,7 +110,6 @@ func (r *repositoryImpliment) SelectByPKs(ctx context.Context, masterTx reposito
 	`)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			// 見つからなかったらNOT FOUNDエラー
 			return nil, werrors.FromConstant(err, werrors.WishBoardNotFound)
 		}
 		return nil, werrors.FromConstant(err, werrors.ServerError)
@@ -121,14 +117,14 @@ func (r *repositoryImpliment) SelectByPKs(ctx context.Context, masterTx reposito
 
 	bs := wishboard.EntitySlice{}
 	for rows.Next() {
-		// Entityへのコピー
+		// ポインタ型のフィールドについては、あらかじめメモリ確保する
 		b := wishboard.Entity{CreatedAt: &time.Time{}, UpdatedAt: &time.Time{}}
+		// CreatedAt, UpdatedAtはポインタなので「&」はつけずにそのまま渡す
 		err := rows.Scan(
 			&b.ID, &b.Title, &b.BackgroundImageURL, &b.InviteURL, &b.UserID, b.CreatedAt, b.UpdatedAt)
 
 		if err != nil {
 			if err == sql.ErrNoRows {
-				// 見つからなかったらNOT FOUNDエラー
 				return nil, werrors.FromConstant(err, werrors.WishBoardNotFound)
 			}
 			return nil, werrors.FromConstant(err, werrors.ServerError)
@@ -147,7 +143,7 @@ func (r *repositoryImpliment) UpdateTitle(ctx context.Context, masterTx reposito
 		return werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	// titleとupdated_atを更新
+	// UpdatedAtの実体を渡す
 	_, err = tx.Exec(`
 		UPDATE wish_boards SET
 			title=?,
@@ -169,7 +165,7 @@ func (r *repositoryImpliment) UpdateBackgroundImageURL(ctx context.Context, mast
 		return werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	// back_ground_urlとupdated_atを更新
+	// UpdatedAtの実体を渡す
 	_, err = tx.Exec(`
 		UPDATE wish_boards SET
 			background_image_url=?,
@@ -191,7 +187,7 @@ func (r *repositoryImpliment) Delete(ctx context.Context, masterTx repository.Ma
 		return werrors.FromConstant(err, werrors.ServerError)
 	}
 
-	// updated_atとdeleted_atに現在時刻をセット
+	// UpdatedAt, DeletedAtの実体を渡す
 	_, err = tx.Exec(`
 		UPDATE wish_boards SET
 			updated_at=?,
