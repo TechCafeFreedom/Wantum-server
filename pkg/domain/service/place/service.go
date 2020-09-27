@@ -12,6 +12,7 @@ import (
 type Service interface {
 	Create(ctx context.Context, masterTx repository.MasterTx, name string) (*placeEntity.Entity, error)
 	Update(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) (*placeEntity.Entity, error)
+	UpdateName(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) error
 	Delete(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error)
 	GetByID(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error)
 	GetAll(ctx context.Context, masterTx repository.MasterTx) (placeEntity.EntitySlice, error)
@@ -58,6 +59,14 @@ func (s *service) Update(ctx context.Context, masterTx repository.MasterTx, plac
 	return place, nil
 }
 
+func (s *service) UpdateName(ctx context.Context, masterTx repository.MasterTx, placeID int, name string) error {
+	now := time.Now()
+	if err := s.placeRepository.UpdateName(ctx, masterTx, placeID, name, &now); err != nil {
+		return werrors.Stack(err)
+	}
+	return nil
+}
+
 func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, placeID int) (*placeEntity.Entity, error) {
 	place, err := s.placeRepository.SelectByID(ctx, masterTx, placeID)
 	if err != nil {
@@ -66,7 +75,7 @@ func (s *service) Delete(ctx context.Context, masterTx repository.MasterTx, plac
 	now := time.Now()
 	place.UpdatedAt = &now
 	place.DeletedAt = &now
-	if err = s.placeRepository.UpDeleteFlag(ctx, masterTx, place); err != nil {
+	if err = s.placeRepository.UpDeleteFlag(ctx, masterTx, place.ID, place.UpdatedAt, place.DeletedAt); err != nil {
 		return nil, werrors.Stack(err)
 	}
 	return place, nil

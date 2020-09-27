@@ -16,6 +16,9 @@ import (
 var (
 	masterTx  repository.MasterTx
 	dummyDate time.Time
+
+	dummyPlaceID   = 1
+	dummyPlaceName = "tsushima"
 )
 
 func TestMain(m *testing.M) {
@@ -67,6 +70,20 @@ func TestService_Update(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
+func TestService_UpdateName(t *testing.T) {
+	ctx := context.Background()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	repo := mock_place.NewMockRepository(ctrl)
+	repo.EXPECT().UpdateName(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+
+	service := New(repo)
+	err := service.UpdateName(ctx, masterTx, dummyPlaceID, dummyPlaceName)
+
+	assert.NoError(t, err)
+}
+
 func TestService_Delete(t *testing.T) {
 	ctx := context.Background()
 	ctrl := gomock.NewController(t)
@@ -80,7 +97,7 @@ func TestService_Delete(t *testing.T) {
 	}
 
 	repo := mock_place.NewMockRepository(ctrl)
-	repo.EXPECT().UpDeleteFlag(ctx, masterTx, gomock.Any()).Return(nil)
+	repo.EXPECT().UpDeleteFlag(ctx, masterTx, gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 	repo.EXPECT().SelectByID(ctx, masterTx, dummyData.ID).Return(dummyData, nil)
 
 	service := New(repo)
